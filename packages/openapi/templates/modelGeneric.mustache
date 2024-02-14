@@ -1,0 +1,64 @@
+/**
+ * {{{description}}}
+ * @export
+ * @interface {{classname}}
+ */
+export interface {{classname}} {{#parent}}extends {{{.}}} {{/parent}}{
+{{#additionalPropertiesType}}
+    [key: string]: {{{additionalPropertiesType}}}{{^additionalPropertiesIsAnyType}}{{#hasVars}} | any{{/hasVars}}{{/additionalPropertiesIsAnyType}};
+
+{{/additionalPropertiesType}}
+{{#vars}}
+    /**
+     * {{{description}}}
+     * @type {{=<% %>=}}{<%&datatype%>}<%={{ }}=%>
+     * @memberof {{classname}}{{#isDiscriminator}}
+     * @discriminator {{baseName}}{{/isDiscriminator}}{{#deprecated}}
+     * @deprecated{{/deprecated}}
+     */
+    {{baseName}}{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}}{{#isNullable}} | null{{/isNullable}};
+{{/vars}}
+}{{#hasEnums}}
+
+{{#vars}}
+{{#isEnum}}
+
+export const {{enumName}} = {
+{{#allowableValues}}
+    {{#enumVars}}
+    {{#enumDescription}}
+    /**
+    * {{.}}
+    */
+    {{/enumDescription}}
+    {{{name}}}: {{{value}}}{{^-last}},{{/-last}}
+    {{/enumVars}}
+{{/allowableValues}}
+} as const;
+
+export module {{enumName}}s {
+    type Handler<I, R> = (e: I) => R;
+    type MatchObj<T extends {{enumName}}, R> = {
+        [K in T as K]: Handler<Extract<T, K>, R>;
+    }  & { onDefault: Handler<unknown, R> };
+    /** All handler must return the same type*/
+    export function match<R>(enumValue: {{enumName}}, handler: MatchObj<{{enumName}}, R>): R {
+        if (enumValue in handler) {
+            return handler[enumValue](enumValue as never);
+        }
+        return handler.onDefault(enumValue);
+    }
+
+    /** All handler must return the same type*/
+    export function matchPartial<R>(enumValue: {{enumName}}, handler: Partial<MatchObj<{{enumName}}, R> >): R | undefined {
+        if (enumValue in handler) {
+            return handler[enumValue]?.(enumValue as never);
+        }
+        return handler.onDefault?.(enumValue);
+    }
+}
+
+export type {{enumName}} = typeof {{enumName}}[keyof typeof {{enumName}}] | UNKNOWN_ENUM_VARIANT  ;
+{{/isEnum}}
+{{/vars}}
+{{/hasEnums}}

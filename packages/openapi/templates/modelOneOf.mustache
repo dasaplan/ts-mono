@@ -1,0 +1,50 @@
+/**
+* @type {{classname}}{{#description}}
+    * {{{.}}}{{/description}}
+* @export
+* @discriminatedUnion {{name}}
+* @discriminatorProperty {{discriminator.propertyName}}
+* @discriminatorValues {{#discriminator.mappedModels}}{{mappingName}}{{^-last}} | {{/-last}}{{/discriminator.mappedModels}}
+* @subTypes {{#discriminator.mappedModels}}{{modelName}}{{^-last}} | {{/-last}}{{/discriminator.mappedModels}}
+*/
+export type {{classname}} = {{#discriminator}}{{!
+discriminator with mapped models - TypeScript discriminating union
+}}{{#mappedModels}}{ {{discriminator.propertyName}}: '{{mappingName}}' } & {{modelName}}{{^-last}} | {{/-last}}{{/mappedModels}}{{!
+
+discriminator only - fallback to not use the discriminator. Default model names are available but possibility of having null/nullable values could introduce more edge cases
+}}{{^mappedModels}}{{#oneOf}}{{{.}}}{{^-last}} | {{/-last}}{{/oneOf}}{{/mappedModels}}{{/discriminator}}{{!
+
+plain oneOf
+}}{{^discriminator}}{{#oneOf}}{{{.}}}{{^-last}} | {{/-last}}{{/oneOf}}{{/discriminator}} | { {{discriminator.propertyName}}: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
+
+{{#discriminator}}
+export module {{classname}} {
+    type Handler<I, R> = (e: I) => R;
+    type MatchObj<T extends {{classname}}, R> = {
+        [K in T as K['{{discriminator.propertyName}}']]: Handler<Extract<T, { type: K['{{discriminator.propertyName}}'] }>, R>
+    } & { onDefault: Handler<unknown, R> };
+
+    /** All handler must return the same type*/
+    export function match<R>(
+        union: {{classname}},
+        handler: MatchObj<{{classname}}, R>
+    ): R {
+        if (union.{{discriminator.propertyName}} in handler) {
+            return handler[union.{{discriminator.propertyName}}](union as never);
+        }
+        return handler.onDefault(union);
+    }
+
+    /** All handler must return the same type*/
+    export function matchPartial<R>(
+        union: {{classname}},
+        handler: Partial<MatchObj<{{classname}}, R>>
+    ): R | undefined {
+        if (union.{{discriminator.propertyName}} in handler) {
+            return handler[union.{{discriminator.propertyName}}]?.(union as never);
+        }
+        return handler.onDefault?.(union);
+    }
+{{/discriminator}}
+
+}

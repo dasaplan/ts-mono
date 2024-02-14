@@ -1,0 +1,12 @@
+/**
+ * {{{description}}}
+ * @export
+ * @enum {string}
+ */
+{{#isBoolean}}
+export type {{classname}} = {{#allowableValues}}{{#enumVars}}{{{value}}}{{^-last}} | {{/-last}}{{/enumVars}}{{/allowableValues}}
+{{/isBoolean}}
+
+{{^isBoolean}}
+{{>modelObjectEnum}}
+{{/isBoolean}}

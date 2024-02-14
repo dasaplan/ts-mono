@@ -1,0 +1,12 @@
+import { z } from "zod";
+import { UNKNOWN_ENUM_VARIANT } from './common.js';
+
+{{#each schemas}}
+const {{@key}} = {{{this}}};
+{{/each}}
+
+export const schemas = {
+{{#each schemas}}
+	{{@key}},
+{{/each}}
+};

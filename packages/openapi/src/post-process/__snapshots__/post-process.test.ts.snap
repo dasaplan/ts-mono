@@ -1,0 +1,3777 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post process spec ensureDiscriminatorValues test/specs/generic/api.yml: bndl-test/specs/generic/api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "discriminator": {
+          "mapping": {
+            "SEAM": "#/components/schemas/Seam",
+            "SHORT": "#/components/schemas/ShortHair",
+          },
+          "propertyName": "catType",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Seam",
+          },
+          {
+            "$ref": "#/components/schemas/ShortHair",
+          },
+        ],
+      },
+      "CatBase": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "catType": {
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+              "catType",
+            ],
+            "title": "CatBase",
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "bark": {
+                "type": "string",
+              },
+              "type": {
+                "example": "DOG",
+                "type": "string",
+                "x-const": "DOG",
+              },
+            },
+            "required": [
+              "bark",
+              "type",
+            ],
+          },
+        ],
+      },
+      "GenericPet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+              },
+              "type": {
+                "example": "HAMSTER",
+                "type": "string",
+                "x-const": [
+                  "BIRD",
+                  "HAMSTER",
+                ],
+              },
+            },
+            "required": [
+              "type",
+            ],
+            "title": "GenericPet",
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "BIRD": "#/components/schemas/GenericPet",
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+            "HAMSTER": "#/components/schemas/GenericPet",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+          {
+            "$ref": "#/components/schemas/GenericPet",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "id": {
+            "exclusiveMaximum": true,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+        ],
+        "title": "PetBase",
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Seam": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CatBase",
+          },
+          {
+            "properties": {
+              "angryLevel": {
+                "pattern": "\\w+",
+                "type": "string",
+              },
+              "catType": {
+                "default": "SEAM",
+                "example": "SEAM",
+                "maxLength": 3,
+                "minLength": 1,
+                "type": "string",
+                "x-const": "SEAM",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "catType",
+              "type",
+            ],
+            "title": "Seam",
+          },
+        ],
+      },
+      "ShortHair": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CatBase",
+          },
+          {
+            "properties": {
+              "angryLevel": {
+                "type": "string",
+              },
+              "catType": {
+                "default": "SHORT",
+                "example": "SHORT",
+                "type": "string",
+                "x-const": "SHORT",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "catType",
+              "type",
+            ],
+            "title": "ShortHair",
+          },
+        ],
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "getPet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "petId",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "Get a Pet",
+      },
+    },
+  },
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/generic/api.yml: ensured-merged-test/specs/generic/api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "discriminator": {
+          "mapping": {
+            "SEAM": "#/components/schemas/Seam",
+            "SHORT": "#/components/schemas/ShortHair",
+          },
+          "propertyName": "catType",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Seam",
+          },
+          {
+            "$ref": "#/components/schemas/ShortHair",
+          },
+        ],
+      },
+      "CatBase": {
+        "allOf": [
+          {},
+          {
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "catType": {
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+              "catType",
+            ],
+            "title": "CatBase",
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "bark": {
+                "type": "string",
+              },
+              "type": {
+                "example": "DOG",
+                "type": "string",
+                "x-const": "DOG",
+              },
+            },
+            "required": [
+              "bark",
+              "type",
+            ],
+          },
+        ],
+      },
+      "GenericPet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+              },
+              "type": {
+                "example": "BIRD",
+                "type": "string",
+                "x-const": [
+                  "BIRD",
+                  "HAMSTER",
+                ],
+              },
+            },
+            "required": [
+              "type",
+            ],
+            "title": "GenericPet",
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "BIRD": "#/components/schemas/GenericPet",
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+            "HAMSTER": "#/components/schemas/GenericPet",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+          {
+            "$ref": "#/components/schemas/GenericPet",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "id": {
+            "exclusiveMaximum": true,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+        ],
+        "title": "PetBase",
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Seam": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "angryLevel": {
+                "pattern": "\\w+",
+                "type": "string",
+              },
+              "catType": {
+                "default": "SEAM",
+                "example": "SEAM",
+                "maxLength": 3,
+                "minLength": 1,
+                "type": "string",
+                "x-const": "SEAM",
+              },
+              "color": {
+                "type": "string",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "catType",
+              "color",
+              "type",
+            ],
+            "title": "Seam",
+          },
+        ],
+      },
+      "ShortHair": {
+        "discriminator": {
+          "propertyName": "catType",
+        },
+        "properties": {
+          "angryLevel": {
+            "type": "string",
+          },
+          "catType": {
+            "default": "SHORT",
+            "example": "SHORT",
+            "type": "string",
+            "x-const": "SHORT",
+          },
+          "color": {
+            "type": "string",
+          },
+          "type": {
+            "example": "CAT",
+            "type": "string",
+            "x-const": "CAT",
+          },
+        },
+        "required": [
+          "catType",
+          "color",
+          "type",
+        ],
+        "title": "ShortHair",
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "getPet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "petId",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "Get a Pet",
+      },
+    },
+  },
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/generic/api.yml: ensured-test/specs/generic/api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "discriminator": {
+          "mapping": {
+            "SEAM": "#/components/schemas/Seam",
+            "SHORT": "#/components/schemas/ShortHair",
+          },
+          "propertyName": "catType",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Seam",
+          },
+          {
+            "$ref": "#/components/schemas/ShortHair",
+          },
+        ],
+      },
+      "CatBase": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "catType": {
+                "enum": [
+                  "SEAM",
+                  "SHORT",
+                ],
+                "title": "CatType",
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+            ],
+            "title": "CatBase",
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "bark": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "bark",
+            ],
+          },
+        ],
+      },
+      "GenericPet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+              },
+            },
+            "title": "GenericPet",
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "BIRD": "#/components/schemas/GenericPet",
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+            "HAMSTER": "#/components/schemas/GenericPet",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+          {
+            "$ref": "#/components/schemas/GenericPet",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "id": {
+            "exclusiveMaximum": true,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+        ],
+        "title": "PetBase",
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Seam": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CatBase",
+          },
+          {
+            "properties": {
+              "angryLevel": {
+                "pattern": "\\w+",
+                "type": "string",
+              },
+              "catType": {
+                "default": "SEAM",
+                "maxLength": 3,
+                "minLength": 1,
+                "type": "string",
+              },
+            },
+            "title": "Seam",
+          },
+        ],
+      },
+      "ShortHair": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CatBase",
+          },
+          {
+            "properties": {
+              "angryLevel": {
+                "type": "string",
+              },
+              "catType": {
+                "default": "SHORT",
+                "type": "string",
+              },
+            },
+            "title": "ShortHair",
+          },
+        ],
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "getPet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "petId",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "Get a Pet",
+      },
+    },
+  },
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/generic/api.yml: merged-test/specs/generic/api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "discriminator": {
+          "mapping": {
+            "SEAM": "#/components/schemas/Seam",
+            "SHORT": "#/components/schemas/ShortHair",
+          },
+          "propertyName": "catType",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Seam",
+          },
+          {
+            "$ref": "#/components/schemas/ShortHair",
+          },
+        ],
+      },
+      "CatBase": {
+        "allOf": [
+          {},
+          {
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "catType": {
+                "enum": [
+                  "SEAM",
+                  "SHORT",
+                ],
+                "title": "CatType",
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+            ],
+            "title": "CatBase",
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "bark": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "bark",
+            ],
+          },
+        ],
+      },
+      "GenericPet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+              },
+            },
+            "title": "GenericPet",
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "BIRD": "#/components/schemas/GenericPet",
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+            "HAMSTER": "#/components/schemas/GenericPet",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+          {
+            "$ref": "#/components/schemas/GenericPet",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "id": {
+            "exclusiveMaximum": true,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+        ],
+        "title": "PetBase",
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Seam": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "angryLevel": {
+                "pattern": "\\w+",
+                "type": "string",
+              },
+              "catType": {
+                "default": "SEAM",
+                "enum": [
+                  "SEAM",
+                  "SHORT",
+                ],
+                "maxLength": 3,
+                "minLength": 1,
+                "title": "CatType",
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+            ],
+            "title": "Seam",
+          },
+        ],
+      },
+      "ShortHair": {
+        "discriminator": {
+          "propertyName": "catType",
+        },
+        "properties": {
+          "angryLevel": {
+            "type": "string",
+          },
+          "catType": {
+            "default": "SHORT",
+            "enum": [
+              "SEAM",
+              "SHORT",
+            ],
+            "title": "CatType",
+            "type": "string",
+          },
+          "color": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "color",
+        ],
+        "title": "ShortHair",
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "getPet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "petId",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "Get a Pet",
+      },
+    },
+  },
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-modular/pets-api.yml: bndl-test/specs/pets-modular/pets-api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "breed": {
+                "enum": [
+                  "CAT_A",
+                  "CAT_B",
+                ],
+                "type": "string",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "type",
+            ],
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "breed": {
+                "$ref": "#/components/schemas/DogEnum",
+              },
+              "fluffy": {
+                "type": "boolean",
+              },
+              "type": {
+                "example": "DOG",
+                "type": "string",
+                "x-const": "DOG",
+              },
+            },
+            "required": [
+              "type",
+            ],
+          },
+        ],
+      },
+      "DogEnum": {
+        "enum": [
+          "DOG_A",
+          "DOG_B",
+        ],
+        "type": "string",
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "name": {
+            "type": "string",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "type",
+        ],
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "description": "My service",
+    "title": "My service",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/v1/pets": {
+      "get": {
+        "operationId": "getPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Ok response",
+          },
+        },
+        "summary": "Get pets",
+      },
+    },
+  },
+  "servers": [
+    {
+      "url": "https://",
+    },
+  ],
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-modular/pets-api.yml: ensured-merged-test/specs/pets-modular/pets-api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "breed": {
+                "enum": [
+                  "CAT_A",
+                  "CAT_B",
+                ],
+                "type": "string",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "type",
+            ],
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "breed": {
+                "$ref": "#/components/schemas/DogEnum",
+              },
+              "fluffy": {
+                "type": "boolean",
+              },
+              "type": {
+                "example": "DOG",
+                "type": "string",
+                "x-const": "DOG",
+              },
+            },
+            "required": [
+              "type",
+            ],
+          },
+        ],
+      },
+      "DogEnum": {
+        "enum": [
+          "DOG_A",
+          "DOG_B",
+        ],
+        "type": "string",
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "name": {
+            "type": "string",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "type",
+        ],
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "description": "My service",
+    "title": "My service",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/v1/pets": {
+      "get": {
+        "operationId": "getPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Ok response",
+          },
+        },
+        "summary": "Get pets",
+      },
+    },
+  },
+  "servers": [
+    {
+      "url": "https://",
+    },
+  ],
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-modular/pets-api.yml: ensured-test/specs/pets-modular/pets-api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "breed": {
+                "enum": [
+                  "CAT_A",
+                  "CAT_B",
+                ],
+                "type": "string",
+              },
+            },
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "breed": {
+                "$ref": "#/components/schemas/DogEnum",
+              },
+              "fluffy": {
+                "type": "boolean",
+              },
+            },
+          },
+        ],
+      },
+      "DogEnum": {
+        "enum": [
+          "DOG_A",
+          "DOG_B",
+        ],
+        "type": "string",
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "name": {
+            "type": "string",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "type",
+        ],
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "description": "My service",
+    "title": "My service",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/v1/pets": {
+      "get": {
+        "operationId": "getPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Ok response",
+          },
+        },
+        "summary": "Get pets",
+      },
+    },
+  },
+  "servers": [
+    {
+      "url": "https://",
+    },
+  ],
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-modular/pets-api.yml: merged-test/specs/pets-modular/pets-api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "breed": {
+                "enum": [
+                  "CAT_A",
+                  "CAT_B",
+                ],
+                "type": "string",
+              },
+            },
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "breed": {
+                "$ref": "#/components/schemas/DogEnum",
+              },
+              "fluffy": {
+                "type": "boolean",
+              },
+            },
+          },
+        ],
+      },
+      "DogEnum": {
+        "enum": [
+          "DOG_A",
+          "DOG_B",
+        ],
+        "type": "string",
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "name": {
+            "type": "string",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "type",
+        ],
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "description": "My service",
+    "title": "My service",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/v1/pets": {
+      "get": {
+        "operationId": "getPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Ok response",
+          },
+        },
+        "summary": "Get pets",
+      },
+    },
+  },
+  "servers": [
+    {
+      "url": "https://",
+    },
+  ],
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-modular-complex/petstore-api.yml: bndl-test/specs/pets-modular-complex/petstore-api.yml 1`] = `
+{
+  "components": {
+    "parameters": {
+      "PathPetId": {
+        "description": "The id of the pet to retrieve",
+        "in": "path",
+        "name": "petId",
+        "required": true,
+        "schema": {
+          "type": "string",
+        },
+      },
+    },
+    "responses": {
+      "Default": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error",
+            },
+          },
+        },
+        "description": "unexpected error",
+      },
+    },
+    "schemas": {
+      "Ball": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Toy",
+          },
+          {
+            "properties": {
+              "kind": {
+                "example": "BALL",
+                "type": "string",
+                "x-const": "BALL",
+              },
+            },
+            "required": [
+              "kind",
+            ],
+            "title": "Ball",
+          },
+        ],
+      },
+      "Color": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/schema-untitled",
+          },
+        ],
+        "properties": {
+          "colorId": {
+            "type": "string",
+          },
+          "untitled": {
+            "$ref": "#/components/schemas/schema-untitled",
+          },
+        },
+        "type": "object",
+      },
+      "Error": {
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/HttpErrorCode",
+          },
+          "message": {
+            "type": "string",
+          },
+          "titledSchema": {
+            "$ref": "#/components/schemas/schema-titled",
+          },
+        },
+        "required": [
+          "code",
+          "message",
+        ],
+        "type": "object",
+      },
+      "FluffLevel": {
+        "enum": [
+          "A",
+          "B",
+          "C",
+        ],
+        "type": "string",
+      },
+      "Fluffy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+        },
+      },
+      "FluffyTeddy": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Teddy",
+          },
+          {
+            "$ref": "#/components/schemas/Fluffy",
+          },
+          {
+            "properties": {
+              "kind": {
+                "example": "TEDDY",
+                "type": "string",
+                "x-const": "TEDDY",
+              },
+            },
+            "required": [
+              "kind",
+            ],
+          },
+        ],
+      },
+      "HttpErrorCode": {
+        "format": "int32",
+        "type": "integer",
+      },
+      "Pet": {
+        "example": {
+          "bar": 1234,
+          "foo": "",
+          "foobar": true,
+        },
+        "properties": {
+          "favFluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "format": "int64",
+            "type": "integer",
+          },
+          "leastFavToy": {
+            "$ref": "#/components/schemas/schemas-Toy",
+          },
+          "name": {
+            "example": {
+              "description": "default string example",
+              "value": "some string",
+            },
+            "type": "string",
+          },
+          "tag": {
+            "example": {
+              "description": "default string example",
+              "value": "some string",
+            },
+            "type": "string",
+          },
+          "toy": {
+            "$ref": "#/components/schemas/components-schemas-Toy",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+        ],
+        "type": "object",
+      },
+      "PetToy": {
+        "discriminator": {
+          "mapping": {
+            "BALL": "#/components/schemas/Ball",
+            "TEDDY": "#/components/schemas/FluffyTeddy",
+          },
+          "propertyName": "kind",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Ball",
+          },
+          {
+            "$ref": "#/components/schemas/FluffyTeddy",
+          },
+        ],
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Teddy": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Toy",
+          },
+          {
+            "title": "Teddy",
+          },
+        ],
+      },
+      "Toy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "price",
+          "kind",
+        ],
+        "title": "Toy",
+      },
+      "components-schemas-Toy": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/schemas-Toy",
+          },
+          {
+            "$ref": "#/components/schemas/schema-sub",
+          },
+          {
+            "properties": {
+              "color": {
+                "$ref": "#/components/schemas/Color",
+              },
+              "name": {
+                "type": "string",
+              },
+              "relates": {
+                "$ref": "#/components/schemas/PetToy",
+              },
+              "targetGroup": {
+                "$ref": "#/components/schemas/targetGroup",
+              },
+            },
+            "title": "Toy",
+          },
+        ],
+      },
+      "schema-sub": {
+        "properties": {
+          "subId": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "string",
+        ],
+      },
+      "schema-titled": {
+        "properties": {
+          "titledProp": {
+            "type": "string",
+          },
+        },
+        "title": "Titled Schema",
+      },
+      "schema-untitled": {
+        "properties": {
+          "untitledProp": {
+            "type": "string",
+          },
+        },
+      },
+      "schemas-Toy": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Toy",
+          },
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "someEnum": {
+            "enum": [
+              "FOO",
+              "BAR",
+            ],
+            "title": "FooBar",
+            "type": "string",
+          },
+        },
+        "title": "Toy",
+      },
+      "targetGroup": {
+        "default": "CHILDREN",
+        "type": "string",
+        "x-extensible-enum": [
+          "PETS",
+          "CHILDREN",
+        ],
+      },
+    },
+  },
+  "info": {
+    "license": {
+      "name": "MIT",
+    },
+    "title": "Swagger Petstore",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+            "headers": {
+              "x-next": {
+                "description": "A link to the next page of responses",
+                "schema": {
+                  "type": "string",
+                },
+              },
+            },
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "List all pets",
+        "tags": [
+          "pets",
+        ],
+      },
+      "post": {
+        "operationId": "createPets",
+        "responses": {
+          "201": {
+            "description": "Null response",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Create a pet",
+        "tags": [
+          "pets",
+        ],
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "showPetById",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Expected response to a valid request",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Info for a specific pet",
+        "tags": [
+          "pets",
+        ],
+      },
+    },
+  },
+  "servers": [
+    {
+      "url": "http://petstore.swagger.io/v1",
+    },
+  ],
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-modular-complex/petstore-api.yml: ensured-merged-test/specs/pets-modular-complex/petstore-api.yml 1`] = `
+{
+  "components": {
+    "parameters": {
+      "PathPetId": {
+        "description": "The id of the pet to retrieve",
+        "in": "path",
+        "name": "petId",
+        "required": true,
+        "schema": {
+          "type": "string",
+        },
+      },
+    },
+    "responses": {
+      "Default": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error",
+            },
+          },
+        },
+        "description": "unexpected error",
+      },
+    },
+    "schemas": {
+      "Ball": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "example": "BALL",
+            "type": "string",
+            "x-const": "BALL",
+          },
+          "price": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "kind",
+          "price",
+        ],
+        "title": "Ball",
+      },
+      "Color": {
+        "properties": {
+          "colorId": {
+            "type": "string",
+          },
+          "untitled": {
+            "$ref": "#/components/schemas/schema-untitled",
+          },
+          "untitledProp": {
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "Error": {
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/HttpErrorCode",
+          },
+          "message": {
+            "type": "string",
+          },
+          "titledSchema": {
+            "$ref": "#/components/schemas/schema-titled",
+          },
+        },
+        "required": [
+          "code",
+          "message",
+        ],
+        "type": "object",
+      },
+      "FluffLevel": {
+        "enum": [
+          "A",
+          "B",
+          "C",
+        ],
+        "type": "string",
+      },
+      "Fluffy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+        },
+      },
+      "FluffyTeddy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "example": "TEDDY",
+            "type": "string",
+            "x-const": "TEDDY",
+          },
+          "price": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "kind",
+          "price",
+        ],
+        "title": "Teddy",
+      },
+      "HttpErrorCode": {
+        "format": "int32",
+        "type": "integer",
+      },
+      "Pet": {
+        "example": {
+          "bar": 1234,
+          "foo": "",
+          "foobar": true,
+        },
+        "properties": {
+          "favFluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "format": "int64",
+            "type": "integer",
+          },
+          "leastFavToy": {
+            "$ref": "#/components/schemas/schemas-Toy",
+          },
+          "name": {
+            "example": {
+              "description": "default string example",
+              "value": "some string",
+            },
+            "type": "string",
+          },
+          "tag": {
+            "example": {
+              "description": "default string example",
+              "value": "some string",
+            },
+            "type": "string",
+          },
+          "toy": {
+            "$ref": "#/components/schemas/components-schemas-Toy",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+        ],
+        "type": "object",
+      },
+      "PetToy": {
+        "discriminator": {
+          "mapping": {
+            "BALL": "#/components/schemas/Ball",
+            "TEDDY": "#/components/schemas/FluffyTeddy",
+          },
+          "propertyName": "kind",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Ball",
+          },
+          {
+            "$ref": "#/components/schemas/FluffyTeddy",
+          },
+        ],
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Teddy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "price",
+          "kind",
+        ],
+        "title": "Teddy",
+      },
+      "Toy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "price",
+          "kind",
+        ],
+        "title": "Toy",
+      },
+      "components-schemas-Toy": {
+        "properties": {
+          "color": {
+            "$ref": "#/components/schemas/Color",
+          },
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "name": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "relates": {
+            "$ref": "#/components/schemas/PetToy",
+          },
+          "someEnum": {
+            "enum": [
+              "FOO",
+              "BAR",
+            ],
+            "title": "FooBar",
+            "type": "string",
+          },
+          "subId": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "$ref": "#/components/schemas/targetGroup",
+          },
+        },
+        "required": [
+          "id",
+          "kind",
+          "price",
+          "string",
+        ],
+        "title": "Toy",
+      },
+      "schema-sub": {
+        "properties": {
+          "subId": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "string",
+        ],
+      },
+      "schema-titled": {
+        "properties": {
+          "titledProp": {
+            "type": "string",
+          },
+        },
+        "title": "Titled Schema",
+      },
+      "schema-untitled": {
+        "properties": {
+          "untitledProp": {
+            "type": "string",
+          },
+        },
+      },
+      "schemas-Toy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "someEnum": {
+            "enum": [
+              "FOO",
+              "BAR",
+            ],
+            "title": "FooBar",
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "price",
+          "kind",
+        ],
+        "title": "Toy",
+      },
+      "targetGroup": {
+        "default": "CHILDREN",
+        "type": "string",
+        "x-extensible-enum": [
+          "PETS",
+          "CHILDREN",
+        ],
+      },
+    },
+  },
+  "info": {
+    "license": {
+      "name": "MIT",
+    },
+    "title": "Swagger Petstore",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+            "headers": {
+              "x-next": {
+                "description": "A link to the next page of responses",
+                "schema": {
+                  "type": "string",
+                },
+              },
+            },
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "List all pets",
+        "tags": [
+          "pets",
+        ],
+      },
+      "post": {
+        "operationId": "createPets",
+        "responses": {
+          "201": {
+            "description": "Null response",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Create a pet",
+        "tags": [
+          "pets",
+        ],
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "showPetById",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Expected response to a valid request",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Info for a specific pet",
+        "tags": [
+          "pets",
+        ],
+      },
+    },
+  },
+  "servers": [
+    {
+      "url": "http://petstore.swagger.io/v1",
+    },
+  ],
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-modular-complex/petstore-api.yml: ensured-test/specs/pets-modular-complex/petstore-api.yml 1`] = `
+{
+  "components": {
+    "parameters": {
+      "PathPetId": {
+        "description": "The id of the pet to retrieve",
+        "in": "path",
+        "name": "petId",
+        "required": true,
+        "schema": {
+          "type": "string",
+        },
+      },
+    },
+    "responses": {
+      "Default": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error",
+            },
+          },
+        },
+        "description": "unexpected error",
+      },
+    },
+    "schemas": {
+      "Ball": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Toy",
+          },
+          {
+            "title": "Ball",
+          },
+        ],
+      },
+      "Color": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/schema-untitled",
+          },
+        ],
+        "properties": {
+          "colorId": {
+            "type": "string",
+          },
+          "untitled": {
+            "$ref": "#/components/schemas/schema-untitled",
+          },
+        },
+        "type": "object",
+      },
+      "Error": {
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/HttpErrorCode",
+          },
+          "message": {
+            "type": "string",
+          },
+          "titledSchema": {
+            "$ref": "#/components/schemas/schema-titled",
+          },
+        },
+        "required": [
+          "code",
+          "message",
+        ],
+        "type": "object",
+      },
+      "FluffLevel": {
+        "enum": [
+          "A",
+          "B",
+          "C",
+        ],
+        "type": "string",
+      },
+      "Fluffy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+        },
+      },
+      "FluffyTeddy": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Teddy",
+          },
+          {
+            "$ref": "#/components/schemas/Fluffy",
+          },
+        ],
+      },
+      "HttpErrorCode": {
+        "format": "int32",
+        "type": "integer",
+      },
+      "Pet": {
+        "example": {
+          "bar": 1234,
+          "foo": "",
+          "foobar": true,
+        },
+        "properties": {
+          "favFluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "format": "int64",
+            "type": "integer",
+          },
+          "leastFavToy": {
+            "$ref": "#/components/schemas/schemas-Toy",
+          },
+          "name": {
+            "example": {
+              "description": "default string example",
+              "value": "some string",
+            },
+            "type": "string",
+          },
+          "tag": {
+            "example": {
+              "description": "default string example",
+              "value": "some string",
+            },
+            "type": "string",
+          },
+          "toy": {
+            "$ref": "#/components/schemas/components-schemas-Toy",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+        ],
+        "type": "object",
+      },
+      "PetToy": {
+        "discriminator": {
+          "mapping": {
+            "BALL": "#/components/schemas/Ball",
+            "TEDDY": "#/components/schemas/FluffyTeddy",
+          },
+          "propertyName": "kind",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Ball",
+          },
+          {
+            "$ref": "#/components/schemas/FluffyTeddy",
+          },
+        ],
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Teddy": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Toy",
+          },
+          {
+            "title": "Teddy",
+          },
+        ],
+      },
+      "Toy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "price",
+          "kind",
+        ],
+        "title": "Toy",
+      },
+      "components-schemas-Toy": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/schemas-Toy",
+          },
+          {
+            "$ref": "#/components/schemas/schema-sub",
+          },
+          {
+            "properties": {
+              "color": {
+                "$ref": "#/components/schemas/Color",
+              },
+              "name": {
+                "type": "string",
+              },
+              "relates": {
+                "$ref": "#/components/schemas/PetToy",
+              },
+              "targetGroup": {
+                "$ref": "#/components/schemas/targetGroup",
+              },
+            },
+            "title": "Toy",
+          },
+        ],
+      },
+      "schema-sub": {
+        "properties": {
+          "subId": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "string",
+        ],
+      },
+      "schema-titled": {
+        "properties": {
+          "titledProp": {
+            "type": "string",
+          },
+        },
+        "title": "Titled Schema",
+      },
+      "schema-untitled": {
+        "properties": {
+          "untitledProp": {
+            "type": "string",
+          },
+        },
+      },
+      "schemas-Toy": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Toy",
+          },
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "someEnum": {
+            "enum": [
+              "FOO",
+              "BAR",
+            ],
+            "title": "FooBar",
+            "type": "string",
+          },
+        },
+        "title": "Toy",
+      },
+      "targetGroup": {
+        "default": "CHILDREN",
+        "type": "string",
+        "x-extensible-enum": [
+          "PETS",
+          "CHILDREN",
+        ],
+      },
+    },
+  },
+  "info": {
+    "license": {
+      "name": "MIT",
+    },
+    "title": "Swagger Petstore",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+            "headers": {
+              "x-next": {
+                "description": "A link to the next page of responses",
+                "schema": {
+                  "type": "string",
+                },
+              },
+            },
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "List all pets",
+        "tags": [
+          "pets",
+        ],
+      },
+      "post": {
+        "operationId": "createPets",
+        "responses": {
+          "201": {
+            "description": "Null response",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Create a pet",
+        "tags": [
+          "pets",
+        ],
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "showPetById",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Expected response to a valid request",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Info for a specific pet",
+        "tags": [
+          "pets",
+        ],
+      },
+    },
+  },
+  "servers": [
+    {
+      "url": "http://petstore.swagger.io/v1",
+    },
+  ],
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-modular-complex/petstore-api.yml: merged-test/specs/pets-modular-complex/petstore-api.yml 1`] = `
+{
+  "components": {
+    "parameters": {
+      "PathPetId": {
+        "description": "The id of the pet to retrieve",
+        "in": "path",
+        "name": "petId",
+        "required": true,
+        "schema": {
+          "type": "string",
+        },
+      },
+    },
+    "responses": {
+      "Default": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error",
+            },
+          },
+        },
+        "description": "unexpected error",
+      },
+    },
+    "schemas": {
+      "Ball": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "price",
+          "kind",
+        ],
+        "title": "Ball",
+      },
+      "Color": {
+        "properties": {
+          "colorId": {
+            "type": "string",
+          },
+          "untitled": {
+            "$ref": "#/components/schemas/schema-untitled",
+          },
+          "untitledProp": {
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "Error": {
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/HttpErrorCode",
+          },
+          "message": {
+            "type": "string",
+          },
+          "titledSchema": {
+            "$ref": "#/components/schemas/schema-titled",
+          },
+        },
+        "required": [
+          "code",
+          "message",
+        ],
+        "type": "object",
+      },
+      "FluffLevel": {
+        "enum": [
+          "A",
+          "B",
+          "C",
+        ],
+        "type": "string",
+      },
+      "Fluffy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+        },
+      },
+      "FluffyTeddy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "price",
+          "kind",
+        ],
+        "title": "Teddy",
+      },
+      "HttpErrorCode": {
+        "format": "int32",
+        "type": "integer",
+      },
+      "Pet": {
+        "example": {
+          "bar": 1234,
+          "foo": "",
+          "foobar": true,
+        },
+        "properties": {
+          "favFluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "format": "int64",
+            "type": "integer",
+          },
+          "leastFavToy": {
+            "$ref": "#/components/schemas/schemas-Toy",
+          },
+          "name": {
+            "example": {
+              "description": "default string example",
+              "value": "some string",
+            },
+            "type": "string",
+          },
+          "tag": {
+            "example": {
+              "description": "default string example",
+              "value": "some string",
+            },
+            "type": "string",
+          },
+          "toy": {
+            "$ref": "#/components/schemas/components-schemas-Toy",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+        ],
+        "type": "object",
+      },
+      "PetToy": {
+        "discriminator": {
+          "mapping": {
+            "BALL": "#/components/schemas/Ball",
+            "TEDDY": "#/components/schemas/FluffyTeddy",
+          },
+          "propertyName": "kind",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Ball",
+          },
+          {
+            "$ref": "#/components/schemas/FluffyTeddy",
+          },
+        ],
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Teddy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "price",
+          "kind",
+        ],
+        "title": "Teddy",
+      },
+      "Toy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "price",
+          "kind",
+        ],
+        "title": "Toy",
+      },
+      "components-schemas-Toy": {
+        "properties": {
+          "color": {
+            "$ref": "#/components/schemas/Color",
+          },
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "name": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "relates": {
+            "$ref": "#/components/schemas/PetToy",
+          },
+          "someEnum": {
+            "enum": [
+              "FOO",
+              "BAR",
+            ],
+            "title": "FooBar",
+            "type": "string",
+          },
+          "subId": {
+            "type": "string",
+          },
+          "targetGroup": {
+            "$ref": "#/components/schemas/targetGroup",
+          },
+        },
+        "required": [
+          "id",
+          "kind",
+          "price",
+          "string",
+        ],
+        "title": "Toy",
+      },
+      "schema-sub": {
+        "properties": {
+          "subId": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "string",
+        ],
+      },
+      "schema-titled": {
+        "properties": {
+          "titledProp": {
+            "type": "string",
+          },
+        },
+        "title": "Titled Schema",
+      },
+      "schema-untitled": {
+        "properties": {
+          "untitledProp": {
+            "type": "string",
+          },
+        },
+      },
+      "schemas-Toy": {
+        "properties": {
+          "fluffLevel": {
+            "$ref": "#/components/schemas/FluffLevel",
+          },
+          "id": {
+            "type": "string",
+          },
+          "kind": {
+            "type": "string",
+          },
+          "price": {
+            "type": "string",
+          },
+          "someEnum": {
+            "enum": [
+              "FOO",
+              "BAR",
+            ],
+            "title": "FooBar",
+            "type": "string",
+          },
+          "targetGroup": {
+            "default": "CHILDREN",
+            "type": "string",
+            "x-extensible-enum": [
+              "PETS",
+              "CHILDREN",
+            ],
+          },
+        },
+        "required": [
+          "id",
+          "price",
+          "kind",
+        ],
+        "title": "Toy",
+      },
+      "targetGroup": {
+        "default": "CHILDREN",
+        "type": "string",
+        "x-extensible-enum": [
+          "PETS",
+          "CHILDREN",
+        ],
+      },
+    },
+  },
+  "info": {
+    "license": {
+      "name": "MIT",
+    },
+    "title": "Swagger Petstore",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+            "headers": {
+              "x-next": {
+                "description": "A link to the next page of responses",
+                "schema": {
+                  "type": "string",
+                },
+              },
+            },
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "List all pets",
+        "tags": [
+          "pets",
+        ],
+      },
+      "post": {
+        "operationId": "createPets",
+        "responses": {
+          "201": {
+            "description": "Null response",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Create a pet",
+        "tags": [
+          "pets",
+        ],
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "showPetById",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Expected response to a valid request",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Info for a specific pet",
+        "tags": [
+          "pets",
+        ],
+      },
+    },
+  },
+  "servers": [
+    {
+      "url": "http://petstore.swagger.io/v1",
+    },
+  ],
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-simple/pets-api.yml: bndl-test/specs/pets-simple/pets-api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "color": {
+                "type": "string",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "color",
+              "type",
+            ],
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "bark": {
+                "type": "string",
+              },
+              "type": {
+                "example": "DOG",
+                "type": "string",
+                "x-const": "DOG",
+              },
+            },
+            "required": [
+              "bark",
+              "type",
+            ],
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "example": {
+          "some": "props",
+        },
+        "properties": {
+          "id": {
+            "format": "int64",
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+        ],
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+  },
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-simple/pets-api.yml: ensured-merged-test/specs/pets-simple/pets-api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "color": {
+                "type": "string",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "color",
+              "type",
+            ],
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "bark": {
+                "type": "string",
+              },
+              "type": {
+                "example": "DOG",
+                "type": "string",
+                "x-const": "DOG",
+              },
+            },
+            "required": [
+              "bark",
+              "type",
+            ],
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "example": {
+          "some": "props",
+        },
+        "properties": {
+          "id": {
+            "format": "int64",
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+        ],
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+  },
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-simple/pets-api.yml: ensured-test/specs/pets-simple/pets-api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+            ],
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "bark": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "bark",
+            ],
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "example": {
+          "some": "props",
+        },
+        "properties": {
+          "id": {
+            "format": "int64",
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+        ],
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+  },
+}
+`;
+
+exports[`post process spec ensureDiscriminatorValues test/specs/pets-simple/pets-api.yml: merged-test/specs/pets-simple/pets-api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+            ],
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "bark": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "bark",
+            ],
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "example": {
+          "some": "props",
+        },
+        "properties": {
+          "id": {
+            "format": "int64",
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+        ],
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+  },
+}
+`;

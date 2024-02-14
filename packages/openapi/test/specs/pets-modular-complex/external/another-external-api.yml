@@ -1,0 +1,95 @@
+openapi: "3.0.3"
+info:
+  version: 1.0.0
+  title: Another External API
+  license:
+    name: MIT
+servers:
+  - url: http://another.external.swagger.io/v1
+paths:
+  /toys:
+    get:
+      summary: List all toys
+      operationId: listPets
+      tags:
+        - pets
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            maximum: 100
+            format: int32
+      responses:
+        '200':
+          description: A paged array of pets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ToyList"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    ToyList:
+      type: array
+      maxItems: 100
+      items:
+        oneOf:
+          - $ref: '#/components/schemas/Ball'
+          - $ref: '#/components/schemas/Teddy'
+        discriminator:
+          propertyName: kind
+          mapping:
+            BALL: "#/components/schemas/Ball"
+            TEDDY: "#/components/schemas/Teddy"
+
+    Ball:
+      allOf:
+        - $ref: '#/components/schemas/Toy'
+        - title: Ball
+
+    Teddy:
+      allOf:
+        - $ref: '#/components/schemas/Toy'
+        - title: Teddy
+
+    Toy:
+      required: [id, price, kind]
+      title: Toy
+      properties:
+        id: { type: string }
+        price: { type: string }
+        kind: { type: string }
+        fluffLevel:
+          $ref: '../external/external-api.yml#/components/schemas/FluffLevel'
+        targetGroup: {type: string, x-extensible-enum: ['PETS', 'CHILDREN'], default: 'CHILDREN'}
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+
+
+
+

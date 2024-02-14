@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  version: 1.0.1
+  title: some title
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      operationId: listPets
+      responses:
+        '200':
+          description: A paged array of pets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pets'
+components:
+  schemas:
+    PetBase:
+      type: object
+      required:
+        - id
+        - name
+      example:
+        some: props
+      properties:
+        id:
+          type: integer
+          format: int64
+        type:
+          type: string
+      discriminator:
+        propertyName: type
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            bark:
+              type: string
+          required:
+            - bark
+    Cat:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            color:
+              type: string
+          required:
+            - color
+    Pet:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+      discriminator:
+        propertyName: type
+        mapping:
+          DOG: '#/components/schemas/Dog'
+          CAT: '#/components/schemas/Cat'
+    Pets:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/Pet'

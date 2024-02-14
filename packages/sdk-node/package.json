@@ -1,0 +1,19 @@
+{
+  "name": "@dasaplan/node-sdk",
+  "description": "Javascript runtime utilities including typescript types",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo test",
+    "lint": "echo not implemented",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@dasaplan/ts-sdk": "*",
+    "@redocly/openapi-core": "^1.6.0"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*"
+  }
+}

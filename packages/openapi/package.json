@@ -1,0 +1,74 @@
+{
+  "name": "@dasaplan/openapi",
+  "main": "dist/index.js",
+  "version": "0.0.0",
+  "type": "module",
+  "author": "dsp",
+  "keywords": ["openapi", "typescript", "ts", "zod", "codegen"],
+  "repository": {
+    "type": "git",
+    "directory": "packages/openapi",
+    "url": "https://github.com/dasaplan/ts-modules.git"
+  },
+  "description": "Collection of ready to use tools to facilitate OpenApi specification centered workflows.",
+  "bin": {
+    "openapicli": "dist/oa-cli.js",
+    "oa-cli": "dist/oa-cli.js",
+    "oacli": "dist/oa-cli.js"
+  },
+  "files": [
+    "templates"
+  ],
+  "scripts": {
+    "build": "run-s ts:build cp:templates",
+    "ts:build": "tsc -p tsconfig.build.json",
+    "ts:check": "tsc",
+    "ts:check:generated": "tsc -p tsconfig.generated.json",
+    "cp:templates": "copyfiles -u 1 \"templates/**/*\" -e \"**/*.json\" dist/templates",
+    "api:build": "oa-cli generate test/specs/generic/api.yml -o out",
+    "api:bundle": "redocly bundle specs/pets-api.yml -o tmp/pets-api.yml",
+    "api:generate": "openapi-generator-cli generate -g typescript-axios -i tmp/pets-api.yml -o out -t templates",
+    "api:template:variables": "openapi-generator-cli author template -g typescript-axios",
+    "schemas:generate": "openapi-zod-client \"./tmp/pets-api.yml\" -o test/out/zod.ts -t templates/schemas-only.hbs",
+    "test": "pnpm test:esm",
+    "test:esm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:esm:update": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -u",
+    "clean": "rimraf dist out tmp",
+    "lint": "eslint \"./src/*.ts\" index.ts oa-cli.ts"
+  },
+  "dependencies": {
+    "@dasaplan/node-sdk": "*",
+    "@openapitools/openapi-generator-cli": "^2.7.0",
+    "@redocly/openapi-core": "^1.6.0",
+    "commander": "^11.1.0",
+    "js-yaml": "^4.1.0",
+    "json-schema-merge-allof": "^0.8.1",
+    "jsonpointer": "^5.0.1",
+    "merge-json-schemas": "^1.0.0",
+    "openapi-zod-client": "^1.15.0",
+    "toposort": "^2.0.2",
+    "topological-sort": "^0.3.0",
+    "ts-morph": "^21.0.1",
+    "@ts-morph/common": "^0.22.0",
+    "pascal-case": "^4.0.0",
+    "camelcase": "^8.0.0",
+    "tslog": "^4.9.2",
+    "handlebars": "^4.7.8"
+  },
+  "devDependencies": {
+    "@redocly/cli": "^1.6.0",
+    "@types/pascal-case": "^1.1.2",
+    "@types/json-schema-merge-allof": "^0.6.5",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "axios": "^1.6.5",
+    "eslint": "^8.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0",
+    "npm-run-all": "*",
+    "openapi3-ts": "^4.2.1",
+    "tsconfig": "workspace:*",
+    "type-fest": "*",
+    "typescript": "*"
+  }
+}

@@ -1,3 +1,7 @@
+.idea
+.turbo
+tmp
+
 # Logs
 logs
 *.log

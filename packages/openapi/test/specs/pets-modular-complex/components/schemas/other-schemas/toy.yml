@@ -1,0 +1,22 @@
+openapi: 3.0.3
+paths:
+components:
+  schemas:
+    # Toy will trigger a collision
+    Toy:
+      allOf:
+        - $ref: './../../../external/external-api.yml#/components/schemas/Toy'
+        - $ref: './../../schemas/unknown/schema-sub.yml'
+        - title: Toy
+          properties:
+            name:
+              type: string
+            color:
+              $ref: './color.yml#/components/schemas/Color'
+            targetGroup:
+              $ref: './../../../external/another-external-api.yml#/components/schemas/Toy/properties/targetGroup'
+            relates:
+              $ref: '#/components/schemas/MyPetToy'
+
+    MyPetToy:
+      $ref: './../../../external/external-api.yml#/components/schemas/PetToy'
