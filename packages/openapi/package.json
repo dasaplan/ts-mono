@@ -17,14 +17,16 @@
     "oacli": "dist/oa-cli.js"
   },
   "files": [
-    "templates"
+    "dist"
   ],
-  "scripts": {
-    "build": "run-s ts:build cp:templates",
+    "scripts": {
+    "build": "run-s ts:build ts:alias:resolve cp:templates cp:configs",
     "ts:build": "tsc -p tsconfig.build.json",
     "ts:check": "tsc",
+    "ts:alias:resolve": "tsc-alias",
     "ts:check:generated": "tsc -p tsconfig.generated.json",
     "cp:templates": "copyfiles -u 1 \"templates/**/*\" -e \"**/*.json\" dist/templates",
+    "cp:configs": "copyfiles openapitools.json dist",
     "api:build": "oa-cli generate test/specs/generic/api.yml -o out",
     "api:bundle": "redocly bundle specs/pets-api.yml -o tmp/pets-api.yml",
     "api:generate": "openapi-generator-cli generate -g typescript-axios -i tmp/pets-api.yml -o out -t templates",
@@ -36,9 +38,11 @@
     "clean": "rimraf dist out tmp",
     "lint": "eslint \"./src/*.ts\" index.ts oa-cli.ts"
   },
+  "peerDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.7.0"
+  },
   "dependencies": {
     "lodash": "^4.17.21",
-    "@openapitools/openapi-generator-cli": "^2.7.0",
     "@redocly/openapi-core": "^1.6.0",
     "commander": "^11.1.0",
     "js-yaml": "^4.1.0",
@@ -56,6 +60,8 @@
     "handlebars": "^4.7.8"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.7.0",
+    "tsc-alias": "^1.8.8",
     "@redocly/cli": "^1.6.0",
     "@types/pascal-case": "^1.1.2",
     "@types/lodash": "^4.14.202",
