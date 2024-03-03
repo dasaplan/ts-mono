@@ -9,12 +9,54 @@ Standard tooling is incorporated but configured and modified to yield consistent
 
 1. We write **tech stack agnostic** OpenApi specifications which are as compatible as possible with widespread OpenApi tooling **across domains** and the use
    cases **json payload validation**, **api documentation** and **code generation**.
-    1. We leverage tooling helping us to write specifications to fulfill rule 1 by automatically applying opinionated practices.
-    2. We express concepts like inheritance and polymorphism as precise as possible with OpenApi rather than extending OpenApi syntax which need to be known for
+    1. We leverage tooling helping us to write specifications to fulfill rule 1 by **automatically applying opinionated practices**.
+    2. We **express concepts** like inheritance and polymorphism **as precise as possible with OpenApi** rather than extending OpenApi syntax which need to be known for
        interpreting the specification.
-2. We aim for generated code which is suitable for statically analysing the correctness of our programs
+2. We aim for generated code which **facilitates statically analysing the correctness** of our programs
     1. We want generated code which respects a **tolerant reader**
-    2. We want the generated code to be usable in vanilla tech stacks without forcing a framework on our consumers.
+    2. We want the generated code to be usable in vanilla tech stacks **without forcing frameworks** on our consumers.
+
+## Getting Started
+### Prerequisite
+The generated typescript types depend on runtime libraries which will need to be installed as `dependencies`. 
+For actually generating code we need to install as `devDependencies` this package and the standard generator cli, this package depends on.
+
+>  @openapitools/openapi-generator-cli wraps the java tolling which needs to be installed and requires a java runtime for execution.
+- using npm
+    ```shell
+    npm i --save axios zod \
+    && npm i --save-dev @dasaplan/openapi @openapitools/openapi-generator-cli
+    ```
+- using pnpm
+    ```shell
+    pnpm i --save axios zod \
+    && pnpm i --save-dev @dasaplan/openapi @openapitools/openapi-generator-cli
+    ```    
+
+### usage
+- For generating `ts-axios` client side code gen with `zod` schemas
+    ```shell
+    # assuming the root spec file is located at "$cwd/specs/generic/api.yml"
+    # and assuming we want all generated files to find at "$cwd/out"
+    oa-cli generate specs/generic/api.yml -output out
+    ```
+
+### customizing
+- The used templates for the standard generator will be output at `$cwd/templates` which can be extended as stated in the official doc https://openapi-generator.tech/docs/templating
+- When using custom / private maven registries see https://github.com/OpenAPITools/openapi-generator-cli?tab=readme-ov-file#using-custom--private-maven-registry
+    ```json
+    {
+      "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+      "spaces": 2,
+      "generator-cli": {
+        "version": "7.3.0",
+        "repository": {
+          "queryUrl": "https://private.maven.intern/solrsearch/select?q=g:${group.id}+AND+a:${artifact.id}&core=gav&start=0&rows=200",
+          "downloadUrl": "https://private.maven.intern/maven2/${groupId}/${artifactId}/${versionName}/${artifactId}-${versionName}.jar"
+        }
+      }
+    }
+    ```
 
 ## Features
 > note: Some examples like OpenApi Specs are written in a compressed way to reduce whitespace and facilitate an overview over the whole example.

@@ -62,6 +62,7 @@ export module File {
   }
 }
 
+export type Folder = ReturnType<typeof Folder.of>
 export module Folder {
   export function temp() {
     return resolve(process.cwd(), "tmp");
@@ -139,6 +140,10 @@ export module Folder {
         }
         fs.rmSync(file);
         return this;
+      },
+      copyTo(destination: typeof this) {
+          fs.cpSync(absPath, destination.absolutePath, { recursive: true });
+          return destination;
       },
       clear() {
         if (fs.existsSync(_folder)) {

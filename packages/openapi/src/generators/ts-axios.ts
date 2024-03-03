@@ -19,8 +19,10 @@ export function generateTypescriptAxios(openapiSpec: string, out: string, params
   const outDir = path.isAbsolute(out) ? out : path.resolve(process.cwd(), out);
   const templateDirPath = Folder.resolve(dirname, TEMPLATE_DIR).absolutePath;
   const zodEnabled = params?.generateZod ? "zodEnabled" : "zodDisabled";
+
+  const templates = Folder.of(templateDirPath).copyTo(Folder.cwd("templates"))
   child_process.execSync(
-    `openapi-generator-cli generate -g typescript-axios --skip-validate-spec -i "${openapiSpec}" -o "${outDir}" -t "${templateDirPath}" --additional-properties ${zodEnabled}`
+    `openapi-generator-cli generate -g typescript-axios --skip-validate-spec -i "${openapiSpec}" -o "${outDir}" -t "${templates.absolutePath}" --additional-properties ${zodEnabled}`
   );
   const apiFile = File.of(outDir, "api.ts");
   if (params?.postProcessor) params.postProcessor(apiFile.absolutPath);
