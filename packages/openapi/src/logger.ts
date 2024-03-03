@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // noinspection JSUnusedLocalSymbols
 
-import { Folder } from "@dasaplan/node-sdk/index.js";
 import { ILogObj, Logger } from "tslog";
-import process from "process";
 
 export const log: Logger<ILogObj> = createDefaultLogger();
 export function childLog(n: string | { name: string }) {

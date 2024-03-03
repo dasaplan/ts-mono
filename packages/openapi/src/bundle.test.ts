@@ -1,4 +1,4 @@
-import { Folder } from "@dasaplan/node-sdk/index.js";
+import { Folder } from "@dasaplan/node-sdk";
 import { bundleOpenapi, parseOpenapi } from "./bundle.js";
 
 describe("Bundler", () => {

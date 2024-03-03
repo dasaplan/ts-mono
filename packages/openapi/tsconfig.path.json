@@ -1,0 +1,10 @@
+{
+  "extends": "./node_modules/tsconfig/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "composite": true,
+    "paths": {
+     "@dasaplan/node-sdk": ["./src/sdk/index.js", "./src/sdk/index.ts"],
+   }
+  },
+}

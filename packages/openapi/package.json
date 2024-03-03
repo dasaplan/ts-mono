@@ -37,7 +37,7 @@
     "lint": "eslint \"./src/*.ts\" index.ts oa-cli.ts"
   },
   "dependencies": {
-    "@dasaplan/node-sdk": "*",
+    "lodash": "^4.17.21",
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "@redocly/openapi-core": "^1.6.0",
     "commander": "^11.1.0",
@@ -58,6 +58,7 @@
   "devDependencies": {
     "@redocly/cli": "^1.6.0",
     "@types/pascal-case": "^1.1.2",
+    "@types/lodash": "^4.14.202",
     "@types/json-schema-merge-allof": "^0.6.5",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "axios": "^1.6.5",

@@ -1,4 +1,4 @@
-import _ = require("lodash");
+import { _ } from "./lodash-extended.js";
 
 export module Union {
   export type Handler<I, R> = (e: I) => R;

@@ -3,7 +3,7 @@ import path from "node:path";
 import process from "node:process";
 import fs from "node:fs";
 import { stringifyYaml } from "@redocly/openapi-core";
-import { _ } from "@dasaplan/ts-sdk";
+import { _ } from "../ts/index.js";
 
 export module File {
   export function isFilePath(filePath: string | undefined): filePath is string {

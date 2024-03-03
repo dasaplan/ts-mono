@@ -1,4 +1,4 @@
-import { _ } from "../index.js";
+import { _ } from "./lodash-extended.js";
 
 export module DiscriminatedUnion {
   export type Handler<I, R> = (e: I) => R;

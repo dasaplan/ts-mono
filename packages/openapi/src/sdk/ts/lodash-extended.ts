@@ -44,4 +44,5 @@ lodash.mixin({
   },
 });
 
+export const _ = lodash;
 export default lodash;
