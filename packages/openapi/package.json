@@ -8,7 +8,7 @@
   "repository": {
     "type": "git",
     "directory": "packages/openapi",
-    "url": "https://github.com/dasaplan/ts-modules.git"
+    "url": "https://github.com/dasaplan/ts-mono.git"
   },
   "description": "Collection of ready to use tools to facilitate OpenApi specification centered workflows.",
   "bin": {
