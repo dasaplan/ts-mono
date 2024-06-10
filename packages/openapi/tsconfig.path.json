@@ -4,7 +4,6 @@
     "baseUrl": ".",
     "composite": true,
     "paths": {
-     "@dasaplan/node-sdk": ["./src/sdk/index.js", "./src/sdk/index.ts"],
    }
   },
 }

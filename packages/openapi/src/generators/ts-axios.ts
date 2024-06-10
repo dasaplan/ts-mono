@@ -2,7 +2,7 @@ import path from "path";
 import process from "process";
 import child_process from "node:child_process";
 import url from "url";
-import { File, Folder } from "@dasaplan/node-sdk";
+import { File, Folder } from "@dasaplan/ts-sdk";
 import { childLog } from "../logger.js";
 
 const dirname = url.fileURLToPath(new URL(".", import.meta.url));

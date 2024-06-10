@@ -1,4 +1,4 @@
-import { Folder } from "@dasaplan/node-sdk";
+import { Folder } from "@dasaplan/ts-sdk";
 
 export function deleteUnwantedFiles(apiPath: string) {
   Folder.of(apiPath).delete(

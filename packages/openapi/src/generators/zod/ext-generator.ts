@@ -1,5 +1,5 @@
 import { OpenApiBundled } from "../../bundle.js";
-import { _, File } from "@dasaplan/node-sdk";
+import { _, File } from "@dasaplan/ts-sdk";
 import { generateZodClientFromOpenAPI } from "openapi-zod-client";
 import url from "url";
 import { childLog } from "../../logger.js";

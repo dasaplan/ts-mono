@@ -1,5 +1,5 @@
 import { childLog } from "../../logger.js";
-import { File } from "@dasaplan/node-sdk";
+import { File } from "@dasaplan/ts-sdk";
 
 import { OpenApiBundled } from "../../bundle.js";
 import { generateZod, ZodGenOptions } from "./zod-schemas.js";

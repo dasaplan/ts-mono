@@ -2,7 +2,7 @@
 // noinspection JSUnusedLocalSymbols
 
 import { oas30 } from "openapi3-ts";
-import { _ } from "@dasaplan/node-sdk";
+import { _ } from "@dasaplan/ts-sdk";
 
 import { SetRequired } from "type-fest";
 import assert from "node:assert";

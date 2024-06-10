@@ -42,6 +42,7 @@
     "@openapitools/openapi-generator-cli": "^2.7.0"
   },
   "dependencies": {
+    "@dasaplan/ts-sdk": "workspace:*",
     "lodash": "^4.17.21",
     "@redocly/openapi-core": "^1.6.0",
     "commander": "^11.1.0",

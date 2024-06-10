@@ -1,5 +1,5 @@
 import { oas30 } from "openapi3-ts";
-import { _ } from "@dasaplan/node-sdk";
+import { _ } from "@dasaplan/ts-sdk";
 import { TranspileContext } from "./transpile-context.js";
 import { Schema } from "./transpile-schema.js";
 

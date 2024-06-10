@@ -1,4 +1,4 @@
-import { _ } from "@dasaplan/node-sdk";
+import { _ } from "@dasaplan/ts-sdk";
 import { KindToNodeMappings, SourceFile, StructureKind, SyntaxKind } from "ts-morph";
 import { log } from "../../logger.js";
 

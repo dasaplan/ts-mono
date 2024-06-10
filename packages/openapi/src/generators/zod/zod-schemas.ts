@@ -8,7 +8,7 @@ import { Project, ScriptKind, ts } from "ts-morph";
 import DiscriminatorProperty = Schema.DiscriminatorProperty;
 import { pascalCase } from "pascal-case";
 import * as camelcase from "camelcase";
-import { _, File, Folder } from "@dasaplan/node-sdk";
+import { _, File, Folder } from "@dasaplan/ts-sdk";
 import { log } from "../../logger.js";
 import Handlebars from "handlebars";
 
