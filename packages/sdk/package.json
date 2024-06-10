@@ -1,0 +1,27 @@
+{
+  "name": "@dasaplan/ts-sdk",
+  "description": "Javascript runtime utilities including typescript types",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "build:bndl": "tsup --entry index.ts --entry oa-cli.ts --format cjs,esm --dts --sourcemap --splitting --onSuccess \"tsc --emitDeclarationOnly --declaration\"",
+    "test": "echo test",
+    "lint": "echo not implemented",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "@redocly/openapi-core": "^1.6.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.5",
+    "tsconfig": "workspace:*"
+  }
+}

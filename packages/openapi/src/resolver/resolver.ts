@@ -2,7 +2,7 @@ import { OpenApiBundled } from "../bundle.js";
 import { oas30 } from "openapi3-ts";
 import { isRef } from "@redocly/openapi-core";
 import pointer from "jsonpointer";
-import { _ } from "@dasaplan/node-sdk";
+import { _ } from "@dasaplan/ts-sdk";
 import { OaComponent } from "./model.js";
 
 export type WithOptionalRef<T extends oas30.ReferenceObject | OaComponent> = Exclude<T, oas30.ReferenceObject> & { "::ref"?: string; $ref?: string };

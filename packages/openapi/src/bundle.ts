@@ -1,6 +1,6 @@
 import { Source, bundle, createConfig } from "@redocly/openapi-core";
 import { oas30 } from "openapi3-ts";
-import { _, File, Folder } from "@dasaplan/node-sdk";
+import { _, File, Folder } from "@dasaplan/ts-sdk";
 import { childLog } from "./logger.js";
 
 export interface OpenApiBundled extends oas30.OpenAPIObject {}

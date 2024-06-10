@@ -1,4 +1,4 @@
-import { Folder, File } from "@dasaplan/node-sdk";
+import { Folder, File } from "@dasaplan/ts-sdk";
 import { generateOpenapi } from "./index.js";
 import path from "path";
 import { createTsPostProcessor } from "./post-process/index.js";

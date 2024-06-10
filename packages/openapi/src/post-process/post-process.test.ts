@@ -3,7 +3,7 @@
 
 import { bundleOpenapi } from "../bundle.js";
 import { mergeAllOf } from "./spec/merge-all-of.js";
-import { _, Folder } from "@dasaplan/node-sdk";
+import { _, Folder } from "@dasaplan/ts-sdk";
 import path from "path";
 import jsonSchemaMergeAllOff from "json-schema-merge-allof";
 import { ensureDiscriminatorValues } from "./spec/ensure-discriminator-values.js";

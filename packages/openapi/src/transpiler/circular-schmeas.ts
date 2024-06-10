@@ -2,7 +2,7 @@
 import { OpenApiBundled } from "../bundle.js";
 import { Schema } from "./transpile-schema.js";
 import { oas30 } from "openapi3-ts";
-import { _ } from "@dasaplan/node-sdk";
+import { _ } from "@dasaplan/ts-sdk";
 import { OaComponent, Resolver } from "../resolver/index.js";
 import { WithOptionalRef } from "../resolver/resolver.js";
 

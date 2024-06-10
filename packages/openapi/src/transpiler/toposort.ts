@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Schema } from "./transpile-schema.js";
 import { log } from "../logger.js";
-import { _ } from "@dasaplan/node-sdk";
+import { _ } from "@dasaplan/ts-sdk";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import toposort from "toposort";

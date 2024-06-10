@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars,no-inner-declarations,@typescript-eslint/ban-types */
 
-import { Union, DiscriminatedUnion } from "@dasaplan/node-sdk";
+import { Union, DiscriminatedUnion } from "@dasaplan/ts-sdk";
 import { z } from "zod";
 
 declare const tag: unique symbol;

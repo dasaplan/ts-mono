@@ -1,4 +1,4 @@
-import { SourceFile, SyntaxKind } from "ts-morph";
+import {CallExpression, SourceFile, SyntaxKind, ts} from "ts-morph";
 
 export function zodEnsureUnknownEnumVariant(zodApi: SourceFile) {
   const enums = findEnums(zodApi);
@@ -8,7 +8,7 @@ export function zodEnsureUnknownEnumVariant(zodApi: SourceFile) {
   return zodApi;
 }
 
-export function findEnums(api: SourceFile) {
+export function findEnums(api: SourceFile): CallExpression<ts.CallExpression>[] {
   return api.getDescendantsOfKind(SyntaxKind.CallExpression).flatMap((n) => {
     // eslint-disable-next-line no-useless-escape
     const isEnumExpression = /\.enum\s*\([\[\]\s\w,_\-"']+\)\s*$/u.test(n.getText());

@@ -1,4 +1,4 @@
-import { SourceFile, SyntaxKind } from "ts-morph";
+import { SourceFile, SyntaxKind, PropertyAccessExpression, ts } from "ts-morph";
 
 export function zodReplaceAnd(zodApi: SourceFile) {
   const mergeProperties = findMergeSignatureWithAnd(zodApi);
@@ -11,7 +11,7 @@ export function zodReplaceAnd(zodApi: SourceFile) {
   return zodApi;
 }
 
-export function findMergeSignatureWithAnd(api: SourceFile) {
+export function findMergeSignatureWithAnd(api: SourceFile):  PropertyAccessExpression<ts.PropertyAccessExpression>[] {
   return api.getDescendantsOfKind(SyntaxKind.VariableDeclaration).flatMap((n) => {
     const isMergeSignatureWithAnd = n.getText().includes(".and");
     if (!isMergeSignatureWithAnd) {

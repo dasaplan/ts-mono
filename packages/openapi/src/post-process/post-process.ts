@@ -1,6 +1,6 @@
 import { Project, SourceFile } from "ts-morph";
 import path from "node:path";
-import { _ } from "@dasaplan/node-sdk";
+import { _ } from "@dasaplan/ts-sdk";
 import { zodReplaceAnd } from "./zod/zod-replace-and.js";
 import { tsEnsureDiscriminatorValues } from "./ts/ts-ensure-discriminator-values.js";
 import { deleteUnwantedFiles } from "./ts/delete-unwanted-files.js";

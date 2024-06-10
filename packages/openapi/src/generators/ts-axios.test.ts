@@ -1,4 +1,4 @@
-import { Folder } from "@dasaplan/node-sdk";
+import { Folder } from "@dasaplan/ts-sdk";
 import { bundleOpenapi } from "../bundle.js";
 import { generateTypescriptAxios } from "./ts-axios.js";
 import { createSpecProcessor } from "../post-process/index.js";

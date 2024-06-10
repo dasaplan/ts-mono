@@ -1,5 +1,5 @@
 import { OpenApiBundled } from "../../bundle.js";
-import { _ } from "@dasaplan/node-sdk";
+import { _ } from "@dasaplan/ts-sdk";
 import { oas30 } from "openapi3-ts";
 import { isRef } from "@redocly/openapi-core";
 import { childLog } from "../../logger.js";
