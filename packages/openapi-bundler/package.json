@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-bundler",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Opinionated bundler/merger for Openapi (Swagger)",
   "keywords": [
     "openapi",
@@ -19,7 +19,7 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "openapi-bundler-cli": "dist/oa-cli.js"
+    "openapi-bundler-cli": "dist/oa-bundler-cli.js"
   },
   "files": [
     "dist"
