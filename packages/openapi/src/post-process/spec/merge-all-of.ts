@@ -2,7 +2,7 @@
 
 import { OpenApiBundled } from "../../bundle.js";
 import { oas30 } from "openapi3-ts";
-import { _ } from "@dasaplan/ts-sdk";
+import {_, ApplicationError} from "@dasaplan/ts-sdk";
 
 import jsonSchemaMergeAllOff from "json-schema-merge-allof";
 import { isRef } from "@redocly/openapi-core";
@@ -11,7 +11,13 @@ import { cleanObj, SchemaResolverContext } from "../../resolver/index.js";
 export function mergeAllOf(bundled: OpenApiBundled) {
   const mergedAllOf = _.cloneDeep(bundled);
   const { collected, ctx } = findSchemaObjectsWithAllOf(mergedAllOf);
-  collected.forEach((s, idx, array) => doMerge(s, ctx));
+  collected.forEach((s) => {
+      try {
+          doMerge(s.schema, ctx);
+      }catch (e){
+          throw ApplicationError.create(`failed to merge allOf for schema.id ${s.id}`).chainUnknown(e);
+      }
+  });
   return mergedAllOf;
 }
 
@@ -92,15 +98,19 @@ function resolveSubSchemas(
 }
 
 function getJsonSchemaMergeAllOff(subschemas: Array<{ pointer: string | undefined; resolved: oas30.SchemaObject }>) {
-  return jsonSchemaMergeAllOff(
-    { allOf: subschemas.map((s) => s.resolved) },
-    {
-      resolvers: {
-        // overwrite title by higher indexed schema: [ {title: a}, {title:b}] => {title:b}
-        title: ([a, b]) => b ?? a!,
-      },
-    }
-  );
+  try {
+      return jsonSchemaMergeAllOff(
+          { allOf: subschemas.map((s) => s.resolved) },
+          {
+              resolvers: {
+                  // overwrite title by higher indexed schema: [ {title: a}, {title:b}] => {title:b}
+                  title: ([a, b]) => b ?? a!,
+              },
+          }
+      );
+  }catch (e: unknown){
+      throw ApplicationError.create("failed merging allOf sub schemas").chainUnknown(e);
+  }
 }
 
 function mergeSubSchemas(_resolvedSchemas: Array<{ pointer: string | undefined; resolved: oas30.SchemaObject }>, ctx: SchemaResolverContext) {
@@ -135,7 +145,7 @@ function mergeSubSchemas(_resolvedSchemas: Array<{ pointer: string | undefined; 
 
 function findSchemaObjectsWithAllOf(bundled: OpenApiBundled) {
   const resolver = SchemaResolverContext.create(bundled);
-  const collected = resolver.schemas.filter((s) => _.isDefined(s.allOf));
+  const collected = resolver.schemas.filter((s) => _.isDefined(s.schema.allOf));
   return { collected, ctx: resolver };
 }
 

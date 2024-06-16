@@ -19,7 +19,7 @@ export type Node = oas30.SchemaObject | undefined | { [key: string]: Node };
 export interface SchemaResolverContext {
   resolver: Resolver;
   graph: SchemaGraph;
-  schemas: Array<oas30.SchemaObject>;
+  schemas: Array<{id: string, schema: oas30.SchemaObject}>;
 }
 
 export module SchemaResolverContext {
@@ -27,6 +27,6 @@ export module SchemaResolverContext {
     const resolver = Resolver.create(bundled);
     const graph = SchemaGraph.createFromBundled(bundled);
 
-    return { resolver, graph, schemas: graph.allNodeIds.map((id) => resolver.resolveRef({ $ref: id })) };
+    return { resolver, graph, schemas: graph.allNodeIds.map((id) => ({id, schema: resolver.resolveRef({ $ref: id })})) };
   }
 }

@@ -1,5 +1,5 @@
 import { OpenApiBundled } from "../../bundle.js";
-import { _ } from "@dasaplan/ts-sdk";
+import {_, ApplicationError} from "@dasaplan/ts-sdk";
 import { oas30 } from "openapi3-ts";
 import { isRef } from "@redocly/openapi-core";
 import { childLog } from "../../logger.js";
@@ -8,7 +8,13 @@ import { SchemaResolverContext } from "../../resolver/index.js";
 export function ensureDiscriminatorValues(bundled: OpenApiBundled) {
   const oneOfSchemas = findSchemaObjectsWithOneOf(bundled);
 
-  oneOfSchemas.collected.map((schema) => ensure(schema, oneOfSchemas.ctx));
+  oneOfSchemas.collected.map((collected) => {
+      try {
+          ensure(collected.schema, oneOfSchemas.ctx)
+      }catch (e){
+          throw ApplicationError.create(`failed ensuring all oneOf sub schemas have expected discriminator values schema.id ${collected.id}`).chainUnknown(e);
+      }
+  });
   childLog("ensureDiscriminatorValues").info(
     "ensured discriminator values of %s schemas for all oneOf subschemas based on values defined in discriminator.mapping",
     oneOfSchemas.collected.length
@@ -184,6 +190,6 @@ function setDiscriminatorProperty(subSchema: oas30.SchemaObject, propertyName: s
 
 function findSchemaObjectsWithOneOf(bundled: OpenApiBundled) {
   const transpiler = SchemaResolverContext.create(bundled);
-  const collected = transpiler.schemas.filter((s) => !_.isEmpty(s.oneOf));
+  const collected = transpiler.schemas.filter((s) => !_.isEmpty(s.schema.oneOf));
   return { collected, ctx: transpiler };
 }
