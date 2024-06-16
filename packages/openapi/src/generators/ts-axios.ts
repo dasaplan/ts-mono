@@ -5,7 +5,6 @@ import url from "url";
 import { File, Folder } from "@dasaplan/ts-sdk";
 import { childLog } from "../logger.js";
 
-const dirname = url.fileURLToPath(new URL(".", import.meta.url));
 const TEMPLATE_DIR = "../../templates";
 export interface TsAxiosPublicGenOptions {
   generateZod?: boolean;
@@ -17,7 +16,7 @@ export function generateTypescriptAxios(openapiSpec: string, out: string, params
   childLog(generateTypescriptAxios).info(`start generate:`, openapiSpec, out);
 
   const outDir = path.isAbsolute(out) ? out : path.resolve(process.cwd(), out);
-  const templateDirPath = Folder.resolve(dirname, TEMPLATE_DIR).absolutePath;
+  const templateDirPath = Folder.cwd(TEMPLATE_DIR).absolutePath;
   const zodEnabled = params?.generateZod ? "zodEnabled" : "zodDisabled";
 
   const tempInCwd = Folder.cwd("templates");

@@ -1,10 +1,18 @@
 {
   "name": "@dasaplan/openapi",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "version": "0.0.1",
   "type": "module",
   "author": "dsp",
-  "keywords": ["openapi", "typescript", "ts", "zod", "codegen"],
+  "keywords": [
+    "openapi",
+    "typescript",
+    "ts",
+    "zod",
+    "codegen"
+  ],
   "repository": {
     "type": "git",
     "directory": "packages/openapi",
@@ -13,14 +21,28 @@
   "description": "Collection of ready to use tools to facilitate OpenApi specification centered workflows.",
   "bin": {
     "openapicli": "dist/oa-cli.js",
-    "oa-cli": "dist/oa-cli.js",
     "oacli": "dist/oa-cli.js"
   },
   "files": [
     "dist"
   ],
-    "scripts": {
-    "build": "run-s ts:build ts:alias:resolve cp:templates cp:configs",
+  "tsup": {
+    "entry": [
+      "index.ts",
+      "oa-cli.ts"
+    ],
+    "noExternal": [
+      "@dasaplan/ts-sdk",
+      "tsconfig"
+    ],
+    "format": ["cjs", "esm"],
+    "tsconfig": "tsconfig.build.json",
+    "clean": true,
+    "sourcemap": true
+  },
+  "scripts": {
+    "build": "run-s rup cp:templates cp:configs",
+    "rup": "tsup-node --dts",
     "ts:build": "tsc -p tsconfig.build.json",
     "ts:check": "tsc",
     "ts:alias:resolve": "tsc-alias",
@@ -42,7 +64,7 @@
     "@openapitools/openapi-generator-cli": "^2.7.0"
   },
   "dependencies": {
-    "@dasaplan/ts-sdk": "workspace:*",
+    "@dasaplan/ts-sdk": "workspace:0.0.0",
     "lodash": "^4.17.21",
     "@redocly/openapi-core": "^1.6.0",
     "commander": "^11.1.0",
@@ -61,6 +83,7 @@
     "handlebars": "^4.7.8"
   },
   "devDependencies": {
+    "tsconfig": "workspace:0.0.0",
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "tsc-alias": "^1.8.8",
     "@redocly/cli": "^1.6.0",
@@ -75,7 +98,6 @@
     "eslint-plugin-promise": "^6.0.0",
     "npm-run-all": "*",
     "openapi3-ts": "^4.2.1",
-    "tsconfig": "workspace:*",
     "type-fest": "*",
     "typescript": "*"
   }

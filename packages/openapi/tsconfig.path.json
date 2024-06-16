@@ -1,9 +1,0 @@
-{
-  "extends": "./node_modules/tsconfig/base.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "composite": true,
-    "paths": {
-   }
-  },
-}
