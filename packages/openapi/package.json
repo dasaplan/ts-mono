@@ -1,11 +1,7 @@
 {
   "name": "@dasaplan/openapi",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "version": "0.0.1",
-  "type": "module",
-  "author": "dsp",
+  "version": "0.0.2",
+  "description": "Collection of ready to use tools to facilitate OpenApi specification centered workflows.",
   "keywords": [
     "openapi",
     "typescript",
@@ -15,32 +11,24 @@
   ],
   "repository": {
     "type": "git",
-    "directory": "packages/openapi",
-    "url": "https://github.com/dasaplan/ts-mono.git"
+    "url": "https://github.com/dasaplan/ts-mono.git",
+    "directory": "packages/openapi"
   },
-  "description": "Collection of ready to use tools to facilitate OpenApi specification centered workflows.",
+  "author": "dsp",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
-    "openapicli": "dist/oa-cli.js",
-    "oacli": "dist/oa-cli.js"
+    "oacli": "dist/oa-cli.js",
+    "openapicli": "dist/oa-cli.js"
   },
   "files": [
     "dist"
   ],
-  "tsup": {
-    "entry": [
-      "index.ts",
-      "oa-cli.ts"
-    ],
-    "noExternal": [
-      "@dasaplan/ts-sdk",
-      "tsconfig"
-    ],
-    "format": ["cjs", "esm"],
-    "tsconfig": "tsconfig.build.json",
-    "clean": true,
-    "sourcemap": true
-  },
   "scripts": {
+    "prepack": "sort-package-json --quiet && clean-package",
+    "postpack": "clean-package restore",
     "build": "run-s rup cp:templates cp:configs",
     "rup": "tsup-node --dts",
     "ts:build": "tsc -p tsconfig.build.json",
@@ -60,45 +48,73 @@
     "clean": "rimraf dist out tmp",
     "lint": "eslint \"./src/*.ts\" index.ts oa-cli.ts"
   },
-  "peerDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.7.0"
-  },
   "dependencies": {
     "@dasaplan/ts-sdk": "workspace:0.0.0",
-    "lodash": "^4.17.21",
     "@redocly/openapi-core": "^1.6.0",
+    "@ts-morph/common": "^0.22.0",
+    "camelcase": "^8.0.0",
     "commander": "^11.1.0",
+    "handlebars": "^4.7.8",
     "js-yaml": "^4.1.0",
     "json-schema-merge-allof": "^0.8.1",
     "jsonpointer": "^5.0.1",
+    "lodash": "^4.17.21",
     "merge-json-schemas": "^1.0.0",
     "openapi-zod-client": "^1.15.0",
-    "toposort": "^2.0.2",
-    "topological-sort": "^0.3.0",
-    "ts-morph": "^21.0.1",
-    "@ts-morph/common": "^0.22.0",
     "pascal-case": "^4.0.0",
-    "camelcase": "^8.0.0",
-    "tslog": "^4.9.2",
-    "handlebars": "^4.7.8"
+    "topological-sort": "^0.3.0",
+    "toposort": "^2.0.2",
+    "ts-morph": "^21.0.1",
+    "tslog": "^4.9.2"
   },
   "devDependencies": {
-    "tsconfig": "workspace:0.0.0",
     "@openapitools/openapi-generator-cli": "^2.7.0",
-    "tsc-alias": "^1.8.8",
     "@redocly/cli": "^1.6.0",
-    "@types/pascal-case": "^1.1.2",
-    "@types/lodash": "^4.14.202",
     "@types/json-schema-merge-allof": "^0.6.5",
+    "@types/lodash": "^4.14.202",
+    "@types/pascal-case": "^1.1.2",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "axios": "^1.6.5",
+    "clean-package": "^2.2.0",
     "eslint": "^8.0.1",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
     "npm-run-all": "*",
     "openapi3-ts": "^4.2.1",
+    "sort-package-json": "^2.10.0",
+    "tsc-alias": "^1.8.8",
+    "tsconfig": "workspace:0.0.0",
     "type-fest": "*",
     "typescript": "*"
+  },
+  "peerDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.7.0"
+  },
+  "clean-package": {
+    "remove": [
+      "scripts",
+      "devDependencies",
+      "tsup",
+      "clean-package",
+      "dependencies.@dasaplan/ts-sdk"
+    ]
+  },
+  "tsup": {
+    "entry": [
+      "index.ts",
+      "oa-cli.ts"
+    ],
+    "noExternal": [
+      "@dasaplan/ts-sdk",
+      "tsconfig"
+    ],
+    "format": [
+      "cjs",
+      "esm"
+    ],
+    "tsconfig": "tsconfig.build.json",
+    "clean": true,
+    "sourcemap": true
   }
 }
