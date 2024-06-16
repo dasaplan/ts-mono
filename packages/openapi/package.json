@@ -49,8 +49,8 @@
     "lint": "eslint \"./src/*.ts\" index.ts oa-cli.ts"
   },
   "dependencies": {
-    "@dasaplan/ts-sdk": "workspace:0.0.0",
     "@dasaplan/openapi-bundler": "workspace:*",
+    "@dasaplan/ts-sdk": "workspace:0.0.0",
     "@ts-morph/common": "^0.22.0",
     "camelcase": "^8.0.0",
     "commander": "^11.1.0",

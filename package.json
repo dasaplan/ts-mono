@@ -11,6 +11,8 @@
     "publish-packages": "turbo run build lint test && changeset version && changeset publish"
   },
   "devDependencies": {
+    "sort-package-json": "^2.10.0",
+    "clean-package": "^2.2.0",
     "@changesets/cli": "^2.27.5",
     "@types/jest": "^29.5.11",
     "@types/node": "^20.10.4",

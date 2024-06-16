@@ -1,11 +1,7 @@
 {
   "name": "@dasaplan/openapi-bundler",
-  "description": "Opinionated bundler/merger for Openapi (Swagger)",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "type": "module",
   "version": "0.0.0",
+  "description": "Opinionated bundler/merger for Openapi (Swagger)",
   "keywords": [
     "openapi",
     "typescript",
@@ -18,39 +14,45 @@
     "url": "https://github.com/dasaplan/ts-mono.git",
     "directory": "packages/openapi-bundler"
   },
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "openapi-bundler-cli": "dist/oa-cli.js"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "pnpm rup",
+    "clean": "rimraf dist",
+    "lint": "eslint \"./src/*.ts\" index.ts oa-bundler-cli.ts",
     "prepack": "sort-package-json --quiet && clean-package",
     "postpack": "clean-package restore",
-    "build": "pnpm rup",
     "rup": "tsup-node --dts",
-    "lint": "eslint \"./src/*.ts\" index.ts oa-bundler-cli.ts",
-    "clean": "rimraf dist",
     "test": "pnpm test:esm",
     "test:esm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "test:esm:update": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -u"
   },
-  "bin": {
-    "openapi-bundler-cli": "dist/oa-cli.js"
-  },
-  "files": ["dist"],
   "dependencies": {
     "commander": "^11.1.0",
     "json-schema-merge-allof": "^0.8.1",
     "jsonpointer": "^5.0.1",
-    "openapi3-ts": "^4.3.3",
-    "merge-json-schemas": "^1.0.0",
-    "tslog": "^4.9.2",
     "lodash": "^4.17.21",
-    "toposort": "^2.0.2"
+    "merge-json-schemas": "^1.0.0",
+    "openapi3-ts": "^4.3.3",
+    "toposort": "^2.0.2",
+    "tslog": "^4.9.2"
+  },
+  "devDependencies": {
+    "@dasaplan/ts-sdk": "workspace:*",
+    "@types/json-schema-merge-allof": "^0.6.5",
+    "@types/lodash": "^4.17.5",
+    "tsconfig": "workspace:*"
   },
   "peerDependencies": {
     "@redocly/openapi-core": "^1.6.0"
-  },
-  "devDependencies": {
-    "tsconfig": "workspace:*",
-    "@types/json-schema-merge-allof": "^0.6.5",
-    "@types/lodash":"^4.17.5",
-    "@dasaplan/ts-sdk": "workspace:*"
   },
   "clean-package": {
     "remove": [
