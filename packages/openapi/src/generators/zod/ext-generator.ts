@@ -1,7 +1,7 @@
-import { OpenApiBundled } from "../../bundle.js";
 import {_, File, Folder} from "@dasaplan/ts-sdk";
 import { generateZodClientFromOpenAPI } from "openapi-zod-client";
 import { childLog } from "../../logger.js";
+import { OpenApiBundled } from "@dasaplan/openapi-bundler";
 
 
 const PATH_TEMPLATE = "../../templates/schemas-only.hbs";

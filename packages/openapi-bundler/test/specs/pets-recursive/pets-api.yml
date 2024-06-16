@@ -1,0 +1,67 @@
+openapi: "3.1.0"
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      operationId: listPets
+      tags:
+        - pets
+      responses:
+        '200':
+          description: A paged array of pets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                $ref: '#/components/schemas/Pets'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pets"
+components:
+  schemas:
+    Pets:
+      type: object
+      properties:
+        pets:
+          type: array
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/Pet"
+
+    Pet:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+      discriminator:
+        propertyName: type
+        mapping:
+          CAT: '#/components/schemas/Cat'
+          DOG: '#/components/schemas/Dog'
+
+    PetBase:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+      discriminator:
+        propertyName: type
+
+    Cat:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            enemies:
+              $ref: '#/components/schemas/Pets'
+
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            friends:
+              $ref: '#/components/schemas/Pets'

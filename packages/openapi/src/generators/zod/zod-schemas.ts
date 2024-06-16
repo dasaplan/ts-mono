@@ -1,17 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // noinspection JSUnusedLocalSymbols
 
-import { OpenApiBundled } from "../../bundle.js";
-import { Transpiler } from "../../transpiler/index.js";
-import { Schema } from "../../transpiler/transpile-schema.js";
 import { Project, ScriptKind, ts } from "ts-morph";
-import DiscriminatorProperty = Schema.DiscriminatorProperty;
 import { pascalCase } from "pascal-case";
 import * as camelcase from "camelcase";
 import { _, File, Folder } from "@dasaplan/ts-sdk";
 import { log } from "../../logger.js";
 import Handlebars from "handlebars";
-import path from "path";
+import { OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
+import DiscriminatorProperty = Schema.DiscriminatorProperty;
 
 const TEMPLATE_DIR = "templates";
 // are being used to identify usecases

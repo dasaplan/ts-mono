@@ -1,7 +1,6 @@
 import { Folder } from "@dasaplan/ts-sdk";
-import { bundleOpenapi } from "../bundle.js";
 import { generateTypescriptAxios } from "./ts-axios.js";
-import { createSpecProcessor } from "../post-process/index.js";
+import { createSpecProcessor, bundleOpenapi } from "@dasaplan/openapi-bundler";
 
 describe("Generator: ts-axios", () => {
   test("generate generateTypescriptAxios", async () => {

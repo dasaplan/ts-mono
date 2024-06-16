@@ -1,0 +1,16 @@
+get:
+  summary: Info for a specific pet
+  operationId: showPetById
+  tags:
+    - pets
+  parameters:
+    - $ref: '../components/parameter.yml#/components/parameters/PathPetId'
+  responses:
+    '200':
+      description: Expected response to a valid request
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas.yml#/components/schemas/Pet'
+    default:
+      $ref: '../components/responses.yml#/components/responses/Default'

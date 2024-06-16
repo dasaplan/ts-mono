@@ -1,0 +1,7 @@
+openapi: 3.0.3
+paths:
+components:
+  examples:
+    String:
+      description: default string example
+      value: "some string"

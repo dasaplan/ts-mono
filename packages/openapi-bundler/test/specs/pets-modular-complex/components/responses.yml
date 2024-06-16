@@ -1,0 +1,10 @@
+openapi: 3.0.3
+paths:
+components:
+  responses:
+    Default:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: "./schemas.yml#/components/schemas/Error"

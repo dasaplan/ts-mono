@@ -1,5 +1,4 @@
-import { bundleOpenapi, OpenApiBundled } from "../../bundle.js";
-import { createSpecProcessor } from "../../post-process/index.js";
+import {bundleOpenapi, createSpecProcessor, OpenApiBundled} from "@dasaplan/openapi-bundler";
 import { ZodGenOptions, generateZod } from "./zod-schemas.js";
 import { oas30 } from "openapi3-ts";
 

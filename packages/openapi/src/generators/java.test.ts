@@ -1,7 +1,6 @@
 import { Folder } from "@dasaplan/ts-sdk";
-import { bundleOpenapi } from "../bundle.js";
-import { createSpecProcessor } from "../post-process/index.js";
 import { generateJava } from "./java.js";
+import {bundleOpenapi, createSpecProcessor} from "@dasaplan/openapi-bundler";
 
 describe("Generator: java", () => {
   test("generate java", async () => {

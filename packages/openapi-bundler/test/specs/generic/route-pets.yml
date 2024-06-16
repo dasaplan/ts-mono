@@ -1,0 +1,10 @@
+get:
+  summary: List all pets
+  operationId: listPets
+  responses:
+    '200':
+      description: A paged array of pets
+      content:
+        application/json:
+          schema:
+            $ref: "./schemas.yml#/components/schemas/Pets"

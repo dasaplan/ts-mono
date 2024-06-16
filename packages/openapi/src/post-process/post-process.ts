@@ -4,17 +4,7 @@ import { _ } from "@dasaplan/ts-sdk";
 import { zodReplaceAnd } from "./zod/zod-replace-and.js";
 import { tsEnsureDiscriminatorValues } from "./ts/ts-ensure-discriminator-values.js";
 import { deleteUnwantedFiles } from "./ts/delete-unwanted-files.js";
-import { OpenApiBundled } from "../bundle.js";
-import { ensureDiscriminatorValues } from "./spec/ensure-discriminator-values.js";
-import { mergeAllOf } from "./spec/merge-all-of.js";
 import { zodEnsureUnknownEnumVariant } from "./zod/zod-ensure-unknown-enum.js";
-
-export function createSpecProcessor(options: { mergeAllOf?: boolean; ensureDiscriminatorValues?: boolean }) {
-  const processors: Array<(spec: OpenApiBundled) => OpenApiBundled> = [];
-  if (options.mergeAllOf) processors.push(mergeAllOf);
-  if (options.ensureDiscriminatorValues) processors.push(ensureDiscriminatorValues);
-  return (spec: OpenApiBundled) => processors.reduce((acc, curr) => curr(acc), spec);
-}
 
 export function createTsPostProcessor(options: { deleteUnwantedFiles?: boolean; ensureDiscriminatorValues?: boolean }) {
   const processors: Array<(api: SourceFile) => SourceFile> = [];

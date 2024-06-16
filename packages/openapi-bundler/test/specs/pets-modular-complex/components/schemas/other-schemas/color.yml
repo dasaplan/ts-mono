@@ -1,0 +1,17 @@
+openapi: 3.0.3
+paths:
+components:
+  schemas:
+    Color:
+      allOf:
+        - $ref: "../unknown/schema-untitled.yml"
+      type: object
+      properties:
+        colorId:
+          type: string
+        untitled:
+          $ref: '#/components/schemas/UntitledImport'
+
+    UntitledImport:
+        $ref: "../unknown/schema-untitled.yml"
+

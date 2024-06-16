@@ -1,8 +1,8 @@
 import { childLog } from "../../logger.js";
 import { File } from "@dasaplan/ts-sdk";
 
-import { OpenApiBundled } from "../../bundle.js";
 import { generateZod, ZodGenOptions } from "./zod-schemas.js";
+import { OpenApiBundled } from "@dasaplan/openapi-bundler";
 
 export async function generateZodSchemas(openapiSpec: OpenApiBundled, outFile: string, options?: ZodGenOptions) {
   childLog(generateZodSchemas).info(`start generate: %s`, outFile);
