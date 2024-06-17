@@ -46,6 +46,7 @@
     "tslog": "^4.9.2"
   },
   "devDependencies": {
+    "openapi-example-specs": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:*",
     "@types/json-schema-merge-allof": "^0.6.5",
     "@types/lodash": "^4.17.5",

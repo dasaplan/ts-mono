@@ -1,0 +1,10 @@
+{
+  "extends": "./node_modules/tsconfig/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "declaration": true
+  },
+  "exclude": ["node_modules"],
+  "include": ["index.ts"]
+}

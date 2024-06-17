@@ -13,7 +13,7 @@ export function generateJava(openapiSpec: string, out: string) {
     .join(",");
   const outDir = path.isAbsolute(out) ? out : path.resolve(process.cwd(), out, "java");
   child_process.execSync(
-    `openapi-generator-cli generate -g spring --skip-validate-spec -i "${openapiSpec}" -o "${outDir}" --additional-properties=${additionalProperties}`
+    `npx openapi-generator-cli generate -g spring --skip-validate-spec -i "${openapiSpec}" -o "${outDir}" --additional-properties=${additionalProperties}`
   );
 
   return outDir;

@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",
+    "openapi-example-specs": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:0.0.0",
     "@ts-morph/common": "^0.22.0",
     "camelcase": "^8.0.0",

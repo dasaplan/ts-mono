@@ -1,0 +1,52 @@
+openapi: "3.1.0"
+paths:
+info:
+components:
+  schemas:
+    Pets:
+      type: array
+      maxItems: 100
+      items:
+        $ref: "#/components/schemas/Pet"
+
+    Pet:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+      discriminator:
+        propertyName: type
+        mapping:
+          DOG: '#/components/schemas/Dog'
+          CAT: '#/components/schemas/Cat'
+
+    PetBase:
+      type: object
+      required:
+        - id
+        - name
+      example:
+        $ref: './example.json'
+      properties:
+        id:
+          type: integer
+          format: int64
+        type:
+          type: string
+      discriminator:
+        propertyName: type
+
+    Cat:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            color:
+              type: string
+          required: [ color ]
+
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            bark:
+              type: string
+          required: [ bark ]

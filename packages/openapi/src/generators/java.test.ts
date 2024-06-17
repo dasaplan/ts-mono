@@ -1,10 +1,11 @@
 import { Folder } from "@dasaplan/ts-sdk";
 import { generateJava } from "./java.js";
-import {bundleOpenapi, createSpecProcessor} from "@dasaplan/openapi-bundler";
+import { bundleOpenapi, createSpecProcessor } from "@dasaplan/openapi-bundler";
+import { resolveSpecPath } from "openapi-example-specs";
 
 describe("Generator: java", () => {
   test("generate java", async () => {
-    const { outFile: bundled } = await bundleOpenapi("test/specs/pets-modular/pets-api.yml", {
+    const { outFile: bundled } = await bundleOpenapi(resolveSpecPath("pets-modular/pets-api.yml"), {
       postProcessor: createSpecProcessor({
         ensureDiscriminatorValues: true,
         mergeAllOf: true,

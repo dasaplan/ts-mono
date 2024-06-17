@@ -27,7 +27,7 @@ export function generateTypescriptAxios(openapiSpec: string, out: string, params
   const shouldCopyToCwd = templateDirPath !== tempInCwd.absolutePath;
   const templates = shouldCopyToCwd ? Folder.of(templateDirPath).copyTo(tempInCwd) : Folder.of(templateDirPath);
   child_process.execSync(
-    `openapi-generator-cli generate -g typescript-axios --skip-validate-spec -i "${openapiSpec}" -o "${outDir}" -t "${templates.absolutePath}" --additional-properties ${zodEnabled}`
+    `npx openapi-generator-cli generate -g typescript-axios --skip-validate-spec -i "${openapiSpec}" -o "${outDir}" -t "${templates.absolutePath}" --additional-properties ${zodEnabled}`
   );
   const apiFile = File.of(outDir, "api.ts");
   if (params?.postProcessor) params.postProcessor(apiFile.absolutPath);

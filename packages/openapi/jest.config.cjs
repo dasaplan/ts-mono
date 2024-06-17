@@ -16,5 +16,6 @@ module.exports = {
     preset: 'ts-jest/presets/default-esm', // needed for esm and import.meta, as well suggested by ts-jest docs
     moduleNameMapper: {"(.+)\\.js": "$1"}, // needed, but idk why
     transform: {"\\.[jt]sx?$": ["ts-jest", {useESM: true}]}, // needed and suggested by ts-jest docs
-    extensionsToTreatAsEsm: ['.ts'], // works also without it but suggested by ts-jest docs
+    extensionsToTreatAsEsm: ['.ts'], // works also without it but suggested by ts-jest docs,
+    reporters: ['default', 'summary'],
 };

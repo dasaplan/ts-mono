@@ -17,7 +17,7 @@ export function createCommandBundle(program: Command) {
         ensureDiscriminatorValues: options.disableEnsureDiscriminatorValues ?? true,
       });
       const result = await withPerformance(() => bundleOpenapi(spec, { postProcessor, outFile: options.outputFile }));
-      log.info(`finished generate in ${(result.duration / 1000).toFixed(3)} s`, result.ret);
+      log.info(`finished generate in ${(result.duration / 1000).toFixed(3)} s`, {outFile: result.ret.outFile});
     });
 }
 

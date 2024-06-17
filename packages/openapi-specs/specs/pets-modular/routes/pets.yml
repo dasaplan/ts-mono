@@ -1,0 +1,10 @@
+get:
+  summary: Get pets
+  operationId: getPets
+  responses:
+    200:
+      description: Ok response
+      content:
+        application/json:
+          schema:
+            $ref: '../components/pet.yml#/components/schemas/Pet'

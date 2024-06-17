@@ -1,0 +1,4 @@
+title: Titled Schema
+properties:
+  titledProp:
+    type: string

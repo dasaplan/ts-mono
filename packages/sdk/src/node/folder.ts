@@ -38,7 +38,7 @@ export module File {
       writeYml(content: string | object | NodeJS.ArrayBufferView) {
         fs.writeFileSync(
           this.absolutPath,
-          stringifyYaml(content, { noRefs: true }),
+          stringifyYaml(content, { noRefs: true })
         );
         return filePath;
       },
@@ -62,7 +62,7 @@ export module File {
   }
 }
 
-export type Folder = ReturnType<typeof Folder.of>
+export type Folder = ReturnType<typeof Folder.of>;
 export module Folder {
   export function temp() {
     return resolve(process.cwd(), "tmp");
@@ -87,24 +87,24 @@ export module Folder {
       },
       write(
         fileName: string,
-        content: string | object | NodeJS.ArrayBufferView,
+        content: string | object | NodeJS.ArrayBufferView
       ) {
         fs.writeFileSync(this.makeFilePath(fileName), File.stringify(content));
         return this;
       },
       appendSync(
         fileName: string,
-        content: string | object | NodeJS.ArrayBufferView,
+        content: string | object | NodeJS.ArrayBufferView
       ) {
         fs.appendFileSync(
           this.makeFilePath(fileName),
-          JSON.stringify(content) + "\n",
+          JSON.stringify(content) + "\n"
         );
         return this;
       },
       writeYml(
         fileName: string,
-        content: string | object | NodeJS.ArrayBufferView,
+        content: string | object | NodeJS.ArrayBufferView
       ) {
         return File.of(this.makeFilePath(fileName)).writeYml(content);
       },
@@ -142,8 +142,8 @@ export module Folder {
         return this;
       },
       copyTo(destination: typeof this) {
-          fs.cpSync(absPath, destination.absolutePath, { recursive: true });
-          return destination;
+        fs.cpSync(absPath, destination.absolutePath, { recursive: true });
+        return destination;
       },
       clear() {
         if (fs.existsSync(_folder)) {

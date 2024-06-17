@@ -98,6 +98,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      openapi-example-specs:
+        specifier: workspace:*
+        version: link:../openapi-specs
       openapi-zod-client:
         specifier: ^1.15.0
         version: 1.15.0(react@18.2.0)
@@ -208,6 +211,15 @@ importers:
       '@types/lodash':
         specifier: ^4.17.5
         version: 4.17.5
+      openapi-example-specs:
+        specifier: workspace:*
+        version: link:../openapi-specs
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+
+  packages/openapi-specs:
+    devDependencies:
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig

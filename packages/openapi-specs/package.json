@@ -1,0 +1,20 @@
+{
+  "name": "openapi-example-specs",
+  "private": true,
+  "version": "0.0.0",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./specs/*": "./specs/*"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "files": [
+    "specs"
+  ],
+  "devDependencies": {
+    "tsconfig": "workspace:*"
+  }
+}

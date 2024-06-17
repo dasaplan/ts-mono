@@ -1,0 +1,11 @@
+openapi: "3.0.3"
+info:
+  version: "1.0.1"
+  title: "some title"
+paths:
+  /pets:
+    $ref: './route-pets.yml'
+  /pets/{petId}:
+    $ref: './route-test.yml#/components/pathItems/GetPet'
+
+

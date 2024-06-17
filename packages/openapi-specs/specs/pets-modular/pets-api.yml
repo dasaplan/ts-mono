@@ -1,0 +1,11 @@
+openapi: 3.0.3
+info:
+  title: My service
+  description: My service
+  version: 1.0.0
+servers:
+  - url: 'https://'
+paths:
+  /v1/pets:
+    $ref: './routes/pets.yml'
+

@@ -1,0 +1,4 @@
+required: [ string ]
+properties:
+  subId:
+    type: string

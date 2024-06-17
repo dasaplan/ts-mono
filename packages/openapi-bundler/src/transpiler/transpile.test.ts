@@ -1,10 +1,15 @@
+import { File, Folder } from "@dasaplan/ts-sdk/index.js";
 import { bundleOpenapi } from "../bundle.js";
 import { createSpecProcessor } from "../post-process/index.js";
 import { Transpiler } from "./transpiler.js";
+import { resolveSpecPath } from "openapi-example-specs";
 
 describe("transpiler", () => {
   test("endpoints", async () => {
-    const { parsed } = await bundleOpenapi("test/specs/pets-modular/pets-api.yml", {
+    const specPath = resolveSpecPath("pets-modular/pets-api.yml");
+    const { parsed } = await bundleOpenapi(specPath ?? "", {
+      outFile: Folder.cwd("tmp", "endpoints").makeFile(File.of(specPath).name)
+        .absolutPath,
       postProcessor: createSpecProcessor({
         mergeAllOf: true,
         ensureDiscriminatorValues: true,
@@ -17,7 +22,10 @@ describe("transpiler", () => {
   });
 
   test("schemas", async () => {
-    const { parsed } = await bundleOpenapi("test/specs/pets-modular/pets-api.yml", {
+    const specPath = resolveSpecPath("pets-modular/pets-api.yml");
+    const { parsed } = await bundleOpenapi(specPath, {
+      outFile: Folder.cwd("tmp", "schemas").makeFile(File.of(specPath).name)
+        .absolutPath,
       postProcessor: createSpecProcessor({
         mergeAllOf: true,
         ensureDiscriminatorValues: true,
@@ -30,12 +38,14 @@ describe("transpiler", () => {
   });
 
   test.each([
-    "test/specs/pets-modular/pets-api.yml",
-    "test/specs/pets-simple/pets-api.yml",
-    "test/specs/pets-modular-complex/petstore-api.yml",
-    "test/specs/generic/api.yml",
+    resolveSpecPath("pets-modular/pets-api.yml"),
+    resolveSpecPath("pets-simple/pets-api.yml"),
+    resolveSpecPath("pets-modular-complex/petstore-api.yml"),
+    resolveSpecPath("generic/api.yml"),
   ])("transpile %s", async (api) => {
     const { parsed } = await bundleOpenapi(api, {
+      outFile: Folder.cwd("tmp", "transpile").makeFile(File.of(api).name)
+        .absolutPath,
       postProcessor: createSpecProcessor({
         mergeAllOf: true,
         ensureDiscriminatorValues: true,
