@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-bundler",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Opinionated bundler/merger for Openapi (Swagger)",
   "keywords": [
     "openapi",
@@ -32,9 +32,9 @@
     "postpack": "clean-package restore",
     "rup": "tsup-node --dts",
     "test": "pnpm test:esm",
-    "test:update": "pnpm test:esm:update",
     "test:esm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:esm:update": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -u"
+    "test:esm:update": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -u",
+    "test:update": "pnpm test:esm:update"
   },
   "dependencies": {
     "commander": "^11.1.0",
@@ -47,10 +47,10 @@
     "tslog": "^4.9.2"
   },
   "devDependencies": {
-    "openapi-example-specs": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:*",
     "@types/json-schema-merge-allof": "^0.6.5",
     "@types/lodash": "^4.17.5",
+    "openapi-example-specs": "workspace:*",
     "tsconfig": "workspace:*"
   },
   "peerDependencies": {

@@ -9,8 +9,10 @@
     "ws:test:update": "turbo test:update",
     "ws:lint": "turbo lint",
     "ws:clean": "turbo clean",
-    "ci": "turbo run build lint test",
-    "publish-packages": "turbo run ci && changeset version && changeset publish"
+    "ci:build": "turbo run build lint test",
+    "ci:commit": "git commit -am \"chore: release\"",
+    "ci:publish": "changeset version && pnpm ci:commit && changeset publish",
+    "publish-packages": "pnpm ci:build && pnpm ci:publish"
   },
   "devDependencies": {
     "sort-package-json": "^2.10.0",
