@@ -260,7 +260,7 @@ export interface Seam extends PetBase {
 }
     
         /**
- * 
+ * Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s 
  * @export
  * @interface ShortHair
  */
@@ -628,16 +628,16 @@ components:
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - properties:
+        - required:
+            - bark
+            - type
+          properties:
             bark:
               type: string
             type:
               type: string
               x-const: DOG
               example: DOG
-          required:
-            - bark
-            - type
     CatBase:
       allOf:
         - {}
@@ -665,6 +665,10 @@ components:
             - type
           discriminator:
             propertyName: catType
+          description: |
+            this is 
+            a multiline
+            description
           properties:
             color:
               type: string
@@ -691,6 +695,9 @@ components:
         - type
       discriminator:
         propertyName: catType
+      description: >
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
       properties:
         color:
           type: string
@@ -1089,16 +1096,16 @@ components:
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - properties:
+        - required:
+            - bark
+            - type
+          properties:
             bark:
               type: string
             type:
               type: string
               x-const: DOG
               example: DOG
-          required:
-            - bark
-            - type
     CatBase:
       allOf:
         - {}
@@ -1123,6 +1130,10 @@ components:
             - type
           discriminator:
             propertyName: catType
+          description: |
+            this is 
+            a multiline
+            description
           properties:
             color:
               type: string
@@ -1133,13 +1144,13 @@ components:
               minLength: 1
               x-const: SEAM
               example: SEAM
-            angryLevel:
-              type: string
-              pattern: \\w+
             type:
               type: string
               x-const: CAT
               example: CAT
+            angryLevel:
+              type: string
+              pattern: \\w+
     ShortHair:
       title: ShortHair
       required:
@@ -1148,6 +1159,9 @@ components:
         - type
       discriminator:
         propertyName: catType
+      description: >
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
       properties:
         color:
           type: string
@@ -1262,16 +1276,16 @@ components:
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - properties:
-            bark:
-              type: string
-            type:
-              type: string
-              x-const: DOG
-              example: DOG
-          required:
-            - bark
-            - type
+      properties:
+        bark:
+          type: string
+        type:
+          type: string
+          x-const: DOG
+          example: DOG
+      required:
+        - bark
+        - type
     CatBase:
       allOf:
         - $ref: '#/components/schemas/PetBase'
@@ -1289,7 +1303,10 @@ components:
     Seam:
       allOf:
         - $ref: '#/components/schemas/CatBase'
-        - title: Seam
+        - description: |
+            this is 
+            a multiline
+            description
           properties:
             catType:
               type: string
@@ -1298,9 +1315,6 @@ components:
               minLength: 1
               x-const: SEAM
               example: SEAM
-            angryLevel:
-              type: string
-              pattern: \\w+
             type:
               type: string
               x-const: CAT
@@ -1308,10 +1322,24 @@ components:
           required:
             - catType
             - type
+        - title: Seam
+          properties:
+            catType:
+              type: string
+              default: SEAM
+              maxLength: 3
+              minLength: 1
+            angryLevel:
+              type: string
+              pattern: \\w+
     ShortHair:
       allOf:
         - $ref: '#/components/schemas/CatBase'
         - title: ShortHair
+          description: >
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+            erat, s
           properties:
             catType:
               type: string
@@ -1449,11 +1477,11 @@ components:
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - properties:
+        - required:
+            - bark
+          properties:
             bark:
               type: string
-          required:
-            - bark
     CatBase:
       allOf:
         - {}
@@ -1479,6 +1507,10 @@ components:
             - color
           discriminator:
             propertyName: catType
+          description: |
+            this is 
+            a multiline
+            description
           properties:
             color:
               type: string
@@ -1500,6 +1532,9 @@ components:
         - color
       discriminator:
         propertyName: catType
+      description: >
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
       properties:
         color:
           type: string
@@ -1589,7 +1624,8 @@ exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node
 "openapi: "3.1.0"
 paths:
 info:
-  description: "Nested discriminated Union"
+  description: |
+    Nested discriminated Union
   title: Nested
   version: 0.0.0
 components:
@@ -1651,14 +1687,18 @@ components:
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - properties:
-            bark:
-              type: string
-          required: [ bark ]
+      properties:
+          bark:
+            type: string
+      required: [ bark ]
 
     Seam:
       allOf:
         - $ref: './cat_base.yml#/CatBase'
+        - description: |
+            this is 
+            a multiline
+            description
         - title: Seam
           properties:
             catType: { type: string, default: "SEAM", maxLength: 3, minLength: 1 }
@@ -1668,6 +1708,8 @@ components:
       allOf:
         - $ref: './cat_base.yml#/CatBase'
         - title: ShortHair
+          description: > 
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
           properties:
             catType: { type: string, default: "SHORT" }
             angryLevel: { type: string }
@@ -3739,6 +3781,10 @@ components:
         - B
         - C
     schemas-Toy:
+      required:
+        - id
+        - price
+        - kind
       title: Toy
       properties:
         id:
@@ -3761,10 +3807,6 @@ components:
             - FOO
             - BAR
           title: FooBar
-      required:
-        - id
-        - price
-        - kind
     schema-untitled:
       properties:
         untitledProp:
@@ -3840,12 +3882,12 @@ components:
           BALL: '#/components/schemas/Ball'
           TEDDY: '#/components/schemas/FluffyTeddy'
     components-schemas-Toy:
-      title: Toy
       required:
         - id
         - kind
         - price
         - string
+      title: Toy
       properties:
         id:
           type: string
@@ -4302,6 +4344,10 @@ components:
             - CHILDREN
           default: CHILDREN
     schemas-Toy:
+      required:
+        - id
+        - price
+        - kind
       title: Toy
       properties:
         id:
@@ -4324,10 +4370,6 @@ components:
             - FOO
             - BAR
           title: FooBar
-      required:
-        - id
-        - price
-        - kind
     schema-sub:
       required:
         - string
@@ -4434,12 +4476,12 @@ components:
           BALL: '#/components/schemas/Ball'
           TEDDY: '#/components/schemas/FluffyTeddy'
     components-schemas-Toy:
-      title: Toy
       required:
         - id
         - kind
         - price
         - string
+      title: Toy
       properties:
         id:
           type: string
@@ -5228,6 +5270,10 @@ components:
             - CHILDREN
           default: CHILDREN
     schemas-Toy:
+      required:
+        - id
+        - price
+        - kind
       title: Toy
       properties:
         id:
@@ -5250,10 +5296,6 @@ components:
             - FOO
             - BAR
           title: FooBar
-      required:
-        - id
-        - price
-        - kind
     schema-sub:
       required:
         - string
@@ -5356,12 +5398,12 @@ components:
           BALL: '#/components/schemas/Ball'
           TEDDY: '#/components/schemas/FluffyTeddy'
     components-schemas-Toy:
-      title: Toy
       required:
         - id
         - kind
         - price
         - string
+      title: Toy
       properties:
         id:
           type: string
@@ -8144,16 +8186,16 @@ components:
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - properties:
+        - required:
+            - bark
+            - type
+          properties:
             bark:
               type: string
             type:
               type: string
               x-const: DOG
               example: DOG
-          required:
-            - bark
-            - type
     CatBase:
       allOf:
         - {}
@@ -8181,6 +8223,10 @@ components:
             - type
           discriminator:
             propertyName: catType
+          description: |
+            this is 
+            a multiline
+            description
           properties:
             color:
               type: string
@@ -8207,6 +8253,9 @@ components:
         - type
       discriminator:
         propertyName: catType
+      description: >
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
       properties:
         color:
           type: string
@@ -8605,16 +8654,16 @@ components:
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - properties:
+        - required:
+            - bark
+            - type
+          properties:
             bark:
               type: string
             type:
               type: string
               x-const: DOG
               example: DOG
-          required:
-            - bark
-            - type
     CatBase:
       allOf:
         - {}
@@ -8639,6 +8688,10 @@ components:
             - type
           discriminator:
             propertyName: catType
+          description: |
+            this is 
+            a multiline
+            description
           properties:
             color:
               type: string
@@ -8649,13 +8702,13 @@ components:
               minLength: 1
               x-const: SEAM
               example: SEAM
-            angryLevel:
-              type: string
-              pattern: \\w+
             type:
               type: string
               x-const: CAT
               example: CAT
+            angryLevel:
+              type: string
+              pattern: \\w+
     ShortHair:
       title: ShortHair
       required:
@@ -8664,6 +8717,9 @@ components:
         - type
       discriminator:
         propertyName: catType
+      description: >
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
       properties:
         color:
           type: string
@@ -8778,16 +8834,16 @@ components:
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - properties:
-            bark:
-              type: string
-            type:
-              type: string
-              x-const: DOG
-              example: DOG
-          required:
-            - bark
-            - type
+      properties:
+        bark:
+          type: string
+        type:
+          type: string
+          x-const: DOG
+          example: DOG
+      required:
+        - bark
+        - type
     CatBase:
       allOf:
         - $ref: '#/components/schemas/PetBase'
@@ -8805,7 +8861,10 @@ components:
     Seam:
       allOf:
         - $ref: '#/components/schemas/CatBase'
-        - title: Seam
+        - description: |
+            this is 
+            a multiline
+            description
           properties:
             catType:
               type: string
@@ -8814,9 +8873,6 @@ components:
               minLength: 1
               x-const: SEAM
               example: SEAM
-            angryLevel:
-              type: string
-              pattern: \\w+
             type:
               type: string
               x-const: CAT
@@ -8824,10 +8880,24 @@ components:
           required:
             - catType
             - type
+        - title: Seam
+          properties:
+            catType:
+              type: string
+              default: SEAM
+              maxLength: 3
+              minLength: 1
+            angryLevel:
+              type: string
+              pattern: \\w+
     ShortHair:
       allOf:
         - $ref: '#/components/schemas/CatBase'
         - title: ShortHair
+          description: >
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+            erat, s
           properties:
             catType:
               type: string
@@ -8965,11 +9035,11 @@ components:
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - properties:
+        - required:
+            - bark
+          properties:
             bark:
               type: string
-          required:
-            - bark
     CatBase:
       allOf:
         - {}
@@ -8995,6 +9065,10 @@ components:
             - color
           discriminator:
             propertyName: catType
+          description: |
+            this is 
+            a multiline
+            description
           properties:
             color:
               type: string
@@ -9016,6 +9090,9 @@ components:
         - color
       discriminator:
         propertyName: catType
+      description: >
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
       properties:
         color:
           type: string
@@ -9105,7 +9182,8 @@ components:
     "content": "openapi: "3.1.0"
 paths:
 info:
-  description: "Nested discriminated Union"
+  description: |
+    Nested discriminated Union
   title: Nested
   version: 0.0.0
 components:
@@ -9167,14 +9245,18 @@ components:
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - properties:
-            bark:
-              type: string
-          required: [ bark ]
+      properties:
+          bark:
+            type: string
+      required: [ bark ]
 
     Seam:
       allOf:
         - $ref: './cat_base.yml#/CatBase'
+        - description: |
+            this is 
+            a multiline
+            description
         - title: Seam
           properties:
             catType: { type: string, default: "SEAM", maxLength: 3, minLength: 1 }
@@ -9184,6 +9266,8 @@ components:
       allOf:
         - $ref: './cat_base.yml#/CatBase'
         - title: ShortHair
+          description: > 
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
           properties:
             catType: { type: string, default: "SHORT" }
             angryLevel: { type: string }

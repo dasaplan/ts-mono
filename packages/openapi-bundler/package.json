@@ -32,6 +32,7 @@
     "postpack": "clean-package restore",
     "rup": "tsup-node --dts",
     "test": "pnpm test:esm",
+    "test:update": "pnpm test:esm:update",
     "test:esm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "test:esm:update": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -u"
   },

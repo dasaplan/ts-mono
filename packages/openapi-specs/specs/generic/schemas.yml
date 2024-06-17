@@ -1,7 +1,8 @@
 openapi: "3.1.0"
 paths:
 info:
-  description: "Nested discriminated Union"
+  description: |
+    Nested discriminated Union
   title: Nested
   version: 0.0.0
 components:
@@ -63,14 +64,18 @@ components:
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - properties:
-            bark:
-              type: string
-          required: [ bark ]
+      properties:
+          bark:
+            type: string
+      required: [ bark ]
 
     Seam:
       allOf:
         - $ref: './cat_base.yml#/CatBase'
+        - description: |
+            this is 
+            a multiline
+            description
         - title: Seam
           properties:
             catType: { type: string, default: "SEAM", maxLength: 3, minLength: 1 }
@@ -80,6 +85,8 @@ components:
       allOf:
         - $ref: './cat_base.yml#/CatBase'
         - title: ShortHair
+          description: > 
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
           properties:
             catType: { type: string, default: "SHORT" }
             angryLevel: { type: string }

@@ -6,9 +6,11 @@
     "build:rebuild": "turbo clean & turbo build --force",
     "ws:build": "turbo build",
     "ws:test": "turbo test",
+    "ws:test:update": "turbo test:update",
     "ws:lint": "turbo lint",
     "ws:clean": "turbo clean",
-    "publish-packages": "turbo run build lint test && changeset version && changeset publish"
+    "ci": "turbo run build lint test",
+    "publish-packages": "turbo run ci && changeset version && changeset publish"
   },
   "devDependencies": {
     "sort-package-json": "^2.10.0",
