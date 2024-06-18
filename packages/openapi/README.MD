@@ -59,148 +59,11 @@ For actually generating code we need to install as `devDependencies` this packag
     ```
 
 ## Features
-> note: Some examples like OpenApi Specs are written in a compressed way to reduce whitespace and facilitate an overview over the whole example.
 ### Openapi Specification
 
 #### bundler
 
-- ✅ Configured wrapper of the standard [redocly](https://redocly.com/docs/cli/) bundler.
-
-#### post processing
-<details>
-<summary>✅ merge all of</summary>
-
-<details style="margin-left: 20px"><summary> motivation </summary>
-Merging allOf arrays means we reduce complexity for generator and documentation tooling in order to facilitate consistency across tech stacks. 
-<p>The easiest way would be to flat out every allOf so there resulting spec does not have the complexity at all. Yet, we need to find a middle ground because codegenerators may rely on identifiers like the discriminator to create object hierarchies.</p> 
-We could just let every tool care for themselves how to handle their use-cases. However, from experience this will yield undefined behaviour for API consumer and lead to frustration because the default tooling does no yield results aligning with the specification.
-
-```yaml
-# schema declares a $ref and has sibling members: almost any tool I encounter will ignore the siblings on a $ref in alignment with the Openapi Spec 
-SomeRefSchema:
-  $ref: '#/SomeOtherComposite'
-  description: "This is something I like to share!"
-  title: SomeRefSchema
-  
-# schema declares allOf but has also sibling members: most tool will merge siblings into array, but some may ignore them 
-MySchema:
-  allOf: [{$ref: '#/SomeOtherComposite'}]
-  properties: # sibling member should be part of allOF
-    name: { type: string }
-
-# multiple allOfs a payload must be valid against all sub schemas. This is very easy to compute for validators because they will only care and evaluate each element in isolation. Yet, for generators or documentation tools this representation leaves many question open because we need to resolve them into a unified view like how to represent collisions.
-MyOtherSchema:
-  allOf: [{$ref: '#/SomeComposite'}, {$ref: '#/SomeOtherComposite'}, {properties: {foo: {type: string}}}]
-```
-</details>
-
-
-
-<details style="margin-left: 20px">
-<summary> src spec </summary>
-
-````yaml
-components:
-  schemas:
-    PetBase: { type: object,
-               properties: { type: { type: string } }
-    }
-    CatBase: { type: object,
-               discriminator: {propertyName: catType},
-               properties: { type: { catType: string, enum: [ 'SEAM', 'SHORT_HAIR' ] } }
-    }
-
-    SeamCat:
-      allOf:
-        - $ref: '#/components/PetBase'
-        - $ref: '#/components/CatBase'
-        - title: SeamCat
-    ShortHairCat:
-      allOf:
-        - $ref: '#/components/PetBase'
-        - $ref: '#/components/CatBase'
-        - title: ShortHairCat
-
-    Dog: { allOf: [ { $ref: '#/components/PetBase' }, { title: Dog } ] }
-
-
-
-````
-</details>
-
-<details style="margin-left: 20px">
-<summary> resulting spec </summary>
-
-````yaml
-components:
-  schemas:
-    PetBase: { type: object, required: [type] discriminator: {propertyName: type},properties: { type: { type: string } } }
-
-    SeamCat:
-      allOf:
-        - $ref: '#/components/PetBase'
-        - { title: SeamCat, type: object, properties: { type: { catType: string, enum: [ 'SEAM', 'SHORT_HAIR' ] } } }
-
-    ShortHairCat:
-      allOf:
-        - $ref: '#/components/PetBase'
-        - { title: ShortHairCat, type: object, properties: { type: { catType: string, enum: [ 'SEAM', 'SHORT_HAIR' ] } } }
-
-    Dog:
-      allOf:
-        - $ref: '#/components/PetBase'
-        - title: Dog 
-````
-</details>
-</details>
-
-
-
-<details>
-<summary>✅ ensure discriminator values</summary>
-
-- ensures that: 
-    - discriminator property type is of type string, and not enum. 
-      - most sophisticated tools can infer the values from the explicit or implicit discriminator mapping
-  - polymorphism and inheritance can be explicitly inferred from the spec
-    - every polymorph subschema defines the discriminator property and respective value
-      - this is only necessary to extend the standard generator with templating
-      - discriminator value is declared with <b>x-const</b> to avoid triggering compatibility layers for discriminator
-    - any parent schema referenced from an allOf array does not define discriminator mapping
-    - discriminator mapping only exists on schemas with a oneOf member
-
-</details>
-<details>
-<summary>✅ support muli schema usage in discriminator mapping (1:n discriminator value to mapping)</summary>
-
-````yaml
-Cat:
-  type: object
-  properties:
-    type: 
-      type: string
-      x-const: [ 'SEAM', 'SHORT_HAIR' ]
-    
-MyOneOfSchema:
-  oneOf: [{$ref: '#/Dog', {$ref: '#/Cat'}}]
-  discriminator:
-    propertyName: 'type'
-    mapping:
-      SEAM: "#/Cat"
-      SHORT_HAIR: "#/Cat"
-      Dog: "#/Dog"
-````
-</details>
-<p></p>
-<details>
-<summary> <b style="color: #2c6fdf">📜 complete example: openapi post-processing </b> </summary>
-
-| examples | src                                 | bundled                                     | post-processed                                       |
-|----------|-------------------------------------|---------------------------------------------|------------------------------------------------------|
-| simple   | [link to src][simple-petstore-src]  | [link to bundled][simple-petstore-bundled]  | [link to post-processed][simple-petstore-processed]  |
-| complex  | [link to src][complex-petstore-src] | [link to bundled][complex-petstore-bundled] | [link to post-processed][complex-petstore-processed] |
-
-</details>
+-  [@dasaplan/openapi-bundler][@dasaplan/openapi-bundler] is used as pre-processing to ensure a certain state. This reduces the complexity e.g. code generation has to endure. 
 
 ### Code Generator
 
@@ -413,16 +276,7 @@ function fooPetNested(pet: Pet): any {
 - ✅ support types for lazy schemas
 - ✅ support for deeply nested recursive schemas 
 
-[complex-petstore-src]: ./test/specs/pets-modular-complex/petstore-api.yml
 
-[complex-petstore-bundled]: ./docs/examples/specs/complex-petstore-bundled.yml
-
-[complex-petstore-processed]: ./docs/examples/specs/complex-petstore-post-processed.yml
-
-[simple-petstore-src]: ./test/specs/pets-simple/pets-api.yml
-
-[simple-petstore-bundled]: ./docs/examples/specs/simple-petstore-bundled.yml
-
-[simple-petstore-processed]: ./docs/examples/specs/simple-petstore-post-processed.yml
 
 [typescript-axios]: https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/typescript-axios.md
+[@dasaplan/openapi-bundler]: ../openapi-bundler/README.MD
