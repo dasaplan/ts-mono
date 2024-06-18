@@ -22,7 +22,7 @@
     "openapi-bundler-cli": "dist/oa-bundler-cli.js"
   },
   "files": [
-    "dist"
+    "dist", "CHANGELOG.md"
   ],
   "scripts": {
     "build": "pnpm rup",

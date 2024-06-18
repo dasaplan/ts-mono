@@ -24,7 +24,7 @@
     "openapicli": "dist/oa-cli.js"
   },
   "files": [
-    "dist"
+    "dist", "CHANGELOG.md"
   ],
   "scripts": {
     "prepack": "sort-package-json --quiet && clean-package",
