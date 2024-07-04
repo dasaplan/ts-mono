@@ -98,9 +98,6 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
-      openapi-example-specs:
-        specifier: workspace:*
-        version: link:../openapi-specs
       openapi-zod-client:
         specifier: ^1.15.0
         version: 1.15.0(react@18.2.0)
@@ -153,6 +150,9 @@ importers:
       npm-run-all:
         specifier: '*'
         version: 4.1.5
+      openapi-example-specs:
+        specifier: workspace:*
+        version: link:../openapi-specs
       openapi3-ts:
         specifier: ^4.2.1
         version: 4.2.1
@@ -202,9 +202,6 @@ importers:
         specifier: ^4.9.2
         version: 4.9.3
     devDependencies:
-      '@dasaplan/openapi-bundler':
-        specifier: ^0.0.2
-        version: 0.0.2(@redocly/openapi-core@1.6.0)
       '@dasaplan/ts-sdk':
         specifier: workspace:*
         version: link:../sdk
@@ -499,12 +496,6 @@ packages:
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
-
-  '@dasaplan/openapi-bundler@0.0.2':
-    resolution: {integrity: sha512-gy6ers9qBblI0G9j2W3dix7hrZZJKfDLHTdYmTzmmnaH1bdypH7Jee0RZrVviq6Vp4VmYQ6++v+qfqAEdtdxXw==}
-    hasBin: true
-    peerDependencies:
-      '@redocly/openapi-core': ^1.6.0
 
   '@emotion/is-prop-valid@1.2.1':
     resolution: {integrity: sha512-61Mf7Ufx4aDxx1xlDeOm8aFFigGHE4z+0sKCa+IHCeZKiyP9RLD0Mmx7m8b9/Cf37f7NAvQOOJAbQQGVr5uERw==}
@@ -4535,18 +4526,6 @@ snapshots:
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
-
-  '@dasaplan/openapi-bundler@0.0.2(@redocly/openapi-core@1.6.0)':
-    dependencies:
-      '@redocly/openapi-core': 1.6.0
-      commander: 11.1.0
-      json-schema-merge-allof: 0.8.1
-      jsonpointer: 5.0.1
-      lodash: 4.17.21
-      merge-json-schemas: 1.0.0
-      openapi3-ts: 4.3.3
-      toposort: 2.0.2
-      tslog: 4.9.3
 
   '@emotion/is-prop-valid@1.2.1':
     dependencies:
