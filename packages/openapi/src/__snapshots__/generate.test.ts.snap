@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\api.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-generic/api.yml-api.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -383,9 +383,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async getPet(petId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPet(petId, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['DefaultApi.getPet']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.getPet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -395,9 +395,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async listPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Pet>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['DefaultApi.listPets']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.listPets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -467,7 +467,7 @@ export class DefaultApi extends BaseAPI {
 "
 `;
 
-exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\base.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-generic/api.yml-base.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -557,7 +557,7 @@ export const operationServerMap: ServerMap = {
 "
 `;
 
-exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\bundled-api.yml 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-generic/api.yml-bundled-api.yml 1`] = `
 "openapi: 3.0.3
 info:
   version: 1.0.1
@@ -742,7 +742,7 @@ components:
 "
 `;
 
-exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\common.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-generic/api.yml-common.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -898,7 +898,7 @@ export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 "
 `;
 
-exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\configuration.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-generic/api.yml-configuration.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -1012,7 +1012,7 @@ export class Configuration {
 "
 `;
 
-exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\index.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-generic/api.yml-index.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -1035,7 +1035,7 @@ export * from "./zod.js";
 "
 `;
 
-exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\zod.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-generic/api.yml-zod.ts 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 import * as api from './api.js'
@@ -1073,7 +1073,7 @@ export module Schemas {
 "
 `;
 
-exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\zod-common.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-generic/api.yml-zod-common.ts 1`] = `
 "import { z } from 'zod'
 
 
@@ -1128,7 +1128,7 @@ export module ZodUnionMatch {
 "
 `;
 
-exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\api.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-pets-modular/pets-api.yml-api.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -1368,9 +1368,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async getPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPets(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['DefaultApi.getPets']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.getPets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -1418,7 +1418,7 @@ export class DefaultApi extends BaseAPI {
 "
 `;
 
-exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\base.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-pets-modular/pets-api.yml-base.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -1508,7 +1508,7 @@ export const operationServerMap: ServerMap = {
 "
 `;
 
-exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\bundled-pets-api.yml 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-pets-modular/pets-api.yml-bundled-pets-api.yml 1`] = `
 "openapi: 3.0.3
 info:
   title: My service
@@ -1587,7 +1587,7 @@ components:
 "
 `;
 
-exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\common.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-pets-modular/pets-api.yml-common.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -1743,7 +1743,7 @@ export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 "
 `;
 
-exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\configuration.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-pets-modular/pets-api.yml-configuration.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -1857,7 +1857,7 @@ export class Configuration {
 "
 `;
 
-exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\index.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-pets-modular/pets-api.yml-index.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -1880,7 +1880,7 @@ export * from "./zod.js";
 "
 `;
 
-exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\zod.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-pets-modular/pets-api.yml-zod.ts 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 import * as api from './api.js'
@@ -1909,7 +1909,7 @@ export module Schemas {
 "
 `;
 
-exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\zod-common.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-pets-modular/pets-api.yml-zod-common.ts 1`] = `
 "import { z } from 'zod'
 
 
@@ -1964,7 +1964,7 @@ export module ZodUnionMatch {
 "
 `;
 
-exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\api.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-pets-modular-complex/petstore-api.yml-api.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -2553,9 +2553,9 @@ export const PetsApiFp = function(configuration?: Configuration) {
          */
         async createPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createPets(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PetsApi.createPets']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PetsApi.createPets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -2566,9 +2566,9 @@ export const PetsApiFp = function(configuration?: Configuration) {
          */
         async listPets(petId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Pet>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(petId, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PetsApi.listPets']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PetsApi.listPets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -2579,9 +2579,9 @@ export const PetsApiFp = function(configuration?: Configuration) {
          */
         async showPetById(petId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.showPetById(petId, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PetsApi.showPetById']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PetsApi.showPetById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -2673,7 +2673,7 @@ export class PetsApi extends BaseAPI {
 "
 `;
 
-exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\base.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-pets-modular-complex/petstore-api.yml-base.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -2763,7 +2763,7 @@ export const operationServerMap: ServerMap = {
 "
 `;
 
-exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\bundled-petstore-api.yml 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-pets-modular-complex/petstore-api.yml-bundled-petstore-api.yml 1`] = `
 "openapi: 3.0.3
 info:
   version: 1.0.0
@@ -3035,7 +3035,7 @@ components:
 "
 `;
 
-exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\common.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-pets-modular-complex/petstore-api.yml-common.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -3191,7 +3191,7 @@ export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 "
 `;
 
-exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\configuration.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-pets-modular-complex/petstore-api.yml-configuration.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -3305,7 +3305,7 @@ export class Configuration {
 "
 `;
 
-exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\index.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-pets-modular-complex/petstore-api.yml-index.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -3328,7 +3328,7 @@ export * from "./zod.js";
 "
 `;
 
-exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\zod.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-pets-modular-complex/petstore-api.yml-zod.ts 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 import * as api from './api.js'
@@ -3375,7 +3375,7 @@ export module Schemas {
 "
 `;
 
-exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\zod-common.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-pets-modular-complex/petstore-api.yml-zod-common.ts 1`] = `
 "import { z } from 'zod'
 
 
@@ -3430,7 +3430,7 @@ export module ZodUnionMatch {
 "
 `;
 
-exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\api.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-pets-recursive/pets-api.yml-api.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -3625,9 +3625,9 @@ export const PetsApiFp = function(configuration?: Configuration) {
          */
         async listPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pets>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PetsApi.listPets']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PetsApi.listPets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -3675,7 +3675,7 @@ export class PetsApi extends BaseAPI {
 "
 `;
 
-exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\base.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-pets-recursive/pets-api.yml-base.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -3765,7 +3765,7 @@ export const operationServerMap: ServerMap = {
 "
 `;
 
-exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\bundled-pets-api.yml 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-pets-recursive/pets-api.yml-bundled-pets-api.yml 1`] = `
 "openapi: 3.1.0
 info:
   version: 1.0.0
@@ -3844,7 +3844,7 @@ components:
 "
 `;
 
-exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\common.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-pets-recursive/pets-api.yml-common.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4000,7 +4000,7 @@ export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 "
 `;
 
-exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\configuration.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-pets-recursive/pets-api.yml-configuration.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4114,7 +4114,7 @@ export class Configuration {
 "
 `;
 
-exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\index.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-pets-recursive/pets-api.yml-index.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4137,7 +4137,7 @@ export * from "./zod.js";
 "
 `;
 
-exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\zod.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-pets-recursive/pets-api.yml-zod.ts 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 import * as api from './api.js'
@@ -4166,7 +4166,7 @@ export module Schemas {
 "
 `;
 
-exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\zod-common.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-pets-recursive/pets-api.yml-zod-common.ts 1`] = `
 "import { z } from 'zod'
 
 
@@ -4221,7 +4221,7 @@ export module ZodUnionMatch {
 "
 `;
 
-exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\api.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-pets-simple/pets-api.yml-api.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4408,9 +4408,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async listPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Pet>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['DefaultApi.listPets']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.listPets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -4458,7 +4458,7 @@ export class DefaultApi extends BaseAPI {
 "
 `;
 
-exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\base.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-pets-simple/pets-api.yml-base.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4548,7 +4548,7 @@ export const operationServerMap: ServerMap = {
 "
 `;
 
-exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\bundled-pets-api.yml 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-pets-simple/pets-api.yml-bundled-pets-api.yml 1`] = `
 "openapi: 3.0.3
 info:
   version: 1.0.1
@@ -4626,7 +4626,7 @@ components:
 "
 `;
 
-exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\common.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-pets-simple/pets-api.yml-common.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4782,7 +4782,7 @@ export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 "
 `;
 
-exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\configuration.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-pets-simple/pets-api.yml-configuration.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4896,7 +4896,7 @@ export class Configuration {
 "
 `;
 
-exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\index.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-pets-simple/pets-api.yml-index.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4919,7 +4919,7 @@ export * from "./zod.js";
 "
 `;
 
-exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\zod.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-pets-simple/pets-api.yml-zod.ts 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 import * as api from './api.js'
@@ -4948,7 +4948,7 @@ export module Schemas {
 "
 `;
 
-exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\zod-common.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-pets-simple/pets-api.yml-zod-common.ts 1`] = `
 "import { z } from 'zod'
 
 
@@ -5003,10 +5003,9 @@ export module ZodUnionMatch {
 "
 `;
 
-exports[`Generate Integration ts generic/api.yml: cleaned-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml 1`] = `
+exports[`Generate Integration ts generic/api.yml: cleaned-generic/api.yml 1`] = `
 [
-  {
-    "content": "/* tslint:disable */
+  "/* tslint:disable */
 /* eslint-disable */
 /**
  * some title
@@ -5388,9 +5387,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async getPet(petId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPet(petId, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['DefaultApi.getPet']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.getPet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -5400,9 +5399,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async listPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Pet>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['DefaultApi.listPets']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.listPets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -5470,10 +5469,7 @@ export class DefaultApi extends BaseAPI {
 
 
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\api.ts",
-  },
-  {
-    "content": "/* tslint:disable */
+  "/* tslint:disable */
 /* eslint-disable */
 /**
  * some title
@@ -5560,10 +5556,7 @@ interface ServerMap {
 export const operationServerMap: ServerMap = {
 }
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\base.ts",
-  },
-  {
-    "content": "openapi: 3.0.3
+  "openapi: 3.0.3
 info:
   version: 1.0.1
   title: some title
@@ -5745,10 +5738,7 @@ components:
       items:
         $ref: '#/components/schemas/Pet'
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\bundled-api.yml",
-  },
-  {
-    "content": "/* tslint:disable */
+  "/* tslint:disable */
 /* eslint-disable */
 /**
  * some title
@@ -5901,10 +5891,7 @@ export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxi
 import { z } from "zod";
 export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\common.ts",
-  },
-  {
-    "content": "/* tslint:disable */
+  "/* tslint:disable */
 /* eslint-disable */
 /**
  * some title
@@ -6015,10 +6002,7 @@ export class Configuration {
     }
 }
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\configuration.ts",
-  },
-  {
-    "content": "/* tslint:disable */
+  "/* tslint:disable */
 /* eslint-disable */
 /**
  * some title
@@ -6038,10 +6022,7 @@ export * from "./configuration.js";
 export * from "./zod.js";
 
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\index.ts",
-  },
-  {
-    "content": "import { z } from 'zod'
+  "import { z } from 'zod'
 
 
 export module ZodUnionMatch {
@@ -6093,10 +6074,7 @@ export module ZodUnionMatch {
     }
 }
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\zod-common.ts",
-  },
-  {
-    "content": "import { z } from 'zod'
+  "import { z } from 'zod'
 import * as zc from './zod-common.js'
 import * as api from './api.js'
 
@@ -6131,7 +6109,5 @@ export module Schemas {
 
 }
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\zod.ts",
-  },
 ]
 `;

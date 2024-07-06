@@ -12,7 +12,10 @@ describe("Generate Integration", () => {
       const bundled = await generateOpenapi(api, out, { clearTemp: false });
       const processor = createTsPostProcessor({ deleteUnwantedFiles: false, ensureDiscriminatorValues: true });
       const g = processor(File.resolve(bundled, "api.ts").absolutPath);
-      expect(Folder.of(g).readAllFilesAsString()).toMatchSnapshot(`cleaned-${api}`);
+      const files = Folder.of(g)
+        .readAllFilesAsString()
+        .map((f) => f.content);
+      expect(files).toMatchSnapshot(`cleaned-${spec}`);
     });
   });
 
@@ -28,7 +31,7 @@ describe("Generate Integration", () => {
       const out = Folder.resolve("test/out/integration", path.dirname(spec)).absolutePath;
       const bundled = await generateOpenapi(api, out, { clearTemp: false });
       const files = Folder.of(bundled).readAllFilesAsString();
-      files.forEach((f) => expect(f.content).toMatchSnapshot(`generate-openapi-${f.src}`));
+      files.forEach((f) => expect(f.content).toMatchSnapshot(`generate-openapi-${spec}-${path.basename(f.src)}`));
     });
   });
 });

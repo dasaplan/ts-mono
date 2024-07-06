@@ -2,10 +2,12 @@ import { Folder } from "@dasaplan/ts-sdk";
 import { generateJava } from "./java.js";
 import { bundleOpenapi, createSpecProcessor } from "@dasaplan/openapi-bundler";
 import { resolveSpecPath } from "openapi-example-specs";
+import path from "path";
 
 describe("Generator: java", () => {
   test("generate java", async () => {
-    const { outFile: bundled } = await bundleOpenapi(resolveSpecPath("pets-modular/pets-api.yml"), {
+    const spec = "pets-modular/pets-api.yml";
+    const { outFile: bundled } = await bundleOpenapi(resolveSpecPath(spec), {
       postProcessor: createSpecProcessor({
         ensureDiscriminatorValues: true,
         mergeAllOf: true,
@@ -13,6 +15,6 @@ describe("Generator: java", () => {
     });
     const outFolder = generateJava(bundled, "test/out/java");
     const files = Folder.of(outFolder).readAllFilesAsString();
-    files.forEach((f) => expect(f.content).toMatchSnapshot(`java-${f.src}`));
+    files.forEach((f) => expect(f.content).toMatchSnapshot(`java-${spec}-${path.basename(f.src)}`));
   });
 });
