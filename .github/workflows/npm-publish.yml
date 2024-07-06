@@ -12,10 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        name: git checkout
       - uses: actions/setup-node@v3
+        name: Setup Node 20
         with:
           node-version: 20
       - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+      - name: Install dependencies
+        run: pnpm install
       - run: pnpm ci:build
 
   publish-npm:
@@ -23,12 +30,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        name: git checkout
       - uses: actions/setup-node@v3
+        name: Setup Node 20
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
       - uses: pnpm/action-setup@v4
-      - run: pnpm ci:build
-      - run: echo npm publish
+        name: Install pnpm
+        with:
+          run_install: false
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build, Lint and Test
+        run: pnpm ci:build
+      - name: npm publish
+        run: echo npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
