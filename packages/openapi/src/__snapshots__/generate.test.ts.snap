@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\api.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -467,22 +467,7 @@ export class DefaultApi extends BaseAPI {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml 1`] = `
-"openapi: "3.0.3"
-info:
-  version: "1.0.1"
-  title: "some title"
-paths:
-  /pets:
-    $ref: './route-pets.yml'
-  /pets/{petId}:
-    $ref: './route-test.yml#/components/pathItems/GetPet'
-
-
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\base.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\base.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -572,7 +557,7 @@ export const operationServerMap: ServerMap = {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\bundled-api.yml 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\bundled-api.yml 1`] = `
 "openapi: 3.0.3
 info:
   version: 1.0.1
@@ -757,20 +742,7 @@ components:
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\cat_base.yml 1`] = `
-"CatBase:
-  allOf:
-    - $ref: './schemas.yml#/components/schemas/PetBase'
-    - title: CatBase
-      properties:
-        color: { type: string }
-        catType: { type: string , enum: [SEAM, SHORT], title: CatType}
-      required: [ color ]
-      discriminator:
-        propertyName: catType"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\common.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\common.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -926,7 +898,7 @@ export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\configuration.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\configuration.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -1040,366 +1012,7 @@ export class Configuration {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\ens-mrg-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  version: 1.0.1
-  title: some title
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-  /pets/{petId}:
-    get:
-      summary: Get a Pet
-      operationId: getPet
-      parameters:
-        - name: petId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      title: PetBase
-      type: object
-      required:
-        - id
-        - name
-        - type
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          exclusiveMaximum: true
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - required:
-            - bark
-            - type
-          properties:
-            bark:
-              type: string
-            type:
-              type: string
-              x-const: DOG
-              example: DOG
-    CatBase:
-      allOf:
-        - {}
-        - title: CatBase
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-          required:
-            - color
-            - catType
-          discriminator:
-            propertyName: catType
-    Seam:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: Seam
-          required:
-            - catType
-            - color
-            - type
-          discriminator:
-            propertyName: catType
-          description: |
-            this is 
-            a multiline
-            description
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-              default: SEAM
-              maxLength: 3
-              minLength: 1
-              x-const: SEAM
-              example: SEAM
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-            angryLevel:
-              type: string
-              pattern: \\w+
-    ShortHair:
-      title: ShortHair
-      required:
-        - catType
-        - color
-        - type
-      discriminator:
-        propertyName: catType
-      description: >
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
-      properties:
-        color:
-          type: string
-        catType:
-          type: string
-          default: SHORT
-          x-const: SHORT
-          example: SHORT
-        angryLevel:
-          type: string
-        type:
-          type: string
-          x-const: CAT
-          example: CAT
-    Cat:
-      oneOf:
-        - $ref: '#/components/schemas/Seam'
-        - $ref: '#/components/schemas/ShortHair'
-      discriminator:
-        propertyName: catType
-        mapping:
-          SEAM: '#/components/schemas/Seam'
-          SHORT: '#/components/schemas/ShortHair'
-    GenericPet:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
-          properties:
-            name:
-              type: string
-            type:
-              type: string
-              x-const:
-                - BIRD
-                - HAMSTER
-              example: BIRD
-          required:
-            - type
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-        - $ref: '#/components/schemas/GenericPet'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-          BIRD: '#/components/schemas/GenericPet'
-          HAMSTER: '#/components/schemas/GenericPet'
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\ensured-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  version: 1.0.1
-  title: some title
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-  /pets/{petId}:
-    get:
-      summary: Get a Pet
-      operationId: getPet
-      parameters:
-        - name: petId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      title: PetBase
-      type: object
-      required:
-        - id
-        - name
-        - type
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          exclusiveMaximum: true
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-      properties:
-        bark:
-          type: string
-        type:
-          type: string
-          x-const: DOG
-          example: DOG
-      required:
-        - bark
-        - type
-    CatBase:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: CatBase
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-          required:
-            - color
-            - catType
-          discriminator:
-            propertyName: catType
-    Seam:
-      allOf:
-        - $ref: '#/components/schemas/CatBase'
-        - description: |
-            this is 
-            a multiline
-            description
-          properties:
-            catType:
-              type: string
-              default: SEAM
-              maxLength: 3
-              minLength: 1
-              x-const: SEAM
-              example: SEAM
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-          required:
-            - catType
-            - type
-        - title: Seam
-          properties:
-            catType:
-              type: string
-              default: SEAM
-              maxLength: 3
-              minLength: 1
-            angryLevel:
-              type: string
-              pattern: \\w+
-    ShortHair:
-      allOf:
-        - $ref: '#/components/schemas/CatBase'
-        - title: ShortHair
-          description: >
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, s
-          properties:
-            catType:
-              type: string
-              default: SHORT
-              x-const: SHORT
-              example: SHORT
-            angryLevel:
-              type: string
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-          required:
-            - catType
-            - type
-    Cat:
-      oneOf:
-        - $ref: '#/components/schemas/Seam'
-        - $ref: '#/components/schemas/ShortHair'
-      discriminator:
-        propertyName: catType
-        mapping:
-          SEAM: '#/components/schemas/Seam'
-          SHORT: '#/components/schemas/ShortHair'
-    GenericPet:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
-          properties:
-            name:
-              type: string
-            type:
-              type: string
-              x-const:
-                - BIRD
-                - HAMSTER
-              example: HAMSTER
-          required:
-            - type
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-        - $ref: '#/components/schemas/GenericPet'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-          BIRD: '#/components/schemas/GenericPet'
-          HAMSTER: '#/components/schemas/GenericPet'
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\index.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\index.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -1422,302 +1035,7 @@ export * from "./zod.js";
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\merged-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  version: 1.0.1
-  title: some title
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-  /pets/{petId}:
-    get:
-      summary: Get a Pet
-      operationId: getPet
-      parameters:
-        - name: petId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      title: PetBase
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          exclusiveMaximum: true
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - required:
-            - bark
-          properties:
-            bark:
-              type: string
-    CatBase:
-      allOf:
-        - {}
-        - title: CatBase
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-              enum:
-                - SEAM
-                - SHORT
-              title: CatType
-          required:
-            - color
-          discriminator:
-            propertyName: catType
-    Seam:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: Seam
-          required:
-            - color
-          discriminator:
-            propertyName: catType
-          description: |
-            this is 
-            a multiline
-            description
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-              enum:
-                - SEAM
-                - SHORT
-              title: CatType
-              default: SEAM
-              maxLength: 3
-              minLength: 1
-            angryLevel:
-              type: string
-              pattern: \\w+
-    ShortHair:
-      title: ShortHair
-      required:
-        - color
-      discriminator:
-        propertyName: catType
-      description: >
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
-      properties:
-        color:
-          type: string
-        catType:
-          type: string
-          enum:
-            - SEAM
-            - SHORT
-          title: CatType
-          default: SHORT
-        angryLevel:
-          type: string
-    Cat:
-      oneOf:
-        - $ref: '#/components/schemas/Seam'
-        - $ref: '#/components/schemas/ShortHair'
-      discriminator:
-        propertyName: catType
-        mapping:
-          SEAM: '#/components/schemas/Seam'
-          SHORT: '#/components/schemas/ShortHair'
-    GenericPet:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
-          properties:
-            name:
-              type: string
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-        - $ref: '#/components/schemas/GenericPet'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-          BIRD: '#/components/schemas/GenericPet'
-          HAMSTER: '#/components/schemas/GenericPet'
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\route-pets.yml 1`] = `
-"get:
-  summary: List all pets
-  operationId: listPets
-  responses:
-    '200':
-      description: A paged array of pets
-      content:
-        application/json:
-          schema:
-            $ref: "./schemas.yml#/components/schemas/Pets"
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\route-test.yml 1`] = `
-"components:
-  pathItems:
-    GetPet:
-      get:
-        summary: Get a Pet
-        operationId: getPet
-        parameters:
-          - name: petId
-            in: path
-            required: true
-            schema:
-              type: string
-        responses:
-          '200':
-            description: A paged array of pets
-            content:
-              application/json:
-                schema:
-                  $ref: "./schemas.yml#/components/schemas/Pet"
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\schemas.yml 1`] = `
-"openapi: "3.1.0"
-paths:
-info:
-  description: |
-    Nested discriminated Union
-  title: Nested
-  version: 0.0.0
-components:
-  schemas:
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: "#/components/schemas/Pet"
-
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-        - $ref: '#/components/schemas/GenericPet'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-          BIRD: '#/components/schemas/GenericPet'
-          HAMSTER: '#/components/schemas/GenericPet'
-
-    GenericPet:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
-          properties:
-            name:
-              type: string
-
-    PetBase:
-      title: PetBase
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          exclusiveMaximum: true
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-
-    Cat:
-      oneOf:
-        - $ref: '#/components/schemas/Seam'
-        - $ref: '#/components/schemas/ShortHair'
-      discriminator:
-        propertyName: catType
-        mapping:
-          SEAM: "#/components/schemas/Seam"
-          SHORT: "#/components/schemas/ShortHair"
-
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-      properties:
-          bark:
-            type: string
-      required: [ bark ]
-
-    Seam:
-      allOf:
-        - $ref: './cat_base.yml#/CatBase'
-        - description: |
-            this is 
-            a multiline
-            description
-        - title: Seam
-          properties:
-            catType: { type: string, default: "SEAM", maxLength: 3, minLength: 1 }
-            angryLevel: { type: string , pattern: '\\w+'}
-
-    ShortHair:
-      allOf:
-        - $ref: './cat_base.yml#/CatBase'
-        - title: ShortHair
-          description: > 
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
-          properties:
-            catType: { type: string, default: "SHORT" }
-            angryLevel: { type: string }
-
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\zod.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\zod.ts 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 import * as api from './api.js'
@@ -1755,7 +1073,7 @@ export module Schemas {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\zod-common.ts 1`] = `
+exports[`Generate Integration all generic/api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\generic\\zod-common.ts 1`] = `
 "import { z } from 'zod'
 
 
@@ -1810,7 +1128,7 @@ export module ZodUnionMatch {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\api.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\api.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -2100,7 +1418,7 @@ export class DefaultApi extends BaseAPI {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\base.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\base.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -2190,7 +1508,7 @@ export const operationServerMap: ServerMap = {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\bundled-pets-api.yml 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\bundled-pets-api.yml 1`] = `
 "openapi: 3.0.3
 info:
   title: My service
@@ -2269,7 +1587,7 @@ components:
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\common.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\common.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -2425,7 +1743,7 @@ export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\configuration.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\configuration.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -2539,165 +1857,7 @@ export class Configuration {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\ens-mrg-pets-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  title: My service
-  description: My service
-  version: 1.0.0
-servers:
-  - url: https://
-paths:
-  /v1/pets:
-    get:
-      summary: Get pets
-      operationId: getPets
-      responses:
-        '200':
-          description: Ok response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      type: object
-      discriminator:
-        propertyName: type
-      required:
-        - type
-      properties:
-        type:
-          type: string
-        name:
-          type: string
-    DogEnum:
-      type: string
-      enum:
-        - DOG_A
-        - DOG_B
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            fluffy:
-              type: boolean
-            breed:
-              $ref: '#/components/schemas/DogEnum'
-            type:
-              type: string
-              x-const: DOG
-              example: DOG
-          required:
-            - type
-    Cat:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            breed:
-              type: string
-              enum:
-                - CAT_A
-                - CAT_B
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-          required:
-            - type
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\ensured-pets-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  title: My service
-  description: My service
-  version: 1.0.0
-servers:
-  - url: https://
-paths:
-  /v1/pets:
-    get:
-      summary: Get pets
-      operationId: getPets
-      responses:
-        '200':
-          description: Ok response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      type: object
-      discriminator:
-        propertyName: type
-      required:
-        - type
-      properties:
-        type:
-          type: string
-        name:
-          type: string
-    DogEnum:
-      type: string
-      enum:
-        - DOG_A
-        - DOG_B
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            fluffy:
-              type: boolean
-            breed:
-              $ref: '#/components/schemas/DogEnum'
-            type:
-              type: string
-              x-const: DOG
-              example: DOG
-          required:
-            - type
-    Cat:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            breed:
-              type: string
-              enum:
-                - CAT_A
-                - CAT_B
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-          required:
-            - type
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\index.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\index.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -2720,89 +1880,7 @@ export * from "./zod.js";
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\merged-pets-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  title: My service
-  description: My service
-  version: 1.0.0
-servers:
-  - url: https://
-paths:
-  /v1/pets:
-    get:
-      summary: Get pets
-      operationId: getPets
-      responses:
-        '200':
-          description: Ok response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      type: object
-      discriminator:
-        propertyName: type
-      required:
-        - type
-      properties:
-        type:
-          type: string
-        name:
-          type: string
-    DogEnum:
-      type: string
-      enum:
-        - DOG_A
-        - DOG_B
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            fluffy:
-              type: boolean
-            breed:
-              $ref: '#/components/schemas/DogEnum'
-    Cat:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            breed:
-              type: string
-              enum:
-                - CAT_A
-                - CAT_B
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  title: My service
-  description: My service
-  version: 1.0.0
-servers:
-  - url: 'https://'
-paths:
-  /v1/pets:
-    $ref: './routes/pets.yml'
-
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\zod.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\zod.ts 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 import * as api from './api.js'
@@ -2831,7 +1909,7 @@ export module Schemas {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular\\zod-common.ts 1`] = `
+exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular\\zod-common.ts 1`] = `
 "import { z } from 'zod'
 
 
@@ -2886,7 +1964,7 @@ export module ZodUnionMatch {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\api.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\api.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -3595,7 +2673,7 @@ export class PetsApi extends BaseAPI {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\base.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\base.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -3685,7 +2763,7 @@ export const operationServerMap: ServerMap = {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\bundled-petstore-api.yml 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\bundled-petstore-api.yml 1`] = `
 "openapi: 3.0.3
 info:
   version: 1.0.0
@@ -3957,7 +3035,7 @@ components:
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\common.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\common.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4113,7 +3191,7 @@ export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\configuration.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\configuration.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4227,910 +3305,7 @@ export class Configuration {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\ens-mrg-petstore-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  version: 1.0.0
-  title: Swagger Petstore
-  license:
-    name: MIT
-servers:
-  - url: http://petstore.swagger.io/v1
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      tags:
-        - pets
-      parameters:
-        - $ref: '#/components/parameters/PathPetId'
-      responses:
-        '200':
-          description: A paged array of pets
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-        default:
-          $ref: '#/components/responses/Default'
-    post:
-      summary: Create a pet
-      operationId: createPets
-      tags:
-        - pets
-      responses:
-        '201':
-          description: Null response
-        default:
-          $ref: '#/components/responses/Default'
-  /pets/{petId}:
-    get:
-      summary: Info for a specific pet
-      operationId: showPetById
-      tags:
-        - pets
-      parameters:
-        - $ref: '#/components/parameters/PathPetId'
-      responses:
-        '200':
-          description: Expected response to a valid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        default:
-          $ref: '#/components/responses/Default'
-components:
-  parameters:
-    PathPetId:
-      name: petId
-      in: path
-      required: true
-      description: The id of the pet to retrieve
-      schema:
-        type: string
-  schemas:
-    HttpErrorCode:
-      type: integer
-      format: int32
-    schema-titled:
-      title: Titled Schema
-      properties:
-        titledProp:
-          type: string
-    Error:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          $ref: '#/components/schemas/HttpErrorCode'
-        message:
-          type: string
-        titledSchema:
-          $ref: '#/components/schemas/schema-titled'
-    FluffLevel:
-      type: string
-      enum:
-        - A
-        - B
-        - C
-    Toy:
-      required:
-        - id
-        - price
-        - kind
-      title: Toy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    schemas-Toy:
-      required:
-        - id
-        - price
-        - kind
-      title: Toy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-        someEnum:
-          type: string
-          enum:
-            - FOO
-            - BAR
-          title: FooBar
-    schema-sub:
-      required:
-        - string
-      properties:
-        subId:
-          type: string
-    schema-untitled:
-      properties:
-        untitledProp:
-          type: string
-    Color:
-      type: object
-      properties:
-        untitledProp:
-          type: string
-        colorId:
-          type: string
-        untitled:
-          $ref: '#/components/schemas/schema-untitled'
-    targetGroup:
-      type: string
-      x-extensible-enum:
-        - PETS
-        - CHILDREN
-      default: CHILDREN
-    Ball:
-      required:
-        - id
-        - kind
-        - price
-      title: Ball
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-          x-const: BALL
-          example: BALL
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    Teddy:
-      required:
-        - id
-        - price
-        - kind
-      title: Teddy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    Fluffy:
-      properties:
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-    FluffyTeddy:
-      required:
-        - id
-        - kind
-        - price
-      title: Teddy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-          x-const: TEDDY
-          example: TEDDY
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    PetToy:
-      oneOf:
-        - $ref: '#/components/schemas/Ball'
-        - $ref: '#/components/schemas/FluffyTeddy'
-      discriminator:
-        propertyName: kind
-        mapping:
-          BALL: '#/components/schemas/Ball'
-          TEDDY: '#/components/schemas/FluffyTeddy'
-    components-schemas-Toy:
-      required:
-        - id
-        - kind
-        - price
-        - string
-      title: Toy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          $ref: '#/components/schemas/targetGroup'
-        someEnum:
-          type: string
-          enum:
-            - FOO
-            - BAR
-          title: FooBar
-        subId:
-          type: string
-        name:
-          type: string
-        color:
-          $ref: '#/components/schemas/Color'
-        relates:
-          $ref: '#/components/schemas/PetToy'
-    Pet:
-      type: object
-      required:
-        - id
-        - name
-      example:
-        foo: ''
-        bar: 1234
-        foobar: true
-      properties:
-        id:
-          type: integer
-          format: int64
-        toy:
-          $ref: '#/components/schemas/components-schemas-Toy'
-        leastFavToy:
-          $ref: '#/components/schemas/schemas-Toy'
-        favFluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        tag:
-          type: string
-          example:
-            description: default string example
-            value: some string
-        name:
-          type: string
-          example:
-            description: default string example
-            value: some string
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-  responses:
-    Default:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\ensured-petstore-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  version: 1.0.0
-  title: Swagger Petstore
-  license:
-    name: MIT
-servers:
-  - url: http://petstore.swagger.io/v1
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      tags:
-        - pets
-      parameters:
-        - $ref: '#/components/parameters/PathPetId'
-      responses:
-        '200':
-          description: A paged array of pets
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-        default:
-          $ref: '#/components/responses/Default'
-    post:
-      summary: Create a pet
-      operationId: createPets
-      tags:
-        - pets
-      responses:
-        '201':
-          description: Null response
-        default:
-          $ref: '#/components/responses/Default'
-  /pets/{petId}:
-    get:
-      summary: Info for a specific pet
-      operationId: showPetById
-      tags:
-        - pets
-      parameters:
-        - $ref: '#/components/parameters/PathPetId'
-      responses:
-        '200':
-          description: Expected response to a valid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        default:
-          $ref: '#/components/responses/Default'
-components:
-  parameters:
-    PathPetId:
-      name: petId
-      in: path
-      required: true
-      description: The id of the pet to retrieve
-      schema:
-        type: string
-  schemas:
-    HttpErrorCode:
-      type: integer
-      format: int32
-    schema-titled:
-      title: Titled Schema
-      properties:
-        titledProp:
-          type: string
-    Error:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          $ref: '#/components/schemas/HttpErrorCode'
-        message:
-          type: string
-        titledSchema:
-          $ref: '#/components/schemas/schema-titled'
-    FluffLevel:
-      type: string
-      enum:
-        - A
-        - B
-        - C
-    Toy:
-      required:
-        - id
-        - price
-        - kind
-      title: Toy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    schemas-Toy:
-      allOf:
-        - $ref: '#/components/schemas/Toy'
-      title: Toy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        someEnum:
-          type: string
-          enum:
-            - FOO
-            - BAR
-          title: FooBar
-    schema-sub:
-      required:
-        - string
-      properties:
-        subId:
-          type: string
-    schema-untitled:
-      properties:
-        untitledProp:
-          type: string
-    Color:
-      allOf:
-        - $ref: '#/components/schemas/schema-untitled'
-      type: object
-      properties:
-        colorId:
-          type: string
-        untitled:
-          $ref: '#/components/schemas/schema-untitled'
-    targetGroup:
-      type: string
-      x-extensible-enum:
-        - PETS
-        - CHILDREN
-      default: CHILDREN
-    Ball:
-      allOf:
-        - $ref: '#/components/schemas/Toy'
-        - title: Ball
-          properties:
-            kind:
-              type: string
-              x-const: BALL
-              example: BALL
-          required:
-            - kind
-    Teddy:
-      allOf:
-        - $ref: '#/components/schemas/Toy'
-        - title: Teddy
-    Fluffy:
-      properties:
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-    FluffyTeddy:
-      allOf:
-        - $ref: '#/components/schemas/Teddy'
-        - $ref: '#/components/schemas/Fluffy'
-        - required:
-            - kind
-          properties:
-            kind:
-              type: string
-              x-const: TEDDY
-              example: TEDDY
-    PetToy:
-      oneOf:
-        - $ref: '#/components/schemas/Ball'
-        - $ref: '#/components/schemas/FluffyTeddy'
-      discriminator:
-        propertyName: kind
-        mapping:
-          BALL: '#/components/schemas/Ball'
-          TEDDY: '#/components/schemas/FluffyTeddy'
-    components-schemas-Toy:
-      allOf:
-        - $ref: '#/components/schemas/schemas-Toy'
-        - $ref: '#/components/schemas/schema-sub'
-        - title: Toy
-          properties:
-            name:
-              type: string
-            color:
-              $ref: '#/components/schemas/Color'
-            targetGroup:
-              $ref: '#/components/schemas/targetGroup'
-            relates:
-              $ref: '#/components/schemas/PetToy'
-    Pet:
-      type: object
-      required:
-        - id
-        - name
-      example:
-        foo: ''
-        bar: 1234
-        foobar: true
-      properties:
-        id:
-          type: integer
-          format: int64
-        toy:
-          $ref: '#/components/schemas/components-schemas-Toy'
-        leastFavToy:
-          $ref: '#/components/schemas/schemas-Toy'
-        favFluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        tag:
-          type: string
-          example:
-            description: default string example
-            value: some string
-        name:
-          type: string
-          example:
-            description: default string example
-            value: some string
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-  responses:
-    Default:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\expected-resolved-allof.yml 1`] = `
-"openapi: 3.0.3
-info:
-  version: 1.0.0
-  title: Swagger Petstore
-  license:
-    name: MIT
-servers:
-  - url: http://petstore.swagger.io/v1
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      tags:
-        - pets
-      parameters:
-        - $ref: '#/components/parameters/PathPetId'
-      responses:
-        '200':
-          description: A paged array of pets
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-        default:
-          $ref: '#/components/responses/Default'
-    post:
-      summary: Create a pet
-      operationId: createPets
-      tags:
-        - pets
-      responses:
-        '201':
-          description: Null response
-        default:
-          $ref: '#/components/responses/Default'
-  /pets/{petId}:
-    get:
-      summary: Info for a specific pet
-      operationId: showPetById
-      tags:
-        - pets
-      parameters:
-        - $ref: '#/components/parameters/PathPetId'
-      responses:
-        '200':
-          description: Expected response to a valid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        default:
-          $ref: '#/components/responses/Default'
-components:
-  parameters:
-    PathPetId:
-      name: petId
-      in: path
-      required: true
-      description: The id of the pet to retrieve
-      schema:
-        type: string
-  schemas:
-    HttpErrorCode:
-      type: integer
-      format: int32
-    schema-titled:
-      title: Titled Schema
-      properties:
-        titledProp:
-          type: string
-    Error:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          $ref: '#/components/schemas/HttpErrorCode'
-        message:
-          type: string
-        titledSchema:
-          $ref: '#/components/schemas/schema-titled'
-    FluffLevel:
-      type: string
-      enum:
-        - A
-        - B
-        - C
-    Toy:
-      required:
-        - id
-        - price
-        - kind
-      title: Toy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    schemas-Toy:
-      title: Toy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-        someEnum:
-          type: string
-          enum:
-            - FOO
-            - BAR
-          title: FooBar
-      required:
-        - id
-        - price
-        - kind
-    schema-sub:
-      required:
-        - string
-      properties:
-        subId:
-          type: string
-    schema-untitled:
-      properties:
-        untitledProp:
-          type: string
-    Color:
-      type: object
-      properties:
-        untitledProp:
-          type: string
-        colorId:
-          type: string
-        untitled:
-          $ref: '#/components/schemas/schema-untitled'
-    targetGroup:
-      type: string
-      x-extensible-enum:
-        - PETS
-        - CHILDREN
-      default: CHILDREN
-    Ball:
-      required:
-        - id
-        - price
-        - kind
-      title: Ball
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    Teddy:
-      required:
-        - id
-        - price
-        - kind
-      title: Teddy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    Fluffy:
-      properties:
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-    FluffyTeddy:
-      required:
-        - id
-        - price
-        - kind
-      title: Teddy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    PetToy:
-      oneOf:
-        - $ref: '#/components/schemas/Ball'
-        - $ref: '#/components/schemas/FluffyTeddy'
-      discriminator:
-        propertyName: kind
-        mapping:
-          BALL: '#/components/schemas/Ball'
-          TEDDY: '#/components/schemas/FluffyTeddy'
-    components-schemas-Toy:
-      title: Toy
-      required:
-        - id
-        - kind
-        - price
-        - string
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-        someEnum:
-          type: string
-          enum:
-            - FOO
-            - BAR
-          title: FooBar
-        subId:
-          type: string
-        name:
-          type: string
-        color:
-          $ref: '#/components/schemas/Color'
-        relates:
-          $ref: '#/components/schemas/PetToy'
-    Pet:
-      type: object
-      required:
-        - id
-        - name
-      example:
-        foo: ''
-        bar: 1234
-        foobar: true
-      properties:
-        id:
-          type: integer
-          format: int64
-        toy:
-          $ref: '#/components/schemas/components-schemas-Toy'
-        leastFavToy:
-          $ref: '#/components/schemas/schemas-Toy'
-        favFluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        tag:
-          type: string
-          example:
-            description: default string example
-            value: some string
-        name:
-          type: string
-          example:
-            description: default string example
-            value: some string
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-  responses:
-    Default:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\index.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\index.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -5153,353 +3328,7 @@ export * from "./zod.js";
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\merged-petstore-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  version: 1.0.0
-  title: Swagger Petstore
-  license:
-    name: MIT
-servers:
-  - url: http://petstore.swagger.io/v1
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      tags:
-        - pets
-      parameters:
-        - $ref: '#/components/parameters/PathPetId'
-      responses:
-        '200':
-          description: A paged array of pets
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-        default:
-          $ref: '#/components/responses/Default'
-    post:
-      summary: Create a pet
-      operationId: createPets
-      tags:
-        - pets
-      responses:
-        '201':
-          description: Null response
-        default:
-          $ref: '#/components/responses/Default'
-  /pets/{petId}:
-    get:
-      summary: Info for a specific pet
-      operationId: showPetById
-      tags:
-        - pets
-      parameters:
-        - $ref: '#/components/parameters/PathPetId'
-      responses:
-        '200':
-          description: Expected response to a valid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        default:
-          $ref: '#/components/responses/Default'
-components:
-  parameters:
-    PathPetId:
-      name: petId
-      in: path
-      required: true
-      description: The id of the pet to retrieve
-      schema:
-        type: string
-  schemas:
-    HttpErrorCode:
-      type: integer
-      format: int32
-    schema-titled:
-      title: Titled Schema
-      properties:
-        titledProp:
-          type: string
-    Error:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          $ref: '#/components/schemas/HttpErrorCode'
-        message:
-          type: string
-        titledSchema:
-          $ref: '#/components/schemas/schema-titled'
-    FluffLevel:
-      type: string
-      enum:
-        - A
-        - B
-        - C
-    Toy:
-      required:
-        - id
-        - price
-        - kind
-      title: Toy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    schemas-Toy:
-      required:
-        - id
-        - price
-        - kind
-      title: Toy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-        someEnum:
-          type: string
-          enum:
-            - FOO
-            - BAR
-          title: FooBar
-    schema-sub:
-      required:
-        - string
-      properties:
-        subId:
-          type: string
-    schema-untitled:
-      properties:
-        untitledProp:
-          type: string
-    Color:
-      type: object
-      properties:
-        untitledProp:
-          type: string
-        colorId:
-          type: string
-        untitled:
-          $ref: '#/components/schemas/schema-untitled'
-    targetGroup:
-      type: string
-      x-extensible-enum:
-        - PETS
-        - CHILDREN
-      default: CHILDREN
-    Ball:
-      required:
-        - id
-        - price
-        - kind
-      title: Ball
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    Teddy:
-      required:
-        - id
-        - price
-        - kind
-      title: Teddy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    Fluffy:
-      properties:
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-    FluffyTeddy:
-      required:
-        - id
-        - price
-        - kind
-      title: Teddy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          type: string
-          x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
-    PetToy:
-      oneOf:
-        - $ref: '#/components/schemas/Ball'
-        - $ref: '#/components/schemas/FluffyTeddy'
-      discriminator:
-        propertyName: kind
-        mapping:
-          BALL: '#/components/schemas/Ball'
-          TEDDY: '#/components/schemas/FluffyTeddy'
-    components-schemas-Toy:
-      required:
-        - id
-        - kind
-        - price
-        - string
-      title: Toy
-      properties:
-        id:
-          type: string
-        price:
-          type: string
-        kind:
-          type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          $ref: '#/components/schemas/targetGroup'
-        someEnum:
-          type: string
-          enum:
-            - FOO
-            - BAR
-          title: FooBar
-        subId:
-          type: string
-        name:
-          type: string
-        color:
-          $ref: '#/components/schemas/Color'
-        relates:
-          $ref: '#/components/schemas/PetToy'
-    Pet:
-      type: object
-      required:
-        - id
-        - name
-      example:
-        foo: ''
-        bar: 1234
-        foobar: true
-      properties:
-        id:
-          type: integer
-          format: int64
-        toy:
-          $ref: '#/components/schemas/components-schemas-Toy'
-        leastFavToy:
-          $ref: '#/components/schemas/schemas-Toy'
-        favFluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        tag:
-          type: string
-          example:
-            description: default string example
-            value: some string
-        name:
-          type: string
-          example:
-            description: default string example
-            value: some string
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-  responses:
-    Default:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml 1`] = `
-"openapi: "3.0.3"
-info:
-  version: 1.0.0
-  title: Swagger Petstore
-  license:
-    name: MIT
-servers:
-  - url: http://petstore.swagger.io/v1
-paths:
-  /pets:
-    $ref: './routes/pets.yml'
-
-  /pets/{petId}:
-    $ref: './routes/pet.yml'
-
-
-
-
-
-
-
-
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\zod.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\zod.ts 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 import * as api from './api.js'
@@ -5546,7 +3375,7 @@ export module Schemas {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\zod-common.ts 1`] = `
+exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-modular-complex\\zod-common.ts 1`] = `
 "import { z } from 'zod'
 
 
@@ -5601,7 +3430,7 @@ export module ZodUnionMatch {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\api.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\api.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -5846,7 +3675,7 @@ export class PetsApi extends BaseAPI {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\base.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\base.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -5936,7 +3765,7 @@ export const operationServerMap: ServerMap = {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\bundled-pets-api.yml 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\bundled-pets-api.yml 1`] = `
 "openapi: 3.1.0
 info:
   version: 1.0.0
@@ -6015,7 +3844,7 @@ components:
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\common.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\common.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -6171,7 +4000,7 @@ export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\configuration.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\configuration.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -6285,7 +4114,7 @@ export class Configuration {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\index.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\index.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -6308,78 +4137,7 @@ export * from "./zod.js";
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\pets-api.yml 1`] = `
-"openapi: "3.1.0"
-info:
-  version: 1.0.0
-  title: Swagger Petstore
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      tags:
-        - pets
-      responses:
-        '200':
-          description: A paged array of pets
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              schema:
-                $ref: '#/components/schemas/Pets'
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Pets"
-components:
-  schemas:
-    Pets:
-      type: object
-      properties:
-        pets:
-          type: array
-          maxItems: 100
-          items:
-            $ref: "#/components/schemas/Pet"
-
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-      discriminator:
-        propertyName: type
-        mapping:
-          CAT: '#/components/schemas/Cat'
-          DOG: '#/components/schemas/Dog'
-
-    PetBase:
-      type: object
-      required:
-        - type
-      properties:
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-
-    Cat:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            enemies:
-              $ref: '#/components/schemas/Pets'
-
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            friends:
-              $ref: '#/components/schemas/Pets'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\zod.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\zod.ts 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 import * as api from './api.js'
@@ -6408,7 +4166,7 @@ export module Schemas {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-recursive\\zod-common.ts 1`] = `
+exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-recursive\\zod-common.ts 1`] = `
 "import { z } from 'zod'
 
 
@@ -6463,7 +4221,7 @@ export module ZodUnionMatch {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\api.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\api.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -6700,7 +4458,7 @@ export class DefaultApi extends BaseAPI {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\base.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\base.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -6790,7 +4548,7 @@ export const operationServerMap: ServerMap = {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\bundled-pets-api.yml 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\bundled-pets-api.yml 1`] = `
 "openapi: 3.0.3
 info:
   version: 1.0.1
@@ -6868,7 +4626,7 @@ components:
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\common.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\common.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -7024,7 +4782,7 @@ export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\configuration.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\configuration.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -7138,169 +4896,7 @@ export class Configuration {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\ens-mrg-pets-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  version: 1.0.1
-  title: some title
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-components:
-  schemas:
-    PetBase:
-      type: object
-      required:
-        - id
-        - name
-        - type
-      example:
-        some: props
-      properties:
-        id:
-          type: integer
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            bark:
-              type: string
-            type:
-              type: string
-              x-const: DOG
-              example: DOG
-          required:
-            - bark
-            - type
-    Cat:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            color:
-              type: string
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-          required:
-            - color
-            - type
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\ensured-pets-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  version: 1.0.1
-  title: some title
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-components:
-  schemas:
-    PetBase:
-      type: object
-      required:
-        - id
-        - name
-        - type
-      example:
-        some: props
-      properties:
-        id:
-          type: integer
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            bark:
-              type: string
-            type:
-              type: string
-              x-const: DOG
-              example: DOG
-          required:
-            - bark
-            - type
-    Cat:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            color:
-              type: string
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-          required:
-            - color
-            - type
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\example.json 1`] = `
-"{
-  "some": "props"
-}"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\index.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\index.ts 1`] = `
 "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -7323,156 +4919,7 @@ export * from "./zod.js";
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\merged-pets-api.yml 1`] = `
-"openapi: 3.0.3
-info:
-  version: 1.0.1
-  title: some title
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-components:
-  schemas:
-    PetBase:
-      type: object
-      required:
-        - id
-        - name
-      example:
-        some: props
-      properties:
-        id:
-          type: integer
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            bark:
-              type: string
-          required:
-            - bark
-    Cat:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            color:
-              type: string
-          required:
-            - color
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml 1`] = `
-"openapi: "3.0.3"
-info:
-  version: "1.0.1"
-  title: "some title"
-paths:
-  /pets:
-    $ref: './route-pets.yml'
-
-
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\route-pets.yml 1`] = `
-"get:
-  summary: List all pets
-  operationId: listPets
-  responses:
-    '200':
-      description: A paged array of pets
-      content:
-        application/json:
-          schema:
-            $ref: "./schemas.yml#/components/schemas/Pets"
-"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\schemas.yml 1`] = `
-"openapi: "3.1.0"
-paths:
-info:
-components:
-  schemas:
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: "#/components/schemas/Pet"
-
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-
-    PetBase:
-      type: object
-      required:
-        - id
-        - name
-      example:
-        $ref: './example.json'
-      properties:
-        id:
-          type: integer
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-
-    Cat:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            color:
-              type: string
-          required: [ color ]
-
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            bark:
-              type: string
-          required: [ bark ]"
-`;
-
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\zod.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\zod.ts 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 import * as api from './api.js'
@@ -7501,7 +4948,7 @@ export module Schemas {
 "
 `;
 
-exports[`Generate Integration all B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\pets-simple\\zod-common.ts 1`] = `
+exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\integration\\pets-simple\\zod-common.ts 1`] = `
 "import { z } from 'zod'
 
 
@@ -7556,7 +5003,7 @@ export module ZodUnionMatch {
 "
 `;
 
-exports[`Generate Integration ts B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: cleaned-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml 1`] = `
+exports[`Generate Integration ts generic/api.yml: cleaned-B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml 1`] = `
 [
   {
     "content": "/* tslint:disable */
@@ -7818,7 +5265,7 @@ export interface Seam extends PetBase {
 }
     
         /**
- * 
+ * Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s 
  * @export
  * @interface ShortHair
  */
@@ -8023,22 +5470,7 @@ export class DefaultApi extends BaseAPI {
 
 
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.ts",
-  },
-  {
-    "content": "openapi: "3.0.3"
-info:
-  version: "1.0.1"
-  title: "some title"
-paths:
-  /pets:
-    $ref: './route-pets.yml'
-  /pets/{petId}:
-    $ref: './route-test.yml#/components/pathItems/GetPet'
-
-
-",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml",
+    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\api.ts",
   },
   {
     "content": "/* tslint:disable */
@@ -8128,7 +5560,7 @@ interface ServerMap {
 export const operationServerMap: ServerMap = {
 }
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\base.ts",
+    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\base.ts",
   },
   {
     "content": "openapi: 3.0.3
@@ -8313,20 +5745,7 @@ components:
       items:
         $ref: '#/components/schemas/Pet'
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\bundled-api.yml",
-  },
-  {
-    "content": "CatBase:
-  allOf:
-    - $ref: './schemas.yml#/components/schemas/PetBase'
-    - title: CatBase
-      properties:
-        color: { type: string }
-        catType: { type: string , enum: [SEAM, SHORT], title: CatType}
-      required: [ color ]
-      discriminator:
-        propertyName: catType",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\cat_base.yml",
+    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\bundled-api.yml",
   },
   {
     "content": "/* tslint:disable */
@@ -8482,7 +5901,7 @@ export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxi
 import { z } from "zod";
 export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\common.ts",
+    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\common.ts",
   },
   {
     "content": "/* tslint:disable */
@@ -8596,366 +6015,7 @@ export class Configuration {
     }
 }
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\configuration.ts",
-  },
-  {
-    "content": "openapi: 3.0.3
-info:
-  version: 1.0.1
-  title: some title
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-  /pets/{petId}:
-    get:
-      summary: Get a Pet
-      operationId: getPet
-      parameters:
-        - name: petId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      title: PetBase
-      type: object
-      required:
-        - id
-        - name
-        - type
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          exclusiveMaximum: true
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - required:
-            - bark
-            - type
-          properties:
-            bark:
-              type: string
-            type:
-              type: string
-              x-const: DOG
-              example: DOG
-    CatBase:
-      allOf:
-        - {}
-        - title: CatBase
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-          required:
-            - color
-            - catType
-          discriminator:
-            propertyName: catType
-    Seam:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: Seam
-          required:
-            - catType
-            - color
-            - type
-          discriminator:
-            propertyName: catType
-          description: |
-            this is 
-            a multiline
-            description
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-              default: SEAM
-              maxLength: 3
-              minLength: 1
-              x-const: SEAM
-              example: SEAM
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-            angryLevel:
-              type: string
-              pattern: \\w+
-    ShortHair:
-      title: ShortHair
-      required:
-        - catType
-        - color
-        - type
-      discriminator:
-        propertyName: catType
-      description: >
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
-      properties:
-        color:
-          type: string
-        catType:
-          type: string
-          default: SHORT
-          x-const: SHORT
-          example: SHORT
-        angryLevel:
-          type: string
-        type:
-          type: string
-          x-const: CAT
-          example: CAT
-    Cat:
-      oneOf:
-        - $ref: '#/components/schemas/Seam'
-        - $ref: '#/components/schemas/ShortHair'
-      discriminator:
-        propertyName: catType
-        mapping:
-          SEAM: '#/components/schemas/Seam'
-          SHORT: '#/components/schemas/ShortHair'
-    GenericPet:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
-          properties:
-            name:
-              type: string
-            type:
-              type: string
-              x-const:
-                - BIRD
-                - HAMSTER
-              example: BIRD
-          required:
-            - type
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-        - $ref: '#/components/schemas/GenericPet'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-          BIRD: '#/components/schemas/GenericPet'
-          HAMSTER: '#/components/schemas/GenericPet'
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\ens-mrg-api.yml",
-  },
-  {
-    "content": "openapi: 3.0.3
-info:
-  version: 1.0.1
-  title: some title
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-  /pets/{petId}:
-    get:
-      summary: Get a Pet
-      operationId: getPet
-      parameters:
-        - name: petId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      title: PetBase
-      type: object
-      required:
-        - id
-        - name
-        - type
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          exclusiveMaximum: true
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-      properties:
-        bark:
-          type: string
-        type:
-          type: string
-          x-const: DOG
-          example: DOG
-      required:
-        - bark
-        - type
-    CatBase:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: CatBase
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-          required:
-            - color
-            - catType
-          discriminator:
-            propertyName: catType
-    Seam:
-      allOf:
-        - $ref: '#/components/schemas/CatBase'
-        - description: |
-            this is 
-            a multiline
-            description
-          properties:
-            catType:
-              type: string
-              default: SEAM
-              maxLength: 3
-              minLength: 1
-              x-const: SEAM
-              example: SEAM
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-          required:
-            - catType
-            - type
-        - title: Seam
-          properties:
-            catType:
-              type: string
-              default: SEAM
-              maxLength: 3
-              minLength: 1
-            angryLevel:
-              type: string
-              pattern: \\w+
-    ShortHair:
-      allOf:
-        - $ref: '#/components/schemas/CatBase'
-        - title: ShortHair
-          description: >
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, s
-          properties:
-            catType:
-              type: string
-              default: SHORT
-              x-const: SHORT
-              example: SHORT
-            angryLevel:
-              type: string
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-          required:
-            - catType
-            - type
-    Cat:
-      oneOf:
-        - $ref: '#/components/schemas/Seam'
-        - $ref: '#/components/schemas/ShortHair'
-      discriminator:
-        propertyName: catType
-        mapping:
-          SEAM: '#/components/schemas/Seam'
-          SHORT: '#/components/schemas/ShortHair'
-    GenericPet:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
-          properties:
-            name:
-              type: string
-            type:
-              type: string
-              x-const:
-                - BIRD
-                - HAMSTER
-              example: HAMSTER
-          required:
-            - type
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-        - $ref: '#/components/schemas/GenericPet'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-          BIRD: '#/components/schemas/GenericPet'
-          HAMSTER: '#/components/schemas/GenericPet'
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\ensured-api.yml",
+    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\configuration.ts",
   },
   {
     "content": "/* tslint:disable */
@@ -8978,302 +6038,7 @@ export * from "./configuration.js";
 export * from "./zod.js";
 
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\index.ts",
-  },
-  {
-    "content": "openapi: 3.0.3
-info:
-  version: 1.0.1
-  title: some title
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-  /pets/{petId}:
-    get:
-      summary: Get a Pet
-      operationId: getPet
-      parameters:
-        - name: petId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      title: PetBase
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          exclusiveMaximum: true
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - required:
-            - bark
-          properties:
-            bark:
-              type: string
-    CatBase:
-      allOf:
-        - {}
-        - title: CatBase
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-              enum:
-                - SEAM
-                - SHORT
-              title: CatType
-          required:
-            - color
-          discriminator:
-            propertyName: catType
-    Seam:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: Seam
-          required:
-            - color
-          discriminator:
-            propertyName: catType
-          description: |
-            this is 
-            a multiline
-            description
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-              enum:
-                - SEAM
-                - SHORT
-              title: CatType
-              default: SEAM
-              maxLength: 3
-              minLength: 1
-            angryLevel:
-              type: string
-              pattern: \\w+
-    ShortHair:
-      title: ShortHair
-      required:
-        - color
-      discriminator:
-        propertyName: catType
-      description: >
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
-      properties:
-        color:
-          type: string
-        catType:
-          type: string
-          enum:
-            - SEAM
-            - SHORT
-          title: CatType
-          default: SHORT
-        angryLevel:
-          type: string
-    Cat:
-      oneOf:
-        - $ref: '#/components/schemas/Seam'
-        - $ref: '#/components/schemas/ShortHair'
-      discriminator:
-        propertyName: catType
-        mapping:
-          SEAM: '#/components/schemas/Seam'
-          SHORT: '#/components/schemas/ShortHair'
-    GenericPet:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
-          properties:
-            name:
-              type: string
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-        - $ref: '#/components/schemas/GenericPet'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-          BIRD: '#/components/schemas/GenericPet'
-          HAMSTER: '#/components/schemas/GenericPet'
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\merged-api.yml",
-  },
-  {
-    "content": "get:
-  summary: List all pets
-  operationId: listPets
-  responses:
-    '200':
-      description: A paged array of pets
-      content:
-        application/json:
-          schema:
-            $ref: "./schemas.yml#/components/schemas/Pets"
-",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\route-pets.yml",
-  },
-  {
-    "content": "components:
-  pathItems:
-    GetPet:
-      get:
-        summary: Get a Pet
-        operationId: getPet
-        parameters:
-          - name: petId
-            in: path
-            required: true
-            schema:
-              type: string
-        responses:
-          '200':
-            description: A paged array of pets
-            content:
-              application/json:
-                schema:
-                  $ref: "./schemas.yml#/components/schemas/Pet"
-",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\route-test.yml",
-  },
-  {
-    "content": "openapi: "3.1.0"
-paths:
-info:
-  description: |
-    Nested discriminated Union
-  title: Nested
-  version: 0.0.0
-components:
-  schemas:
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: "#/components/schemas/Pet"
-
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-        - $ref: '#/components/schemas/GenericPet'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-          BIRD: '#/components/schemas/GenericPet'
-          HAMSTER: '#/components/schemas/GenericPet'
-
-    GenericPet:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
-          properties:
-            name:
-              type: string
-
-    PetBase:
-      title: PetBase
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          exclusiveMaximum: true
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-
-    Cat:
-      oneOf:
-        - $ref: '#/components/schemas/Seam'
-        - $ref: '#/components/schemas/ShortHair'
-      discriminator:
-        propertyName: catType
-        mapping:
-          SEAM: "#/components/schemas/Seam"
-          SHORT: "#/components/schemas/ShortHair"
-
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-      properties:
-          bark:
-            type: string
-      required: [ bark ]
-
-    Seam:
-      allOf:
-        - $ref: './cat_base.yml#/CatBase'
-        - description: |
-            this is 
-            a multiline
-            description
-        - title: Seam
-          properties:
-            catType: { type: string, default: "SEAM", maxLength: 3, minLength: 1 }
-            angryLevel: { type: string , pattern: '\\w+'}
-
-    ShortHair:
-      allOf:
-        - $ref: './cat_base.yml#/CatBase'
-        - title: ShortHair
-          description: > 
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
-          properties:
-            catType: { type: string, default: "SHORT" }
-            angryLevel: { type: string }
-
-",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\schemas.yml",
+    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\index.ts",
   },
   {
     "content": "import { z } from 'zod'
@@ -9328,7 +6093,7 @@ export module ZodUnionMatch {
     }
 }
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\zod-common.ts",
+    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\zod-common.ts",
   },
   {
     "content": "import { z } from 'zod'
@@ -9366,7 +6131,7 @@ export module Schemas {
 
 }
 ",
-    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\node_modules\\openapi-example-specs\\specs\\generic\\zod.ts",
+    "src": "B:\\dasaplan\\ts-mono\\packages\\openapi\\test\\out\\post\\generic\\zod.ts",
   },
 ]
 `;

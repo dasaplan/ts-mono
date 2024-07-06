@@ -15,7 +15,7 @@ export module Schemas {
 "
 `;
 
-exports[`generateZod generates test/specs/generic/api.yml: /generic/api 1`] = `
+exports[`generateZod generates generic/api.yml: generic/api 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 
@@ -52,7 +52,7 @@ export module Schemas {
 "
 `;
 
-exports[`generateZod generates test/specs/pets-modular/pets-api.yml: /pets-modular/pets-api 1`] = `
+exports[`generateZod generates pets-modular/pets-api.yml: pets-modular/pets-api 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 
@@ -80,7 +80,7 @@ export module Schemas {
 "
 `;
 
-exports[`generateZod generates test/specs/pets-modular-complex/petstore-api.yml: /pets-modular-complex/petstore-api 1`] = `
+exports[`generateZod generates pets-modular-complex/petstore-api.yml: pets-modular-complex/petstore-api 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 
@@ -126,7 +126,7 @@ export module Schemas {
 "
 `;
 
-exports[`generateZod generates test/specs/pets-recursive/pets-api.yml: /pets-recursive/pets-api 1`] = `
+exports[`generateZod generates pets-recursive/pets-api.yml: pets-recursive/pets-api 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 
@@ -154,7 +154,7 @@ export module Schemas {
 "
 `;
 
-exports[`generateZod generates test/specs/pets-simple/pets-api.yml: /pets-simple/pets-api 1`] = `
+exports[`generateZod generates pets-simple/pets-api.yml: pets-simple/pets-api 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 

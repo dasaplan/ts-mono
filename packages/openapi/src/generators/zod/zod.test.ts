@@ -1,25 +1,28 @@
-import {bundleOpenapi, createSpecProcessor, OpenApiBundled} from "@dasaplan/openapi-bundler";
+import { bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { ZodGenOptions, generateZod } from "./zod-schemas.js";
 import { oas30 } from "openapi3-ts";
+import { resolveSpecPath } from "openapi-example-specs";
+import path from "path";
 
 const options: () => ZodGenOptions = () => ({
   includeTsTypes: false,
 });
 describe("generateZod", () => {
   test.each([
-    "test/specs/pets-modular/pets-api.yml",
-    "test/specs/pets-simple/pets-api.yml",
-    "test/specs/pets-modular-complex/petstore-api.yml",
-    "test/specs/generic/api.yml",
-    "test/specs/pets-recursive/pets-api.yml",
-  ])("generates %s", async (api) => {
+    "pets-modular/pets-api.yml",
+    "pets-simple/pets-api.yml",
+    "pets-modular-complex/petstore-api.yml",
+    "generic/api.yml",
+    "pets-recursive/pets-api.yml",
+  ])("generates %s", async (spec) => {
+    const api = resolveSpecPath(spec);
     const { parsed } = await bundleOpenapi(api, {
       postProcessor: createSpecProcessor({
         mergeAllOf: true,
         ensureDiscriminatorValues: true,
       }),
     });
-    const name = api.replace("test/specs", "").replace(".yml", "");
+    const name = spec.replace(".yml", "");
     const { sourceFile } = await generateZod(parsed, `test/out/zod/${name}.ts`, options());
 
     expect(sourceFile.getFullText()).toMatchSnapshot(name);

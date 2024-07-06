@@ -13,37 +13,27 @@ describe("post process", () => {
   describe("spec", () => {
     describe("ensureDiscriminatorValues", () => {
       test.each([
-        resolveSpecPath("pets-modular/pets-api.yml"),
-        resolveSpecPath("pets-simple/pets-api.yml"),
-        resolveSpecPath("pets-modular-complex/petstore-api.yml"),
-        resolveSpecPath("generic/api.yml"),
-      ])("%s", async (api) => {
+        "pets-modular/pets-api.yml",
+        "pets-simple/pets-api.yml",
+        "pets-modular-complex/petstore-api.yml",
+        "generic/api.yml",
+      ])("%s", async (spec) => {
+        const api = resolveSpecPath(spec);
         const { parsed } = await bundleOpenapi(api);
         const mergedAllOf = mergeAllOf(_.cloneDeep(parsed));
         const ensured = ensureDiscriminatorValues(_.cloneDeep(parsed));
         const ensuredMerged = mergeAllOf(
           ensureDiscriminatorValues(_.cloneDeep(ensured))
         );
-        Folder.resolve(`test/out`, api).writeYml(
-          `bundled-${path.basename(api)}`,
-          parsed
-        );
-        Folder.resolve(`test/out`, api).writeYml(
-          `merged-${path.basename(api)}`,
-          mergedAllOf
-        );
-        Folder.resolve(`test/out`, api).writeYml(
-          `ensured-${path.basename(api)}`,
-          ensured
-        );
-        Folder.resolve(`test/out`, api).writeYml(
-          `ens-mrg-${path.basename(api)}`,
-          ensuredMerged
-        );
-        expect(parsed).toMatchSnapshot(`ensured-${api}`);
-        expect(mergedAllOf).toMatchSnapshot(`merged-${api}`);
-        expect(ensured).toMatchSnapshot(`bndl-${api}`);
-        expect(ensuredMerged).toMatchSnapshot(`ensured-merged-${api}`);
+        const testOut = Folder.resolve(`test/out/discriminator-values`, spec);
+        testOut.writeYml(`bundled-${path.basename(spec)}`, parsed);
+        testOut.writeYml(`merged-${path.basename(spec)}`, mergedAllOf);
+        testOut.writeYml(`ensured-${path.basename(spec)}`, ensured);
+        testOut.writeYml(`ens-mrg-${path.basename(spec)}`, ensuredMerged);
+        expect(parsed).toMatchSnapshot(`ensured-${spec}`);
+        expect(mergedAllOf).toMatchSnapshot(`merged-${spec}`);
+        expect(ensured).toMatchSnapshot(`bndl-${spec}`);
+        expect(ensuredMerged).toMatchSnapshot(`ensured-merged-${spec}`);
       });
     });
 

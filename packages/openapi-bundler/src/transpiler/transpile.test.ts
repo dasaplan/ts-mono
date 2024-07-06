@@ -38,11 +38,12 @@ describe("transpiler", () => {
   });
 
   test.each([
-    resolveSpecPath("pets-modular/pets-api.yml"),
-    resolveSpecPath("pets-simple/pets-api.yml"),
-    resolveSpecPath("pets-modular-complex/petstore-api.yml"),
-    resolveSpecPath("generic/api.yml"),
-  ])("transpile %s", async (api) => {
+    "pets-modular/pets-api.yml",
+    "pets-simple/pets-api.yml",
+    "pets-modular-complex/petstore-api.yml",
+    "generic/api.yml",
+  ])("transpile %s", async (specName) => {
+    const api = resolveSpecPath(specName);
     const { parsed } = await bundleOpenapi(api, {
       outFile: Folder.cwd("tmp", "transpile").makeFile(File.of(api).name)
         .absolutPath,

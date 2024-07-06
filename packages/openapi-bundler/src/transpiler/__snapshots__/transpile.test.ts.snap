@@ -4205,7 +4205,7 @@ exports[`transpiler schemas: schemas 2`] = `
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: endpoints 1`] = `
+exports[`transpiler transpile generic/api.yml: endpoints 1`] = `
 [
   {
     "alias": "listPets",
@@ -12584,7 +12584,7 @@ description
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: schemas 1`] = `
+exports[`transpiler transpile generic/api.yml: schemas 1`] = `
 [
   {
     "component": {
@@ -31852,7 +31852,7 @@ description
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\generic\\api.yml: schemas-sorted 1`] = `
+exports[`transpiler transpile generic/api.yml: schemas-sorted 1`] = `
 [
   {
     "component": {
@@ -51120,7 +51120,7 @@ description
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: endpoints 1`] = `
+exports[`transpiler transpile pets-modular/pets-api.yml: endpoints 1`] = `
 [
   {
     "alias": "getPets",
@@ -51748,7 +51748,7 @@ exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: schemas 1`] = `
+exports[`transpiler transpile pets-modular/pets-api.yml: schemas 1`] = `
 [
   {
     "component": {
@@ -53541,7 +53541,7 @@ exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\pets-modular\\pets-api.yml: schemas-sorted 1`] = `
+exports[`transpiler transpile pets-modular/pets-api.yml: schemas-sorted 1`] = `
 [
   {
     "component": {
@@ -55334,7 +55334,7 @@ exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: endpoints 1`] = `
+exports[`transpiler transpile pets-modular-complex/petstore-api.yml: endpoints 1`] = `
 [
   {
     "alias": "listPets",
@@ -57825,7 +57825,7 @@ exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: schemas 1`] = `
+exports[`transpiler transpile pets-modular-complex/petstore-api.yml: schemas 1`] = `
 [
   {
     "component": {
@@ -63210,7 +63210,7 @@ exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\pets-modular-complex\\petstore-api.yml: schemas-sorted 1`] = `
+exports[`transpiler transpile pets-modular-complex/petstore-api.yml: schemas-sorted 1`] = `
 [
   {
     "component": {
@@ -68595,7 +68595,7 @@ exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: endpoints 1`] = `
+exports[`transpiler transpile pets-simple/pets-api.yml: endpoints 1`] = `
 [
   {
     "alias": "listPets",
@@ -69197,7 +69197,7 @@ exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: schemas 1`] = `
+exports[`transpiler transpile pets-simple/pets-api.yml: schemas 1`] = `
 [
   {
     "component": {
@@ -71446,7 +71446,7 @@ exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\
 ]
 `;
 
-exports[`transpiler transpile B:\\dasaplan\\ts-mono\\packages\\openapi-bundler\\node_modules\\openapi-example-specs\\specs\\pets-simple\\pets-api.yml: schemas-sorted 1`] = `
+exports[`transpiler transpile pets-simple/pets-api.yml: schemas-sorted 1`] = `
 [
   {
     "component": {
