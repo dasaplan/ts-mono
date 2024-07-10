@@ -23,8 +23,8 @@ export module Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
-    export const ShortHair = z.object({ color: z.string(), catType: z.literal('SHORT'), angryLevel: z.string().optional(), type: z.literal('CAT') });
-    export const Seam = PetBase.merge(z.object({ color: z.string(), catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), type: z.literal('CAT') }));
+    export const ShortHair = z.object({ catType: z.literal('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') });
+    export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
     export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() });
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() });
     export const Pets = z.array(Pet).max(100);
@@ -86,14 +86,14 @@ import * as zc from './zod-common.js'
 
 export module Schemas {
     export const FluffLevel = z.enum(['A', 'B', 'C']).or(z.string().brand("UNKNOWN"));
-    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional() });
-    export const FluffyTeddy = z.object({ id: z.string(), price: z.string(), kind: z.literal('TEDDY'), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
+    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
+    export const FluffyTeddy = z.object({ fluffLevel: FluffLevel.optional(), id: z.string(), price: z.string(), kind: z.literal('TEDDY'), targetGroup: z.string().optional() });
     export const Ball = z.object({ id: z.string(), price: z.string(), kind: z.literal('BALL'), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
     export const PetToy = zc.ZodUnionMatch.matcher("kind", { 'BALL': Ball, 'TEDDY': FluffyTeddy, onDefault: z.object({ kind: z.string().brand("UNKNOWN") }).passthrough() });
-    export const SchemaUntitled = z.object({ untitledProp: z.string().optional() });
-    export const Color = z.object({ untitledProp: z.string().optional(), colorId: z.string().optional(), schemaUntitled: SchemaUntitled.optional() });
     export const TargetGroup = z.string();
-    export const ComponentsSchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), fluffLevel: FluffLevel.optional(), targetGroup: TargetGroup.optional(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), subId: z.string().optional(), name: z.string().optional(), color: Color.optional(), petToy: PetToy.optional() });
+    export const SchemaUntitled = z.object({ untitledProp: z.string().optional() });
+    export const Color = z.object({ colorId: z.string().optional(), schemaUntitled: SchemaUntitled.optional(), untitledProp: z.string().optional() });
+    export const ComponentsSchemasToy = z.object({ name: z.string().optional(), color: Color.optional(), targetGroup: TargetGroup.optional(), petToy: PetToy.optional(), subId: z.string().optional(), id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional() });
     export const Pet = z.object({ id: z.number().int(), componentsSchemasToy: ComponentsSchemasToy.optional(), schemasToy: SchemasToy.optional(), fluffLevel: FluffLevel.optional(), tag: z.string().optional(), name: z.string() });
     export const Pets = z.array(Pet).max(100);
     export const SchemaTitled = z.object({ titledProp: z.string().optional() });
@@ -106,9 +106,9 @@ export module Schemas {
         export type FluffyTeddy = z.infer<typeof Schemas.FluffyTeddy>;
         export type Ball = z.infer<typeof Schemas.Ball>;
         export type PetToy = z.infer<typeof Schemas.PetToy>;
+        export type TargetGroup = z.infer<typeof Schemas.TargetGroup>;
         export type SchemaUntitled = z.infer<typeof Schemas.SchemaUntitled>;
         export type Color = z.infer<typeof Schemas.Color>;
-        export type TargetGroup = z.infer<typeof Schemas.TargetGroup>;
         export type ComponentsSchemasToy = z.infer<typeof Schemas.ComponentsSchemasToy>;
         export type Pet = z.infer<typeof Schemas.Pet>;
         export type Pets = z.infer<typeof Schemas.Pets>;

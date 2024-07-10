@@ -236,12 +236,6 @@ export interface Seam extends PetBase {
      * 
      * @type {string}
      * @memberof Seam
-     */
-    color: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Seam
      * @discriminator catType
      */
     catType: 'SEAM';
@@ -251,6 +245,12 @@ export interface Seam extends PetBase {
      * @memberof Seam
      */
     angryLevel?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Seam
+     */
+    color: string;
     /**
      * 
      * @type {string}
@@ -269,12 +269,6 @@ export interface ShortHair {
      * 
      * @type {string}
      * @memberof ShortHair
-     */
-    color: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShortHair
      * @discriminator catType
      */
     catType: 'SHORT';
@@ -284,6 +278,12 @@ export interface ShortHair {
      * @memberof ShortHair
      */
     angryLevel?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ShortHair
+     */
+    color: string;
     /**
      * 
      * @type {string}
@@ -644,55 +644,55 @@ components:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - title: Seam
+          description: |
+            this is 
+            a multiline
+            description
           required:
             - color
             - catType
             - type
           discriminator:
             propertyName: catType
-          description: |
-            this is 
-            a multiline
-            description
           properties:
-            color:
-              type: string
             catType:
               type: string
-              title: CatType
               default: SEAM
               maxLength: 3
               minLength: 1
+              title: CatType
               x-const: SEAM
               example: SEAM
             angryLevel:
               type: string
               pattern: \\w+
+            color:
+              type: string
             type:
               type: string
               x-const: CAT
               example: CAT
     ShortHair:
       title: ShortHair
+      description: >
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
       required:
         - color
         - catType
         - type
       discriminator:
         propertyName: catType
-      description: >
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
       properties:
-        color:
-          type: string
         catType:
           type: string
-          title: CatType
           default: SHORT
+          title: CatType
           x-const: SHORT
           example: SHORT
         angryLevel:
+          type: string
+        color:
           type: string
         type:
           type: string
@@ -1044,8 +1044,8 @@ export module Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
-    export const ShortHair = z.object({ color: z.string(), catType: z.literal('SHORT'), angryLevel: z.string().optional(), type: z.literal('CAT') });
-    export const Seam = PetBase.merge(z.object({ color: z.string(), catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), type: z.literal('CAT') }));
+    export const ShortHair = z.object({ catType: z.literal('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') });
+    export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
     export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Cat>;
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets = z.array(Pet).max(100);
@@ -2043,12 +2043,6 @@ export interface Color {
      * @type {string}
      * @memberof Color
      */
-    untitledProp?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Color
-     */
     colorId?: string;
     /**
      * 
@@ -2056,6 +2050,12 @@ export interface Color {
      * @memberof Color
      */
     untitled?: SchemaUntitled;
+    /**
+     * 
+     * @type {string}
+     * @memberof Color
+     */
+    untitledProp?: string;
 }
     
         /**
@@ -2064,6 +2064,36 @@ export interface Color {
  * @interface ComponentsSchemasToy
  */
 export interface ComponentsSchemasToy {
+    /**
+     * 
+     * @type {string}
+     * @memberof ComponentsSchemasToy
+     */
+    name?: string;
+    /**
+     * 
+     * @type {Color}
+     * @memberof ComponentsSchemasToy
+     */
+    color?: Color;
+    /**
+     * 
+     * @type {string}
+     * @memberof ComponentsSchemasToy
+     */
+    targetGroup?: string;
+    /**
+     * 
+     * @type {PetToy}
+     * @memberof ComponentsSchemasToy
+     */
+    relates?: PetToy;
+    /**
+     * 
+     * @type {string}
+     * @memberof ComponentsSchemasToy
+     */
+    subId?: string;
     /**
      * 
      * @type {string}
@@ -2084,46 +2114,16 @@ export interface ComponentsSchemasToy {
     kind: string;
     /**
      * 
-     * @type {FluffLevel}
-     * @memberof ComponentsSchemasToy
-     */
-    fluffLevel?: FluffLevel;
-    /**
-     * 
-     * @type {string}
-     * @memberof ComponentsSchemasToy
-     */
-    targetGroup?: string;
-    /**
-     * 
      * @type {string}
      * @memberof ComponentsSchemasToy
      */
     someEnum?: ComponentsSchemasToySomeEnumEnum;
     /**
      * 
-     * @type {string}
+     * @type {FluffLevel}
      * @memberof ComponentsSchemasToy
      */
-    subId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ComponentsSchemasToy
-     */
-    name?: string;
-    /**
-     * 
-     * @type {Color}
-     * @memberof ComponentsSchemasToy
-     */
-    color?: Color;
-    /**
-     * 
-     * @type {PetToy}
-     * @memberof ComponentsSchemasToy
-     */
-    relates?: PetToy;
+    fluffLevel?: FluffLevel;
 }
 
 
@@ -2180,6 +2180,12 @@ export type FluffLevel = typeof FluffLevel[keyof typeof FluffLevel]  | UNKNOWN_E
 export interface FluffyTeddy {
     /**
      * 
+     * @type {FluffLevel}
+     * @memberof FluffyTeddy
+     */
+    fluffLevel?: FluffLevel;
+    /**
+     * 
      * @type {string}
      * @memberof FluffyTeddy
      */
@@ -2196,12 +2202,6 @@ export interface FluffyTeddy {
      * @memberof FluffyTeddy
      */
     kind: 'TEDDY';
-    /**
-     * 
-     * @type {FluffLevel}
-     * @memberof FluffyTeddy
-     */
-    fluffLevel?: FluffLevel;
     /**
      * 
      * @type {string}
@@ -2380,6 +2380,12 @@ export interface SchemasToy {
     kind: string;
     /**
      * 
+     * @type {string}
+     * @memberof SchemasToy
+     */
+    someEnum?: SchemasToySomeEnumEnum;
+    /**
+     * 
      * @type {FluffLevel}
      * @memberof SchemasToy
      */
@@ -2390,12 +2396,6 @@ export interface SchemasToy {
      * @memberof SchemasToy
      */
     targetGroup?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchemasToy
-     */
-    someEnum?: SchemasToySomeEnumEnum;
 }
 
 
@@ -2859,11 +2859,11 @@ components:
         - B
         - C
     schemas-Toy:
+      title: Toy
       required:
         - id
         - price
         - kind
-      title: Toy
       properties:
         id:
           type: string
@@ -2871,6 +2871,12 @@ components:
           type: string
         kind:
           type: string
+        someEnum:
+          type: string
+          enum:
+            - FOO
+            - BAR
+          title: FooBar
         fluffLevel:
           $ref: '#/components/schemas/FluffLevel'
         targetGroup:
@@ -2879,12 +2885,6 @@ components:
             - PETS
             - CHILDREN
           default: CHILDREN
-        someEnum:
-          type: string
-          enum:
-            - FOO
-            - BAR
-          title: FooBar
     schema-untitled:
       properties:
         untitledProp:
@@ -2892,12 +2892,12 @@ components:
     Color:
       type: object
       properties:
-        untitledProp:
-          type: string
         colorId:
           type: string
         untitled:
           $ref: '#/components/schemas/schema-untitled'
+        untitledProp:
+          type: string
     targetGroup:
       type: string
       x-extensible-enum:
@@ -2905,11 +2905,11 @@ components:
         - CHILDREN
       default: CHILDREN
     Ball:
+      title: Ball
       required:
         - id
         - price
         - kind
-      title: Ball
       properties:
         id:
           type: string
@@ -2928,12 +2928,14 @@ components:
             - CHILDREN
           default: CHILDREN
     FluffyTeddy:
+      title: Teddy
       required:
         - id
         - price
         - kind
-      title: Teddy
       properties:
+        fluffLevel:
+          $ref: '#/components/schemas/FluffLevel'
         id:
           type: string
         price:
@@ -2942,8 +2944,6 @@ components:
           type: string
           x-const: TEDDY
           example: TEDDY
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
         targetGroup:
           type: string
           x-extensible-enum:
@@ -2960,37 +2960,37 @@ components:
           BALL: '#/components/schemas/Ball'
           TEDDY: '#/components/schemas/FluffyTeddy'
     components-schemas-Toy:
+      title: Toy
       required:
         - id
         - kind
         - price
         - string
-      title: Toy
       properties:
+        name:
+          type: string
+        color:
+          $ref: '#/components/schemas/Color'
+        targetGroup:
+          $ref: '#/components/schemas/targetGroup'
+        relates:
+          $ref: '#/components/schemas/PetToy'
+        subId:
+          type: string
         id:
           type: string
         price:
           type: string
         kind:
           type: string
-        fluffLevel:
-          $ref: '#/components/schemas/FluffLevel'
-        targetGroup:
-          $ref: '#/components/schemas/targetGroup'
         someEnum:
           type: string
           enum:
             - FOO
             - BAR
           title: FooBar
-        subId:
-          type: string
-        name:
-          type: string
-        color:
-          $ref: '#/components/schemas/Color'
-        relates:
-          $ref: '#/components/schemas/PetToy'
+        fluffLevel:
+          $ref: '#/components/schemas/FluffLevel'
     Pet:
       type: object
       required:
@@ -3335,14 +3335,14 @@ import * as api from './api.js'
 
 export module Schemas {
     export const FluffLevel = z.enum(['A', 'B', 'C']).or(z.string().brand("UNKNOWN")) as z.ZodType<api.FluffLevel>;
-    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional() });
-    export const FluffyTeddy = z.object({ id: z.string(), price: z.string(), kind: z.literal('TEDDY'), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
+    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
+    export const FluffyTeddy = z.object({ fluffLevel: FluffLevel.optional(), id: z.string(), price: z.string(), kind: z.literal('TEDDY'), targetGroup: z.string().optional() });
     export const Ball = z.object({ id: z.string(), price: z.string(), kind: z.literal('BALL'), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
     export const PetToy = zc.ZodUnionMatch.matcher("kind", { 'BALL': Ball, 'TEDDY': FluffyTeddy, onDefault: z.object({ kind: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.PetToy>;
-    export const SchemaUntitled = z.object({ untitledProp: z.string().optional() });
-    export const Color = z.object({ untitledProp: z.string().optional(), colorId: z.string().optional(), schemaUntitled: SchemaUntitled.optional() });
     export const TargetGroup = z.string();
-    export const ComponentsSchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), fluffLevel: FluffLevel.optional(), targetGroup: TargetGroup.optional(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), subId: z.string().optional(), name: z.string().optional(), color: Color.optional(), petToy: PetToy.optional() });
+    export const SchemaUntitled = z.object({ untitledProp: z.string().optional() });
+    export const Color = z.object({ colorId: z.string().optional(), schemaUntitled: SchemaUntitled.optional(), untitledProp: z.string().optional() });
+    export const ComponentsSchemasToy = z.object({ name: z.string().optional(), color: Color.optional(), targetGroup: TargetGroup.optional(), petToy: PetToy.optional(), subId: z.string().optional(), id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional() });
     export const Pet = z.object({ id: z.number().int(), componentsSchemasToy: ComponentsSchemasToy.optional(), schemasToy: SchemasToy.optional(), fluffLevel: FluffLevel.optional(), tag: z.string().optional(), name: z.string() });
     export const Pets = z.array(Pet).max(100);
     export const SchemaTitled = z.object({ titledProp: z.string().optional() });
@@ -3355,9 +3355,9 @@ export module Schemas {
         export type FluffyTeddy = z.infer<typeof Schemas.FluffyTeddy>;
         export type Ball = z.infer<typeof Schemas.Ball>;
         export type PetToy = z.infer<typeof Schemas.PetToy>;
+        export type TargetGroup = z.infer<typeof Schemas.TargetGroup>;
         export type SchemaUntitled = z.infer<typeof Schemas.SchemaUntitled>;
         export type Color = z.infer<typeof Schemas.Color>;
-        export type TargetGroup = z.infer<typeof Schemas.TargetGroup>;
         export type ComponentsSchemasToy = z.infer<typeof Schemas.ComponentsSchemasToy>;
         export type Pet = z.infer<typeof Schemas.Pet>;
         export type Pets = z.infer<typeof Schemas.Pets>;
@@ -5240,12 +5240,6 @@ export interface Seam extends PetBase {
      * 
      * @type {string}
      * @memberof Seam
-     */
-    color: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Seam
      * @discriminator catType
      */
     catType: 'SEAM';
@@ -5255,6 +5249,12 @@ export interface Seam extends PetBase {
      * @memberof Seam
      */
     angryLevel?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Seam
+     */
+    color: string;
     /**
      * 
      * @type {string}
@@ -5273,12 +5273,6 @@ export interface ShortHair {
      * 
      * @type {string}
      * @memberof ShortHair
-     */
-    color: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShortHair
      * @discriminator catType
      */
     catType: 'SHORT';
@@ -5288,6 +5282,12 @@ export interface ShortHair {
      * @memberof ShortHair
      */
     angryLevel?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ShortHair
+     */
+    color: string;
     /**
      * 
      * @type {string}
@@ -5642,55 +5642,55 @@ components:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - title: Seam
+          description: |
+            this is 
+            a multiline
+            description
           required:
             - color
             - catType
             - type
           discriminator:
             propertyName: catType
-          description: |
-            this is 
-            a multiline
-            description
           properties:
-            color:
-              type: string
             catType:
               type: string
-              title: CatType
               default: SEAM
               maxLength: 3
               minLength: 1
+              title: CatType
               x-const: SEAM
               example: SEAM
             angryLevel:
               type: string
               pattern: \\w+
+            color:
+              type: string
             type:
               type: string
               x-const: CAT
               example: CAT
     ShortHair:
       title: ShortHair
+      description: >
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
       required:
         - color
         - catType
         - type
       discriminator:
         propertyName: catType
-      description: >
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
       properties:
-        color:
-          type: string
         catType:
           type: string
-          title: CatType
           default: SHORT
+          title: CatType
           x-const: SHORT
           example: SHORT
         angryLevel:
+          type: string
+        color:
           type: string
         type:
           type: string
@@ -6082,8 +6082,8 @@ export module Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
-    export const ShortHair = z.object({ color: z.string(), catType: z.literal('SHORT'), angryLevel: z.string().optional(), type: z.literal('CAT') });
-    export const Seam = PetBase.merge(z.object({ color: z.string(), catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), type: z.literal('CAT') }));
+    export const ShortHair = z.object({ catType: z.literal('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') });
+    export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
     export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Cat>;
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets = z.array(Pet).max(100);

@@ -1,5 +1,13 @@
 # @dasaplan/openapi
 
+## 0.0.8
+
+### Patch Changes
+
+- fix mergeAlOf order to follow default behaviour
+- Updated dependencies
+  - @dasaplan/openapi-bundler@0.0.6
+
 ## 0.0.7
 
 ### Patch Changes
