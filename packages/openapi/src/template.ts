@@ -1,0 +1,26 @@
+import { fileURLToPath } from "url";
+import path from "path";
+import { Folder } from "@dasaplan/ts-sdk/index.js";
+import { log } from "./logger.js";
+
+export module TemplateDir {
+  function isInit() {
+    const exists = Folder.cwd("templates").readAllFilesAsString().length > 0;
+    log.info("templates exists:", exists);
+    return exists;
+  }
+
+  function init() {
+    const packageRoot = fileURLToPath(import.meta.resolve("@dasaplan/openapi"));
+    const templates = path.resolve(packageRoot, "..", "templates");
+    const tmp = Folder.of(templates);
+    log.info("copy templates:", tmp.absolutePath, tmp.copyTo(Folder.cwd("templates")).absolutePath);
+  }
+
+  export function getTmpDir() {
+    if (!isInit()) {
+      init();
+    }
+    return Folder.cwd("templates");
+  }
+}

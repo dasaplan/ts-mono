@@ -1,5 +1,14 @@
 # @dasaplan/openapi
 
+## 0.0.9
+
+### Patch Changes
+
+- fix template dir
+- Updated dependencies
+  - @dasaplan/ts-sdk@0.0.1
+  - @dasaplan/openapi-bundler@0.0.6
+
 ## 0.0.8
 
 ### Patch Changes

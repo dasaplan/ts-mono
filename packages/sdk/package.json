@@ -5,7 +5,7 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "build": "tsc",
@@ -14,8 +14,7 @@
     "lint": "echo not implemented",
     "clean": "rimraf dist"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@redocly/openapi-core": "^1.6.0",
     "lodash": "^4.17.21"

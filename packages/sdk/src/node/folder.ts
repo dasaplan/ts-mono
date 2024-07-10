@@ -145,8 +145,11 @@ export module Folder {
         fs.cpSync(absPath, destination.absolutePath, { recursive: true });
         return destination;
       },
+      exists() {
+        return fs.existsSync(_folder);
+      },
       clear() {
-        if (fs.existsSync(_folder)) {
+        if (this.exists()) {
           fs.rmSync(_folder, { recursive: true, force: true });
         }
         return this;

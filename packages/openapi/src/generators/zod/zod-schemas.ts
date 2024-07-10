@@ -4,13 +4,13 @@
 import { Project, ScriptKind, ts } from "ts-morph";
 import { pascalCase } from "pascal-case";
 import * as camelcase from "camelcase";
-import { _, File, Folder } from "@dasaplan/ts-sdk";
+import { _, File } from "@dasaplan/ts-sdk";
 import { log } from "../../logger.js";
 import Handlebars from "handlebars";
 import { OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
 import DiscriminatorProperty = Schema.DiscriminatorProperty;
+import { TemplateDir } from "../../template.js";
 
-const TEMPLATE_DIR = "templates";
 // are being used to identify usecases
 const IDENTIFIER_API = "api";
 
@@ -52,8 +52,7 @@ export async function generateZod(parsed: OpenApiBundled, filePath: string, para
   const sourceSchema = createTsMorphSrcFile(filePath, source);
 
   /* hint: just checking hbs out, could easily laso be*/
-  const templateDir = Folder.cwd(TEMPLATE_DIR);
-  console.log("accessing template", templateDir.absolutePath)
+  const templateDir = TemplateDir.getTmpDir();
   const commonTemplate = templateDir.makeFile("zod-common.hbs").readAsString();
   const template = Handlebars.compile(commonTemplate);
   const result = template({});
