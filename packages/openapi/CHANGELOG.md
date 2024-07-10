@@ -1,5 +1,11 @@
 # @dasaplan/openapi
 
+## 0.0.6
+
+### Patch Changes
+
+- small changes
+
 ## 0.0.5
 
 ### Patch Changes
