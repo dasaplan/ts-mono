@@ -141,7 +141,8 @@ function getJsonSchemaMergeAllOff(
       {
         resolvers: {
           // overwrite title by higher indexed schema: [ {title: a}, {title:b}] => {title:b}
-          title: ([a, b]) => b ?? a!,
+          // default title means take first occurance
+          defaultResolver: jsonSchemaMergeAllOff.options.resolvers.title,
         },
       }
     );
@@ -164,7 +165,7 @@ function mergeSubSchemas(
     resolved: ctx.resolver.resolveRef(d.resolved, { deleteRef: true }),
   }));
 
-  const merged = getJsonSchemaMergeAllOff(subschemas);
+  const merged = getJsonSchemaMergeAllOff(subschemas.reverse());
   // clean references in properties
   Object.values(merged.properties ?? {}).forEach((propValue) => {
     if (_.isNil(propValue.$ref) || _.isEmpty(_.omit(propValue, "$ref"))) {
