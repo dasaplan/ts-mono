@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-bundler",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Opinionated bundler/merger for Openapi (Swagger)",
   "keywords": [
     "openapi",
@@ -22,7 +22,8 @@
     "openapi-bundler-cli": "dist/oa-bundler-cli.js"
   },
   "files": [
-    "dist", "CHANGELOG.md"
+    "dist",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "pnpm rup",

@@ -24,7 +24,8 @@
     "openapicli": "dist/oa-cli.js"
   },
   "files": [
-    "dist", "CHANGELOG.md"
+    "dist",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "prepack": "sort-package-json --quiet && clean-package",
@@ -63,7 +64,6 @@
     "tslog": "^4.9.2"
   },
   "devDependencies": {
-    "openapi-example-specs": "workspace:*",
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "@redocly/cli": "^1.6.0",
     "@types/json-schema-merge-allof": "^0.6.5",
@@ -77,6 +77,7 @@
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
     "npm-run-all": "*",
+    "openapi-example-specs": "workspace:*",
     "openapi3-ts": "^4.2.1",
     "sort-package-json": "^2.10.0",
     "tsc-alias": "^1.8.8",
