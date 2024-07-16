@@ -1,5 +1,13 @@
 # @dasaplan/openapi
 
+## 0.0.10
+
+### Patch Changes
+
+- ef2415e: fixed toposort schemas when array items are allOf objects
+- Updated dependencies [ef2415e]
+  - @dasaplan/openapi-bundler@0.0.7
+
 ## 0.0.9
 
 ### Patch Changes
