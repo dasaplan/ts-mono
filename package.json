@@ -11,8 +11,9 @@
     "ws:clean": "turbo clean",
     "ci:build": "turbo run build lint test",
     "ci:commit": "git commit -am \"chore: release\"",
-    "ci:publish": "changeset version && pnpm ci:commit && changeset publish",
-    "publish-packages": "pnpm ci:build && pnpm ci:publish"
+    "local:publish": "changeset version && pnpm ci:commit && changeset publish",
+    "local:publish-packages": "pnpm ci:build && pnpm local:publish",
+    "ci:publish": "pnpm publish -r"
   },
   "devDependencies": {
     "sort-package-json": "^2.10.0",

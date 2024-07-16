@@ -26,25 +26,36 @@ jobs:
       - run: pnpm ci:build
 
   publish-npm:
-    needs: build
+  version:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        name: git checkout
-      - uses: actions/setup-node@v3
-        name: Setup Node 20
+      - name: checkout code repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node 20
+        uses: actions/setup-node@v3
         with:
           node-version: 20
-          registry-url: https://registry.npmjs.org/
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
           run_install: false
-      - name: Install dependencies
+      - name: Setup npmrc
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+      - name: setup pnpm config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+      - name: install dependencies
         run: pnpm install
       - name: Build, Lint and Test
         run: pnpm ci:build
-      - name: npm publish
-        run: echo npm publish
+      - name: create and publish versions
+        uses: changesets/action@v1
+        with:
+          version: pnpm ci:version
+          commit: "chore: update versions"
+          title: "chore: update versions"
+          publish: pnpm ci:publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
