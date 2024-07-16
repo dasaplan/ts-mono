@@ -25,7 +25,6 @@ jobs:
         run: pnpm install
       - run: pnpm ci:build
 
-  publish-npm:
   version:
     timeout-minutes: 15
     runs-on: ubuntu-latest
