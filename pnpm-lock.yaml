@@ -78,10 +78,10 @@ importers:
   packages/openapi:
     dependencies:
       '@dasaplan/openapi-bundler':
-        specifier: ^0.0.6
-        version: 0.0.6(@redocly/openapi-core@1.6.0)
+        specifier: workspace:*
+        version: link:../openapi-bundler
       '@dasaplan/ts-sdk':
-        specifier: workspace:0.0.0
+        specifier: workspace:0.0.1
         version: link:../sdk
       '@ts-morph/common':
         specifier: ^0.22.0
@@ -496,12 +496,6 @@ packages:
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
-
-  '@dasaplan/openapi-bundler@0.0.6':
-    resolution: {integrity: sha512-AIQpbQcIhBgkg5kQ7G+ZAauT7uks90PtHu3R9Qtv64zidX14KuCNjSuF8uULkueaZlsiQ3NfFy3vbL41nmmdCA==}
-    hasBin: true
-    peerDependencies:
-      '@redocly/openapi-core': ^1.6.0
 
   '@emotion/is-prop-valid@1.2.1':
     resolution: {integrity: sha512-61Mf7Ufx4aDxx1xlDeOm8aFFigGHE4z+0sKCa+IHCeZKiyP9RLD0Mmx7m8b9/Cf37f7NAvQOOJAbQQGVr5uERw==}
@@ -4532,18 +4526,6 @@ snapshots:
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
-
-  '@dasaplan/openapi-bundler@0.0.6(@redocly/openapi-core@1.6.0)':
-    dependencies:
-      '@redocly/openapi-core': 1.6.0
-      commander: 11.1.0
-      json-schema-merge-allof: 0.8.1
-      jsonpointer: 5.0.1
-      lodash: 4.17.21
-      merge-json-schemas: 1.0.0
-      openapi3-ts: 4.3.3
-      toposort: 2.0.2
-      tslog: 4.9.3
 
   '@emotion/is-prop-valid@1.2.1':
     dependencies:

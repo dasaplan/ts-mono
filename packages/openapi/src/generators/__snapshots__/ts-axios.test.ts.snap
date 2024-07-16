@@ -232,9 +232,9 @@ export const PetsApiFp = function(configuration?: Configuration) {
          */
         async listPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pets>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['PetsApi.listPets']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PetsApi.listPets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };

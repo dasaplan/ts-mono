@@ -12,10 +12,14 @@ export module Transpiler {
     return {
       ctx: transpiler,
       endpoints() {
-        return transpiler.endpoints.length > 0 ? transpiler.endpoints : Endpoint.transpileAll(endpointTranspiler);
+        return transpiler.endpoints.length > 0
+          ? transpiler.endpoints
+          : Endpoint.transpileAll(endpointTranspiler);
       },
       schemas() {
-        return transpiler.schemas.size > 0 ? Array.from(transpiler.schemas.values()) : Schema.transpileAll(transpiler) ?? [];
+        return transpiler.schemas.size > 0
+          ? Array.from(transpiler.schemas.values())
+          : Schema.transpileAll(transpiler) ?? [];
       },
       schemasTopoSorted(): Array<Schema> {
         const schemas = this.schemas();

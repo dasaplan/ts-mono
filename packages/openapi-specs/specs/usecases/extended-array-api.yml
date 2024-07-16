@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+  title: Extended Array Items
+  description: Toposorting deps didn't work out for array elements, when they were extended
+  version: 1.0.0
+servers:
+  - url: https://
+paths:
+  /v1/pets:
+    get:
+      summary: Get pets
+      operationId: getPets
+      responses:
+        '200':
+          description: Ok response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetInfo'
+components:
+  schemas:
+    PetBase:
+      type: object
+      discriminator:
+        propertyName: type
+      required:
+        - type
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+    DogEnum:
+      type: string
+      enum:
+        - DOG_A
+        - DOG_B
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            fluffy:
+              type: boolean
+            breed:
+              $ref: '#/components/schemas/DogEnum'
+    Cat:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            breed:
+              type: string
+              enum:
+                - CAT_A
+                - CAT_B
+    PetInfo:
+      properties:
+        cats:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cat'
+        dogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dog'

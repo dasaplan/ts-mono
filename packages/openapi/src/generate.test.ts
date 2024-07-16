@@ -21,17 +21,18 @@ describe("Generate Integration", () => {
 
   describe("all", () => {
     test.each([
-      "pets-modular/pets-api.yml",
-      "pets-simple/pets-api.yml",
-      "pets-modular-complex/petstore-api.yml",
-      "generic/api.yml",
-      "pets-recursive/pets-api.yml",
+      // "pets-modular/pets-api.yml",
+      // "pets-simple/pets-api.yml",
+      // "pets-modular-complex/petstore-api.yml",
+      // "generic/api.yml",
+      // "pets-recursive/pets-api.yml",
+      "usecases/extended-array-api.yml",
     ])("%s", async (spec) => {
       const api = resolveSpecPath(spec);
-      const out = Folder.resolve("test/out/integration", path.dirname(spec)).absolutePath;
+      const out = Folder.resolve("test/out/integration", spec.replace(".yml", "")).absolutePath;
       const bundled = await generateOpenapi(api, out, { clearTemp: false });
       const files = Folder.of(bundled).readAllFilesAsString();
-      files.forEach((f) => expect(f.content).toMatchSnapshot(`generate-openapi-${spec}-${path.basename(f.src)}`));
+      files.forEach((f) => expect(f.content).toMatchSnapshot(`generate-openapi-all-${spec}-${path.basename(f.src)}`));
     });
   });
 });

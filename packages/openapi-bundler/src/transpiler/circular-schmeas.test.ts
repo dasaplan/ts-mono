@@ -11,14 +11,21 @@ describe("find circles", () => {
           properties: {
             id: { type: "string" },
             parent: { $ref: "#/components/schemas/Node" },
-            children: { type: "array", items: { $ref: "#/components/schemas/Node" } },
+            children: {
+              type: "array",
+              items: { $ref: "#/components/schemas/Node" },
+            },
           },
         },
       })
     );
     const result = SchemaGraph.createFromBundled(openapi);
-    expect(Array.from(result.circles.values())).toEqual(["#/components/schemas/Node"]);
-    expect(Array.from(result.nodes.keys())).toEqual(["#/components/schemas/Node"]);
+    expect(Array.from(result.circles.values())).toEqual([
+      "#/components/schemas/Node",
+    ]);
+    expect(Array.from(result.nodes.keys())).toEqual([
+      "#/components/schemas/Node",
+    ]);
     expect(result.edges).toEqual([]);
   });
 
@@ -31,12 +38,19 @@ describe("find circles", () => {
           properties: {
             id: { type: "string" },
             parent: { $ref: "#/components/schemas/Node" },
-            children: { type: "array", items: { $ref: "#/components/schemas/Child" } },
+            children: {
+              type: "array",
+              items: { $ref: "#/components/schemas/Child" },
+            },
           },
         },
         Child: {
           title: "Child",
-          oneOf: [{ $ref: "#/components/schemas/A" }, { $ref: "#/components/schemas/B" }, { $ref: "#/components/schemas/Node" }],
+          oneOf: [
+            { $ref: "#/components/schemas/A" },
+            { $ref: "#/components/schemas/B" },
+            { $ref: "#/components/schemas/Node" },
+          ],
           discriminator: {
             propertyName: "type",
             mapping: {
@@ -59,7 +73,10 @@ describe("find circles", () => {
               properties: {
                 id: { type: "string" },
                 parent: { $ref: "#/components/schemas/Node" },
-                children: { type: "array", items: { $ref: "#/components/schemas/Node" } },
+                children: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Node" },
+                },
               },
             },
           ],
@@ -72,7 +89,10 @@ describe("find circles", () => {
               properties: {
                 id: { type: "string" },
                 parent: { $ref: "#/components/schemas/Node" },
-                children: { type: "array", items: { $ref: "#/components/schemas/Node" } },
+                children: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Node" },
+                },
               },
             },
           ],
@@ -80,7 +100,9 @@ describe("find circles", () => {
       })
     );
     const result = SchemaGraph.createFromBundled(openapi);
-    expect(Array.from(result.circles.values())).toEqual(["#/components/schemas/Node"]);
+    expect(Array.from(result.circles.values())).toEqual([
+      "#/components/schemas/Node",
+    ]);
     expect(Array.from(result.nodes.keys())).toEqual([
       "#/components/schemas/Node",
       "#/components/schemas/Child",
@@ -106,12 +128,19 @@ describe("find circles", () => {
           properties: {
             id: { type: "string" },
             parent: { $ref: "#/components/schemas/Node" },
-            children: { type: "array", items: { $ref: "#/components/schemas/Child" } },
+            children: {
+              type: "array",
+              items: { $ref: "#/components/schemas/Child" },
+            },
           },
         },
         Child: {
           title: "Child",
-          oneOf: [{ $ref: "#/components/schemas/A" }, { $ref: "#/components/schemas/B" }, { $ref: "#/components/schemas/Node" }],
+          oneOf: [
+            { $ref: "#/components/schemas/A" },
+            { $ref: "#/components/schemas/B" },
+            { $ref: "#/components/schemas/Node" },
+          ],
           discriminator: {
             propertyName: "type",
             mapping: {
@@ -133,7 +162,10 @@ describe("find circles", () => {
               title: "A",
               properties: {
                 parent: { $ref: "#/components/schemas/Child" },
-                children: { type: "array", items: { $ref: "#/components/schemas/Node" } },
+                children: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Node" },
+                },
               },
             },
           ],
@@ -145,7 +177,10 @@ describe("find circles", () => {
             {
               properties: {
                 parent: { $ref: "#/components/schemas/Child" },
-                children: { type: "array", items: { $ref: "#/components/schemas/Node" } },
+                children: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Node" },
+                },
               },
             },
           ],
@@ -153,7 +188,10 @@ describe("find circles", () => {
       })
     );
     const result = SchemaGraph.createFromBundled(openapi);
-    expect(Array.from(result.circles.values())).toEqual(["#/components/schemas/Node", "#/components/schemas/Child"]);
+    expect(Array.from(result.circles.values())).toEqual([
+      "#/components/schemas/Node",
+      "#/components/schemas/Child",
+    ]);
     expect(Array.from(result.nodes.keys())).toEqual([
       "#/components/schemas/Node",
       "#/components/schemas/Child",
@@ -179,12 +217,18 @@ describe("find circles", () => {
           properties: {
             id: { type: "string" },
             parent: { $ref: "#/components/schemas/Node" },
-            children: { type: "array", items: { $ref: "#/components/schemas/Child" } },
+            children: {
+              type: "array",
+              items: { $ref: "#/components/schemas/Child" },
+            },
           },
         },
         Child: {
           title: "Child",
-          oneOf: [{ $ref: "#/components/schemas/A" }, { $ref: "#/components/schemas/B" }],
+          oneOf: [
+            { $ref: "#/components/schemas/A" },
+            { $ref: "#/components/schemas/B" },
+          ],
           discriminator: {
             propertyName: "type",
             mapping: {
@@ -204,7 +248,10 @@ describe("find circles", () => {
             {
               title: "A",
               properties: {
-                children: { type: "array", items: { $ref: "#/components/schemas/Rec" } },
+                children: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Rec" },
+                },
               },
             },
           ],
@@ -215,7 +262,10 @@ describe("find circles", () => {
             { $ref: "#/components/schemas/Base" },
             {
               properties: {
-                children: { type: "array", items: { $ref: "#/components/schemas/Rec" } },
+                children: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Rec" },
+                },
               },
             },
           ],
@@ -257,7 +307,9 @@ describe("find circles", () => {
   });
 });
 
-function createApi(...mods: Array<(oa: OpenApiBundled) => OpenApiBundled>): OpenApiBundled {
+function createApi(
+  ...mods: Array<(oa: OpenApiBundled) => OpenApiBundled>
+): OpenApiBundled {
   const api: OpenApiBundled = {
     openapi: "3.0.3",
     info: { version: "", title: "" },
@@ -269,7 +321,10 @@ function createApi(...mods: Array<(oa: OpenApiBundled) => OpenApiBundled>): Open
   return mods.reduce((acc, curr) => curr(acc), api);
 }
 
-function withSchemas(oa: OpenApiBundled, schemas: NonNullable<oas30.ComponentsObject["schemas"]>): OpenApiBundled {
+function withSchemas(
+  oa: OpenApiBundled,
+  schemas: NonNullable<oas30.ComponentsObject["schemas"]>
+): OpenApiBundled {
   return {
     ...oa,
     components: {
