@@ -21,11 +21,11 @@ describe("Generate Integration", () => {
 
   describe("all", () => {
     test.each([
-      // "pets-modular/pets-api.yml",
-      // "pets-simple/pets-api.yml",
-      // "pets-modular-complex/petstore-api.yml",
-      // "generic/api.yml",
-      // "pets-recursive/pets-api.yml",
+      "pets-modular/pets-api.yml",
+      "pets-simple/pets-api.yml",
+      "pets-modular-complex/petstore-api.yml",
+      "generic/api.yml",
+      "pets-recursive/pets-api.yml",
       "usecases/extended-array-api.yml",
     ])("%s", async (spec) => {
       const api = resolveSpecPath(spec);

@@ -73,7 +73,11 @@ export module Toposort {
     switch (child.kind) {
       case "ARRAY":
         withoutCircles(child.items, () =>
-          collectEdges(child.items, parent, ctx, nodes)
+          /*
+           * root schema of type array has no parent => child
+           * else, we are a property and want to create a dependency between the "parent" of the property and the array item => parent
+           * */
+          collectEdges(child.items, parent ?? child, ctx, nodes)
         );
         return;
       case "UNION":

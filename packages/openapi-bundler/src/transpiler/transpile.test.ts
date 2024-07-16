@@ -59,7 +59,7 @@ describe("transpiler", () => {
     expect(spec.endpoints()).toMatchSnapshot("endpoints");
   });
 
-  test("should toposort array items correctly", () => {
+  test("should toposort array items correctly for allOf item", () => {
     const openapi: OpenApiBundled = createApi((oa) =>
       withSchemas(oa, {
         Parent: {
@@ -110,6 +110,118 @@ describe("transpiler", () => {
       "Parent",
       "B",
       "A",
+      "List",
+    ]);
+  });
+
+  test("should toposort array items correctly - union", () => {
+    const openapi: OpenApiBundled = createApi((oa) =>
+      withSchemas(oa, {
+        Union: {
+          oneOf: [
+            { $ref: "#/components/schemas/A" },
+            { $ref: "#/components/schemas/B" },
+          ],
+          discriminator: {
+            propertyName: "kind",
+            mapping: {
+              A: "#/components/schemas/A",
+              B: "#/components/schemas/B",
+            },
+          },
+        },
+        A: {
+          type: "object",
+          properties: {
+            kind: { type: "string" },
+            propA: { type: "string" },
+          },
+        },
+        B: {
+          type: "object",
+          properties: {
+            propB: { type: "string" },
+          },
+        },
+        List: {
+          type: "object",
+          properties: {
+            unions: {
+              type: "array",
+              items: { $ref: "#/components/schemas/Union" },
+            },
+          },
+        },
+      })
+    );
+    const spec = Transpiler.of(openapi);
+    expect(spec.schemasTopoSorted().map((s) => s.getName())).toEqual([
+      "B",
+      "A",
+      "Union",
+      "List",
+    ]);
+  });
+
+  test("should toposort array items correctly - top level array", () => {
+    const openapi: OpenApiBundled = createApi((oa) =>
+      withSchemas(oa, {
+        Union: {
+          oneOf: [
+            { $ref: "#/components/schemas/A" },
+            { $ref: "#/components/schemas/B" },
+          ],
+          discriminator: {
+            propertyName: "kind",
+            mapping: {
+              A: "#/components/schemas/A",
+              B: "#/components/schemas/B",
+            },
+          },
+        },
+        Parent: {
+          type: "object",
+          required: ["kind"],
+          properties: {
+            parentProp: { type: "string" },
+            kind: { type: "string" },
+          },
+        },
+        A: {
+          allOf: [
+            { $ref: "#/components/schemas/Parent" },
+            {
+              type: "object",
+              properties: {
+                propA: { type: "string" },
+              },
+            },
+          ],
+        },
+        B: {
+          allOf: [
+            { $ref: "#/components/schemas/Parent" },
+            {
+              type: "object",
+              properties: {
+                propB: { type: "string" },
+              },
+            },
+          ],
+        },
+        List: {
+          type: "array",
+          items: { $ref: "#/components/schemas/Union" },
+        },
+      })
+    );
+    const spec = Transpiler.of(openapi);
+    const schemas = spec.schemasTopoSorted();
+    expect(schemas.map((s) => s.getName())).toEqual([
+      "Parent",
+      "B",
+      "A",
+      "Union",
       "List",
     ]);
   });

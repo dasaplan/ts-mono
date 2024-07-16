@@ -5716,18 +5716,18 @@ import * as zc from './zod-common.js'
 import * as api from './api.js'
 
 export module Schemas {
-    export const PetInfo = z.object({ cats: z.array(Cat).optional(), dogs: z.array(Dog).optional() });
     export const PetBase = z.object({ type: z.string(), name: z.string().optional() });
-    export const Cat = PetBase.merge(z.object({ breed: z.enum(['CAT_A', 'CAT_B']).or(z.string().brand("UNKNOWN")).optional() }));
     export const DogEnum = z.enum(['DOG_A', 'DOG_B']).or(z.string().brand("UNKNOWN")) as z.ZodType<api.DogEnum>;
     export const Dog = PetBase.merge(z.object({ fluffy: z.boolean().optional(), dogEnum: DogEnum.optional() }));
+    export const Cat = PetBase.merge(z.object({ breed: z.enum(['CAT_A', 'CAT_B']).or(z.string().brand("UNKNOWN")).optional() }));
+    export const PetInfo = z.object({ cats: z.array(Cat).optional(), dogs: z.array(Dog).optional() });
 
     export module Types {
-        export type PetInfo = z.infer<typeof Schemas.PetInfo>;
         export type PetBase = z.infer<typeof Schemas.PetBase>;
-        export type Cat = z.infer<typeof Schemas.Cat>;
         export type DogEnum = z.infer<typeof Schemas.DogEnum>;
         export type Dog = z.infer<typeof Schemas.Dog>;
+        export type Cat = z.infer<typeof Schemas.Cat>;
+        export type PetInfo = z.infer<typeof Schemas.PetInfo>;
     }
 
 }
