@@ -9,7 +9,7 @@ describe("Generate Integration", () => {
     test.each(["generic/api.yml"])("%s", async (spec) => {
       const api = resolveSpecPath(spec);
       const out = Folder.resolve("test/out/post", path.dirname(spec)).absolutePath;
-      const bundled = await generateOpenapi(api, out, { clearTemp: false });
+      const bundled = await generateOpenapi(api, out, { clearTemp: false, tempFolder: "test/out/post" });
       const processor = createTsPostProcessor({ deleteUnwantedFiles: false, ensureDiscriminatorValues: true });
       const g = processor(File.resolve(bundled, "api.ts").absolutPath);
       const files = Folder.of(g)
@@ -30,7 +30,7 @@ describe("Generate Integration", () => {
     ])("%s", async (spec) => {
       const api = resolveSpecPath(spec);
       const out = Folder.resolve("test/out/integration", spec.replace(".yml", "")).absolutePath;
-      const bundled = await generateOpenapi(api, out, { clearTemp: false });
+      const bundled = await generateOpenapi(api, out, { clearTemp: false, tempFolder: "test/out/integration" });
       const files = Folder.of(bundled).readAllFilesAsString();
       files.forEach((f) => expect(f.content).toMatchSnapshot(`generate-openapi-all-${spec}-${path.basename(f.src)}`));
     });

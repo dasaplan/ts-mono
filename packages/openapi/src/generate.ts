@@ -1,14 +1,14 @@
 import process from "process";
-import {  createTsPostProcessor } from "./post-process/index.js";
+import { createTsPostProcessor } from "./post-process/index.js";
 import { generateTypescriptAxios, generateZodSchemas, TsAxiosPublicGenOptions } from "./generators/index.js";
 import { File, Folder } from "@dasaplan/ts-sdk";
 import { log } from "./logger.js";
 import { ZodGenOptions } from "./generators/zod/zod-schemas.js";
-import {bundleOpenapi, createSpecProcessor, OpenApiBundled} from "@dasaplan/openapi-bundler";
+import { bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
 
-export async function generateOpenapi(specFilePath: string, outputFile: string, params?: { clearTemp: boolean }) {
+export async function generateOpenapi(specFilePath: string, outputFile: string, params?: { clearTemp: boolean; tempFolder?: string }) {
   try {
-    const { bundledFilePath, parsed } = await bundle(specFilePath);
+    const { bundledFilePath, parsed } = await bundle(specFilePath, { tempFolder: params?.tempFolder });
     const { outDir } = await generateTsAxios(bundledFilePath, outputFile, { generateZod: true });
     await generateZod(parsed, outputFile, { includeTsTypes: true });
 
@@ -27,8 +27,9 @@ export async function generateOpenapi(specFilePath: string, outputFile: string, 
   }
 }
 
-export async function bundle(spec: string) {
+export async function bundle(spec: string, params?: { tempFolder?: string }) {
   const { parsed, outFile: bundledFilePath } = await bundleOpenapi(spec, {
+    outFile: params?.tempFolder,
     postProcessor: createSpecProcessor({ mergeAllOf: true, ensureDiscriminatorValues: true }),
   });
   return { parsed, bundledFilePath };

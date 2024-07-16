@@ -8,24 +8,7 @@ on:
     types: [created, edited]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        name: git checkout
-      - uses: actions/setup-node@v3
-        name: Setup Node 20
-        with:
-          node-version: 20
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-        with:
-          run_install: false
-      - name: Install dependencies
-        run: pnpm install
-      - run: pnpm ci:build
-
-  version:
+  publish:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:

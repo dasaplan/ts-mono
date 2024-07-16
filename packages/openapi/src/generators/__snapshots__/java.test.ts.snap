@@ -79,6 +79,8 @@ exports[`Generator: java generate java: java-pets-modular/pets-api.yml-pom.xml 1
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                </configuration>
             </plugin>
         </plugins>
     </build>
