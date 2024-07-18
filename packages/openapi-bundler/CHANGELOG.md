@@ -1,5 +1,11 @@
 # @dasaplan/openapi-bundler
 
+## 0.0.8
+
+### Patch Changes
+
+- fix zod generate schema properties
+
 ## 0.0.7
 
 ### Patch Changes
