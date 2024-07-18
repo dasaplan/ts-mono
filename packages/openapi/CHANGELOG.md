@@ -1,5 +1,13 @@
 # @dasaplan/openapi
 
+## 0.0.12
+
+### Patch Changes
+
+- fix: optional discriminator properties and single union instances dsp A minute ago
+- Updated dependencies
+  - @dasaplan/openapi-bundler@0.0.9
+
 ## 0.0.11
 
 ### Patch Changes
