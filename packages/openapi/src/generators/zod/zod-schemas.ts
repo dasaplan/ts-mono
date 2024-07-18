@@ -80,7 +80,7 @@ function createConstantDeclaration(c: Schema, options: ZodGenOptions) {
   }
   return `${declaration} = ${value};`;
 }
-// todo: refactor
+
 function createUnionDeclaration(c: Schema, options: ZodGenOptions) {
   if (c.kind !== "UNION") throw ApplicationError.create(`expected schema to be of kind UNION but received ${c.kind}`);
   const name = `${pascalCase(c.getName())}`;
@@ -288,7 +288,6 @@ module Factory {
     if (values.length <= 1) {
       return literal(values[0]);
     }
-    // todo: implement discrimintated union
     return `z.enum([${values.map(stringify).join(",")}])`;
   }
 
