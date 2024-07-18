@@ -39,7 +39,8 @@ export async function generateZod(parsed: OpenApiBundled, filePath: string, para
   schemaDeclarations.push(schemaTypesModule);
 
   // include unions which can used for introspecting e.g. for test data generators
-  const unions = components.filter((c) => c.kind === "UNION").filter((u) => u.schemas.length > 1);
+  // ignore if we have less than 2 "unique" schemas - (we can omit mappings, because discriminator values are handled in the schema)
+  const unions = components.filter((c) => c.kind === "UNION" && c.schemas.length > 1);
   if (unions.length > 0) {
     const unionDeclarations = unions.map((c) => createUnionDeclaration(c, options));
     const unionModule = createModule("Unions", unionDeclarations, options);

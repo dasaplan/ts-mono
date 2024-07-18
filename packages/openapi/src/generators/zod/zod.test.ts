@@ -82,6 +82,67 @@ describe("generateZod", () => {
         }"
 `);
   });
+  test("unions have discriminator property required and have at least two schemas", async () => {
+    const openapi: OpenApiBundled = createApi((oa) =>
+      withSchemas(oa, {
+        A: {
+          title: "A",
+          properties: {
+            id: { type: "string" },
+            type: { type: "string" },
+          },
+        },
+        B: {
+          title: "B",
+          properties: {
+            id: { type: "string" },
+            type: { type: "string" },
+          },
+        },
+        SingleUnion: {
+          oneOf: [{ $ref: "#/components/schemas/A" }],
+          discriminator: { propertyName: "type", mapping: { A_TYPE: "#/components/schemas/A" } },
+        },
+        Union: {
+          oneOf: [{ $ref: "#/components/schemas/A" }],
+          discriminator: { propertyName: "type", mapping: { A_TYPE: "#/components/schemas/A", AA_TYPE: "#/components/schemas/A" } },
+        },
+        MultiUnion: {
+          oneOf: [{ $ref: "#/components/schemas/A" }, { $ref: "#/components/schemas/B" }],
+          discriminator: { propertyName: "type", mapping: { A_TYPE: "#/components/schemas/A", B_TYPE: "#/components/schemas/B" } },
+        },
+      })
+    );
+    const { sourceFile } = await generateZod(openapi, `test/out/zod/circular.ts`, { includeTsTypes: true });
+
+    expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
+      "import { z } from 'zod'
+      import * as zc from './zod-common.js'
+      import * as api from './api.js'
+
+      export module Schemas {
+          export const B = z.object({ id: z.string().optional(), type: z.literal('B_TYPE') });
+          export const A = z.object({ id: z.string().optional(), type: z.enum(['A_TYPE', 'AA_TYPE']) });
+          export const MultiUnion = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, 'B_TYPE': B, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.MultiUnion>;
+          export const Union = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, 'AA_TYPE': A, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Union>;
+          export const SingleUnion = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.SingleUnion>;
+
+          export module Types {
+              export type B = z.infer<typeof Schemas.B>;
+              export type A = z.infer<typeof Schemas.A>;
+              export type MultiUnion = z.infer<typeof Schemas.MultiUnion>;
+              export type Union = z.infer<typeof Schemas.Union>;
+              export type SingleUnion = z.infer<typeof Schemas.SingleUnion>;
+          }
+
+
+          export module Unions {
+              export const MultiUnion = z.union([A, B]);
+          }
+
+      }"
+    `);
+  });
 
   test("deeply nested circular schema", async () => {
     const openapi: OpenApiBundled = createApi((oa) =>

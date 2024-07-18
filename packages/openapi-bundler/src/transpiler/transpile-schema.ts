@@ -372,18 +372,17 @@ export module Schema {
           });
           return [discriminator];
         }
-        // todo: resolve weired typescript
-        property.propertyValue.kind = "DISCRIMINATOR";
-        if (property.propertyValue.kind === "DISCRIMINATOR") {
-          // todo: how can property.enum be undefined??
-          property.propertyValue.entityRef = unionSchema;
-          property.propertyValue.enum = Array.from(
-            new Set([
-              ...(property.propertyValue.enum ?? []),
-              discriminatorValue,
-            ])
+
+        // mutable ensure that the property is a discriminator (e.g. could be a string)
+        property.required = true;
+        const { propertyValue } = property;
+        propertyValue.kind = "DISCRIMINATOR";
+        if (propertyValue.kind === "DISCRIMINATOR") {
+          propertyValue.entityRef = unionSchema;
+          propertyValue.enum = Array.from(
+            new Set([...(propertyValue.enum ?? []), discriminatorValue])
           );
-          return [property.propertyValue];
+          return [propertyValue];
         }
         return [];
       }
@@ -391,8 +390,8 @@ export module Schema {
       case "ENUM":
       case "BOX":
       case "ARRAY":
-        throw new Error(
-          `expected object sub schema to ensure discriminator properties and values but got: ${JSON.stringify(
+        throw ApplicationError.create(
+          `expected discriminator.propertyName to be ensured for schema.id: ${schema.getId()}, schema: ${JSON.stringify(
             schema
           )}`
         );
@@ -489,12 +488,16 @@ export module Schema {
         : undefined;
       Object.entries(schema.discriminator?.mapping ?? {}).forEach(
         ([discriminatorValue, mapRef]) => {
-          const subSchema = groupedSchemas[mapRef][0];
+          assert(
+            !_.isEmpty(mapRef),
+            `expected "${name}".discriminator.mapping["${discriminatorValue}"] value to be not empty`
+          );
+          const subSchema = groupedSchemas[mapRef]?.at(0);
           assert(
             _.isDefined(subSchema),
-            `expected discriminator mapping subschema to be a oneOf subschema ${discriminatorValue}, ${mapRef}: ${JSON.stringify(
-              schema
-            )}`
+            `expected (${name}).discriminator.mapping["${discriminatorValue}"] to be a oneOf subschema in (${name}).oneOf: ${Object.keys(
+              groupedSchemas
+            ).join(", ")}`
           );
 
           ensureDiscriminator(
