@@ -80,6 +80,9 @@ importers:
       '@dasaplan/openapi-bundler':
         specifier: workspace:*
         version: link:../openapi-bundler
+      '@dasaplan/openapi-codegen-zod':
+        specifier: workspace:*
+        version: link:../openapi-codegen-zod
       '@dasaplan/ts-sdk':
         specifier: workspace:0.0.1
         version: link:../sdk
@@ -217,6 +220,100 @@ importers:
       tsconfig:
         specifier: workspace:0.0.0
         version: link:../tsconfig
+      typescript:
+        specifier: ^5.5.3
+        version: 5.5.3
+
+  packages/openapi-codegen-zod:
+    dependencies:
+      '@dasaplan/openapi-bundler':
+        specifier: workspace:*
+        version: link:../openapi-bundler
+      '@dasaplan/ts-sdk':
+        specifier: workspace:0.0.1
+        version: link:../sdk
+      '@ts-morph/common':
+        specifier: ^0.22.0
+        version: 0.22.0
+      commander:
+        specifier: ^11.1.0
+        version: 11.1.0
+      handlebars:
+        specifier: ^4.7.8
+        version: 4.7.8
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      openapi-zod-client:
+        specifier: ^1.15.0
+        version: 1.15.0(react@18.2.0)
+      pascal-case:
+        specifier: ^4.0.0
+        version: 4.0.0
+      ts-morph:
+        specifier: ^21.0.1
+        version: 21.0.1
+      tslog:
+        specifier: ^4.9.2
+        version: 4.9.3
+    devDependencies:
+      '@openapitools/openapi-generator-cli':
+        specifier: ^2.7.0
+        version: 2.7.0
+      '@redocly/cli':
+        specifier: ^1.6.0
+        version: 1.6.0
+      '@types/json-schema-merge-allof':
+        specifier: ^0.6.5
+        version: 0.6.5
+      '@types/lodash':
+        specifier: ^4.14.202
+        version: 4.17.5
+      '@types/pascal-case':
+        specifier: ^1.1.2
+        version: 1.1.2
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.17.0
+        version: 6.17.0(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)(typescript@5.5.3)
+      axios:
+        specifier: ^1.6.5
+        version: 1.6.5
+      clean-package:
+        specifier: ^2.2.0
+        version: 2.2.0
+      eslint:
+        specifier: ^8.0.1
+        version: 8.55.0
+      eslint-plugin-import:
+        specifier: ^2.25.2
+        version: 2.29.1(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)
+      eslint-plugin-n:
+        specifier: '^15.0.0 || ^16.0.0 '
+        version: 16.4.0(eslint@8.55.0)
+      eslint-plugin-promise:
+        specifier: ^6.0.0
+        version: 6.1.1(eslint@8.55.0)
+      npm-run-all:
+        specifier: '*'
+        version: 4.1.5
+      openapi-example-specs:
+        specifier: workspace:*
+        version: link:../openapi-specs
+      openapi3-ts:
+        specifier: ^4.2.1
+        version: 4.3.3
+      sort-package-json:
+        specifier: ^2.10.0
+        version: 2.10.0
+      tsc-alias:
+        specifier: ^1.8.8
+        version: 1.8.8
+      tsconfig:
+        specifier: workspace:0.0.0
+        version: link:../tsconfig
+      type-fest:
+        specifier: '*'
+        version: 4.9.0
       typescript:
         specifier: ^5.5.3
         version: 5.5.3

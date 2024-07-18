@@ -1,9 +1,8 @@
 import process from "process";
 import { createTsPostProcessor } from "./post-process/index.js";
-import { generateTypescriptAxios, generateZodSchemas, TsAxiosPublicGenOptions } from "./generators/index.js";
+import { generateTypescriptAxios, TsAxiosPublicGenOptions } from "./generators/index.js";
 import { File, Folder } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
-import { ZodGenOptions } from "./generators/zod/zod-schemas.js";
 import { bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
 
 export async function generateOpenapi(specFilePath: string, outputFile: string, params?: { clearTemp: boolean; tempFolder?: string }) {
