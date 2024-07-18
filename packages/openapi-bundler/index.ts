@@ -8,6 +8,7 @@ export {
   parseOpenapi,
   Resolver,
   Transpiler,
+  Endpoint,
   OaComponent,
   SchemaResolverContext,
   Schema,
