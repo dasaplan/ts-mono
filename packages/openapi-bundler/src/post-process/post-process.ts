@@ -10,6 +10,10 @@ export function createSpecProcessor(options: {
   if (options.mergeAllOf) processors.push(mergeAllOf);
   if (options.ensureDiscriminatorValues)
     processors.push(ensureDiscriminatorValues);
+
+  if (processors.length < 1) {
+    return undefined;
+  }
   return (spec: OpenApiBundled) =>
     processors.reduce((acc, curr) => curr(acc), spec);
 }

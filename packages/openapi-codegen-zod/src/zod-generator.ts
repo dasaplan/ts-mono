@@ -2,10 +2,11 @@ import { File } from "@dasaplan/ts-sdk";
 
 import { createConstantDeclaration, createModule, createTypeDeclaration, createUnionDeclaration, IDENTIFIER_API, ZodGenOptions } from "./zod-schemas.js";
 import { OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
-import { appLog } from "../../logger.js";
+import { appLog } from "./logger.js";
 import { getZodCommon } from "./zod-common.js";
 import { Project, ScriptKind, ts } from "ts-morph";
 
+/** Generate zod schemas and export to filesystem */
 export async function generateZodSchemas(openapiSpec: OpenApiBundled, outFile: string, options?: ZodGenOptions) {
   appLog.childLog(generateZodSchemas).info(`start generate: %s`, outFile);
   const outFilePath = File.of(outFile).absolutPath;
@@ -14,6 +15,7 @@ export async function generateZodSchemas(openapiSpec: OpenApiBundled, outFile: s
   return outFilePath;
 }
 
+/** Generate zod schemas and export to filesystem and keep a handle to the sources */
 export async function generateZodSources(parsed: OpenApiBundled, filePath: string, params?: ZodGenOptions) {
   const options: ZodGenOptions = {
     includeTsTypes: true,
@@ -31,6 +33,7 @@ export async function generateZodSources(parsed: OpenApiBundled, filePath: strin
   return sourceSchema;
 }
 
+/** Generate zod schemas In-Memory from the parse model */
 export function generateZodSchemasFromParseModel(schemas: Array<Schema>, options: ZodGenOptions) {
   const components = schemas.filter((s) => s.component.kind === "COMPONENT");
   // we want to generate all components

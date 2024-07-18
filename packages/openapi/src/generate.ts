@@ -4,6 +4,7 @@ import { generateTypescriptAxios, TsAxiosPublicGenOptions } from "./generators/i
 import { File, Folder } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
 import { bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
+import { generateZodSchemas, ZodGenOptions } from "@dasaplan/openapi-codegen-zod";
 
 export async function generateOpenapi(specFilePath: string, outputFile: string, params?: { clearTemp: boolean; tempFolder?: string }) {
   try {

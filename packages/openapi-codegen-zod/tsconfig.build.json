@@ -11,7 +11,7 @@
     "noImplicitThis": true
   },
   "include": [
-    "index.ts", "src", "oa-cli.ts"
+    "index.ts", "src", "zod-cli.ts"
   ],
   "exclude": [ "node_modules", "src/**/*.test.ts" ]
 }

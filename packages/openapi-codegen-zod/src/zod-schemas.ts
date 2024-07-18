@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // noinspection JSUnusedLocalSymbols
 
-import { Project, ScriptKind, ts } from "ts-morph";
 import { pascalCase } from "pascal-case";
 import { _, ApplicationError } from "@dasaplan/ts-sdk";
-import { appLog } from "../../logger.js";
+import { appLog } from "./logger.js";
 import { Schema } from "@dasaplan/openapi-bundler";
 
 // is being used to identify usecases

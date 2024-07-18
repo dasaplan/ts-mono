@@ -2,12 +2,15 @@ import { Source, bundle, createConfig } from "@redocly/openapi-core";
 import { oas30 } from "openapi3-ts";
 import { _, File, Folder } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
+import { createSpecProcessor } from "./post-process/index.js";
 
 export interface OpenApiBundled extends oas30.OpenAPIObject {}
 
 interface BundleOption {
   postProcessor: (bundled: OpenApiBundled) => OpenApiBundled;
   outFile: string;
+  ensureDiscriminatorValues: boolean;
+  mergeAllOf: boolean;
 }
 
 export async function bundleOpenapi(
@@ -15,12 +18,27 @@ export async function bundleOpenapi(
   params?: Partial<BundleOption>
 ) {
   appLog.childLog(bundleOpenapi).info("start bundle: ", _pathToApi);
-  const { postProcessor } = params ?? {};
-
   const inputFile = File.of(_pathToApi);
   const outputFile = File.isFilePath(params?.outFile)
     ? File.of(params.outFile)
     : Folder.temp().makeFile(`bundled-${inputFile.name}`);
+  const parsed = await bundleParseOpenapi(_pathToApi, params);
+  return { parsed, outFile: outputFile.writeYml(parsed) };
+}
+
+export async function bundleParseOpenapi(
+  _pathToApi: string,
+  params?: Partial<Omit<BundleOption, "outFile">>
+): Promise<OpenApiBundled> {
+  const inputFile = File.of(_pathToApi);
+
+  appLog.childLog(bundleOpenapi).info("start bundle: ", inputFile.absolutPath);
+  const postProcessor =
+    params?.postProcessor ??
+    createSpecProcessor({
+      mergeAllOf: params?.mergeAllOf,
+      ensureDiscriminatorValues: params?.ensureDiscriminatorValues,
+    });
   const bundleResults = await parseOpenapi(inputFile.absolutPath);
   const parsed: OpenApiBundled = _.isNil(postProcessor)
     ? bundleResults.bundle.parsed
@@ -34,7 +52,7 @@ export async function bundleOpenapi(
   if (_.isDefined(parsed.components?.schemas?.["schemas"])) {
     delete parsed.components.schemas["schemas"];
   }
-  return { parsed: cleanedParsed, outFile: outputFile.writeYml(cleanedParsed) };
+  return cleanedParsed;
 }
 
 export async function parseOpenapi(pathToApi: string) {

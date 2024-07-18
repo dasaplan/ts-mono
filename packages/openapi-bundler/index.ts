@@ -1,5 +1,6 @@
 export {
   bundleOpenapi,
+  bundleParseOpenapi,
   createCommandBundle,
   createSpecProcessor,
   cleanObj,

@@ -1,7 +1,7 @@
 {
   "name": "@dasaplan/openapi-codegen-zod",
   "version": "0.0.0",
-  "description": "Collection of ready to use tools to facilitate OpenApi specification centered workflows.",
+  "description": "Openapi zod generator as tolerant reader",
   "keywords": [
     "openapi",
     "typescript",
@@ -12,16 +12,20 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/dasaplan/ts-mono.git",
-    "directory": "packages/openapi"
+    "directory": "packages/openapi-codegen-zod"
   },
   "author": "dsp",
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js" ,
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "bin": {
-    "oacli": "dist/oa-cli.js",
-    "openapicli": "dist/oa-cli.js"
+    "oazod": "dist/zod-cli.js",
+    "oa-zod-generator": "dist/zod-cli.js"
   },
   "files": [
     "dist",
@@ -35,7 +39,6 @@
     "rup": "tsup-node --dts",
     "ts:build": "tsc -p tsconfig.build.json",
     "ts:check": "tsc",
-    "ts:alias:resolve": "tsc-alias",
     "ts:check:generated": "tsc -p tsconfig.generated.json",
     "cp:templates": "copyfiles -u 1 \"templates/**/*\" -e \"**/*.json\" dist/templates",
     "cp:configs": "copyfiles openapitools.json dist",
@@ -56,21 +59,12 @@
     "@dasaplan/ts-sdk": "workspace:0.0.1",
     "@ts-morph/common": "^0.22.0",
     "commander": "^11.1.0",
-    "handlebars": "^4.7.8",
-    "lodash": "^4.17.21",
-    "openapi-zod-client": "^1.15.0",
     "pascal-case": "^4.0.0",
-    "ts-morph": "^21.0.1",
-    "tslog": "^4.9.2"
+    "ts-morph": "^21.0.1"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.7.0",
-    "@redocly/cli": "^1.6.0",
-    "@types/json-schema-merge-allof": "^0.6.5",
-    "@types/lodash": "^4.14.202",
     "@types/pascal-case": "^1.1.2",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
-    "axios": "^1.6.5",
     "clean-package": "^2.2.0",
     "eslint": "^8.0.1",
     "eslint-plugin-import": "^2.25.2",
@@ -80,7 +74,6 @@
     "openapi-example-specs": "workspace:*",
     "openapi3-ts": "^4.2.1",
     "sort-package-json": "^2.10.0",
-    "tsc-alias": "^1.8.8",
     "tsconfig": "workspace:0.0.0",
     "type-fest": "*",
     "typescript": "^5.5.3"
@@ -100,7 +93,7 @@
   "tsup": {
     "entry": [
       "index.ts",
-      "oa-cli.ts"
+      "zod-cli.ts"
     ],
     "noExternal": [
       "@dasaplan/ts-sdk",

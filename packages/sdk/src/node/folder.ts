@@ -5,6 +5,7 @@ import fs from "node:fs";
 import { stringifyYaml } from "@redocly/openapi-core";
 import { _ } from "../ts/index.js";
 
+export type File = ReturnType<typeof File.of>;
 export module File {
   export function isFilePath(filePath: string | undefined): filePath is string {
     if (_.isNil(filePath)) return false;

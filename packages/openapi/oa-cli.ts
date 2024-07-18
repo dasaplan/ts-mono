@@ -3,8 +3,9 @@
 import { Command } from "commander";
 import * as process from "process";
 import { createCommandGenerate } from "./src/index.js";
-import { createCommandGenerateTs, createCommandGenerateZod } from "./src/commands.js";
+import { createCommandGenerateTs } from "./src/commands.js";
 import { createCommandBundle } from "@dasaplan/openapi-bundler";
+import { createCommandGenerateZod } from "@dasaplan/openapi-codegen-zod";
 
 const program = new Command();
 createCommandGenerate(program);
