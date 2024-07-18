@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { log } from "./logger.js";
+import { appLog } from "./logger.js";
 import { bundleOpenapi } from "./bundle.js";
 import { createSpecProcessor } from "./post-process/index.js";
 
@@ -40,7 +40,7 @@ export function createCommandBundle(program: Command) {
         const result = await withPerformance(() =>
           bundleOpenapi(spec, { postProcessor, outFile: options.outputFile })
         );
-        log.info(
+        appLog.log.info(
           `finished bundling in ${(result.duration / 1000).toFixed(3)} s`,
           { outFile: result.ret.outFile }
         );

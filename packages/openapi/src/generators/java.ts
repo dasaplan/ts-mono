@@ -1,10 +1,10 @@
 import path from "path";
 import process from "process";
 import child_process from "node:child_process";
-import { childLog } from "../logger.js";
+import { appLog } from "../logger.js";
 
 export function generateJava(openapiSpec: string, out: string) {
-  childLog(generateJava).info(`start generate:`, openapiSpec, out);
+  appLog.childLog(generateJava).info(`start generate:`, openapiSpec, out);
   const options = {
     enumUnknownDefaultCase: true,
   };

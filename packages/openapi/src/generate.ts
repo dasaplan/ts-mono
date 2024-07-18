@@ -2,7 +2,7 @@ import process from "process";
 import { createTsPostProcessor } from "./post-process/index.js";
 import { generateTypescriptAxios, generateZodSchemas, TsAxiosPublicGenOptions } from "./generators/index.js";
 import { File, Folder } from "@dasaplan/ts-sdk";
-import { log } from "./logger.js";
+import { appLog } from "./logger.js";
 import { ZodGenOptions } from "./generators/zod/zod-schemas.js";
 import { bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
 
@@ -19,9 +19,9 @@ export async function generateOpenapi(specFilePath: string, outputFile: string, 
     return outDir;
   } catch (e: unknown) {
     if (e instanceof Error) {
-      log.error(`${e.name}: ${e.message}`);
+      appLog.log.error(`${e.name}: ${e.message}`);
     } else {
-      log.error(`Something went wrong: ${JSON.stringify(e)}`);
+      appLog.log.error(`Something went wrong: ${JSON.stringify(e)}`);
     }
     process.exit(1);
   }

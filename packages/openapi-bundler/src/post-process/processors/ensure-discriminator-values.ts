@@ -1,28 +1,35 @@
 import { OpenApiBundled } from "../../bundle.js";
-import {_, ApplicationError} from "@dasaplan/ts-sdk";
 import { oas30 } from "openapi3-ts";
 import { isRef } from "@redocly/openapi-core";
-import { childLog } from "../../logger.js";
+import { appLog } from "../../logger.js";
+import { _, ApplicationError } from "@dasaplan/ts-sdk/index.js";
 import { SchemaResolverContext } from "../../resolver/index.js";
 
 export function ensureDiscriminatorValues(bundled: OpenApiBundled) {
   const oneOfSchemas = findSchemaObjectsWithOneOf(bundled);
 
   oneOfSchemas.collected.map((collected) => {
-      try {
-          ensure(collected.schema, oneOfSchemas.ctx)
-      }catch (e){
-          throw ApplicationError.create(`failed ensuring all oneOf sub schemas have expected discriminator values schema.id ${collected.id}`).chainUnknown(e);
-      }
+    try {
+      ensure(collected.schema, oneOfSchemas.ctx);
+    } catch (e) {
+      throw ApplicationError.create(
+        `failed ensuring all oneOf sub schemas have expected discriminator values schema.id ${collected.id}`
+      ).chainUnknown(e);
+    }
   });
-  childLog("ensureDiscriminatorValues").info(
-    "ensured discriminator values of %s schemas for all oneOf subschemas based on values defined in discriminator.mapping",
-    oneOfSchemas.collected.length
-  );
+  appLog
+    .childLog("ensureDiscriminatorValues")
+    .info(
+      "ensured discriminator values of %s schemas for all oneOf subschemas based on values defined in discriminator.mapping",
+      oneOfSchemas.collected.length
+    );
   return bundled;
 }
 
-function ensureRequired(resolvedParent: oas30.SchemaObject, propertyName: string) {
+function ensureRequired(
+  resolvedParent: oas30.SchemaObject,
+  propertyName: string
+) {
   if (_.isNil(resolvedParent.required)) {
     resolvedParent.required = [propertyName];
   } else if (!resolvedParent.required.includes(propertyName)) {
@@ -38,18 +45,29 @@ function ensure(schema: oas30.SchemaObject, ctx: SchemaResolverContext) {
   }
   const { propertyName, mapping } = discriminator;
   if (_.isNil(mapping)) {
-    throw `Error: expected discriminator mapping for discriminated oneOf schema ${JSON.stringify(schema)}`;
+    throw `Error: expected discriminator mapping for discriminated oneOf schema ${JSON.stringify(
+      schema
+    )}`;
   }
 
   Object.entries(mapping).forEach(([key, value]) => {
     const subSchema = ctx.resolver.resolveRef({ $ref: value });
 
-    const { prop: resolvedDiscriminatorProp, subSchema: resolvedParent } = findDiscriminatorProperty(subSchema, propertyName, ctx) ?? {};
-    const discriminatorProp = selectDiscriminatorProperty(subSchema, propertyName, ctx);
+    const { prop: resolvedDiscriminatorProp, subSchema: resolvedParent } =
+      findDiscriminatorProperty(subSchema, propertyName, ctx) ?? {};
+    const discriminatorProp = selectDiscriminatorProperty(
+      subSchema,
+      propertyName,
+      ctx
+    );
 
-    const discriminatorProperty = _.cloneDeep(discriminatorProp.property) ?? _.cloneDeep(resolvedDiscriminatorProp);
+    const discriminatorProperty =
+      _.cloneDeep(discriminatorProp.property) ??
+      _.cloneDeep(resolvedDiscriminatorProp);
     if (_.isEmpty(discriminatorProperty)) {
-      throw `Error: expected discriminator property '${propertyName}' with value ${key} on subschema ${value} for oneOf schema ${JSON.stringify(schema)}`;
+      throw `Error: expected discriminator property '${propertyName}' with value ${key} on subschema ${value} for oneOf schema ${JSON.stringify(
+        schema
+      )}`;
     }
     if (discriminatorProperty.type !== "string") {
       throw `Error: expected discriminator property '${propertyName}' to be of type 'string' but found ${
@@ -58,16 +76,28 @@ function ensure(schema: oas30.SchemaObject, ctx: SchemaResolverContext) {
     }
 
     if (!_.isEmpty(resolvedParent)) {
-      setDiscriminatorProperty(resolvedParent, propertyName, { type: "string" }, ctx);
+      setDiscriminatorProperty(
+        resolvedParent,
+        propertyName,
+        { type: "string" },
+        ctx
+      );
     }
 
-    setDiscriminatorProperty(subSchema, propertyName, ensureDiscriminator(discriminatorProperty, key), ctx);
+    setDiscriminatorProperty(
+      subSchema,
+      propertyName,
+      ensureDiscriminator(discriminatorProperty, key),
+      ctx
+    );
   });
 
   return undefined;
 }
 
-function deleteEnumFromDiscriminator(discriminatorProperty: oas30.SchemaObject) {
+function deleteEnumFromDiscriminator(
+  discriminatorProperty: oas30.SchemaObject
+) {
   if (discriminatorProperty.enum) {
     delete discriminatorProperty.enum;
   }
@@ -76,7 +106,10 @@ function deleteEnumFromDiscriminator(discriminatorProperty: oas30.SchemaObject) 
   }
 }
 
-function ensureDiscriminator(discriminatorProperty: oas30.SchemaObject, key: string) {
+function ensureDiscriminator(
+  discriminatorProperty: oas30.SchemaObject,
+  key: string
+) {
   const update = _.cloneDeep(discriminatorProperty);
   deleteEnumFromDiscriminator(update);
   const prev = update["x-const"];
@@ -99,18 +132,28 @@ function findDiscriminatorProperty(
   subSchema: oas30.SchemaObject,
   propertyName: string,
   ctx: SchemaResolverContext
-): { prop: oas30.SchemaObject | undefined; subSchema: oas30.SchemaObject } | undefined {
+):
+  | { prop: oas30.SchemaObject | undefined; subSchema: oas30.SchemaObject }
+  | undefined {
   const property = subSchema.properties?.[propertyName];
   if (!_.isEmpty(property)) {
-    return isRef(property) ? { prop: ctx.resolver.resolveRef(property), subSchema } : { prop: property, subSchema };
+    return isRef(property)
+      ? { prop: ctx.resolver.resolveRef(property), subSchema }
+      : { prop: property, subSchema };
   }
   if (!_.isEmpty(subSchema.allOf)) {
-    const resolved = subSchema.allOf?.map((s) => ctx.resolver.resolveRef(s)) ?? [];
-    return resolved.map((s) => findDiscriminatorProperty(s, propertyName, ctx)).filter(_.isDefined)[0];
+    const resolved =
+      subSchema.allOf?.map((s) => ctx.resolver.resolveRef(s)) ?? [];
+    return resolved
+      .map((s) => findDiscriminatorProperty(s, propertyName, ctx))
+      .filter(_.isDefined)[0];
   }
   if (!_.isEmpty(subSchema.oneOf)) {
-    const resolved = subSchema.oneOf?.map((s) => ctx.resolver.resolveRef(s)) ?? [];
-    return resolved.map((s) => findDiscriminatorProperty(s, propertyName, ctx)).filter(_.isDefined)[0];
+    const resolved =
+      subSchema.oneOf?.map((s) => ctx.resolver.resolveRef(s)) ?? [];
+    return resolved
+      .map((s) => findDiscriminatorProperty(s, propertyName, ctx))
+      .filter(_.isDefined)[0];
   }
   return undefined;
 }
@@ -120,27 +163,41 @@ function selectDiscriminatorProperty(
   propertyName: string,
   ctx: SchemaResolverContext,
   params: { resolveRefs: boolean } = { resolveRefs: true }
-): { src: "properties" | "allOf" | "oneOf"; property: oas30.SchemaObject | undefined } {
+): {
+  src: "properties" | "allOf" | "oneOf";
+  property: oas30.SchemaObject | undefined;
+} {
   if (!_.isEmpty(subSchema.properties)) {
     return { src: "properties", property: selectProperty(subSchema) };
   }
   if (!_.isEmpty(subSchema.allOf)) {
-    return { src: "allOf", property: selectPropertyFrom(subSchema.allOf?.toReversed()) };
+    return {
+      src: "allOf",
+      property: selectPropertyFrom(subSchema.allOf?.toReversed()),
+    };
   }
   if (!_.isEmpty(subSchema.oneOf)) {
     return { src: "oneOf", property: selectPropertyFrom(subSchema.oneOf) };
   }
 
-  function selectPropertyFrom(subschemas: Array<oas30.SchemaObject | oas30.ReferenceObject> | undefined) {
-    const isSchema = (a: oas30.SchemaObject | oas30.ReferenceObject): a is oas30.SchemaObject => !isRef(a);
+  function selectPropertyFrom(
+    subschemas: Array<oas30.SchemaObject | oas30.ReferenceObject> | undefined
+  ) {
+    const isSchema = (
+      a: oas30.SchemaObject | oas30.ReferenceObject
+    ): a is oas30.SchemaObject => !isRef(a);
     const resolved: Array<oas30.SchemaObject> | undefined = params.resolveRefs
       ? subschemas?.map((s) => ctx.resolver.resolveRef(s)) ?? []
       : subschemas?.filter(isSchema);
-    const resolvedWithDiscriminator = resolved?.find((r) => !_.isEmpty(r.properties?.[propertyName]));
+    const resolvedWithDiscriminator = resolved?.find(
+      (r) => !_.isEmpty(r.properties?.[propertyName])
+    );
     return selectProperty(resolvedWithDiscriminator);
   }
 
-  function selectProperty(resolvedWithDiscriminator: oas30.SchemaObject | undefined) {
+  function selectProperty(
+    resolvedWithDiscriminator: oas30.SchemaObject | undefined
+  ) {
     const property = resolvedWithDiscriminator?.properties?.[propertyName];
     if (isRef(property)) {
       return params.resolveRefs ? ctx.resolver.resolveRef(property) : undefined;
@@ -153,8 +210,15 @@ function selectDiscriminatorProperty(
   )}`;
 }
 
-function setDiscriminatorProperty(subSchema: oas30.SchemaObject, propertyName: string, value: oas30.SchemaObject, ctx: SchemaResolverContext): void {
-  const prop = selectDiscriminatorProperty(subSchema, propertyName, ctx, { resolveRefs: false });
+function setDiscriminatorProperty(
+  subSchema: oas30.SchemaObject,
+  propertyName: string,
+  value: oas30.SchemaObject,
+  ctx: SchemaResolverContext
+): void {
+  const prop = selectDiscriminatorProperty(subSchema, propertyName, ctx, {
+    resolveRefs: false,
+  });
   // new discriminator
   switch (prop.src) {
     case "properties":
@@ -162,7 +226,9 @@ function setDiscriminatorProperty(subSchema: oas30.SchemaObject, propertyName: s
       subSchema.properties![propertyName] = value;
       return;
     case "allOf": {
-      const sub = subSchema.allOf?.find((f): f is oas30.SchemaObject => !isRef(f));
+      const sub = subSchema.allOf?.find(
+        (f): f is oas30.SchemaObject => !isRef(f)
+      );
       if (_.isDefined(sub)) {
         if ("allOf" in sub || "oneOf" in sub || "anyOf" in sub) {
           setDiscriminatorProperty(sub, propertyName, value, ctx);
@@ -174,7 +240,10 @@ function setDiscriminatorProperty(subSchema: oas30.SchemaObject, propertyName: s
         ensureRequired(sub, propertyName);
       } else {
         // all elements are refs. this may yield more than two allOf elements...
-        subSchema.allOf?.push({ required: [propertyName], properties: { [propertyName]: value } });
+        subSchema.allOf?.push({
+          required: [propertyName],
+          properties: { [propertyName]: value },
+        });
       }
       return;
     }
@@ -190,6 +259,8 @@ function setDiscriminatorProperty(subSchema: oas30.SchemaObject, propertyName: s
 
 function findSchemaObjectsWithOneOf(bundled: OpenApiBundled) {
   const transpiler = SchemaResolverContext.create(bundled);
-  const collected = transpiler.schemas.filter((s) => !_.isEmpty(s.schema.oneOf));
+  const collected = transpiler.schemas.filter(
+    (s) => !_.isEmpty(s.schema.oneOf)
+  );
   return { collected, ctx: transpiler };
 }

@@ -2,12 +2,12 @@
 
 import { OpenApiBundled } from "../../bundle.js";
 import { oas30 } from "openapi3-ts";
-import { _, ApplicationError } from "@dasaplan/ts-sdk";
 
 import jsonSchemaMergeAllOff from "json-schema-merge-allof";
 import { isRef } from "@redocly/openapi-core";
+import { appLog } from "../../logger.js";
+import { _, ApplicationError } from "@dasaplan/ts-sdk/index.js";
 import { cleanObj, SchemaResolverContext } from "../../resolver/index.js";
-import { log } from "../../logger.js";
 
 export function mergeAllOf(bundled: OpenApiBundled) {
   const mergedAllOf = _.cloneDeep(bundled);
@@ -28,6 +28,7 @@ function doMerge(
   { schema, id }: { id: string; schema: any },
   ctx: SchemaResolverContext
 ) {
+  const log = appLog.childLog(doMerge);
   const subSchemas: Array<oas30.ReferenceObject | oas30.SchemaObject> =
     schema.allOf ?? [];
   // include dangling properties {allOf: [], danglingA: {}, danglingB: [], danglingC: null, ... }

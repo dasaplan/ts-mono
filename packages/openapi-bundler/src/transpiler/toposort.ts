@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Schema } from "./transpile-schema.js";
-import { log } from "../logger.js";
+import { appLog } from "../logger.js";
 import { _ } from "@dasaplan/ts-sdk";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import toposort from "toposort";
 
 export module Toposort {
+  const logger = appLog.childLogger("Toposort");
+
   export function sortSchemas(schemas: Array<Schema>): Array<Schema> {
     const collectedEdges: Map<string, Set<string>> = new Map();
     const nodes = new Map<string, Schema>();
@@ -59,7 +61,9 @@ export module Toposort {
     }
     // only components which we can identify
     if (child.getName() === parent?.getName()) {
-      log.warn(`recursion found ${child.getName()} - skip`);
+      logger
+        .childLog(collectEdges)
+        .warn(`recursion found ${child.getName()} - skip`);
       return;
     }
     if (

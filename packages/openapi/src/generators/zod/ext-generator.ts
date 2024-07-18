@@ -1,8 +1,7 @@
-import {_, File, Folder} from "@dasaplan/ts-sdk";
+import { _, File } from "@dasaplan/ts-sdk";
 import { generateZodClientFromOpenAPI } from "openapi-zod-client";
-import { childLog } from "../../logger.js";
+import { appLog } from "../../logger.js";
 import { OpenApiBundled } from "@dasaplan/openapi-bundler";
-
 
 const PATH_TEMPLATE = "../../templates/schemas-only.hbs";
 
@@ -14,7 +13,7 @@ const PATH_TEMPLATE = "../../templates/schemas-only.hbs";
  */
 /** @deprecated does not meet requirements*/
 export async function generateZodSchemas(openapiSpec: OpenApiBundled, outDir: string, params?: { postProcessor?: (api: string) => string }) {
-  childLog(generateZodSchemas).info(`start generate: %s`, outDir);
+  appLog.childLog(generateZodSchemas).info(`start generate: %s`, outDir);
   const outFilePath = File.of(outDir, "zod.ts").absolutPath;
   const templatePath = File.resolve(PATH_TEMPLATE).absolutPath;
   await generateZodClientFromOpenAPI({

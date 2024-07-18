@@ -1,6 +1,6 @@
 import { _ } from "@dasaplan/ts-sdk";
 import { KindToNodeMappings, SourceFile, StructureKind, SyntaxKind } from "ts-morph";
-import { log } from "../../logger.js";
+import { appLog } from "../../logger.js";
 
 export function tsEnsureDiscriminatorValues(api: SourceFile) {
   const discriminatedUnions = findDiscriminatedUnions(api);
@@ -72,12 +72,12 @@ function recursivelyEnsureDiscriminatorValues(
     // ensure allowed discriminator on unsupported type - only literal or union types expected
     if (!propertyValue.isLiteral() && !propertyValue.isUnion()) {
       discriminatorProperty.setType(`'${mappingValue}'`);
-      log.info(`fixed missing discriminator value on subtype ${declaredSubType.getName()}.${propertyName} - setting it with ${mappingValue}`);
+      appLog.log.info(`fixed missing discriminator value on subtype ${declaredSubType.getName()}.${propertyName} - setting it with ${mappingValue}`);
     }
     // make union if allowed value literal does not match it
     else if (propertyValue.isLiteral() && propertyValue.getLiteralValue() !== mappingValue) {
       discriminatorProperty.setType(`'${propertyValue.getLiteralValue()}' | '${mappingValue}'`);
-      log.info(
+      appLog.log.info(
         `fixed missing discriminator value on subtype ${declaredSubType.getName()}.${propertyName} - extending ${propertyValue.getText()} with ${mappingValue}`
       );
     }
@@ -87,7 +87,7 @@ function recursivelyEnsureDiscriminatorValues(
       unions.push(`'${mappingValue}'`);
       const newType = unions.join(" | ");
       discriminatorProperty.setType(newType);
-      log.info(`fixed missing discriminator value on subtype ${declaredSubType.getName()}.${propertyName} - extending %j with ${mappingValue}`, unions);
+      appLog.log.info(`fixed missing discriminator value on subtype ${declaredSubType.getName()}.${propertyName} - extending %j with ${mappingValue}`, unions);
     }
     return;
   });

@@ -235,6 +235,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      tslog:
+        specifier: ^4.9.2
+        version: 4.9.3
     devDependencies:
       '@types/lodash':
         specifier: ^4.17.5

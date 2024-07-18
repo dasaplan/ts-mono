@@ -2,11 +2,11 @@
 // noinspection JSUnusedLocalSymbols
 
 import { bundleOpenapi } from "../bundle.js";
-import { mergeAllOf } from "./spec/merge-all-of.js";
+import { mergeAllOf } from "./processors/merge-all-of.js";
 import { _, Folder } from "@dasaplan/ts-sdk";
 import * as path from "node:path";
 import jsonSchemaMergeAllOff from "json-schema-merge-allof";
-import { ensureDiscriminatorValues } from "./spec/ensure-discriminator-values.js";
+import { ensureDiscriminatorValues } from "./processors/ensure-discriminator-values.js";
 import { resolveSpecPath } from "openapi-example-specs";
 
 describe("post process", () => {

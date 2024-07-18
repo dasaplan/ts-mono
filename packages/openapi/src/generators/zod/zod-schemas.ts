@@ -4,7 +4,7 @@
 import { Project, ScriptKind, ts } from "ts-morph";
 import { pascalCase } from "pascal-case";
 import { _, ApplicationError, File } from "@dasaplan/ts-sdk";
-import { log } from "../../logger.js";
+import { appLog } from "../../logger.js";
 import Handlebars from "handlebars";
 import { OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
 
@@ -321,7 +321,7 @@ module Factory {
         case "maxProperties":
         case "minProperties":
           // not supported
-          log.warn(`unsupported constraint ${curr} will be ignored`);
+          appLog.log.warn(`unsupported constraint ${curr} will be ignored`);
           break;
       }
       return acc;
