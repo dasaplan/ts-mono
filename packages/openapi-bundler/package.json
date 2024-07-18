@@ -15,9 +15,11 @@
     "directory": "packages/openapi-bundler"
   },
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs",
+    "types": "./dist/index.d.ts"
+  },
   "bin": {
     "openapi-bundler-cli": "dist/oa-bundler-cli.js"
   },
@@ -42,6 +44,7 @@
     "json-schema-merge-allof": "^0.8.1",
     "jsonpointer": "^5.0.1",
     "lodash": "^4.17.21",
+    "camelcase": "^8.0.0",
     "merge-json-schemas": "^1.0.0",
     "openapi3-ts": "^4.3.3",
     "toposort": "^2.0.2",
@@ -52,7 +55,8 @@
     "@types/json-schema-merge-allof": "^0.6.5",
     "@types/lodash": "^4.17.5",
     "openapi-example-specs": "workspace:*",
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:0.0.0",
+    "typescript": "*"
   },
   "peerDependencies": {
     "@redocly/openapi-core": "^1.6.0"

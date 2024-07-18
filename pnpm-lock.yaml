@@ -86,9 +86,6 @@ importers:
       '@ts-morph/common':
         specifier: ^0.22.0
         version: 0.22.0
-      camelcase:
-        specifier: ^8.0.0
-        version: 8.0.0
       commander:
         specifier: ^11.1.0
         version: 11.1.0
@@ -177,6 +174,9 @@ importers:
       '@redocly/openapi-core':
         specifier: ^1.6.0
         version: 1.6.0
+      camelcase:
+        specifier: ^8.0.0
+        version: 8.0.0
       commander:
         specifier: ^11.1.0
         version: 11.1.0
@@ -215,8 +215,11 @@ importers:
         specifier: workspace:*
         version: link:../openapi-specs
       tsconfig:
-        specifier: workspace:*
+        specifier: workspace:0.0.0
         version: link:../tsconfig
+      typescript:
+        specifier: '*'
+        version: 5.3.3
 
   packages/openapi-specs:
     devDependencies:

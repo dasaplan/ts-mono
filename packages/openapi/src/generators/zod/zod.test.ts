@@ -2,7 +2,6 @@ import { bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/op
 import { ZodGenOptions, generateZod } from "./zod-schemas.js";
 import { oas30 } from "openapi3-ts";
 import { resolveSpecPath } from "openapi-example-specs";
-import path from "path";
 
 const options: () => ZodGenOptions = () => ({
   includeTsTypes: false,
@@ -45,6 +44,43 @@ describe("generateZod", () => {
     const { sourceFile } = await generateZod(openapi, `test/out/zod/circular.ts`, options());
 
     expect(sourceFile.getFullText()).toMatchSnapshot("circular");
+  });
+
+  test("property name does not change when entity is referenced", async () => {
+    const openapi: OpenApiBundled = createApi((oa) =>
+      withSchemas(oa, {
+        Node: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            refEntity: { $ref: "#/components/schemas/SomeEntity" },
+            refEntity2: { $ref: "#/components/schemas/SomeEntity" },
+          },
+        },
+        SomeEntity: {
+          type: "object",
+          properties: { name: { type: "string" } },
+        },
+      })
+    );
+
+    const { sourceFile } = await generateZod(openapi, `test/out/zod/circular.ts`, options());
+
+    expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
+        "import { z } from 'zod'
+        import * as zc from './zod-common.js'
+        
+        export module Schemas {
+            export const SomeEntity = z.object({ name: z.string().optional() });
+            export const Node = z.object({ id: z.string().optional(), refEntity: SomeEntity.optional(), refEntity2: SomeEntity.optional() });
+        
+            export module Types {
+                export type SomeEntity = z.infer<typeof Schemas.SomeEntity>;
+                export type Node = z.infer<typeof Schemas.Node>;
+            }
+        
+        }"
+`);
   });
 
   test("deeply nested circular schema", async () => {
@@ -112,10 +148,10 @@ describe("generateZod", () => {
 
       export module Schemas {
           export const Base = z.object({ type: z.string().optional() });
-          export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().optional(), node: Node.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('B') })));
-          export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().optional(), node: Node.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('A') })));
+          export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('B') })));
+          export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('A') })));
           export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, 'Node': Node, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }));
-          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), node: Node.optional(), children: z.array(Child).optional() }));
+          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.array(Child).optional() }));
 
           export module Types {
               export type Base = z.infer<typeof Schemas.Base>;
@@ -197,10 +233,10 @@ describe("generateZod", () => {
 
       export module Schemas {
           export const Base = z.object({ type: z.string().optional() });
-          export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ child: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('B') })));
-          export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ child: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('A') })));
+          export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('B') })));
+          export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('A') })));
           export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, 'Node': Node, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }));
-          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), node: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
+          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
 
           export module Types {
               export type Base = z.infer<typeof Schemas.Base>;
@@ -292,7 +328,7 @@ describe("generateZod", () => {
           export const Rec: z.ZodTypeAny = z.lazy(() => z.object({ a: A.optional(), b: B.optional(), child: Child.optional(), node: Node.optional() }));
           export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ children: z.lazy(() => z.array(Rec)).optional(), type: z.literal('A') })));
           export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }));
-          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), node: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
+          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
 
           export module Types {
               export type Base = z.infer<typeof Schemas.Base>;

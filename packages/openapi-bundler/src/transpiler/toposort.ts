@@ -87,6 +87,7 @@ export module Toposort {
         return;
       case "OBJECT":
         child.properties
+          .map((p) => p.propertyValue)
           .flatMap((d) => (d.kind === "DISCRIMINATOR" ? [] : [d]))
           .forEach((s) =>
             withoutCircles(s, () => collectEdges(s, child, ctx, nodes))

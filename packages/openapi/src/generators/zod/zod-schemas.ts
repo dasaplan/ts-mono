@@ -3,12 +3,11 @@
 
 import { Project, ScriptKind, ts } from "ts-morph";
 import { pascalCase } from "pascal-case";
-import * as camelcase from "camelcase";
 import { _, File } from "@dasaplan/ts-sdk";
 import { log } from "../../logger.js";
 import Handlebars from "handlebars";
 import { OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
-import DiscriminatorProperty = Schema.DiscriminatorProperty;
+
 import { TemplateDir } from "../../template.js";
 
 // are being used to identify usecases
@@ -106,19 +105,17 @@ export module ${name} {
   `;
 }
 
-function processSubSchema(c: Schema | DiscriminatorProperty, options: ZodGenOptions, params?: { withOptionalEntityRef?: boolean }) {
+function processSubSchema(c: Schema | Schema.DiscriminatorProperty, options: ZodGenOptions, params?: { withOptionalEntityRef?: boolean }) {
   switch (c.component.kind) {
     case "INLINE":
-      return Factory.withOptional(c.required, () => processSchema(c, options));
+      return processSchema(c, options);
     case "COMPONENT": {
-      if (params?.withOptionalEntityRef) {
-        return Factory.withOptional(c.required, () => Factory.createEntityRef(c, options));
-      }
       return Factory.createEntityRef(c, options);
     }
   }
 }
-function isCircular(c: Schema | DiscriminatorProperty) {
+
+function isCircular(c: Schema | Schema.DiscriminatorProperty) {
   if (c.isCircular) {
     return true;
   }
@@ -126,7 +123,7 @@ function isCircular(c: Schema | DiscriminatorProperty) {
     case "UNION":
       return c.schemas.some((s) => s.isCircular);
     case "OBJECT":
-      return c.parent?.isCircular || c.properties.some((p) => p.isCircular);
+      return c.parent?.isCircular || c.properties.some((p) => p.propertyValue.isCircular);
     case "ARRAY":
       return c.items.isCircular;
     case "BOX":
@@ -136,7 +133,7 @@ function isCircular(c: Schema | DiscriminatorProperty) {
       return c.isCircular;
   }
 }
-function processSchema(c: Schema | DiscriminatorProperty, options: ZodGenOptions): string {
+function processSchema(c: Schema | Schema.DiscriminatorProperty, options: ZodGenOptions): string {
   return Factory.withLazy(isCircular(c) ?? false, () => {
     switch (c.kind) {
       case "UNION": {
@@ -153,9 +150,9 @@ function processSchema(c: Schema | DiscriminatorProperty, options: ZodGenOptions
       }
       case "OBJECT": {
         const parent = _.isDefined(c.parent) ? processSubSchema(c.parent, options) : undefined;
-        const properties = c.properties.map((s) => {
-          const name = camelcase.default(s.getName());
-          const value = processSubSchema(s, options, { withOptionalEntityRef: true });
+        const properties = c.properties.map((property) => {
+          const name = property.propertyName;
+          const value = Factory.withOptional(property.required, () => processSubSchema(property.propertyValue, options));
           return Factory.createObjectProperty(name, value, options);
         });
         return Factory.createObject(properties, parent, options);
@@ -216,15 +213,16 @@ module Factory {
     Schema["raw"],
     K
   >;
-
+  type Test = keyof Schema["raw"];
+  const t: Test = "enum";
   export function withLazy(condition: boolean, fn: () => string): string {
     return condition ? `z.lazy(() => ${fn()})` : fn();
   }
-  export function createInferredType(c: Schema | DiscriminatorProperty, options: ZodGenOptions) {
+  export function createInferredType(c: Schema | Schema.DiscriminatorProperty, options: ZodGenOptions) {
     return `z.infer<typeof Schemas.${createEntityRef(c, options)}>`;
   }
 
-  export function createEntityRef(c: Schema | DiscriminatorProperty, options: ZodGenOptions) {
+  export function createEntityRef(c: Schema | Schema.DiscriminatorProperty, options: ZodGenOptions) {
     return `${pascalCase(c.getName())}`;
   }
 
@@ -322,14 +320,14 @@ module Factory {
         case "maxProperties":
         case "minProperties":
           // not supported
-          log.info(`unsupported constraint ${curr} will be ignored`);
+          log.warn(`unsupported constraint ${curr} will be ignored`);
           break;
       }
       return acc;
     }, value);
   }
 
-  export function stringFormatAware(c: Schema.Primitive, numberValue: string, options: ZodGenOptions): string {
+  export function stringFormatAware(c: Schema.Primitive.PrimitiveAlphaNumeric, numberValue: string, options: ZodGenOptions): string {
     switch (c.format) {
       case "int64":
         // todo: feat: support bigint for string + int64 format
@@ -361,7 +359,7 @@ module Factory {
     }
   }
 
-  export function numberFormatAware(c: Schema.Primitive, numberValue: string, options: ZodGenOptions): string {
+  export function numberFormatAware(c: Schema.Primitive.PrimitiveAlphaNumeric, numberValue: string, options: ZodGenOptions): string {
     switch (c.format) {
       case "int64":
       case "int32":
