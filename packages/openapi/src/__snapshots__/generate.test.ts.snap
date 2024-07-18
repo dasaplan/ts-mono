@@ -1074,8 +1074,8 @@ export module Schemas {
 `;
 
 exports[`Generate Integration all generic/api.yml: generate-openapi-all-generic/api.yml-zod-common.ts 1`] = `
-"import { z } from 'zod'
-
+"
+import { z } from "zod";
 
 export module ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
@@ -1104,9 +1104,8 @@ export module ZodUnionMatch {
                     ctx.addIssue({
                         code: "invalid_union",
                         unionErrors: [prev.result.error],
-                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${
-                            discriminatorWithValue ?? ""
-                        }) \`,
+                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${discriminatorWithValue ?? ""
+                            }) \`,
                     });
                 }
             })
@@ -1910,8 +1909,8 @@ export module Schemas {
 `;
 
 exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-all-pets-modular/pets-api.yml-zod-common.ts 1`] = `
-"import { z } from 'zod'
-
+"
+import { z } from "zod";
 
 export module ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
@@ -1940,9 +1939,8 @@ export module ZodUnionMatch {
                     ctx.addIssue({
                         code: "invalid_union",
                         unionErrors: [prev.result.error],
-                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${
-                            discriminatorWithValue ?? ""
-                        }) \`,
+                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${discriminatorWithValue ?? ""
+                            }) \`,
                     });
                 }
             })
@@ -3376,8 +3374,8 @@ export module Schemas {
 `;
 
 exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-all-pets-modular-complex/petstore-api.yml-zod-common.ts 1`] = `
-"import { z } from 'zod'
-
+"
+import { z } from "zod";
 
 export module ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
@@ -3406,9 +3404,8 @@ export module ZodUnionMatch {
                     ctx.addIssue({
                         code: "invalid_union",
                         unionErrors: [prev.result.error],
-                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${
-                            discriminatorWithValue ?? ""
-                        }) \`,
+                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${discriminatorWithValue ?? ""
+                            }) \`,
                     });
                 }
             })
@@ -4167,8 +4164,8 @@ export module Schemas {
 `;
 
 exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-all-pets-recursive/pets-api.yml-zod-common.ts 1`] = `
-"import { z } from 'zod'
-
+"
+import { z } from "zod";
 
 export module ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
@@ -4197,9 +4194,8 @@ export module ZodUnionMatch {
                     ctx.addIssue({
                         code: "invalid_union",
                         unionErrors: [prev.result.error],
-                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${
-                            discriminatorWithValue ?? ""
-                        }) \`,
+                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${discriminatorWithValue ?? ""
+                            }) \`,
                     });
                 }
             })
@@ -4949,8 +4945,8 @@ export module Schemas {
 `;
 
 exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-all-pets-simple/pets-api.yml-zod-common.ts 1`] = `
-"import { z } from 'zod'
-
+"
+import { z } from "zod";
 
 export module ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
@@ -4979,9 +4975,8 @@ export module ZodUnionMatch {
                     ctx.addIssue({
                         code: "invalid_union",
                         unionErrors: [prev.result.error],
-                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${
-                            discriminatorWithValue ?? ""
-                        }) \`,
+                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${discriminatorWithValue ?? ""
+                            }) \`,
                     });
                 }
             })
@@ -5735,8 +5730,8 @@ export module Schemas {
 `;
 
 exports[`Generate Integration all usecases/extended-array-api.yml: generate-openapi-all-usecases/extended-array-api.yml-zod-common.ts 1`] = `
-"import { z } from 'zod'
-
+"
+import { z } from "zod";
 
 export module ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
@@ -5765,9 +5760,8 @@ export module ZodUnionMatch {
                     ctx.addIssue({
                         code: "invalid_union",
                         unionErrors: [prev.result.error],
-                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${
-                            discriminatorWithValue ?? ""
-                        }) \`,
+                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${discriminatorWithValue ?? ""
+                            }) \`,
                     });
                 }
             })
@@ -6808,8 +6802,8 @@ export * from "./configuration.js";
 export * from "./zod.js";
 
 ",
-  "import { z } from 'zod'
-
+  "
+import { z } from "zod";
 
 export module ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
@@ -6838,9 +6832,8 @@ export module ZodUnionMatch {
                     ctx.addIssue({
                         code: "invalid_union",
                         unionErrors: [prev.result.error],
-                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${
-                            discriminatorWithValue ?? ""
-                        }) \`,
+                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${discriminatorWithValue ?? ""
+                            }) \`,
                     });
                 }
             })

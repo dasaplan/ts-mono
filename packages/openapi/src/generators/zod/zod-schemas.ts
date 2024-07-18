@@ -3,64 +3,18 @@
 
 import { Project, ScriptKind, ts } from "ts-morph";
 import { pascalCase } from "pascal-case";
-import { _, ApplicationError, File } from "@dasaplan/ts-sdk";
+import { _, ApplicationError } from "@dasaplan/ts-sdk";
 import { appLog } from "../../logger.js";
-import Handlebars from "handlebars";
-import { OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
+import { Schema } from "@dasaplan/openapi-bundler";
 
-import { TemplateDir } from "../../template.js";
-
-// are being used to identify usecases
-const IDENTIFIER_API = "api";
+// is being used to identify usecases
+export const IDENTIFIER_API = "api";
 
 export interface ZodGenOptions {
   includeTsTypes: boolean;
 }
 
-export async function generateZod(parsed: OpenApiBundled, filePath: string, params?: ZodGenOptions) {
-  const options: ZodGenOptions = {
-    includeTsTypes: true,
-    ...(params ?? {}),
-  };
-  const transpiler = Transpiler.of(parsed);
-  const schemas = transpiler.schemasTopoSorted();
-  const components = schemas.filter((s) => s.component.kind === "COMPONENT");
-  // we want to generate all components
-  const imports = ["import { z } from 'zod'", "import * as zc from './zod-common.js'"];
-  if (options.includeTsTypes) {
-    imports.push(`import * as ${IDENTIFIER_API} from './api.js'`);
-  }
-
-  const schemaDeclarations = components.map((c) => createConstantDeclaration(c, options));
-
-  // include types
-  const typeDeclarations = components.map((c) => createTypeDeclaration(c, options));
-  const schemaTypesModule = createModule("Types", typeDeclarations, options);
-  schemaDeclarations.push(schemaTypesModule);
-
-  // include unions which can used for introspecting e.g. for test data generators
-  // ignore if we have less than 2 "unique" schemas - (we can omit mappings, because discriminator values are handled in the schema)
-  const unions = components.filter((c) => c.kind === "UNION" && c.schemas.length > 1);
-  if (unions.length > 0) {
-    const unionDeclarations = unions.map((c) => createUnionDeclaration(c, options));
-    const unionModule = createModule("Unions", unionDeclarations, options);
-    schemaDeclarations.push(unionModule);
-  }
-
-  const schemasModule = createModule("Schemas", schemaDeclarations, options);
-  const source = [...imports, schemasModule].join("\n");
-  const sourceSchema = createTsMorphSrcFile(filePath, source);
-
-  /* hint: just checking hbs out, could easily laso be*/
-  const templateDir = TemplateDir.getTmpDir();
-  const commonTemplate = templateDir.makeFile("zod-common.hbs").readAsString();
-  const template = Handlebars.compile(commonTemplate);
-  const result = template({});
-  File.of(filePath).siblingFile("zod-common.ts").write(result);
-  return sourceSchema;
-}
-
-function createConstantDeclaration(c: Schema, options: ZodGenOptions) {
+export function createConstantDeclaration(c: Schema, options: ZodGenOptions) {
   const name = `${pascalCase(c.getName())}`;
   const declaration = `export const ${name}`;
   const value = processSchema(c, options);
@@ -81,7 +35,7 @@ function createConstantDeclaration(c: Schema, options: ZodGenOptions) {
   return `${declaration} = ${value};`;
 }
 
-function createUnionDeclaration(c: Schema, options: ZodGenOptions) {
+export function createUnionDeclaration(c: Schema, options: ZodGenOptions) {
   if (c.kind !== "UNION") throw ApplicationError.create(`expected schema to be of kind UNION but received ${c.kind}`);
   const name = `${pascalCase(c.getName())}`;
   const declaration = `export const ${name}`;
@@ -92,13 +46,13 @@ function createUnionDeclaration(c: Schema, options: ZodGenOptions) {
   return `${declaration} = ${value};`;
 }
 
-function createTypeDeclaration(c: Schema, options: ZodGenOptions) {
+export function createTypeDeclaration(c: Schema, options: ZodGenOptions) {
   const declaration = `export type ${pascalCase(c.getName())}`;
   const value = Factory.createInferredType(c, options);
   return `${declaration} = ${value};`;
 }
 
-function createModule(name: string, members: string[], options: ZodGenOptions) {
+export function createModule(name: string, members: string[], options: ZodGenOptions) {
   return `
 export module ${name} {
     ${members.join("\n")}
@@ -178,21 +132,6 @@ function processSchema(c: Schema | Schema.DiscriminatorProperty, options: ZodGen
       }
     }
   });
-}
-
-function createTsMorphSrcFile(tsFilePath: string, source: string) {
-  const project = new Project();
-  const sourceFile = project.createSourceFile(tsFilePath, source, {
-    overwrite: true,
-    scriptKind: ScriptKind.TS,
-  });
-  sourceFile.formatText({
-    indentSwitchCase: true,
-    indentStyle: ts.IndentStyle.Smart,
-    indentMultiLineObjectLiteralBeginningOnBlankLine: true,
-  });
-  sourceFile.saveSync();
-  return { project, sourceFile: sourceFile };
 }
 
 module Factory {
