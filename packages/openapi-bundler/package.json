@@ -40,11 +40,11 @@
     "test:update": "pnpm test:esm:update"
   },
   "dependencies": {
+    "camelcase": "^8.0.0",
     "commander": "^11.1.0",
     "json-schema-merge-allof": "^0.8.1",
     "jsonpointer": "^5.0.1",
     "lodash": "^4.17.21",
-    "camelcase": "^8.0.0",
     "merge-json-schemas": "^1.0.0",
     "openapi3-ts": "^4.3.3",
     "toposort": "^2.0.2",
@@ -56,7 +56,7 @@
     "@types/lodash": "^4.17.5",
     "openapi-example-specs": "workspace:*",
     "tsconfig": "workspace:0.0.0",
-    "typescript": "*"
+    "typescript": "^5.5.3"
   },
   "peerDependencies": {
     "@redocly/openapi-core": "^1.6.0"

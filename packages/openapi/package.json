@@ -83,7 +83,7 @@
     "tsc-alias": "^1.8.8",
     "tsconfig": "workspace:0.0.0",
     "type-fest": "*",
-    "typescript": "*"
+    "typescript": "^5.5.3"
   },
   "peerDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0"

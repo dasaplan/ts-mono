@@ -3,7 +3,7 @@
 
 import { Project, ScriptKind, ts } from "ts-morph";
 import { pascalCase } from "pascal-case";
-import { _, File } from "@dasaplan/ts-sdk";
+import { _, ApplicationError, File } from "@dasaplan/ts-sdk";
 import { log } from "../../logger.js";
 import Handlebars from "handlebars";
 import { OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
@@ -39,7 +39,7 @@ export async function generateZod(parsed: OpenApiBundled, filePath: string, para
   schemaDeclarations.push(schemaTypesModule);
 
   // include unions which can used for introspecting e.g. for test data generators
-  const unions = components.filter((c) => c.kind === "UNION");
+  const unions = components.filter((c) => c.kind === "UNION").filter((u) => u.schemas.length > 1);
   if (unions.length > 0) {
     const unionDeclarations = unions.map((c) => createUnionDeclaration(c, options));
     const unionModule = createModule("Unions", unionDeclarations, options);
@@ -81,7 +81,7 @@ function createConstantDeclaration(c: Schema, options: ZodGenOptions) {
 }
 // todo: refactor
 function createUnionDeclaration(c: Schema, options: ZodGenOptions) {
-  if (c.kind !== "UNION") throw new Error(`expected schema to be of kind UNION but received ${c.kind}`);
+  if (c.kind !== "UNION") throw ApplicationError.create(`expected schema to be of kind UNION but received ${c.kind}`);
   const name = `${pascalCase(c.getName())}`;
   const declaration = `export const ${name}`;
   // remove discrminator to create normal unions
