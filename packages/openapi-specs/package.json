@@ -1,11 +1,13 @@
 {
   "name": "openapi-example-specs",
   "private": true,
+  "type": "module",
   "version": "0.0.0",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js",
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
     "./specs/*": "./specs/*"
   },
   "scripts": {

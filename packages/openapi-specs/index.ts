@@ -1,5 +1,6 @@
-import * as path from "node:path";
+import { createRequire } from "node:module";
 
 export function resolveSpecPath(spec: string) {
-  return path.resolve("./node_modules/openapi-example-specs/specs", spec);
+  const require = createRequire(import.meta.url);
+  return require.resolve(`openapi-example-specs/specs/${spec}`);
 }
