@@ -1,5 +1,11 @@
 # @dasaplan/openapi-bundler
 
+## 0.0.10
+
+### Patch Changes
+
+- Mostly cleanup and some fixes
+
 ## 0.0.9
 
 ### Patch Changes
