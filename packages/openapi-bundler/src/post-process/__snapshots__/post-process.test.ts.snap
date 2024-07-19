@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`post process spec ensureDiscriminatorValues generic/api.yml: bndl-generic/api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > generic/api.yml > bndl-generic/api.yml 1`] = `
 {
   "components": {
     "schemas": {
@@ -282,7 +282,7 @@ description
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues generic/api.yml: ensured-generic/api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > generic/api.yml > ensured-generic/api.yml 1`] = `
 {
   "components": {
     "schemas": {
@@ -520,7 +520,7 @@ description
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues generic/api.yml: ensured-merged-generic/api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > generic/api.yml > ensured-merged-generic/api.yml 1`] = `
 {
   "components": {
     "schemas": {
@@ -799,7 +799,7 @@ description
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues generic/api.yml: merged-generic/api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > generic/api.yml > merged-generic/api.yml 1`] = `
 {
   "components": {
     "schemas": {
@@ -1056,7 +1056,7 @@ description
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-modular/pets-api.yml: bndl-pets-modular/pets-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-modular/pets-api.yml > bndl-pets-modular/pets-api.yml 1`] = `
 {
   "components": {
     "schemas": {
@@ -1188,7 +1188,7 @@ exports[`post process spec ensureDiscriminatorValues pets-modular/pets-api.yml: 
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-modular/pets-api.yml: ensured-merged-pets-modular/pets-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-modular/pets-api.yml > ensured-merged-pets-modular/pets-api.yml 1`] = `
 {
   "components": {
     "schemas": {
@@ -1320,7 +1320,7 @@ exports[`post process spec ensureDiscriminatorValues pets-modular/pets-api.yml: 
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-modular/pets-api.yml: ensured-pets-modular/pets-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-modular/pets-api.yml > ensured-pets-modular/pets-api.yml 1`] = `
 {
   "components": {
     "schemas": {
@@ -1436,7 +1436,7 @@ exports[`post process spec ensureDiscriminatorValues pets-modular/pets-api.yml: 
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-modular/pets-api.yml: merged-pets-modular/pets-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-modular/pets-api.yml > merged-pets-modular/pets-api.yml 1`] = `
 {
   "components": {
     "schemas": {
@@ -1552,7 +1552,7 @@ exports[`post process spec ensureDiscriminatorValues pets-modular/pets-api.yml: 
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-modular-complex/petstore-api.yml: bndl-pets-modular-complex/petstore-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/petstore-api.yml > bndl-pets-modular-complex/petstore-api.yml 1`] = `
 {
   "components": {
     "parameters": {
@@ -1967,7 +1967,7 @@ exports[`post process spec ensureDiscriminatorValues pets-modular-complex/petsto
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-modular-complex/petstore-api.yml: ensured-merged-pets-modular-complex/petstore-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/petstore-api.yml > ensured-merged-pets-modular-complex/petstore-api.yml 1`] = `
 {
   "components": {
     "parameters": {
@@ -2452,7 +2452,7 @@ exports[`post process spec ensureDiscriminatorValues pets-modular-complex/petsto
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-modular-complex/petstore-api.yml: ensured-pets-modular-complex/petstore-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/petstore-api.yml > ensured-pets-modular-complex/petstore-api.yml 1`] = `
 {
   "components": {
     "parameters": {
@@ -2845,7 +2845,7 @@ exports[`post process spec ensureDiscriminatorValues pets-modular-complex/petsto
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-modular-complex/petstore-api.yml: merged-pets-modular-complex/petstore-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/petstore-api.yml > merged-pets-modular-complex/petstore-api.yml 1`] = `
 {
   "components": {
     "parameters": {
@@ -3326,7 +3326,7 @@ exports[`post process spec ensureDiscriminatorValues pets-modular-complex/petsto
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-simple/pets-api.yml: bndl-pets-simple/pets-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-simple/pets-api.yml > bndl-pets-simple/pets-api.yml 1`] = `
 {
   "components": {
     "schemas": {
@@ -3453,7 +3453,7 @@ exports[`post process spec ensureDiscriminatorValues pets-simple/pets-api.yml: b
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-simple/pets-api.yml: ensured-merged-pets-simple/pets-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-simple/pets-api.yml > ensured-merged-pets-simple/pets-api.yml 1`] = `
 {
   "components": {
     "schemas": {
@@ -3580,7 +3580,7 @@ exports[`post process spec ensureDiscriminatorValues pets-simple/pets-api.yml: e
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-simple/pets-api.yml: ensured-pets-simple/pets-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-simple/pets-api.yml > ensured-pets-simple/pets-api.yml 1`] = `
 {
   "components": {
     "schemas": {
@@ -3694,7 +3694,7 @@ exports[`post process spec ensureDiscriminatorValues pets-simple/pets-api.yml: e
 }
 `;
 
-exports[`post process spec ensureDiscriminatorValues pets-simple/pets-api.yml: merged-pets-simple/pets-api.yml 1`] = `
+exports[`post process > spec > ensureDiscriminatorValues > pets-simple/pets-api.yml > merged-pets-simple/pets-api.yml 1`] = `
 {
   "components": {
     "schemas": {

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`transpiler endpoints: endpoints 1`] = `
+exports[`transpiler > endpoints > endpoints 1`] = `
 [
   {
     "alias": "getPets",
@@ -709,7 +709,7 @@ exports[`transpiler endpoints: endpoints 1`] = `
 ]
 `;
 
-exports[`transpiler schemas: schemas 1`] = `
+exports[`transpiler > schemas > schemas 1`] = `
 [
   {
     "component": {
@@ -2757,7 +2757,7 @@ exports[`transpiler schemas: schemas 1`] = `
 ]
 `;
 
-exports[`transpiler schemas: schemas 2`] = `
+exports[`transpiler > schemas > schemas 2`] = `
 [
   {
     "component": {
@@ -4805,7 +4805,7 @@ exports[`transpiler schemas: schemas 2`] = `
 ]
 `;
 
-exports[`transpiler transpile generic/api.yml: endpoints 1`] = `
+exports[`transpiler > transpile generic/api.yml > endpoints 1`] = `
 [
   {
     "alias": "listPets",
@@ -14263,7 +14263,7 @@ description
 ]
 `;
 
-exports[`transpiler transpile generic/api.yml: schemas 1`] = `
+exports[`transpiler > transpile generic/api.yml > schemas 1`] = `
 [
   {
     "component": {
@@ -36050,7 +36050,7 @@ description
 ]
 `;
 
-exports[`transpiler transpile generic/api.yml: schemas-sorted 1`] = `
+exports[`transpiler > transpile generic/api.yml > schemas-sorted 1`] = `
 [
   {
     "component": {
@@ -57837,7 +57837,7 @@ description
 ]
 `;
 
-exports[`transpiler transpile pets-modular/pets-api.yml: endpoints 1`] = `
+exports[`transpiler > transpile pets-modular/pets-api.yml > endpoints 1`] = `
 [
   {
     "alias": "getPets",
@@ -58555,7 +58555,7 @@ exports[`transpiler transpile pets-modular/pets-api.yml: endpoints 1`] = `
 ]
 `;
 
-exports[`transpiler transpile pets-modular/pets-api.yml: schemas 1`] = `
+exports[`transpiler > transpile pets-modular/pets-api.yml > schemas 1`] = `
 [
   {
     "component": {
@@ -60603,7 +60603,7 @@ exports[`transpiler transpile pets-modular/pets-api.yml: schemas 1`] = `
 ]
 `;
 
-exports[`transpiler transpile pets-modular/pets-api.yml: schemas-sorted 1`] = `
+exports[`transpiler > transpile pets-modular/pets-api.yml > schemas-sorted 1`] = `
 [
   {
     "component": {
@@ -62651,7 +62651,7 @@ exports[`transpiler transpile pets-modular/pets-api.yml: schemas-sorted 1`] = `
 ]
 `;
 
-exports[`transpiler transpile pets-modular-complex/petstore-api.yml: endpoints 1`] = `
+exports[`transpiler > transpile pets-modular-complex/petstore-api.yml > endpoints 1`] = `
 [
   {
     "alias": "listPets",
@@ -65601,7 +65601,7 @@ exports[`transpiler transpile pets-modular-complex/petstore-api.yml: endpoints 1
 ]
 `;
 
-exports[`transpiler transpile pets-modular-complex/petstore-api.yml: schemas 1`] = `
+exports[`transpiler > transpile pets-modular-complex/petstore-api.yml > schemas 1`] = `
 [
   {
     "component": {
@@ -71945,7 +71945,7 @@ exports[`transpiler transpile pets-modular-complex/petstore-api.yml: schemas 1`]
 ]
 `;
 
-exports[`transpiler transpile pets-modular-complex/petstore-api.yml: schemas-sorted 1`] = `
+exports[`transpiler > transpile pets-modular-complex/petstore-api.yml > schemas-sorted 1`] = `
 [
   {
     "component": {
@@ -78289,7 +78289,7 @@ exports[`transpiler transpile pets-modular-complex/petstore-api.yml: schemas-sor
 ]
 `;
 
-exports[`transpiler transpile pets-simple/pets-api.yml: endpoints 1`] = `
+exports[`transpiler > transpile pets-simple/pets-api.yml > endpoints 1`] = `
 [
   {
     "alias": "listPets",
@@ -78970,7 +78970,7 @@ exports[`transpiler transpile pets-simple/pets-api.yml: endpoints 1`] = `
 ]
 `;
 
-exports[`transpiler transpile pets-simple/pets-api.yml: schemas 1`] = `
+exports[`transpiler > transpile pets-simple/pets-api.yml > schemas 1`] = `
 [
   {
     "component": {
@@ -81528,7 +81528,7 @@ exports[`transpiler transpile pets-simple/pets-api.yml: schemas 1`] = `
 ]
 `;
 
-exports[`transpiler transpile pets-simple/pets-api.yml: schemas-sorted 1`] = `
+exports[`transpiler > transpile pets-simple/pets-api.yml > schemas-sorted 1`] = `
 [
   {
     "component": {

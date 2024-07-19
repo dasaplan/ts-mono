@@ -3,6 +3,7 @@ import { generateJava } from "./java.js";
 import { bundleOpenapi, createSpecProcessor } from "@dasaplan/openapi-bundler";
 import { resolveSpecPath } from "openapi-example-specs";
 import path from "path";
+import { describe, test, expect } from "vitest";
 
 describe("Generator: java", () => {
   test("generate java", async () => {

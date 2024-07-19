@@ -1,6 +1,7 @@
 import { OpenApiBundled } from "../bundle.js";
 import { oas30 } from "openapi3-ts";
 import { SchemaGraph } from "./circular-schmeas.js";
+import { describe, test, expect } from "vitest";
 
 describe("find circles", () => {
   test("circular", () => {

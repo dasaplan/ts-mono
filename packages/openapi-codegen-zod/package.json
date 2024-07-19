@@ -42,10 +42,8 @@
     "ts:check:generated": "tsc -p tsconfig.generated.json",
     "cp:templates": "copyfiles -u 1 \"templates/**/*\" -e \"**/*.json\" dist/templates",
     "cp:configs": "copyfiles openapitools.json dist",
-    "test": "pnpm test:esm",
-    "test:update": "pnpm test:esm:update",
-    "test:esm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:esm:update": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -u",
+    "test": "vitest --config ../../vitest.config.ts",
+    "test:update": "vitest -u --config ../../vitest.config.ts",
     "clean": "rimraf dist out tmp",
     "lint": "eslint \"./src/*.ts\" index.ts zod-cli.ts"
   },

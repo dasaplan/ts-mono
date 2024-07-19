@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Generate Integration all generic/api.yml: generate-openapi-all-generic/api.yml 1`] = `
+exports[`Generate Integration > all > generic/api.yml > generate-openapi-all-generic/api.yml 1`] = `
 [
   "/* tslint:disable */
 /* eslint-disable */
@@ -1108,7 +1108,7 @@ export module Schemas {
 ]
 `;
 
-exports[`Generate Integration all pets-modular/pets-api.yml: generate-openapi-all-pets-modular/pets-api.yml 1`] = `
+exports[`Generate Integration > all > pets-modular/pets-api.yml > generate-openapi-all-pets-modular/pets-api.yml 1`] = `
 [
   "/* tslint:disable */
 /* eslint-disable */
@@ -1924,7 +1924,7 @@ export module Schemas {
 ]
 `;
 
-exports[`Generate Integration all pets-modular-complex/petstore-api.yml: generate-openapi-all-pets-modular-complex/petstore-api.yml 1`] = `
+exports[`Generate Integration > all > pets-modular-complex/petstore-api.yml > generate-openapi-all-pets-modular-complex/petstore-api.yml 1`] = `
 [
   "/* tslint:disable */
 /* eslint-disable */
@@ -3370,7 +3370,7 @@ export module Schemas {
 ]
 `;
 
-exports[`Generate Integration all pets-recursive/pets-api.yml: generate-openapi-all-pets-recursive/pets-api.yml 1`] = `
+exports[`Generate Integration > all > pets-recursive/pets-api.yml > generate-openapi-all-pets-recursive/pets-api.yml 1`] = `
 [
   "/* tslint:disable */
 /* eslint-disable */
@@ -4141,7 +4141,7 @@ export module Schemas {
 ]
 `;
 
-exports[`Generate Integration all pets-simple/pets-api.yml: generate-openapi-all-pets-simple/pets-api.yml 1`] = `
+exports[`Generate Integration > all > pets-simple/pets-api.yml > generate-openapi-all-pets-simple/pets-api.yml 1`] = `
 [
   "/* tslint:disable */
 /* eslint-disable */
@@ -4903,7 +4903,7 @@ export module Schemas {
 ]
 `;
 
-exports[`Generate Integration all usecases/extended-array-api.yml: generate-openapi-all-usecases/extended-array-api.yml 1`] = `
+exports[`Generate Integration > all > usecases/extended-array-api.yml > generate-openapi-all-usecases/extended-array-api.yml 1`] = `
 [
   "/* tslint:disable */
 /* eslint-disable */
@@ -5669,7 +5669,7 @@ export module Schemas {
 ]
 `;
 
-exports[`Generate Integration ts generic/api.yml: cleaned-generic/api.yml 1`] = `
+exports[`Generate Integration > ts > generic/api.yml > cleaned-generic/api.yml 1`] = `
 [
   "/* tslint:disable */
 /* eslint-disable */
@@ -6403,188 +6403,6 @@ interface ServerMap {
  */
 export const operationServerMap: ServerMap = {
 }
-",
-  "openapi: 3.0.3
-info:
-  version: 1.0.1
-  title: some title
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-  /pets/{petId}:
-    get:
-      summary: Get a Pet
-      operationId: getPet
-      parameters:
-        - name: petId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      title: PetBase
-      type: object
-      required:
-        - id
-        - name
-        - type
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          exclusiveMaximum: true
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - required:
-            - bark
-            - type
-          properties:
-            bark:
-              type: string
-            type:
-              type: string
-              x-const: DOG
-              example: DOG
-    CatBase:
-      allOf:
-        - {}
-        - title: CatBase
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-              enum:
-                - SEAM
-                - SHORT
-              title: CatType
-          required:
-            - color
-          discriminator:
-            propertyName: catType
-    Seam:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: Seam
-          description: |
-            this is 
-            a multiline
-            description
-          required:
-            - color
-            - catType
-            - type
-          discriminator:
-            propertyName: catType
-          properties:
-            catType:
-              type: string
-              default: SEAM
-              maxLength: 3
-              minLength: 1
-              title: CatType
-              x-const: SEAM
-              example: SEAM
-            angryLevel:
-              type: string
-              pattern: \\w+
-            color:
-              type: string
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-    ShortHair:
-      title: ShortHair
-      description: >
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
-      required:
-        - color
-        - catType
-        - type
-      discriminator:
-        propertyName: catType
-      properties:
-        catType:
-          type: string
-          default: SHORT
-          title: CatType
-          x-const: SHORT
-          example: SHORT
-        angryLevel:
-          type: string
-        color:
-          type: string
-        type:
-          type: string
-          x-const: CAT
-          example: CAT
-    Cat:
-      oneOf:
-        - $ref: '#/components/schemas/Seam'
-        - $ref: '#/components/schemas/ShortHair'
-      discriminator:
-        propertyName: catType
-        mapping:
-          SEAM: '#/components/schemas/Seam'
-          SHORT: '#/components/schemas/ShortHair'
-    GenericPet:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
-          properties:
-            name:
-              type: string
-            type:
-              type: string
-              x-const:
-                - BIRD
-                - HAMSTER
-              example: HAMSTER
-          required:
-            - type
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-        - $ref: '#/components/schemas/GenericPet'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-          BIRD: '#/components/schemas/GenericPet'
-          HAMSTER: '#/components/schemas/GenericPet'
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
 ",
   "/* tslint:disable */
 /* eslint-disable */

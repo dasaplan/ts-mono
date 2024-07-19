@@ -6,7 +6,7 @@ import { oas30 } from "openapi3-ts";
 import jsonSchemaMergeAllOff from "json-schema-merge-allof";
 import { isRef } from "@redocly/openapi-core";
 import { appLog } from "../../logger.js";
-import { _, ApplicationError } from "@dasaplan/ts-sdk/index.js";
+import { _, ApplicationError } from "@dasaplan/ts-sdk";
 import { cleanObj, SchemaResolverContext } from "../../resolver/index.js";
 
 export function mergeAllOf(bundled: OpenApiBundled) {

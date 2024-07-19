@@ -1,6 +1,6 @@
 import { fileURLToPath } from "url";
 import path from "path";
-import { Folder } from "@dasaplan/ts-sdk/index.js";
+import { Folder } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
 
 export module TemplateDir {

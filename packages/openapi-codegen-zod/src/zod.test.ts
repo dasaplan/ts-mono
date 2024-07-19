@@ -3,6 +3,7 @@ import { ZodGenOptions } from "./zod-schemas.js";
 import { oas30 } from "openapi3-ts";
 import { resolveSpecPath } from "openapi-example-specs";
 import { generateZodSources } from "./zod-generator.js";
+import { describe, test, expect } from "vitest";
 
 const options: () => ZodGenOptions = () => ({
   includeTsTypes: false,

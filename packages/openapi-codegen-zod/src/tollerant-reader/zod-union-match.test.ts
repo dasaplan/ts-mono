@@ -3,6 +3,8 @@
 
 import { BRAND, z } from "zod";
 import { ZodUnionMatch } from "./zod-union-match.js";
+import { test, expect } from "vitest";
+
 test("zod discriminated union", () => {
   type Unknown = string & z.BRAND<"UNKNOWN">;
 

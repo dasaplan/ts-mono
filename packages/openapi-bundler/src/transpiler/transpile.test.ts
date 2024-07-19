@@ -1,9 +1,10 @@
-import { File, Folder } from "@dasaplan/ts-sdk/index.js";
+import { File, Folder } from "@dasaplan/ts-sdk";
 import { bundleOpenapi, OpenApiBundled } from "../bundle.js";
 import { createSpecProcessor } from "../post-process/index.js";
 import { Transpiler } from "./transpiler.js";
 import { resolveSpecPath } from "openapi-example-specs";
 import { oas30 } from "openapi3-ts";
+import { describe, test, expect } from "vitest";
 
 describe("transpiler", () => {
   test("endpoints", async () => {

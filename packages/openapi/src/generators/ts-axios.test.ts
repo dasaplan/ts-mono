@@ -3,6 +3,7 @@ import { generateTypescriptAxios } from "./ts-axios.js";
 import { createSpecProcessor, bundleOpenapi } from "@dasaplan/openapi-bundler";
 import { resolveSpecPath } from "openapi-example-specs";
 import path from "path";
+import { describe, test, expect } from "vitest";
 
 describe("Generator: ts-axios", () => {
   test("generate generateTypescriptAxios", async () => {

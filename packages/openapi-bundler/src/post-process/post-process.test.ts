@@ -8,6 +8,7 @@ import * as path from "node:path";
 import jsonSchemaMergeAllOff from "json-schema-merge-allof";
 import { ensureDiscriminatorValues } from "./processors/ensure-discriminator-values.js";
 import { resolveSpecPath } from "openapi-example-specs";
+import { describe, test, expect } from "vitest";
 
 describe("post process", () => {
   describe("spec", () => {

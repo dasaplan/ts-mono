@@ -5,6 +5,7 @@ import { z } from "zod";
 
 declare const tag: unique symbol;
 type UNKNOWN = string & { readonly [tag]: "UNKNOWN" };
+import { describe, test, expect } from "vitest";
 
 describe("discriminated union", () => {
   type DiscriminatedUnion = { type: "A"; a: number } | { type: "B"; b: number } | { type: UNKNOWN; [b: string]: unknown };

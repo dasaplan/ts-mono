@@ -2,7 +2,7 @@ import { OpenApiBundled } from "../../bundle.js";
 import { oas30 } from "openapi3-ts";
 import { isRef } from "@redocly/openapi-core";
 import { appLog } from "../../logger.js";
-import { _, ApplicationError } from "@dasaplan/ts-sdk/index.js";
+import { _, ApplicationError } from "@dasaplan/ts-sdk";
 import { SchemaResolverContext } from "../../resolver/index.js";
 
 export function ensureDiscriminatorValues(bundled: OpenApiBundled) {

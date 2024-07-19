@@ -3,6 +3,8 @@
 
 import { z } from "zod";
 import { ZodDiscriminatedUnion } from "./discriminated-union.js";
+import { describe, test, expect } from "vitest";
+
 declare const tag: unique symbol;
 type UNKNOWN = string & { readonly [tag]: "UNKNOWN" };
 

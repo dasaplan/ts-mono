@@ -36,10 +36,8 @@
     "prepack": "sort-package-json --quiet && clean-package",
     "postpack": "clean-package restore",
     "rup": "tsup-node --dts",
-    "test": "pnpm test:esm",
-    "test:esm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:esm:update": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -u",
-    "test:update": "pnpm test:esm:update"
+    "test": "vitest --config ../../vitest.config.ts",
+    "test:update": "vitest -u --config ../../vitest.config.ts"
   },
   "dependencies": {
     "camelcase": "^8.0.0",
