@@ -19,8 +19,11 @@ export async function bundleOpenapi(
 ) {
   appLog.childLog(bundleOpenapi).info("start bundle: ", _pathToApi);
   const inputFile = File.of(_pathToApi);
+
   const outputFile = File.isFilePath(params?.outFile)
     ? File.of(params.outFile)
+    : _.isDefined(params?.outFile)
+    ? Folder.of(params.outFile).makeFile(`bundled-${inputFile.name}`)
     : Folder.temp().makeFile(`bundled-${inputFile.name}`);
   const parsed = await bundleParseOpenapi(_pathToApi, params);
   return { parsed, outFile: outputFile.writeYml(parsed) };
@@ -32,14 +35,14 @@ export async function bundleParseOpenapi(
 ): Promise<OpenApiBundled> {
   const inputFile = File.of(_pathToApi);
 
-  appLog.childLog(bundleOpenapi).info("start bundle: ", inputFile.absolutPath);
+  appLog.childLog(bundleOpenapi).info("start bundle: ", inputFile.absolutePath);
   const postProcessor =
     params?.postProcessor ??
     createSpecProcessor({
       mergeAllOf: params?.mergeAllOf,
       ensureDiscriminatorValues: params?.ensureDiscriminatorValues,
     });
-  const bundleResults = await parseOpenapi(inputFile.absolutPath);
+  const bundleResults = await parseOpenapi(inputFile.absolutePath);
   const parsed: OpenApiBundled = _.isNil(postProcessor)
     ? bundleResults.bundle.parsed
     : postProcessor(bundleResults.bundle.parsed);

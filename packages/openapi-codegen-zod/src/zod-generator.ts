@@ -9,8 +9,8 @@ import { Project, ScriptKind, ts } from "ts-morph";
 /** Generate zod schemas and export to filesystem */
 export async function generateZodSchemas(openapiSpec: OpenApiBundled, outFile: string, options?: ZodGenOptions) {
   appLog.childLog(generateZodSchemas).info(`start generate: %s`, outFile);
-  const outFilePath = File.of(outFile).absolutPath;
-  const { project } = await generateZodSources(openapiSpec, File.resolve(outFile).absolutPath, options);
+  const outFilePath = File.of(outFile).absolutePath;
+  const { project } = await generateZodSources(openapiSpec, File.resolve(outFile).absolutePath, options);
   project.saveSync();
   return outFilePath;
 }
@@ -28,7 +28,7 @@ export async function generateZodSources(parsed: OpenApiBundled, filePath: strin
   const source = [...imports, schemasModule].join("\n");
   const sourceSchema = createTsMorphSrcFile(filePath, source);
 
-  const commonFilePath = File.of(filePath).siblingFile("zod-common.ts").absolutPath;
+  const commonFilePath = File.of(filePath).siblingFile("zod-common.ts").absolutePath;
   createTsMorphSrcFile(commonFilePath, getZodCommon(), sourceSchema.project);
   return sourceSchema;
 }

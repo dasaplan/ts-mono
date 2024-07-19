@@ -8,7 +8,7 @@ describe("Generator: ts-axios", () => {
   test("generate generateTypescriptAxios", async () => {
     const spec = "pets-modular/pets-api.yml";
     const { outFile: bundled } = await bundleOpenapi(resolveSpecPath(spec), {
-      outFile: Folder.resolve("test/out/ts").makeFile("bundled.yml").absolutPath,
+      outFile: Folder.resolve("test/out/ts").makeFile("bundled.yml").absolutePath,
       postProcessor: createSpecProcessor({
         ensureDiscriminatorValues: true,
         mergeAllOf: true,

@@ -10,7 +10,7 @@ describe("transpiler", () => {
     const specPath = resolveSpecPath("pets-modular/pets-api.yml");
     const { parsed } = await bundleOpenapi(specPath ?? "", {
       outFile: Folder.cwd("tmp", "endpoints").makeFile(File.of(specPath).name)
-        .absolutPath,
+        .absolutePath,
       postProcessor: createSpecProcessor({
         mergeAllOf: true,
         ensureDiscriminatorValues: true,
@@ -26,7 +26,7 @@ describe("transpiler", () => {
     const specPath = resolveSpecPath("pets-modular/pets-api.yml");
     const { parsed } = await bundleOpenapi(specPath, {
       outFile: Folder.cwd("tmp", "schemas").makeFile(File.of(specPath).name)
-        .absolutPath,
+        .absolutePath,
       postProcessor: createSpecProcessor({
         mergeAllOf: true,
         ensureDiscriminatorValues: true,
@@ -47,7 +47,7 @@ describe("transpiler", () => {
     const api = resolveSpecPath(specName);
     const { parsed } = await bundleOpenapi(api, {
       outFile: Folder.cwd("tmp", "transpile").makeFile(File.of(api).name)
-        .absolutPath,
+        .absolutePath,
       postProcessor: createSpecProcessor({
         mergeAllOf: true,
         ensureDiscriminatorValues: true,

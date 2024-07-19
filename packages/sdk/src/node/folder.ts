@@ -31,23 +31,23 @@ export module File {
         return Folder.of(_folder.absolutePath);
       },
       readAsString() {
-        return fs.readFileSync(this.absolutPath, "utf-8");
+        return fs.readFileSync(this.absolutePath, "utf-8");
       },
       siblingFile(nameWithExt: string) {
         return of(_folder.makeFilePath(nameWithExt));
       },
       writeYml(content: string | object | NodeJS.ArrayBufferView) {
         fs.writeFileSync(
-          this.absolutPath,
+          this.absolutePath,
           stringifyYaml(content, { noRefs: true })
         );
         return filePath;
       },
       write(content: string | object | NodeJS.ArrayBufferView) {
-        fs.writeFileSync(this.absolutPath, content as never);
+        fs.writeFileSync(this.absolutePath, content as never);
         return filePath;
       },
-      get absolutPath() {
+      get absolutePath() {
         return _folder.makeFilePath(fileName);
       },
     };
@@ -75,16 +75,16 @@ export module Folder {
     return of(path.resolve(...segments));
   }
   export function of(folderPath: string) {
-    const absPath = path.isAbsolute(folderPath)
+    const _absPath = path.isAbsolute(folderPath)
       ? folderPath
       : path.resolve(process.cwd(), folderPath);
-    const _folder = parsePath(absPath);
+    const _folder = parsePath(_absPath);
     if (!fs.existsSync(_folder)) {
       fs.mkdirSync(_folder, { recursive: true });
     }
     return {
       get absolutePath() {
-        return absPath;
+        return _folder;
       },
       write(
         fileName: string,
@@ -102,6 +102,12 @@ export module Folder {
           JSON.stringify(content) + "\n"
         );
         return this;
+      },
+      parent() {
+        return Folder.resolve(_folder, "..");
+      },
+      resolve(...segments: Array<string>) {
+        return Folder.resolve(_folder, ...segments);
       },
       writeYml(
         fileName: string,
@@ -143,7 +149,7 @@ export module Folder {
         return this;
       },
       copyTo(destination: typeof this) {
-        fs.cpSync(absPath, destination.absolutePath, { recursive: true });
+        fs.cpSync(_folder, destination.absolutePath, { recursive: true });
         return destination;
       },
       exists() {

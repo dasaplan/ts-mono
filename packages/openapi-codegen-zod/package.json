@@ -42,17 +42,12 @@
     "ts:check:generated": "tsc -p tsconfig.generated.json",
     "cp:templates": "copyfiles -u 1 \"templates/**/*\" -e \"**/*.json\" dist/templates",
     "cp:configs": "copyfiles openapitools.json dist",
-    "api:build": "oa-cli generate test/specs/generic/api.yml -o out",
-    "api:bundle": "redocly bundle specs/pets-api.yml -o tmp/pets-api.yml",
-    "api:generate": "openapi-generator-cli generate -g typescript-axios -i tmp/pets-api.yml -o out -t templates",
-    "api:template:variables": "openapi-generator-cli author template -g typescript-axios",
-    "schemas:generate": "openapi-zod-client \"./tmp/pets-api.yml\" -o test/out/zod.ts -t templates/schemas-only.hbs",
     "test": "pnpm test:esm",
     "test:update": "pnpm test:esm:update",
     "test:esm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "test:esm:update": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -u",
     "clean": "rimraf dist out tmp",
-    "lint": "eslint \"./src/*.ts\" index.ts oa-cli.ts"
+    "lint": "eslint \"./src/*.ts\" index.ts zod-cli.ts"
   },
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",

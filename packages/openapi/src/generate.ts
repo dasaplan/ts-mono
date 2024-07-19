@@ -1,8 +1,6 @@
-import process from "process";
 import { createTsPostProcessor } from "./post-process/index.js";
 import { generateTypescriptAxios, TsAxiosPublicGenOptions } from "./generators/index.js";
-import { File, Folder } from "@dasaplan/ts-sdk";
-import { appLog } from "./logger.js";
+import { _, ApplicationError, File, Folder } from "@dasaplan/ts-sdk";
 import { bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { generateZodSchemas, ZodGenOptions } from "@dasaplan/openapi-codegen-zod";
 
@@ -13,17 +11,16 @@ export async function generateOpenapi(specFilePath: string, outputFile: string, 
     await generateZod(parsed, outputFile, { includeTsTypes: true });
 
     // save spec where the code is generated
-    Folder.of(outDir).writeYml(File.of(bundledFilePath).name, parsed);
+    Folder.of(outDir).writeYml(File.of(specFilePath).name, parsed);
 
-    if (params?.clearTemp ?? true) Folder.temp().clear();
+    if (params?.clearTemp ?? true) {
+      const tmp = _.isDefined(params?.tempFolder) ? Folder.of(params?.tempFolder) : Folder.temp();
+      tmp.clear();
+    }
+
     return outDir;
   } catch (e: unknown) {
-    if (e instanceof Error) {
-      appLog.log.error(`${e.name}: ${e.message}`);
-    } else {
-      appLog.log.error(`Something went wrong: ${JSON.stringify(e)}`);
-    }
-    process.exit(1);
+    throw ApplicationError.create(`Failed generating from spec ${specFilePath}`).chainUnknown(e);
   }
 }
 
@@ -45,6 +42,6 @@ export async function generateTsAxios(bundledFilePath: string, output: string, o
 }
 
 export async function generateZod(bundled: OpenApiBundled, output: string, options: ZodGenOptions) {
-  const outFilePath = await generateZodSchemas(bundled, File.of(output, "zod.ts").absolutPath, options);
+  const outFilePath = await generateZodSchemas(bundled, File.of(output, "zod.ts").absolutePath, options);
   return { outFilePath };
 }
