@@ -1,6 +1,5 @@
-import { createRequire } from "node:module";
+import { Imports } from "@dasaplan/ts-sdk";
 
 export function resolveSpecPath(spec: string) {
-  const require = createRequire(import.meta.url);
-  return require.resolve(`openapi-example-specs/specs/${spec}`);
+  return Imports.resolve(`openapi-example-specs/specs/${spec}`);
 }

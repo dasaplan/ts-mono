@@ -16,6 +16,9 @@
   "files": [
     "specs"
   ],
+  "dependencies": {
+    "@dasaplan/ts-sdk": "workspace:*"
+  },
   "devDependencies": {
     "tsconfig": "workspace:*"
   }

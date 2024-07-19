@@ -365,6 +365,10 @@ importers:
         version: 5.5.3
 
   packages/openapi-specs:
+    dependencies:
+      '@dasaplan/ts-sdk':
+        specifier: workspace:*
+        version: link:../sdk
     devDependencies:
       tsconfig:
         specifier: workspace:*
