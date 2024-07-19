@@ -74,12 +74,16 @@ export module Folder {
   export function resolve(...segments: string[]) {
     return of(path.resolve(...segments));
   }
-  export function of(folderPath: string) {
+  export function of(
+    folderPath: string,
+    options: { createIfNotExists?: boolean } = { createIfNotExists: true }
+  ) {
     const _absPath = path.isAbsolute(folderPath)
       ? folderPath
       : path.resolve(process.cwd(), folderPath);
     const _folder = parsePath(_absPath);
-    if (!fs.existsSync(_folder)) {
+
+    if (!fs.existsSync(_folder) && options.createIfNotExists) {
       fs.mkdirSync(_folder, { recursive: true });
     }
     return {
@@ -104,9 +108,9 @@ export module Folder {
         return this;
       },
       parent() {
-        return Folder.resolve(_folder, "..");
+        return this.cd("..");
       },
-      resolve(...segments: Array<string>) {
+      cd(...segments: Array<string>) {
         return Folder.resolve(_folder, ...segments);
       },
       writeYml(
