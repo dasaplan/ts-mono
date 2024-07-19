@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { describe, test } from "vitest";
-import { EndpointDefinition } from "../EndpointDefinition.js";
+import { EndpointDefinition } from "../endpoint-definition.js";
 
 describe("express endpoint generator", () => {
   test("compiles types without error", async () => {

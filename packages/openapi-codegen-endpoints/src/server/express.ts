@@ -1,5 +1,5 @@
 import { Express, RequestHandler } from "express";
-import { EndpointDefinition } from "../EndpointDefinition.js";
+import { EndpointDefinition } from "../endpoint-definition.js";
 
 export module EndpointsExpressJs {
   export function fromEndpoint<

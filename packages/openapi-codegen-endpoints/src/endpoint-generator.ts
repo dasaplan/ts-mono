@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { appLog } from "./logger.js";
-import { bundleParseOpenapi, Endpoint, OpenApiBundled, Transpiler } from "@dasaplan/openapi-bundler";
-import { _, Folder } from "@dasaplan/ts-sdk";
+import { bundleParseOpenapi, Endpoint, OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
+import { _, ApplicationError, Folder } from "@dasaplan/ts-sdk";
 import { Project } from "ts-morph";
 import path from "node:path";
 import { Templates } from "./templates.js";
-import { EndpointDefinition } from "./EndpointDefinition.js";
-import { object, string } from "zod";
+import { EndpointDefinition } from "./endpoint-definition.js";
 
 export interface EndpointDefinitionOptions {
   outDir: string;
@@ -23,33 +22,78 @@ export interface EndpointDefinitionOptions {
 //   return outDir;
 // }
 
-function createEndpointDefinition(endpoint: Endpoint) {
+function generatePayloadSchema(schema: Schema | undefined) {
+  if (_.isNil(schema)) return undefined;
+
+  switch (schema.component.kind) {
+    case "COMPONENT":
+      return { $ref: schema.component.id };
+    case "INLINE":
+      throw ApplicationError.create(
+        `Failed to generate payload type for schema '${schema.getId()}':
+            Inline schemas are yet not supported for request / response payloads.
+            Please define the payload as schema and reference it (#/components/schema/<Name>)   `
+      );
+  }
+}
+
+function generateParamsSchema(schema: Schema | undefined) {
+  if (_.isNil(schema)) return undefined;
+
+  switch (schema.component.kind) {
+    case "COMPONENT":
+      return { $ref: schema.component.id };
+    case "INLINE":
+      switch (schema.kind) {
+        case "PRIMITIVE":
+          return { type: schema.type };
+        case "OBJECT":
+        case "UNION":
+        case "ENUM":
+        case "ARRAY":
+        case "BOX":
+          throw ApplicationError.create(
+            `Failed to generate parameter schema '${schema.getName()}':
+            non-primitive parameters schema are yet not supported.
+            Please define the payload as schema and reference it (#/components/schema/<Name>)`
+          );
+      }
+  }
+}
+
+function createEndpointDefinition<T extends Endpoint = Endpoint>(endpoint: T) {
+  type GroupedParams = { [param in Endpoint.Parameter["type"]]: Array<Endpoint.Parameter & { type: param }> };
+  const groupedParams = _.groupBy(endpoint.parameters ?? [], (it) => it.type) as GroupedParams;
   const parameters = {
-    path: {},
-    query: {},
-    header: {},
-    cookie: {},
+    path: groupedParams?.["path"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema) }), {}),
+    query: groupedParams?.["query"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema) }), {}),
+    header: groupedParams?.["header"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema) }), {}),
+    cookie: groupedParams?.["cookie"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema) }), {}),
   } satisfies EndpointDefinition.Parameters;
 
   const request = {
-    format: undefined,
-    payload: undefined,
+    format: endpoint.requestBody?.format,
+    payload: generatePayloadSchema(endpoint?.requestBody?.schema),
     transform: undefined,
   } satisfies EndpointDefinition.Request;
 
-  const response = {
-    [200]: {
-      format: undefined,
-      payload: undefined,
-      transform: undefined,
-    },
-  } satisfies EndpointDefinition.Response;
+  const response: EndpointDefinition.Response = endpoint.responses
+    .filter((r) => _.isDefined(r.status))
+    .reduce(
+      (acc, curr) => ({
+        [curr.status!]: {
+          format: curr.format,
+          payload: generatePayloadSchema(curr.schema),
+          transform: undefined,
+        },
+      }),
+      {}
+    ) satisfies EndpointDefinition.Response;
 
   type DeserializedResponse = EndpointDefinition.ToDeserializedResponse<typeof response>;
   type DeserializedRequest = EndpointDefinition.ToDeserializedRequest<typeof request>;
 
   return {
-    // TODO: add guard to check for leading slash
     path: endpoint.path as EndpointDefinition.Path,
     name: endpoint.alias,
     operation: endpoint.method,

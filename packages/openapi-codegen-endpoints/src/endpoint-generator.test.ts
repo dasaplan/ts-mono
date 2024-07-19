@@ -5,7 +5,7 @@ import { generateEndpointDefinitions } from "./endpoint-generator.js";
 import { describe, expect, test } from "vitest";
 
 describe("generateEndpointDefinitions", () => {
-  test("circular schema", async () => {
+  test("enspoints", async () => {
     const openapi: OpenApiBundled = createApi(
       (oa) =>
         withSchemas(oa, {
@@ -13,6 +13,18 @@ describe("generateEndpointDefinitions", () => {
             type: "object",
             properties: {
               id: { type: "string" },
+            },
+          },
+          RequestSchema: {
+            type: "object",
+            properties: {
+              help: { type: "string" },
+            },
+          },
+          ErrorSchema: {
+            type: "object",
+            properties: {
+              message: { type: "string" },
             },
           },
         }),
@@ -30,7 +42,7 @@ describe("generateEndpointDefinitions", () => {
                   description: "success",
                 },
                 401: {
-                  content: { "application/json": { schema: { type: "object", properties: { message: { type: "string" } } } } },
+                  content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorSchema" } } },
                 },
               },
             },
@@ -40,14 +52,13 @@ describe("generateEndpointDefinitions", () => {
               requestBody: {
                 content: {
                   "application/json": {
-                    schema: { type: "object", properties: { help: { type: "string" } } },
+                    schema: { $ref: "#/components/schemas/RequestSchema" },
                   },
                 },
               },
               responses: {
                 200: {
-                  content: "application/json",
-                  schema: { $ref: "#/components/schemas/ResponseSchema" },
+                  content: { "application/json": { schema: { $ref: "#/components/schemas/ResponseSchema" } } },
                 },
               },
             },
@@ -62,7 +73,7 @@ describe("generateEndpointDefinitions", () => {
               requestBody: {
                 content: {
                   "application/json": {
-                    schema: { type: "object", properties: { help: { type: "string" } } },
+                    schema: { $ref: "#/components/schemas/RequestSchema" },
                   },
                 },
               },
@@ -81,15 +92,99 @@ describe("generateEndpointDefinitions", () => {
 
     expect(endpoints).toMatchInlineSnapshot(`
       [
-        "
-          
-          ",
-        "
-          
-          ",
-        "
-          
-          ",
+        {
+          "name": "getPet",
+          "operation": "get",
+          "parameters": {
+            "cookie": undefined,
+            "header": undefined,
+            "path": {
+              "petId": {
+                "type": "string",
+              },
+            },
+            "query": undefined,
+          },
+          "path": "/pets/{:petId}",
+          "request": {
+            "format": undefined,
+            "payload": undefined,
+            "transform": undefined,
+          },
+          "response": {
+            "401": {
+              "format": "json",
+              "payload": {
+                "$ref": "#/components/schemas/ErrorSchema",
+              },
+              "transform": undefined,
+            },
+          },
+        },
+        {
+          "name": "updatePet",
+          "operation": "put",
+          "parameters": {
+            "cookie": undefined,
+            "header": undefined,
+            "path": undefined,
+            "query": {
+              "secret": {
+                "type": "string",
+              },
+            },
+          },
+          "path": "/pets/{:petId}",
+          "request": {
+            "format": "json",
+            "payload": {
+              "$ref": "#/components/schemas/RequestSchema",
+            },
+            "transform": undefined,
+          },
+          "response": {
+            "200": {
+              "format": "json",
+              "payload": {
+                "$ref": "#/components/schemas/ResponseSchema",
+              },
+              "transform": undefined,
+            },
+          },
+        },
+        {
+          "name": "createPet",
+          "operation": "post",
+          "parameters": {
+            "cookie": {
+              "secret": {
+                "type": "string",
+              },
+            },
+            "header": {
+              "other-secret": {
+                "type": "string",
+              },
+            },
+            "path": undefined,
+            "query": undefined,
+          },
+          "path": "/pets",
+          "request": {
+            "format": "json",
+            "payload": {
+              "$ref": "#/components/schemas/RequestSchema",
+            },
+            "transform": undefined,
+          },
+          "response": {
+            "200": {
+              "format": undefined,
+              "payload": undefined,
+              "transform": undefined,
+            },
+          },
+        },
       ]
     `);
   });
