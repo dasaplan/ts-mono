@@ -12,7 +12,7 @@ importers:
         specifier: ^2.27.5
         version: 2.27.5
       '@redocly/openapi-core':
-        specifier: ^1.18.0
+        specifier: ^1.18.0q
         version: 1.18.0
       '@types/node':
         specifier: ^20.10.4
@@ -238,6 +238,9 @@ importers:
       commander:
         specifier: ^11.1.0
         version: 11.1.0
+      jsonpointer:
+        specifier: ^5.0.1
+        version: 5.0.1
       pascal-case:
         specifier: ^4.0.0
         version: 4.0.0
@@ -3973,7 +3976,7 @@ snapshots:
       '@babel/helper-split-export-declaration': 7.22.6
       '@babel/parser': 7.22.16
       '@babel/types': 7.22.17
-      debug: 4.3.4
+      debug: 4.3.5
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color

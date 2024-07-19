@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-codegen-zod",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Openapi zod generator as tolerant reader",
   "keywords": [
     "openapi",
@@ -18,14 +18,14 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js" ,
+      "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     }
   },
   "bin": {
-    "oazod": "dist/zod-cli.js",
-    "oa-zod-generator": "dist/zod-cli.js"
+    "oa-zod-generator": "dist/zod-cli.js",
+    "oazod": "dist/zod-cli.js"
   },
   "files": [
     "dist",
@@ -52,6 +52,7 @@
     "@dasaplan/ts-sdk": "workspace:0.0.1",
     "@ts-morph/common": "^0.22.0",
     "commander": "^11.1.0",
+    "jsonpointer": "^5.0.1",
     "pascal-case": "^4.0.0",
     "ts-morph": "^21.0.1"
   },
