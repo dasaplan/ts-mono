@@ -1,12 +1,12 @@
 import { Folder, File } from "@dasaplan/ts-sdk";
 import { generateOpenapi } from "./index.js";
 import { createTsPostProcessor } from "./post-process/index.js";
-import { resolveSpecPath } from "openapi-example-specs";
+import { ExampleSpec, resolveSpecPath } from "openapi-example-specs";
 import { describe, test, expect } from "vitest";
 
 describe("Generate Integration", () => {
   describe("ts", () => {
-    test.each(["generic/api.yml"])("%s", async (spec) => {
+    test.each(["generic/api.yml"] satisfies Array<ExampleSpec>)("%s", async (spec) => {
       const api = resolveSpecPath(spec);
       const out = Folder.resolve("test/out/post", spec);
       const bundled = await generateOpenapi(api, out.absolutePath, { clearTemp: true, tempFolder: out.cd("tmp").absolutePath });
@@ -27,7 +27,7 @@ describe("Generate Integration", () => {
       "generic/api.yml",
       "pets-recursive/pets-api.yml",
       "usecases/extended-array-api.yml",
-    ])("%s", async (spec) => {
+    ] satisfies Array<ExampleSpec>)("%s", async (spec) => {
       const api = resolveSpecPath(spec);
       const out = Folder.resolve("test/out/integration", spec);
       const outDir = await generateOpenapi(api, out.absolutePath, { clearTemp: true, tempFolder: out.cd("tmp").absolutePath });

@@ -1,6 +1,6 @@
 import { BundleMock, bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { ZodGenOptions } from "./zod-schemas.js";
-import { resolveSpecPath } from "openapi-example-specs";
+import { ExampleSpec, resolveSpecPath } from "openapi-example-specs";
 import { generateZodSources } from "./zod-generator.js";
 import { describe, test, expect } from "vitest";
 
@@ -16,7 +16,7 @@ describe("generateZod", () => {
     "pets-modular-complex/petstore-api.yml",
     "generic/api.yml",
     "pets-recursive/pets-api.yml",
-  ])("generates %s", async (spec) => {
+  ] satisfies Array<ExampleSpec>)("generates %s", async (spec) => {
     const api = resolveSpecPath(spec);
     const { parsed } = await bundleOpenapi(api, {
       postProcessor: createSpecProcessor({

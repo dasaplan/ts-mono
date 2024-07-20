@@ -7,7 +7,7 @@ import { _, Folder } from "@dasaplan/ts-sdk";
 import * as path from "node:path";
 import jsonSchemaMergeAllOff from "json-schema-merge-allof";
 import { ensureDiscriminatorValues } from "./processors/ensure-discriminator-values.js";
-import { resolveSpecPath } from "openapi-example-specs";
+import { ExampleSpec, resolveSpecPath } from "openapi-example-specs";
 import { describe, test, expect } from "vitest";
 
 describe("post process", () => {
@@ -18,7 +18,7 @@ describe("post process", () => {
         "pets-simple/pets-api.yml",
         "pets-modular-complex/petstore-api.yml",
         "generic/api.yml",
-      ])("%s", async (spec) => {
+      ] satisfies Array<ExampleSpec>)("%s", async (spec) => {
         const api = resolveSpecPath(spec);
         const { parsed } = await bundleOpenapi(api, {
           mergeAllOf: false,

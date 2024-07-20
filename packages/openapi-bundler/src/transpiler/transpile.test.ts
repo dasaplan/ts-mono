@@ -2,7 +2,7 @@ import { File, Folder } from "@dasaplan/ts-sdk";
 import { bundleOpenapi, OpenApiBundled } from "../bundle.js";
 import { createSpecProcessor } from "../post-process/index.js";
 import { Transpiler } from "./transpiler.js";
-import { resolveSpecPath } from "openapi-example-specs";
+import { ExampleSpec, resolveSpecPath } from "openapi-example-specs";
 import { describe, test, expect } from "vitest";
 import { BundleMock } from "../bundle-mock.js";
 
@@ -46,7 +46,7 @@ describe("transpiler", () => {
     "pets-simple/pets-api.yml",
     "pets-modular-complex/petstore-api.yml",
     "generic/api.yml",
-  ])("transpile %s", async (specName) => {
+  ] satisfies Array<ExampleSpec>)("transpile %s", async (specName) => {
     const api = resolveSpecPath(specName);
     const { parsed } = await bundleOpenapi(api, {
       outFile: Folder.cwd("tmp", "transpile").makeFile(File.of(api).name)
