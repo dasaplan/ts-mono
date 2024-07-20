@@ -20,12 +20,17 @@ describe("post process", () => {
         "generic/api.yml",
       ])("%s", async (spec) => {
         const api = resolveSpecPath(spec);
-        const { parsed } = await bundleOpenapi(api);
+        const { parsed } = await bundleOpenapi(api, {
+          mergeAllOf: false,
+          ensureDiscriminatorValues: false,
+        });
+
         const mergedAllOf = mergeAllOf(_.cloneDeep(parsed));
         const ensured = ensureDiscriminatorValues(_.cloneDeep(parsed));
         const ensuredMerged = mergeAllOf(
           ensureDiscriminatorValues(_.cloneDeep(ensured))
         );
+
         const testOut = Folder.resolve(`test/out/discriminator-values`, spec);
         testOut.writeYml(`bundled-${path.basename(spec)}`, parsed);
         testOut.writeYml(`merged-${path.basename(spec)}`, mergedAllOf);
