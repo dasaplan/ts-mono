@@ -3,10 +3,12 @@ import { bundleOpenapi, OpenApiBundled } from "../bundle.js";
 import { createSpecProcessor } from "../post-process/index.js";
 import { Transpiler } from "./transpiler.js";
 import { resolveSpecPath } from "openapi-example-specs";
-import { oas30 } from "openapi3-ts";
 import { describe, test, expect } from "vitest";
+import { BundleMock } from "../bundle-mock.js";
 
 describe("transpiler", () => {
+  const { withSchemas, createApi } = BundleMock.create();
+
   test("endpoints", async () => {
     const specPath = resolveSpecPath("pets-modular/pets-api.yml");
     const { parsed } = await bundleOpenapi(specPath ?? "", {
@@ -61,8 +63,8 @@ describe("transpiler", () => {
   });
 
   test("should toposort array items correctly for allOf item", () => {
-    const openapi: OpenApiBundled = createApi((oa) =>
-      withSchemas(oa, {
+    const openapi: OpenApiBundled = createApi(
+      withSchemas({
         Parent: {
           type: "object",
           properties: {
@@ -116,8 +118,8 @@ describe("transpiler", () => {
   });
 
   test("should toposort array items correctly - union", () => {
-    const openapi: OpenApiBundled = createApi((oa) =>
-      withSchemas(oa, {
+    const openapi: OpenApiBundled = createApi(
+      withSchemas({
         Union: {
           oneOf: [
             { $ref: "#/components/schemas/A" },
@@ -165,8 +167,8 @@ describe("transpiler", () => {
   });
 
   test("should toposort array items correctly - top level array", () => {
-    const openapi: OpenApiBundled = createApi((oa) =>
-      withSchemas(oa, {
+    const openapi: OpenApiBundled = createApi(
+      withSchemas({
         Union: {
           oneOf: [
             { $ref: "#/components/schemas/A" },
@@ -227,33 +229,3 @@ describe("transpiler", () => {
     ]);
   });
 });
-
-function createApi(
-  ...mods: Array<(oa: OpenApiBundled) => OpenApiBundled>
-): OpenApiBundled {
-  const api: OpenApiBundled = {
-    openapi: "3.0.3",
-    info: { version: "", title: "" },
-    paths: {},
-    components: {
-      schemas: {},
-    },
-  };
-  return mods.reduce((acc, curr) => curr(acc), api);
-}
-
-function withSchemas(
-  oa: OpenApiBundled,
-  schemas: NonNullable<oas30.ComponentsObject["schemas"]>
-): OpenApiBundled {
-  return {
-    ...oa,
-    components: {
-      ...oa.components,
-      schemas: {
-        ...(oa.components?.schemas ?? {}),
-        ...schemas,
-      },
-    },
-  };
-}

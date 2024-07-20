@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { OpenApiBundled } from "@dasaplan/openapi-bundler";
+import { BundleMock, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { oas30 } from "openapi3-ts";
 import { generateEndpointDefinitions } from "./endpoint-generator.js";
 import { describe, expect, test } from "vitest";
 
 describe("generateEndpointDefinitions", () => {
+  const { createApi, withSchemas, withRoute } = BundleMock.create();
+
   test("enspoints", async () => {
     const openapi: OpenApiBundled = createApi(
       (oa) =>
@@ -189,37 +191,3 @@ describe("generateEndpointDefinitions", () => {
     `);
   });
 });
-
-function createApi(...mods: Array<(oa: OpenApiBundled) => OpenApiBundled>): OpenApiBundled {
-  const api: OpenApiBundled = {
-    openapi: "3.0.3",
-    info: { version: "", title: "" },
-    paths: {},
-    components: {
-      schemas: {},
-    },
-  };
-  return mods.reduce((acc, curr) => curr(acc), api);
-}
-
-function withSchemas(oa: OpenApiBundled, schemas: NonNullable<oas30.ComponentsObject["schemas"]>): OpenApiBundled {
-  return {
-    ...oa,
-    components: {
-      ...oa.components,
-      schemas: {
-        ...(oa.components?.schemas ?? {}),
-        ...schemas,
-      },
-    },
-  };
-}
-function withRoute(oa: OpenApiBundled, routes: NonNullable<oas30.PathsObject>): OpenApiBundled {
-  return {
-    ...oa,
-    paths: {
-      ...oa.paths,
-      ...routes,
-    },
-  };
-}

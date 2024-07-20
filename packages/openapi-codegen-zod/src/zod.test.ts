@@ -1,6 +1,5 @@
-import { bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
+import { BundleMock, bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { ZodGenOptions } from "./zod-schemas.js";
-import { oas30 } from "openapi3-ts";
 import { resolveSpecPath } from "openapi-example-specs";
 import { generateZodSources } from "./zod-generator.js";
 import { describe, test, expect } from "vitest";
@@ -9,6 +8,8 @@ const options: () => ZodGenOptions = () => ({
   includeTsTypes: false,
 });
 describe("generateZod", () => {
+  const { withSchemas, createApi } = BundleMock.create();
+
   test.each([
     "pets-simple/pets-api.yml",
     "pets-modular/pets-api.yml",
@@ -30,8 +31,8 @@ describe("generateZod", () => {
   });
 
   test("circular schema", async () => {
-    const openapi: OpenApiBundled = createApi((oa) =>
-      withSchemas(oa, {
+    const openapi: OpenApiBundled = createApi(
+      withSchemas({
         Node: {
           type: "object",
           properties: {
@@ -49,8 +50,8 @@ describe("generateZod", () => {
   });
 
   test("property name does not change when entity is referenced", async () => {
-    const openapi: OpenApiBundled = createApi((oa) =>
-      withSchemas(oa, {
+    const openapi: OpenApiBundled = createApi(
+      withSchemas({
         Node: {
           type: "object",
           properties: {
@@ -85,8 +86,8 @@ describe("generateZod", () => {
 `);
   });
   test("unions have discriminator property required and have at least two schemas", async () => {
-    const openapi: OpenApiBundled = createApi((oa) =>
-      withSchemas(oa, {
+    const openapi: OpenApiBundled = createApi(
+      withSchemas({
         A: {
           title: "A",
           properties: {
@@ -147,8 +148,8 @@ describe("generateZod", () => {
   });
 
   test("deeply nested circular schema", async () => {
-    const openapi: OpenApiBundled = createApi((oa) =>
-      withSchemas(oa, {
+    const openapi: OpenApiBundled = createApi(
+      withSchemas({
         Node: {
           title: "Node",
           type: "object",
@@ -234,8 +235,8 @@ describe("generateZod", () => {
   });
 
   test("deeply nested multi circular schema", async () => {
-    const openapi: OpenApiBundled = createApi((oa) =>
-      withSchemas(oa, {
+    const openapi: OpenApiBundled = createApi(
+      withSchemas({
         Node: {
           title: "Node",
           type: "object",
@@ -319,8 +320,8 @@ describe("generateZod", () => {
   });
 
   test("deeply 3 deep nested multi circular schema", async () => {
-    const openapi: OpenApiBundled = createApi((oa) =>
-      withSchemas(oa, {
+    const openapi: OpenApiBundled = createApi(
+      withSchemas({
         Node: {
           title: "Node",
           type: "object",
@@ -411,28 +412,3 @@ describe("generateZod", () => {
     `);
   });
 });
-
-function createApi(...mods: Array<(oa: OpenApiBundled) => OpenApiBundled>): OpenApiBundled {
-  const api: OpenApiBundled = {
-    openapi: "3.0.3",
-    info: { version: "", title: "" },
-    paths: {},
-    components: {
-      schemas: {},
-    },
-  };
-  return mods.reduce((acc, curr) => curr(acc), api);
-}
-
-function withSchemas(oa: OpenApiBundled, schemas: NonNullable<oas30.ComponentsObject["schemas"]>): OpenApiBundled {
-  return {
-    ...oa,
-    components: {
-      ...oa.components,
-      schemas: {
-        ...(oa.components?.schemas ?? {}),
-        ...schemas,
-      },
-    },
-  };
-}
