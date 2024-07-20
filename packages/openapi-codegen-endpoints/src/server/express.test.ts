@@ -25,7 +25,7 @@ describe("express endpoint generator", () => {
           200: { message: string };
           201: undefined;
         },
-        undefined,
+        string,
         undefined
       > {
       name: "updatePet";

@@ -1,139 +1,52 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { appLog } from "./logger.js";
-import { bundleParseOpenapi, Endpoint, OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
-import { _, ApplicationError, Folder } from "@dasaplan/ts-sdk";
+import { bundleParseOpenapi, OpenApiBundled } from "@dasaplan/openapi-bundler";
+import { _, Folder, File } from "@dasaplan/ts-sdk";
 import { Project, ScriptKind, ts } from "ts-morph";
 import path from "node:path";
 import { Templates } from "./templates.js";
-import { EndpointDefinition } from "./endpoint-definition.js";
+import { EndpointInterfaceGeneratorOptions, generateEndpointInterfacesAsText } from "./endpoint-interfaces.js";
+import { pascalCase } from "pascal-case";
 
-export interface EndpointDefinitionOptions extends EndpointGeneratorOptions {
+export interface EndpointDefinitionGeneratorOptions extends EndpointInterfaceGeneratorOptions {
   outDir: string;
   templatesDir?: string;
 }
-export interface EndpointGeneratorOptions {
-  tsImportModuleName?: string;
-  typeSuffix?: string;
-}
 
-function generatePayloadSchema(schema: Schema | undefined, params: EndpointGeneratorOptions) {
-  if (_.isNil(schema)) return undefined;
-
-  switch (schema.component.kind) {
-    case "COMPONENT":
-      return createIdentifier(schema, params);
-    case "INLINE":
-      throw ApplicationError.create(
-        `Failed to generate payload type for schema '${schema.getId()}':
-            Inline schemas are yet not supported for request / response payloads.
-            Please define the payload as schema and reference it (#/components/schema/<Name>)   `
-      );
-  }
-}
-
-function createIdentifier(schema: Schema, params: EndpointGeneratorOptions) {
-  const identifier = `${schema.getName()}${params.typeSuffix}`;
-  if (params.tsImportModuleName) {
-    return `${params.tsImportModuleName}.${identifier}`;
-  }
-  return identifier;
-}
-
-function generateParamsSchema(schema: Schema | undefined, params: EndpointGeneratorOptions) {
-  if (_.isNil(schema)) return undefined;
-
-  switch (schema.component.kind) {
-    case "COMPONENT":
-      return createIdentifier(schema, params);
-    case "INLINE":
-      switch (schema.kind) {
-        case "PRIMITIVE":
-          return `${schema.type === "integer" ? "number" : schema.type}`;
-        case "OBJECT":
-        case "UNION":
-        case "ENUM":
-        case "ARRAY":
-        case "BOX":
-          throw ApplicationError.create(
-            `Failed to generate parameter schema '${schema.getName()}':
-            non-primitive parameters schema are yet not supported.
-            Please define the payload as schema and reference it (#/components/schema/<Name>)`
-          );
-      }
-  }
-}
-
-function createEndpointDefinition<T extends Endpoint = Endpoint>(endpoint: T, params: EndpointGeneratorOptions) {
-  type GroupedParams = { [param in Endpoint.Parameter["type"]]: Array<Endpoint.Parameter & { type: param }> };
-  const groupedParams = _.groupBy(endpoint.parameters ?? [], (it) => it.type) as GroupedParams;
-  const parameters = {
-    path: groupedParams?.["path"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema, params) }), {}),
-    query: groupedParams?.["query"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema, params) }), {}),
-    header: groupedParams?.["header"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema, params) }), {}),
-    cookie: groupedParams?.["cookie"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema, params) }), {}),
-  } satisfies EndpointDefinition.Parameters;
-
-  const request = {
-    format: endpoint.requestBody?.format,
-    payload: generatePayloadSchema(endpoint?.requestBody?.schema, params),
-    transform: undefined,
-  } satisfies EndpointDefinition.Request;
-
-  const response: EndpointDefinition.Response = endpoint.responses
-    .filter((r) => _.isDefined(r.status))
-    .reduce(
-      (acc, curr) => ({
-        [curr.status!]: {
-          format: curr.format,
-          payload: generatePayloadSchema(curr.schema, params),
-          transform: undefined,
-        },
-      }),
-      {}
-    ) satisfies EndpointDefinition.Response;
-
-  type DeserializedResponse = EndpointDefinition.ToDeserializedResponse<typeof response>;
-  type DeserializedRequest = EndpointDefinition.ToDeserializedRequest<typeof request>;
-
-  return {
-    path: endpoint.path as EndpointDefinition.Path,
-    name: endpoint.alias,
-    operation: endpoint.method,
-    parameters: parameters,
-    response: response,
-    request: request,
-  } satisfies EndpointDefinition<DeserializedResponse, DeserializedRequest, typeof parameters>;
-}
-
-export async function generateEndpointDefinitionsInMemory(openapiSpec: string, params: EndpointDefinitionOptions) {
-  appLog.childLog(generateEndpointDefinitionsInMemory).info(`start generate:`, openapiSpec);
+export async function generateEndpointDefinitions(openapiSpec: string, params: EndpointDefinitionGeneratorOptions) {
+  appLog.childLog(generateEndpointDefinitions).info(`start generate:`, openapiSpec);
   const bundled = await bundleParseOpenapi(openapiSpec, { mergeAllOf: true, ensureDiscriminatorValues: true });
-  const endpoints = await generateEndpointDefinitions(bundled, params);
+  return await generateEndpointDefinitionsFromBundled(bundled, params);
+}
+
+export async function generateEndpointDefinitionsFromBundled(bundled: OpenApiBundled, params: EndpointDefinitionGeneratorOptions) {
+  const apiName = createApiName(bundled, params);
+  const endpoints = await generateEndpointInterfacesAsText(bundled, { ...params, apiName });
+  const withImports = ["import {EndpointDefinition} from './EndpointDefinition'", endpoints].join("\n");
 
   const out = Folder.of(params?.outDir ?? "out");
-  const endpointSourceText = `
-  const endpoints = ${JSON.stringify(endpoints, undefined, 2)} as const
-  `;
-  const { project } = createTsMorphSrcFileFromText(out.makeFile("endpoints.ts").absolutePath, endpointSourceText);
-  await generateTemplates(params, project);
+  const { project } = await generateTemplates({ ...params, outDir: out.absolutePath });
+
+  createTsMorphSrcFileFromText(out.makeFile(`${apiName}.ts`).absolutePath, withImports, project);
   await project.save();
 
-  return endpoints;
+  return project.getSourceFiles().map((s) => s.getText());
 }
 
-export async function generateEndpointDefinitions(bundled: OpenApiBundled, params: EndpointGeneratorOptions = {}) {
-  const endpoints = Transpiler.of(bundled).endpoints();
-  const endpointDefinitions = endpoints.map((e) => createEndpointDefinition(e, params));
-  const groupedByName = _.groupBy(endpointDefinitions, (it) => it.name);
-  return Object.entries(groupedByName).reduce((acc, [key, values]) => ({ ...acc, [key]: values.at(0) }), {});
+export function createApiName(bundled: OpenApiBundled, params: EndpointDefinitionGeneratorOptions) {
+  if (params.apiName) {
+    return `${params.apiName}Endpoints`;
+  }
+  const name = _.isEmpty(pascalCase(bundled.info.title)) ? "Api" : bundled.info.title;
+  return `${name}Endpoints`;
 }
 
-async function generateTemplates(_params?: EndpointDefinitionOptions, project: Project = new Project()) {
+async function generateTemplates(params: EndpointDefinitionGeneratorOptions, project: Project = new Project()) {
   const endpointTmpl = Templates.getTemplateFile("EndpointDefinition.d.ts");
-  const out = Folder.of(_params?.outDir ?? "out");
-
   const source = createTsMorphSrcFile(endpointTmpl.absolutePath, project);
-  source.sourceFile.copy(out.makeFile(endpointTmpl.name).absolutePath, { overwrite: true });
+
+  const outFile = File.resolve(params.outDir, endpointTmpl.name);
+  source.sourceFile.copy(outFile.absolutePath, { overwrite: true });
   return { project, sourceFile: source.sourceFile };
 }
 

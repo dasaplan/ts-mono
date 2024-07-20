@@ -1,17 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BundleMock, OpenApiBundled } from "@dasaplan/openapi-bundler";
-import { generateEndpointDefinitions, generateEndpointDefinitionsFromBundled } from "./endpoint-generator.js";
+import { generateEndpointDefinitions } from "./endpoint-generator.js";
 import { describe, expect, test } from "vitest";
-import { resolveSpecPath } from "openapi-example-specs";
+import { generateEndpointInterfacesAsText } from "./endpoint-interfaces.js";
 
 describe("generateEndpointDefinitions", () => {
   const { createApi, withSchemas, withRoute } = BundleMock.create();
-
-  test("integration", async () => {
-    const spec = resolveSpecPath("pets-modular-complex/petstore-api.yml");
-    const endpoints = await generateEndpointDefinitions(spec, { outDir: "tmp/endpoints", apiName: "TestApi" });
-    expect(endpoints).toMatchSnapshot("pets-modular-complex/petstore-api.yml");
-  });
 
   test("enspoints", async () => {
     const openapi: OpenApiBundled = createApi(
@@ -94,8 +88,47 @@ describe("generateEndpointDefinitions", () => {
       })
     );
 
-    const endpoints = await generateEndpointDefinitionsFromBundled(openapi, { outDir: "tmp/endpoints", apiName: "TestApi" });
+    const endpoints = await generateEndpointInterfacesAsText(openapi, { apiName: "TestApi" });
 
-    expect(endpoints).toMatchSnapshot();
+    expect(endpoints).toMatchInlineSnapshot(`
+      "export module TestApi {
+                      export type Path = "/pets/{:petId}" | "/pets"
+                      export interface OperationToPath {
+                          getPet: "/pets/{:petId}";
+      updatePet: "/pets/{:petId}";
+      createPet: "/pets";
+                      }
+                      export interface GetPet<ErrorSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+                      {"401": ErrorSchema},
+                      undefined,
+                      {"path": {"petId": string},"query": undefined,"header": undefined,"cookie": undefined}
+                  > {
+              name: "getPet";
+              operation: "get";
+              path: "/pets/{:petId}"
+          }
+          
+      export interface UpdatePet<ResponseSchema extends EndpointDefinition.DtoTypes, RequestSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+                      {"200": ResponseSchema},
+                      RequestSchema,
+                      {"path": undefined,"query": {"secret": string},"header": undefined,"cookie": undefined}
+                  > {
+              name: "updatePet";
+              operation: "put";
+              path: "/pets/{:petId}"
+          }
+          
+      export interface CreatePet<RequestSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+                      {"200": undefined},
+                      RequestSchema,
+                      {"path": undefined,"query": undefined,"header": {"other-secret": string},"cookie": {"secret": string}}
+                  > {
+              name: "createPet";
+              operation: "post";
+              path: "/pets"
+          }
+          
+                  }"
+    `);
   });
 });
