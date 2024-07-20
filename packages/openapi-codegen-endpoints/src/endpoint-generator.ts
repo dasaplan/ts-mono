@@ -2,32 +2,26 @@
 import { appLog } from "./logger.js";
 import { bundleParseOpenapi, Endpoint, OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
 import { _, ApplicationError, Folder } from "@dasaplan/ts-sdk";
-import { Project } from "ts-morph";
+import { Project, ScriptKind, ts } from "ts-morph";
 import path from "node:path";
 import { Templates } from "./templates.js";
 import { EndpointDefinition } from "./endpoint-definition.js";
 
-export interface EndpointDefinitionOptions {
+export interface EndpointDefinitionOptions extends EndpointGeneratorOptions {
   outDir: string;
   templatesDir?: string;
 }
+export interface EndpointGeneratorOptions {
+  tsImportModuleName?: string;
+  typeSuffix?: string;
+}
 
-// export function generateEndpointDefinitions(openapiSpec: string, out: string, _params?: EndpointDefinitionOptions) {
-//   appLog.childLog(generateEndpointDefinitions).info(`start generate:`, openapiSpec, out);
-//
-//   const outDir = path.isAbsolute(out) ? out : path.resolve(process.cwd(), out);
-//
-//   const _apiFile = File.of(outDir, "endpoints.ts");
-//
-//   return outDir;
-// }
-
-function generatePayloadSchema(schema: Schema | undefined) {
+function generatePayloadSchema(schema: Schema | undefined, params: EndpointGeneratorOptions) {
   if (_.isNil(schema)) return undefined;
 
   switch (schema.component.kind) {
     case "COMPONENT":
-      return { $ref: schema.component.id };
+      return createIdentifier(schema, params);
     case "INLINE":
       throw ApplicationError.create(
         `Failed to generate payload type for schema '${schema.getId()}':
@@ -37,16 +31,24 @@ function generatePayloadSchema(schema: Schema | undefined) {
   }
 }
 
-function generateParamsSchema(schema: Schema | undefined) {
+function createIdentifier(schema: Schema, params: EndpointGeneratorOptions) {
+  const identifier = `${schema.getName()}${params.typeSuffix}`;
+  if (params.tsImportModuleName) {
+    return `${params.tsImportModuleName}.${identifier}`;
+  }
+  return identifier;
+}
+
+function generateParamsSchema(schema: Schema | undefined, params: EndpointGeneratorOptions) {
   if (_.isNil(schema)) return undefined;
 
   switch (schema.component.kind) {
     case "COMPONENT":
-      return { $ref: schema.component.id };
+      return createIdentifier(schema, params);
     case "INLINE":
       switch (schema.kind) {
         case "PRIMITIVE":
-          return { type: schema.type };
+          return `${schema.type === "integer" ? "number" : schema.type}`;
         case "OBJECT":
         case "UNION":
         case "ENUM":
@@ -61,19 +63,19 @@ function generateParamsSchema(schema: Schema | undefined) {
   }
 }
 
-function createEndpointDefinition<T extends Endpoint = Endpoint>(endpoint: T) {
+function createEndpointDefinition<T extends Endpoint = Endpoint>(endpoint: T, params: EndpointGeneratorOptions) {
   type GroupedParams = { [param in Endpoint.Parameter["type"]]: Array<Endpoint.Parameter & { type: param }> };
   const groupedParams = _.groupBy(endpoint.parameters ?? [], (it) => it.type) as GroupedParams;
   const parameters = {
-    path: groupedParams?.["path"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema) }), {}),
-    query: groupedParams?.["query"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema) }), {}),
-    header: groupedParams?.["header"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema) }), {}),
-    cookie: groupedParams?.["cookie"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema) }), {}),
+    path: groupedParams?.["path"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema, params) }), {}),
+    query: groupedParams?.["query"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema, params) }), {}),
+    header: groupedParams?.["header"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema, params) }), {}),
+    cookie: groupedParams?.["cookie"]?.reduce((acc, curr) => ({ [curr.name]: generateParamsSchema(curr.schema, params) }), {}),
   } satisfies EndpointDefinition.Parameters;
 
   const request = {
     format: endpoint.requestBody?.format,
-    payload: generatePayloadSchema(endpoint?.requestBody?.schema),
+    payload: generatePayloadSchema(endpoint?.requestBody?.schema, params),
     transform: undefined,
   } satisfies EndpointDefinition.Request;
 
@@ -83,7 +85,7 @@ function createEndpointDefinition<T extends Endpoint = Endpoint>(endpoint: T) {
       (acc, curr) => ({
         [curr.status!]: {
           format: curr.format,
-          payload: generatePayloadSchema(curr.schema),
+          payload: generatePayloadSchema(curr.schema, params),
           transform: undefined,
         },
       }),
@@ -103,34 +105,62 @@ function createEndpointDefinition<T extends Endpoint = Endpoint>(endpoint: T) {
   } satisfies EndpointDefinition<DeserializedResponse, DeserializedRequest, typeof parameters>;
 }
 
-export async function generateEndpointDefinitionsInMemory(openapiSpec: string, _params?: EndpointDefinitionOptions) {
+export async function generateEndpointDefinitionsInMemory(openapiSpec: string, params: EndpointDefinitionOptions) {
   appLog.childLog(generateEndpointDefinitionsInMemory).info(`start generate:`, openapiSpec);
   const bundled = await bundleParseOpenapi(openapiSpec, { mergeAllOf: true, ensureDiscriminatorValues: true });
-  const endpoints = generateEndpointDefinitions(bundled);
-  await generateTemplates(_params);
+  const endpoints = await generateEndpointDefinitions(bundled, params);
+
+  const out = Folder.of(params?.outDir ?? "out");
+  const endpointSourceText = `
+  const endpoints = ${JSON.stringify(endpoints, undefined, 2)} as const
+  `;
+  const { project } = createTsMorphSrcFileFromText(out.makeFile("endpoints.ts").absolutePath, endpointSourceText);
+  await generateTemplates(params, project);
+  await project.save();
+
   return endpoints;
 }
 
-export async function generateEndpointDefinitions(bundled: OpenApiBundled, _params?: EndpointDefinitionOptions) {
+export async function generateEndpointDefinitions(bundled: OpenApiBundled, params: EndpointGeneratorOptions = {}) {
   const endpoints = Transpiler.of(bundled).endpoints();
-
-  return endpoints.map(createEndpointDefinition);
+  const endpointDefinitions = endpoints.map((e) => createEndpointDefinition(e, params));
+  const groupedByName = _.groupBy(endpointDefinitions, (it) => it.name);
+  return Object.entries(groupedByName).reduce((acc, [key, values]) => ({ ...acc, [key]: values.at(0) }), {});
 }
 
-async function generateTemplates(_params?: EndpointDefinitionOptions) {
+async function generateTemplates(_params?: EndpointDefinitionOptions, project: Project = new Project()) {
   const endpointTmpl = Templates.getTemplateFile("EndpointDefinition.d.ts");
   const out = Folder.of(_params?.outDir ?? "out");
 
-  const source = createTsMorphSrcFile(endpointTmpl.absolutePath);
+  const source = createTsMorphSrcFile(endpointTmpl.absolutePath, project);
   source.sourceFile.copy(out.makeFile(endpointTmpl.name).absolutePath, { overwrite: true });
-  await source.project.save();
-  return out.absolutePath;
+  return { project, sourceFile: source.sourceFile };
 }
 
-function createTsMorphSrcFile(tsFilePath: string) {
-  const project = new Project();
+function createTsMorphSrcFile(tsFilePath: string, project: Project = new Project()) {
   project.addSourceFileAtPath(tsFilePath);
   const sourceFile = project.getSourceFile(path.basename(tsFilePath));
+  sourceFile?.formatText({
+    indentSwitchCase: true,
+    indentStyle: ts.IndentStyle.Smart,
+    indentMultiLineObjectLiteralBeginningOnBlankLine: true,
+  });
+
+  if (_.isNil(sourceFile)) {
+    throw `Error: Expected source file for provided path: srcFile: ${tsFilePath}`;
+  }
+  return { project, sourceFile: sourceFile };
+}
+
+function createTsMorphSrcFileFromText(tsFilePath: string, text: string | object, project: Project = new Project()) {
+  project.createSourceFile(tsFilePath, text, { overwrite: true, scriptKind: ScriptKind.TS });
+  const sourceFile = project.getSourceFile(path.basename(tsFilePath));
+  sourceFile?.formatText({
+    indentSwitchCase: true,
+    indentStyle: ts.IndentStyle.Smart,
+
+    indentMultiLineObjectLiteralBeginningOnBlankLine: true,
+  });
   if (_.isNil(sourceFile)) {
     throw `Error: Expected source file for provided path: srcFile: ${tsFilePath}`;
   }

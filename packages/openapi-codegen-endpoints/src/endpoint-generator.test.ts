@@ -1,109 +1,138 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BundleMock, OpenApiBundled } from "@dasaplan/openapi-bundler";
-import { oas30 } from "openapi3-ts";
-import { generateEndpointDefinitions } from "./endpoint-generator.js";
+import { generateEndpointDefinitions, generateEndpointDefinitionsInMemory } from "./endpoint-generator.js";
 import { describe, expect, test } from "vitest";
+import { resolveSpecPath } from "openapi-example-specs";
 
 describe("generateEndpointDefinitions", () => {
   const { createApi, withSchemas, withRoute } = BundleMock.create();
 
+  test("integration", async () => {
+    const spec = resolveSpecPath("pets-modular-complex/petstore-api.yml");
+    const endpoints = await generateEndpointDefinitionsInMemory(spec, { outDir: "tmp/endpoints" });
+    expect(endpoints).toMatchSnapshot("pets-modular-complex/petstore-api.yml");
+  });
+
   test("enspoints", async () => {
     const openapi: OpenApiBundled = createApi(
-      (oa) =>
-        withSchemas(oa, {
-          ResponseSchema: {
-            type: "object",
-            properties: {
-              id: { type: "string" },
-            },
+      withSchemas({
+        ResponseSchema: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
           },
-          RequestSchema: {
-            type: "object",
-            properties: {
-              help: { type: "string" },
-            },
+        },
+        RequestSchema: {
+          type: "object",
+          properties: {
+            help: { type: "string" },
           },
-          ErrorSchema: {
-            type: "object",
-            properties: {
-              message: { type: "string" },
-            },
+        },
+        ErrorSchema: {
+          type: "object",
+          properties: {
+            message: { type: "string" },
           },
-        }),
-      (oa) =>
-        withRoute(oa, {
-          "/pets/{:petId}": {
-            get: {
-              operationId: "getPet",
-              parameters: [{ in: "path", name: "petId", required: true, schema: { type: "string" } }],
-              responses: {
-                200: {
-                  content: { "application/json": { schema: { $ref: "#/components/schemas/ResponseSchema" } } },
-                },
-                201: {
-                  description: "success",
-                },
-                401: {
-                  content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorSchema" } } },
-                },
+        },
+      }),
+      withRoute({
+        "/pets/{:petId}": {
+          get: {
+            operationId: "getPet",
+            parameters: [{ in: "path", name: "petId", required: true, schema: { type: "string" } }],
+            responses: {
+              200: {
+                content: { "application/json": { schema: { $ref: "#/components/schemas/ResponseSchema" } } },
               },
-            },
-            put: {
-              operationId: "updatePet",
-              parameters: [{ in: "query", name: "secret", required: true, schema: { type: "string" } }],
-              requestBody: {
-                content: {
-                  "application/json": {
-                    schema: { $ref: "#/components/schemas/RequestSchema" },
-                  },
-                },
+              201: {
+                description: "success",
               },
-              responses: {
-                200: {
-                  content: { "application/json": { schema: { $ref: "#/components/schemas/ResponseSchema" } } },
-                },
+              401: {
+                content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorSchema" } } },
               },
             },
           },
-          "/pets": {
-            post: {
-              operationId: "createPet",
-              parameters: [
-                { in: "cookie", name: "secret", required: true, schema: { type: "string" } },
-                { in: "header", name: "other-secret", required: true, schema: { type: "string" } },
-              ],
-              requestBody: {
-                content: {
-                  "application/json": {
-                    schema: { $ref: "#/components/schemas/RequestSchema" },
-                  },
-                },
-              },
-              responses: {
-                200: {
-                  content: "application/json",
-                  schema: { $ref: "#/components/schemas/ResponseSchema" },
+          put: {
+            operationId: "updatePet",
+            parameters: [{ in: "query", name: "secret", required: true, schema: { type: "string" } }],
+            requestBody: {
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/RequestSchema" },
                 },
               },
             },
+            responses: {
+              200: {
+                content: { "application/json": { schema: { $ref: "#/components/schemas/ResponseSchema" } } },
+              },
+            },
           },
-        })
+        },
+        "/pets": {
+          post: {
+            operationId: "createPet",
+            parameters: [
+              { in: "cookie", name: "secret", required: true, schema: { type: "string" } },
+              { in: "header", name: "other-secret", required: true, schema: { type: "string" } },
+            ],
+            requestBody: {
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/RequestSchema" },
+                },
+              },
+            },
+            responses: {
+              200: {
+                content: "application/json",
+                schema: { $ref: "#/components/schemas/ResponseSchema" },
+              },
+            },
+          },
+        },
+      })
     );
 
     const endpoints = await generateEndpointDefinitions(openapi);
 
     expect(endpoints).toMatchInlineSnapshot(`
-      [
-        {
+      {
+        "createPet": {
+          "name": "createPet",
+          "operation": "post",
+          "parameters": {
+            "cookie": {
+              "secret": "string",
+            },
+            "header": {
+              "other-secret": "string",
+            },
+            "path": undefined,
+            "query": undefined,
+          },
+          "path": "/pets",
+          "request": {
+            "format": "json",
+            "payload": "RequestSchema",
+            "transform": undefined,
+          },
+          "response": {
+            "200": {
+              "format": undefined,
+              "payload": undefined,
+              "transform": undefined,
+            },
+          },
+        },
+        "getPet": {
           "name": "getPet",
           "operation": "get",
           "parameters": {
             "cookie": undefined,
             "header": undefined,
             "path": {
-              "petId": {
-                "type": "string",
-              },
+              "petId": "string",
             },
             "query": undefined,
           },
@@ -116,14 +145,12 @@ describe("generateEndpointDefinitions", () => {
           "response": {
             "401": {
               "format": "json",
-              "payload": {
-                "$ref": "#/components/schemas/ErrorSchema",
-              },
+              "payload": "ErrorSchema",
               "transform": undefined,
             },
           },
         },
-        {
+        "updatePet": {
           "name": "updatePet",
           "operation": "put",
           "parameters": {
@@ -131,63 +158,24 @@ describe("generateEndpointDefinitions", () => {
             "header": undefined,
             "path": undefined,
             "query": {
-              "secret": {
-                "type": "string",
-              },
+              "secret": "string",
             },
           },
           "path": "/pets/{:petId}",
           "request": {
             "format": "json",
-            "payload": {
-              "$ref": "#/components/schemas/RequestSchema",
-            },
+            "payload": "RequestSchema",
             "transform": undefined,
           },
           "response": {
             "200": {
               "format": "json",
-              "payload": {
-                "$ref": "#/components/schemas/ResponseSchema",
-              },
+              "payload": "ResponseSchema",
               "transform": undefined,
             },
           },
         },
-        {
-          "name": "createPet",
-          "operation": "post",
-          "parameters": {
-            "cookie": {
-              "secret": {
-                "type": "string",
-              },
-            },
-            "header": {
-              "other-secret": {
-                "type": "string",
-              },
-            },
-            "path": undefined,
-            "query": undefined,
-          },
-          "path": "/pets",
-          "request": {
-            "format": "json",
-            "payload": {
-              "$ref": "#/components/schemas/RequestSchema",
-            },
-            "transform": undefined,
-          },
-          "response": {
-            "200": {
-              "format": undefined,
-              "payload": undefined,
-              "transform": undefined,
-            },
-          },
-        },
-      ]
+      }
     `);
   });
 });
