@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Collection of ready to use tools to facilitate OpenApi specification centered workflows.",
   "keywords": [
     "openapi",
@@ -69,10 +69,10 @@
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "@redocly/cli": "^1.6.0",
+    "@types/express": "^4.17.21",
     "@types/json-schema-merge-allof": "^0.6.5",
     "@types/lodash": "^4.14.202",
     "@types/pascal-case": "^1.1.2",
-    "@types/express": "^4.17.21",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "axios": "^1.6.5",
     "clean-package": "^2.2.0",
@@ -80,6 +80,7 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
+    "express": "^4.19.2",
     "npm-run-all": "*",
     "openapi-example-specs": "workspace:*",
     "openapi3-ts": "^4.2.1",
@@ -87,8 +88,7 @@
     "tsc-alias": "^1.8.8",
     "tsconfig": "workspace:0.0.0",
     "type-fest": "*",
-    "typescript": "^5.5.3",
-    "express": "^4.19.2"
+    "typescript": "^5.5.3"
   },
   "peerDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0"

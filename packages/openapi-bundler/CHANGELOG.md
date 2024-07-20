@@ -1,5 +1,11 @@
 # @dasaplan/openapi-bundler
 
+## 0.0.11
+
+### Patch Changes
+
+- feat: endpoint definitions
+
 ## 0.0.10
 
 ### Patch Changes

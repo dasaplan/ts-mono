@@ -263,20 +263,11 @@ function fooPetNested(pet: Pet): any {
 
 #### zod
 
-- ✅ generate schemas
-- ✅ generate 100 % compatible schemas with generated typescript types
-- 🔲 extended validation and parsing of data types and formats
-    - ✅ ensure primitive data types and basic set of formats
-    - 🔲 validate / ensure that a date format does not include time information
-    - 🔲 validate / ensure that a date-time format includes timezone information
-    - 🔲 support parsing bigint for string + int64 format
-- ✅ support of nested (discriminated) unions
-- ✅ support **unknown enum variant**
-- ✅ support of circular (lazy) schemas
-- ✅ support types for lazy schemas
-- ✅ support for deeply nested recursive schemas 
+-  [@dasaplan/openapi-codegen-zod][@dasaplan/openapi-codegen-zod] is used to generate zod schemas which respect a tolerant reader and is compatible with the generated typescript interfaces
+
 
 
 
 [typescript-axios]: https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/typescript-axios.md
 [@dasaplan/openapi-bundler]: ../openapi-bundler/README.MD
+[@dasaplan/openapi-codegen-zod]: ../openapi-codegen-zod/README.MD
