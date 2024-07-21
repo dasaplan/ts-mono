@@ -1,9 +1,10 @@
 import { createTsPostProcessor } from "./post-process/index.js";
 import { generateTypescriptAxios, TsAxiosPublicGenOptions } from "./generators/index.js";
 import { _, ApplicationError, File, Folder } from "@dasaplan/ts-sdk";
-import { bundleOpenapi, createSpecProcessor } from "@dasaplan/openapi-bundler";
+import { bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { generateZodSchemas } from "@dasaplan/openapi-codegen-zod";
 import { generateEndpointDefinitionsFromBundled } from "@dasaplan/openapi-codegen-endpoints";
+import { Project } from "ts-morph";
 
 export async function generateOpenapi(
   specFilePath: string,
@@ -15,9 +16,9 @@ export async function generateOpenapi(
     const { outDir } = await generateTsAxios(bundledFilePath, outputFile, { generateZod: true });
 
     const out = Folder.of(outDir).create();
+    await generateZod(parsed, out);
+    await generateEndpoints(parsed, out);
 
-    await generateZodSchemas(parsed, out.makeFile("zod.ts").absolutePath, { includeTsTypes: true });
-    await generateEndpointDefinitionsFromBundled(parsed, { outDir: out.absolutePath });
     // save spec where the code is generated
     out.writeYml(File.of(specFilePath).name, parsed);
 
@@ -47,4 +48,22 @@ export async function generateTsAxios(bundledFilePath: string, output: string, o
     ...(options ?? {}),
   });
   return { outDir };
+}
+
+async function generateZod(parsed: OpenApiBundled, out: Folder) {
+  await generateZodSchemas(parsed, out.makeFile("zod.ts").absolutePath, { includeTsTypes: true });
+}
+
+async function generateEndpoints(parsed: OpenApiBundled, out: Folder) {
+  const { endpointFileName, endpointFilePath } = await generateEndpointDefinitionsFromBundled(parsed, { outDir: out.absolutePath });
+  const endpointFile = File.of(endpointFilePath);
+
+  // add export to index.ts
+  const project = new Project();
+  project.addSourceFileAtPath(endpointFile.absolutePath);
+  const _indexSrc = project.addSourceFileAtPath(out.makeFile("index.ts").absolutePath);
+  _indexSrc.addExportDeclaration({
+    moduleSpecifier: `./${endpointFileName.replace(".ts", ".js")}`,
+  });
+  project.saveSync();
 }

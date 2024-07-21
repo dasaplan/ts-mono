@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-bundler",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Opinionated bundler/merger for Openapi (Swagger)",
   "keywords": [
     "openapi",
@@ -36,8 +36,8 @@
     "prepack": "sort-package-json --quiet && clean-package",
     "postpack": "clean-package restore",
     "rup": "tsup-node --dts",
-    "test": "vitest --config ../../vitest.config.ts",
-    "test:update": "vitest -u --config ../../vitest.config.ts"
+    "test": "vitest",
+    "test:update": "vitest -u"
   },
   "dependencies": {
     "camelcase": "^8.0.0",

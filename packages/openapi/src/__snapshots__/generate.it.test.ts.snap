@@ -1078,7 +1078,7 @@ export module EndpointDefinition {
 export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
-
+export * from "./SomeTitleEndpoints.js";
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module SomeTitleEndpoints {
@@ -1917,7 +1917,7 @@ export module EndpointDefinition {
 export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
-
+export * from "./MyServiceEndpoints.js";
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module MyServiceEndpoints {
@@ -3231,7 +3231,7 @@ export module EndpointDefinition {
 export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
-
+export * from "./SwaggerPetstoreEndpoints.js";
 ",
   "openapi: 3.0.3
 info:
@@ -4314,7 +4314,7 @@ export module EndpointDefinition {
 export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
-
+export * from "./SwaggerPetstoreEndpoints.js";
 ",
   "openapi: 3.1.0
 info:
@@ -5156,7 +5156,7 @@ export module EndpointDefinition {
 export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
-
+export * from "./SomeTitleEndpoints.js";
 ",
   "openapi: 3.0.3
 info:
@@ -6099,7 +6099,7 @@ export module ExtendedArrayItemsEndpoints {
 export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
-
+export * from "./ExtendedArrayItemsEndpoints.js";
 ",
   "
 import { z } from "zod";
@@ -7254,36 +7254,7 @@ export module EndpointDefinition {
 export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
-
-",
-  "import { EndpointDefinition } from './EndpointDefinition'
-export module some titleEndpoints {
-    export type Path = "/pets" | "/pets/{petId}"
-    export interface OperationToPath {
-        listPets: "/pets";
-        getPet: "/pets/{petId}";
-    }
-    export interface ListPets<Pets extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
-        { "200": Pets },
-        undefined,
-        { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
-    > {
-        name: "listPets";
-        operation: "get";
-        path: "/pets"
-    }
-
-    export interface GetPet<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
-        { "200": Pet },
-        undefined,
-        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
-    > {
-        name: "getPet";
-        operation: "get";
-        path: "/pets/{petId}"
-    }
-
-}
+export * from "./SomeTitleEndpoints.js";
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module SomeTitleEndpoints {

@@ -26,11 +26,12 @@ export async function generateEndpointDefinitionsFromBundled(bundled: OpenApiBun
 
   const out = Folder.of(params?.outDir ?? "out").create();
   const { project } = await generateTemplates({ ...params, outDir: out.absolutePath });
-
-  createTsMorphSrcFileFromText(out.makeFile(`${apiName}.ts`).absolutePath, withImports, project);
+  const endpointFileName = `${apiName}.ts`;
+  const endpointFilePath = out.makeFile(endpointFileName).absolutePath;
+  createTsMorphSrcFileFromText(endpointFilePath, withImports, project);
   await project.save();
 
-  return project.getSourceFiles().map((s) => s.getText());
+  return { endpointFileName, endpointFilePath, sources: project.getSourceFiles().map((s) => s.getText()) };
 }
 
 export function createApiName(bundled: OpenApiBundled, params: EndpointDefinitionGeneratorOptions) {

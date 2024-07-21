@@ -10,7 +10,7 @@ describe("generateEndpointDefinitions", () => {
   test("integration", async () => {
     const spec = resolveSpecPath("pets-modular-complex/petstore-api.yml");
     const endpoints = await generateEndpointDefinitions(spec, { outDir: "tmp/endpoints", apiName: "TestApi" });
-    expect(endpoints).toMatchSnapshot("pets-modular-complex/petstore-api.yml");
+    expect(endpoints.sources).toMatchSnapshot("pets-modular-complex/petstore-api.yml");
   });
 
   test("enspoints", async () => {
@@ -96,6 +96,6 @@ describe("generateEndpointDefinitions", () => {
 
     const endpoints = await generateEndpointDefinitionsFromBundled(openapi, { outDir: "tmp/endpoints", apiName: "TestApi" });
 
-    expect(endpoints).toMatchSnapshot();
+    expect(endpoints.sources).toMatchSnapshot();
   });
 });

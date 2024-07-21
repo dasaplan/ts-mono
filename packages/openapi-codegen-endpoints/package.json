@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-codegen-endpoints",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Openapi framework agnostic endpoint generator",
   "keywords": [
     "openapi",
@@ -42,8 +42,8 @@
     "ts:check": "tsc",
     "ts:check:generated": "tsc -p tsconfig.generated.json",
     "cp:templates": "copyfiles -u 1 \"templates/**/*\" dist/templates",
-    "test": "vitest --config ../../vitest.config.ts",
-    "test:update": "vitest -u --config ../../vitest.config.ts",
+    "test": "vitest",
+    "test:update": "vitest -u",
     "clean": "rimraf dist out tmp",
     "lint": "eslint \"./src/*.ts\" index.ts endpoint-cli.ts"
   },
