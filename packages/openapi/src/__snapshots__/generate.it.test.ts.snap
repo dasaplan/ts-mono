@@ -89,22 +89,22 @@ export interface CatBase {
      * @memberof CatBase
      * @discriminator catType
      */
-    catType?: CatBaseCatTypeEnum;
+    catType?: CatBaseCatType;
 }
 
 
-export const CatBaseCatTypeEnum = {
+export const CatBaseCatType = {
     SEAM: 'SEAM',
     SHORT: 'SHORT'
 } as const;
 
-export module CatBaseCatTypeEnums {
+export module CatBaseCatTypes {
     type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends CatBaseCatTypeEnum, R> = {
+    type MatchObj<T extends CatBaseCatType, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
     }  & { onDefault: Handler<unknown, R> };
     /** All handler must return the same type*/
-    export function match<R>(enumValue: CatBaseCatTypeEnum, handler: MatchObj<CatBaseCatTypeEnum, R>): R {
+    export function match<R>(enumValue: CatBaseCatType, handler: MatchObj<CatBaseCatType, R>): R {
         if (enumValue in handler) {
             return handler[enumValue](enumValue as never);
         }
@@ -112,7 +112,7 @@ export module CatBaseCatTypeEnums {
     }
 
     /** All handler must return the same type*/
-    export function matchPartial<R>(enumValue: CatBaseCatTypeEnum, handler: Partial<MatchObj<CatBaseCatTypeEnum, R> >): R | undefined {
+    export function matchPartial<R>(enumValue: CatBaseCatType, handler: Partial<MatchObj<CatBaseCatType, R> >): R | undefined {
         if (enumValue in handler) {
             return handler[enumValue]?.(enumValue as never);
         }
@@ -120,7 +120,7 @@ export module CatBaseCatTypeEnums {
     }
 }
 
-export type CatBaseCatTypeEnum = typeof CatBaseCatTypeEnum[keyof typeof CatBaseCatTypeEnum] | UNKNOWN_ENUM_VARIANT  ;
+export type CatBaseCatType = typeof CatBaseCatType[keyof typeof CatBaseCatType] | UNKNOWN_ENUM_VARIANT  ;
 
     
         /**
@@ -1148,7 +1148,7 @@ export interface Cat extends PetBase {
      * @type {string}
      * @memberof Cat
      */
-    breed?: CatBreedEnum;
+    breed?: CatBreed;
     /**
      * 
      * @type {string}
@@ -1158,18 +1158,18 @@ export interface Cat extends PetBase {
 }
 
 
-export const CatBreedEnum = {
+export const CatBreed = {
     A: 'CAT_A',
     B: 'CAT_B'
 } as const;
 
-export module CatBreedEnums {
+export module CatBreeds {
     type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends CatBreedEnum, R> = {
+    type MatchObj<T extends CatBreed, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
     }  & { onDefault: Handler<unknown, R> };
     /** All handler must return the same type*/
-    export function match<R>(enumValue: CatBreedEnum, handler: MatchObj<CatBreedEnum, R>): R {
+    export function match<R>(enumValue: CatBreed, handler: MatchObj<CatBreed, R>): R {
         if (enumValue in handler) {
             return handler[enumValue](enumValue as never);
         }
@@ -1177,7 +1177,7 @@ export module CatBreedEnums {
     }
 
     /** All handler must return the same type*/
-    export function matchPartial<R>(enumValue: CatBreedEnum, handler: Partial<MatchObj<CatBreedEnum, R> >): R | undefined {
+    export function matchPartial<R>(enumValue: CatBreed, handler: Partial<MatchObj<CatBreed, R> >): R | undefined {
         if (enumValue in handler) {
             return handler[enumValue]?.(enumValue as never);
         }
@@ -1185,7 +1185,7 @@ export module CatBreedEnums {
     }
 }
 
-export type CatBreedEnum = typeof CatBreedEnum[keyof typeof CatBreedEnum] | UNKNOWN_ENUM_VARIANT  ;
+export type CatBreed = typeof CatBreed[keyof typeof CatBreed] | UNKNOWN_ENUM_VARIANT  ;
 
     
         /**
@@ -2078,7 +2078,7 @@ export interface ComponentsSchemasToy {
      * @type {string}
      * @memberof ComponentsSchemasToy
      */
-    someEnum?: ComponentsSchemasToySomeEnumEnum;
+    someEnum?: ComponentsSchemasToySomeEnum;
     /**
      * 
      * @type {FluffLevel}
@@ -2088,18 +2088,18 @@ export interface ComponentsSchemasToy {
 }
 
 
-export const ComponentsSchemasToySomeEnumEnum = {
+export const ComponentsSchemasToySomeEnum = {
     FOO: 'FOO',
     BAR: 'BAR'
 } as const;
 
-export module ComponentsSchemasToySomeEnumEnums {
+export module ComponentsSchemasToySomeEnums {
     type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends ComponentsSchemasToySomeEnumEnum, R> = {
+    type MatchObj<T extends ComponentsSchemasToySomeEnum, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
     }  & { onDefault: Handler<unknown, R> };
     /** All handler must return the same type*/
-    export function match<R>(enumValue: ComponentsSchemasToySomeEnumEnum, handler: MatchObj<ComponentsSchemasToySomeEnumEnum, R>): R {
+    export function match<R>(enumValue: ComponentsSchemasToySomeEnum, handler: MatchObj<ComponentsSchemasToySomeEnum, R>): R {
         if (enumValue in handler) {
             return handler[enumValue](enumValue as never);
         }
@@ -2107,7 +2107,7 @@ export module ComponentsSchemasToySomeEnumEnums {
     }
 
     /** All handler must return the same type*/
-    export function matchPartial<R>(enumValue: ComponentsSchemasToySomeEnumEnum, handler: Partial<MatchObj<ComponentsSchemasToySomeEnumEnum, R> >): R | undefined {
+    export function matchPartial<R>(enumValue: ComponentsSchemasToySomeEnum, handler: Partial<MatchObj<ComponentsSchemasToySomeEnum, R> >): R | undefined {
         if (enumValue in handler) {
             return handler[enumValue]?.(enumValue as never);
         }
@@ -2115,7 +2115,7 @@ export module ComponentsSchemasToySomeEnumEnums {
     }
 }
 
-export type ComponentsSchemasToySomeEnumEnum = typeof ComponentsSchemasToySomeEnumEnum[keyof typeof ComponentsSchemasToySomeEnumEnum] | UNKNOWN_ENUM_VARIANT  ;
+export type ComponentsSchemasToySomeEnum = typeof ComponentsSchemasToySomeEnum[keyof typeof ComponentsSchemasToySomeEnum] | UNKNOWN_ENUM_VARIANT  ;
 
     /**
  * 
@@ -2344,7 +2344,7 @@ export interface SchemasToy {
      * @type {string}
      * @memberof SchemasToy
      */
-    someEnum?: SchemasToySomeEnumEnum;
+    someEnum?: SchemasToySomeEnum;
     /**
      * 
      * @type {FluffLevel}
@@ -2360,18 +2360,18 @@ export interface SchemasToy {
 }
 
 
-export const SchemasToySomeEnumEnum = {
+export const SchemasToySomeEnum = {
     FOO: 'FOO',
     BAR: 'BAR'
 } as const;
 
-export module SchemasToySomeEnumEnums {
+export module SchemasToySomeEnums {
     type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends SchemasToySomeEnumEnum, R> = {
+    type MatchObj<T extends SchemasToySomeEnum, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
     }  & { onDefault: Handler<unknown, R> };
     /** All handler must return the same type*/
-    export function match<R>(enumValue: SchemasToySomeEnumEnum, handler: MatchObj<SchemasToySomeEnumEnum, R>): R {
+    export function match<R>(enumValue: SchemasToySomeEnum, handler: MatchObj<SchemasToySomeEnum, R>): R {
         if (enumValue in handler) {
             return handler[enumValue](enumValue as never);
         }
@@ -2379,7 +2379,7 @@ export module SchemasToySomeEnumEnums {
     }
 
     /** All handler must return the same type*/
-    export function matchPartial<R>(enumValue: SchemasToySomeEnumEnum, handler: Partial<MatchObj<SchemasToySomeEnumEnum, R> >): R | undefined {
+    export function matchPartial<R>(enumValue: SchemasToySomeEnum, handler: Partial<MatchObj<SchemasToySomeEnum, R> >): R | undefined {
         if (enumValue in handler) {
             return handler[enumValue]?.(enumValue as never);
         }
@@ -2387,7 +2387,7 @@ export module SchemasToySomeEnumEnums {
     }
 }
 
-export type SchemasToySomeEnumEnum = typeof SchemasToySomeEnumEnum[keyof typeof SchemasToySomeEnumEnum] | UNKNOWN_ENUM_VARIANT  ;
+export type SchemasToySomeEnum = typeof SchemasToySomeEnum[keyof typeof SchemasToySomeEnum] | UNKNOWN_ENUM_VARIANT  ;
 
 
 
@@ -4943,22 +4943,22 @@ export interface Cat extends PetBase {
      * @type {string}
      * @memberof Cat
      */
-    breed?: CatBreedEnum;
+    breed?: CatBreed;
 }
 
 
-export const CatBreedEnum = {
+export const CatBreed = {
     A: 'CAT_A',
     B: 'CAT_B'
 } as const;
 
-export module CatBreedEnums {
+export module CatBreeds {
     type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends CatBreedEnum, R> = {
+    type MatchObj<T extends CatBreed, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
     }  & { onDefault: Handler<unknown, R> };
     /** All handler must return the same type*/
-    export function match<R>(enumValue: CatBreedEnum, handler: MatchObj<CatBreedEnum, R>): R {
+    export function match<R>(enumValue: CatBreed, handler: MatchObj<CatBreed, R>): R {
         if (enumValue in handler) {
             return handler[enumValue](enumValue as never);
         }
@@ -4966,7 +4966,7 @@ export module CatBreedEnums {
     }
 
     /** All handler must return the same type*/
-    export function matchPartial<R>(enumValue: CatBreedEnum, handler: Partial<MatchObj<CatBreedEnum, R> >): R | undefined {
+    export function matchPartial<R>(enumValue: CatBreed, handler: Partial<MatchObj<CatBreed, R> >): R | undefined {
         if (enumValue in handler) {
             return handler[enumValue]?.(enumValue as never);
         }
@@ -4974,7 +4974,7 @@ export module CatBreedEnums {
     }
 }
 
-export type CatBreedEnum = typeof CatBreedEnum[keyof typeof CatBreedEnum] | UNKNOWN_ENUM_VARIANT  ;
+export type CatBreed = typeof CatBreed[keyof typeof CatBreed] | UNKNOWN_ENUM_VARIANT  ;
 
     
         /**
@@ -5758,22 +5758,22 @@ export interface CatBase {
      * @memberof CatBase
      * @discriminator catType
      */
-    catType?: CatBaseCatTypeEnum;
+    catType?: CatBaseCatType;
 }
 
 
-export const CatBaseCatTypeEnum = {
+export const CatBaseCatType = {
     SEAM: 'SEAM',
     SHORT: 'SHORT'
 } as const;
 
-export module CatBaseCatTypeEnums {
+export module CatBaseCatTypes {
     type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends CatBaseCatTypeEnum, R> = {
+    type MatchObj<T extends CatBaseCatType, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
     }  & { onDefault: Handler<unknown, R> };
     /** All handler must return the same type*/
-    export function match<R>(enumValue: CatBaseCatTypeEnum, handler: MatchObj<CatBaseCatTypeEnum, R>): R {
+    export function match<R>(enumValue: CatBaseCatType, handler: MatchObj<CatBaseCatType, R>): R {
         if (enumValue in handler) {
             return handler[enumValue](enumValue as never);
         }
@@ -5781,7 +5781,7 @@ export module CatBaseCatTypeEnums {
     }
 
     /** All handler must return the same type*/
-    export function matchPartial<R>(enumValue: CatBaseCatTypeEnum, handler: Partial<MatchObj<CatBaseCatTypeEnum, R> >): R | undefined {
+    export function matchPartial<R>(enumValue: CatBaseCatType, handler: Partial<MatchObj<CatBaseCatType, R> >): R | undefined {
         if (enumValue in handler) {
             return handler[enumValue]?.(enumValue as never);
         }
@@ -5789,7 +5789,7 @@ export module CatBaseCatTypeEnums {
     }
 }
 
-export type CatBaseCatTypeEnum = typeof CatBaseCatTypeEnum[keyof typeof CatBaseCatTypeEnum] | UNKNOWN_ENUM_VARIANT  ;
+export type CatBaseCatType = typeof CatBaseCatType[keyof typeof CatBaseCatType] | UNKNOWN_ENUM_VARIANT  ;
 
     
         /**

@@ -53,6 +53,9 @@ export module OaGeneratorOptions {
         return acc;
       }
       const formattedFlag = flag.startsWith("-") ? flag : `--${flag}`;
+      if (typeof value === "boolean" && value) {
+        return [...acc, formattedFlag];
+      }
       const stringValueInQuotes = typeof value === "string" ? `"${value}"` : value;
       if (!stringValueInQuotes) {
         return [...acc, formattedFlag];
@@ -61,17 +64,32 @@ export module OaGeneratorOptions {
     }, []);
   }
 
+  /** https://openapi-generator.tech/docs/usage/*/
   export interface CLIParams {
     /** path to spec */
-    "-i": string;
+    "--input-spec": string;
     /** output dir*/
-    "-o": string;
+    "--output": string;
     /** templates dir*/
-    "-t"?: string;
+    "--template-dir"?: string;
     /** generator */
-    "-g": "typescript-axios" | "spring";
+    "--generator-name": "typescript-axios" | "spring";
     "--skip-validate-spec"?: undefined;
     /** generator options (or variables passed to the templates(*/
     "--additional-properties"?: string;
+    /** Path to configuration file. It can be JSON or YAML. If file is JSON,
+         the content should have the format {"optionKey":"optionValue",
+         "optionKey1":"optionValue1"...}. If file is YAML, the content should
+         have the format optionKey: optionValue. Supported options can be
+         different for each language. Run config-help -g {generator name}
+         command for language-specific config options*/
+    "--engine"?: "mustache" | "handlebars";
+    "--config"?: string;
+    "--ignore-file-override"?: boolean;
+    "--legacy-discriminator-behavior"?: boolean;
+    "--model-name-prefix"?: string;
+    "--model-name-suffix"?: string;
+    "--strict-spec"?: boolean;
+    "--verbose"?: boolean;
   }
 }

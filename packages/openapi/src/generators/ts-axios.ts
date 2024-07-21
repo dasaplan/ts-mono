@@ -5,6 +5,7 @@ import { OaGenerator } from "./oa-generator.js";
 
 export interface TsAxiosPublicGenOptions {
   generateZod?: boolean;
+  modelSuffix?: string;
 }
 
 export interface TsAxiosInternalOptions extends TsAxiosPublicGenOptions {
@@ -28,14 +29,17 @@ export async function generateTypescriptAxios(openapiSpec: string, out: string, 
 
   await OaGenerator.generate<TypescriptAxiosConfigOptions>(
     {
-      "-g": "typescript-axios",
-      "-i": sanitizedInput.specPath,
-      "-o": sanitizedInput.outDirPath,
-      "-t": sanitizedInput.templatesPath,
+      "--generator-name": "typescript-axios",
+      "--input-spec": sanitizedInput.specPath,
+      "--output": sanitizedInput.outDirPath,
+      "--template-dir": sanitizedInput.templatesPath,
       "--additional-properties": zodEnabled,
+      "--model-name-suffix": params?.modelSuffix,
     },
     {
       enumPropertyNaming: "original",
+      enumNameSuffix: "",
+      paramNaming: "original",
     }
   );
 

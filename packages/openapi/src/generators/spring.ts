@@ -15,9 +15,9 @@ export async function generateJava(openapiSpec: string, out: string) {
 
   await OaGenerator.generate(
     {
-      "-g": "spring",
-      "-i": sanitizedInput.specPath,
-      "-o": sanitizedInput.outDirPath,
+      "--generator-name": "spring",
+      "--input-spec": sanitizedInput.specPath,
+      "--output": sanitizedInput.outDirPath,
     },
     { enumUnknownDefaultCase: true }
   );

@@ -76,7 +76,7 @@ export interface Cat extends PetBase {
      * @type {string}
      * @memberof Cat
      */
-    breed?: CatBreedEnum;
+    breed?: CatBreed;
     /**
      * 
      * @type {string}
@@ -86,18 +86,18 @@ export interface Cat extends PetBase {
 }
 
 
-export const CatBreedEnum = {
+export const CatBreed = {
     A: 'CAT_A',
     B: 'CAT_B'
 } as const;
 
-export module CatBreedEnums {
+export module CatBreeds {
     type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends CatBreedEnum, R> = {
+    type MatchObj<T extends CatBreed, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
     }  & { onDefault: Handler<unknown, R> };
     /** All handler must return the same type*/
-    export function match<R>(enumValue: CatBreedEnum, handler: MatchObj<CatBreedEnum, R>): R {
+    export function match<R>(enumValue: CatBreed, handler: MatchObj<CatBreed, R>): R {
         if (enumValue in handler) {
             return handler[enumValue](enumValue as never);
         }
@@ -105,7 +105,7 @@ export module CatBreedEnums {
     }
 
     /** All handler must return the same type*/
-    export function matchPartial<R>(enumValue: CatBreedEnum, handler: Partial<MatchObj<CatBreedEnum, R> >): R | undefined {
+    export function matchPartial<R>(enumValue: CatBreed, handler: Partial<MatchObj<CatBreed, R> >): R | undefined {
         if (enumValue in handler) {
             return handler[enumValue]?.(enumValue as never);
         }
@@ -113,7 +113,7 @@ export module CatBreedEnums {
     }
 }
 
-export type CatBreedEnum = typeof CatBreedEnum[keyof typeof CatBreedEnum] | UNKNOWN_ENUM_VARIANT  ;
+export type CatBreed = typeof CatBreed[keyof typeof CatBreed] | UNKNOWN_ENUM_VARIANT  ;
 
     
         /**

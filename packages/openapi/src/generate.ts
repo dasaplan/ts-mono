@@ -4,7 +4,11 @@ import { _, ApplicationError, File, Folder } from "@dasaplan/ts-sdk";
 import { bundleOpenapi, createSpecProcessor } from "@dasaplan/openapi-bundler";
 import { generateZodSchemas } from "@dasaplan/openapi-codegen-zod";
 
-export async function generateOpenapi(specFilePath: string, outputFile: string, params?: { clearTemp: boolean; tempFolder?: string }) {
+export async function generateOpenapi(
+  specFilePath: string,
+  outputFile: string,
+  params?: { clearTemp: boolean; tempFolder?: string } & TsAxiosPublicGenOptions
+) {
   try {
     const { bundledFilePath, parsed } = await bundle(specFilePath, { tempFolder: params?.tempFolder });
     const { outDir } = await generateTsAxios(bundledFilePath, outputFile, { generateZod: true });
