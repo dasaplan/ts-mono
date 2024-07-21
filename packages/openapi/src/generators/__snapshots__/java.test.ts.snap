@@ -51,6 +51,85 @@ http://localhost:8080/swagger-ui.html
 Change default port value in application.properties"
 `;
 
+exports[`Generator: java > generate java > java-pets-modular/pets-api.yml-bundled.yml 1`] = `
+"openapi: 3.0.3
+info:
+  title: My service
+  description: My service
+  version: 1.0.0
+servers:
+  - url: https://
+paths:
+  /v1/pets:
+    get:
+      summary: Get pets
+      operationId: getPets
+      responses:
+        '200':
+          description: Ok response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+components:
+  schemas:
+    PetBase:
+      type: object
+      discriminator:
+        propertyName: type
+      required:
+        - type
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+    DogEnum:
+      type: string
+      enum:
+        - DOG_A
+        - DOG_B
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            fluffy:
+              type: boolean
+            breed:
+              $ref: '#/components/schemas/DogEnum'
+            type:
+              type: string
+              x-const: DOG
+              example: DOG
+          required:
+            - type
+    Cat:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            breed:
+              type: string
+              enum:
+                - CAT_A
+                - CAT_B
+            type:
+              type: string
+              x-const: CAT
+              example: CAT
+          required:
+            - type
+    Pet:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+      discriminator:
+        propertyName: type
+        mapping:
+          DOG: '#/components/schemas/Dog'
+          CAT: '#/components/schemas/Cat'
+"
+`;
+
 exports[`Generator: java > generate java > java-pets-modular/pets-api.yml-pom.xml 1`] = `
 "<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>

@@ -1,10 +1,8 @@
-import { defineConfig } from "vitest/config";
-
+import { defineConfig, configDefaults } from "vitest/config";
 export default defineConfig({
   test: {
-    // ...
-    exclude: ["out", "dist", "node_modules"],
     watch: false,
     minWorkers: 3,
+    workspace: "../../vitest.workspaces.ts",
   },
 });

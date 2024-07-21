@@ -8,14 +8,16 @@ import { describe, test, expect } from "vitest";
 describe("Generator: ts-axios", () => {
   test("generate generateTypescriptAxios", async () => {
     const spec = "pets-modular/pets-api.yml";
+    const out = Folder.of("test/out/ts");
+
     const { outFile: bundled } = await bundleOpenapi(resolveSpecPath(spec), {
-      outFile: Folder.resolve("test/out/ts").makeFile("bundled.yml").absolutePath,
+      outFile: out.makeFile("bundled.yml").absolutePath,
       postProcessor: createSpecProcessor({
         ensureDiscriminatorValues: true,
         mergeAllOf: true,
       }),
     });
-    const outFolder = generateTypescriptAxios(bundled, "test/out/ts");
+    const outFolder = generateTypescriptAxios(bundled, out.absolutePath);
     const files = Folder.of(outFolder).readAllFilesAsString();
     files.forEach((f) => expect(f.content).toMatchSnapshot(`generate-ts-${spec}-${path.basename(f.src)}`));
   });

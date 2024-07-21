@@ -48,8 +48,10 @@
     "api:generate": "openapi-generator-cli generate -g typescript-axios -i tmp/pets-api.yml -o out -t templates",
     "api:template:variables": "openapi-generator-cli author template -g typescript-axios",
     "schemas:generate": "openapi-zod-client \"./tmp/pets-api.yml\" -o test/out/zod.ts -t templates/schemas-only.hbs",
-    "test": "vitest --config ../../vitest.config.ts",
-    "test:update": "vitest -u --config ../../vitest.config.ts",
+    "test": "vitest",
+    "test:update": "vitest -u",
+    "test:unit:update": "vitest -u --project unit-test",
+    "test:it:update": "vitest -u --project integration-test",
     "clean": "rimraf dist out tmp",
     "lint": "eslint \"./src/*.ts\" index.ts oa-cli.ts"
   },

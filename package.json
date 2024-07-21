@@ -6,18 +6,16 @@
     "build:rebuild": "turbo clean & turbo build --force",
     "ws:build": "turbo build",
     "ws:test": "turbo test",
-    "ws:test:update": "turbo test:update",
+    "ws:test:update": "turbo test:update --force",
+    "ws:test:unit:update": "turbo test:unit:update --force",
+    "ws:test:it:update": "turbo test:it:update --force",
     "ws:lint": "turbo lint",
     "ws:clean": "turbo clean",
     "local:publish": "changeset version && pnpm ci:commit && changeset publish",
     "local:publish-packages": "pnpm ci:build && pnpm local:publish",
     "ci:build": "turbo run build lint test",
     "ci:commit": "git commit -am \"chore: release\"",
-    "ci:publish": "pnpm publish -r",
-    "test": "pnpm test:esm",
-    "test:esm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:update": "pnpm test:esm:update",
-    "test:esm:update": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -u"
+    "ci:publish": "pnpm publish -r"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.5",
@@ -40,6 +38,7 @@
     "type-fest": "^4.9.0",
     "typescript": "^5.5.3",
     "vitest": "^2.0.3",
+    "vite-tsconfig-paths": "^4.3.2",
     "zod": "^3.22.4"
   },
   "engines": {
