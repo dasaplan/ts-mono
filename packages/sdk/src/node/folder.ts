@@ -78,18 +78,12 @@ export module Folder {
   export function resolve(...segments: string[]) {
     return of(path.resolve(...segments));
   }
-  export function of(
-    folderPath: string,
-    options: { createIfNotExists?: boolean } = { createIfNotExists: true }
-  ) {
+  export function of(folderPath: string) {
     const _absPath = path.isAbsolute(folderPath)
       ? folderPath
       : path.resolve(process.cwd(), folderPath);
     const _folder = parsePath(_absPath);
 
-    if (!fs.existsSync(_folder) && options.createIfNotExists) {
-      fs.mkdirSync(_folder, { recursive: true });
-    }
     return {
       get absolutePath() {
         return _folder;
@@ -101,6 +95,7 @@ export module Folder {
         fileName: string,
         content: string | object | NodeJS.ArrayBufferView
       ) {
+        this.create();
         fs.writeFileSync(this.makeFilePath(fileName), File.stringify(content));
         return this;
       },
@@ -124,12 +119,15 @@ export module Folder {
         fileName: string,
         content: string | object | NodeJS.ArrayBufferView
       ) {
+        this.create();
         return File.of(this.makeFilePath(fileName)).writeYml(content);
       },
       makeFilePath(file: string) {
+        this.create();
         return path.isAbsolute(file) ? file : path.resolve(_folder, file);
       },
       makeFile(file: string) {
+        this.create();
         return File.of(this.makeFilePath(file));
       },
       delete(...files: string[]) {
@@ -169,6 +167,12 @@ export module Folder {
       clear() {
         if (this.exists()) {
           fs.rmSync(_folder, { recursive: true, force: true });
+        }
+        return this;
+      },
+      create() {
+        if (!this.exists()) {
+          fs.mkdirSync(_folder, { recursive: true });
         }
         return this;
       },

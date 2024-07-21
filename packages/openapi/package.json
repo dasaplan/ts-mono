@@ -58,6 +58,7 @@
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",
     "@dasaplan/openapi-codegen-zod": "workspace:*",
+    "@dasaplan/openapi-codegen-endpoints": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:0.0.1",
     "@ts-morph/common": "^0.22.0",
     "commander": "^11.1.0",

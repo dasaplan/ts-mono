@@ -1,12 +1,18 @@
-import { ApplicationError, Folder } from "@dasaplan/ts-sdk";
+import { ApplicationError, Folder, Imports } from "@dasaplan/ts-sdk";
 
 export module Templates {
   export function folder() {
-    const local = Folder.of("templates", { createIfNotExists: false });
+    const libPath = Imports.resolve("@dasaplan/openapi-codegen-endpoints");
+    const lib = Folder.of(libPath).cd("templates");
+    if (lib.exists()) {
+      return lib;
+    }
+
+    const local = Folder.of("templates");
     if (local.exists()) {
       return local;
     }
-    const develop = Folder.of("dist/templates", { createIfNotExists: false });
+    const develop = Folder.of("dist/templates");
     if (develop.exists()) {
       return develop;
     }

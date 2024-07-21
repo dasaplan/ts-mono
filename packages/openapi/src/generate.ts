@@ -3,6 +3,7 @@ import { generateTypescriptAxios, TsAxiosPublicGenOptions } from "./generators/i
 import { _, ApplicationError, File, Folder } from "@dasaplan/ts-sdk";
 import { bundleOpenapi, createSpecProcessor } from "@dasaplan/openapi-bundler";
 import { generateZodSchemas } from "@dasaplan/openapi-codegen-zod";
+import { generateEndpointDefinitionsFromBundled } from "@dasaplan/openapi-codegen-endpoints";
 
 export async function generateOpenapi(
   specFilePath: string,
@@ -13,10 +14,12 @@ export async function generateOpenapi(
     const { bundledFilePath, parsed } = await bundle(specFilePath, { tempFolder: params?.tempFolder });
     const { outDir } = await generateTsAxios(bundledFilePath, outputFile, { generateZod: true });
 
-    await generateZodSchemas(parsed, File.of(outputFile, "zod.ts").absolutePath, { includeTsTypes: true });
+    const out = Folder.of(outDir).create();
 
+    await generateZodSchemas(parsed, out.makeFile("zod.ts").absolutePath, { includeTsTypes: true });
+    await generateEndpointDefinitionsFromBundled(parsed, { outDir: out.absolutePath });
     // save spec where the code is generated
-    Folder.of(outDir).writeYml(File.of(specFilePath).name, parsed);
+    out.writeYml(File.of(specFilePath).name, parsed);
 
     if (params?.clearTemp ?? true) {
       const tmp = _.isDefined(params?.tempFolder) ? Folder.of(params?.tempFolder) : Folder.temp();

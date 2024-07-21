@@ -24,7 +24,7 @@ export async function generateEndpointDefinitionsFromBundled(bundled: OpenApiBun
   const endpoints = await generateEndpointInterfacesAsText(bundled, { ...params, apiName });
   const withImports = ["import {EndpointDefinition} from './EndpointDefinition'", endpoints].join("\n");
 
-  const out = Folder.of(params?.outDir ?? "out");
+  const out = Folder.of(params?.outDir ?? "out").create();
   const { project } = await generateTemplates({ ...params, outDir: out.absolutePath });
 
   createTsMorphSrcFileFromText(out.makeFile(`${apiName}.ts`).absolutePath, withImports, project);
@@ -34,10 +34,9 @@ export async function generateEndpointDefinitionsFromBundled(bundled: OpenApiBun
 }
 
 export function createApiName(bundled: OpenApiBundled, params: EndpointDefinitionGeneratorOptions) {
-  if (params.apiName) {
-    return `${params.apiName}Endpoints`;
-  }
-  const name = _.isEmpty(pascalCase(bundled.info.title)) ? "Api" : bundled.info.title;
+  const rawApiName = params.apiName ?? bundled.info.title;
+  const apiName = pascalCase(rawApiName);
+  const name = _.isEmpty(apiName) ? "Api" : apiName;
   return `${name}Endpoints`;
 }
 

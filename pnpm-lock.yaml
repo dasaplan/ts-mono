@@ -80,6 +80,9 @@ importers:
       '@dasaplan/openapi-bundler':
         specifier: workspace:*
         version: link:../openapi-bundler
+      '@dasaplan/openapi-codegen-endpoints':
+        specifier: workspace:*
+        version: link:../openapi-codegen-endpoints
       '@dasaplan/openapi-codegen-zod':
         specifier: workspace:*
         version: link:../openapi-codegen-zod

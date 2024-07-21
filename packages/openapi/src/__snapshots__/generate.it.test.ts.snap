@@ -999,6 +999,67 @@ export class Configuration {
     }
 }
 ",
+  "/**
+ * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
+ * */
+export interface EndpointDefinition<
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
+    Params extends EndpointDefinition.Parameters | undefined = undefined
+> {
+    path: EndpointDefinition.Path;
+    /** operation id */
+    name: string;
+    operation: EndpointDefinition.Operation;
+    parameters?: Params;
+    response: EndpointDefinition.Response<DeserializedResponse>;
+    request?: EndpointDefinition.Request<DeserializedRequest>;
+}
+
+export module EndpointDefinition {
+    type PathSegment = \`\${string}\`;
+
+    type PathParam = \`{:\${string}}\`;
+
+    /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
+    export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
+
+    type DtoTypes = object | string | number | undefined;
+
+    export type DeserializedResponsesObject = { [status: number]: DtoTypes };
+
+    export type Operation = "get" | "post" | "put" | "delete" | "patch";
+
+    export type Parameters = {
+        path: { [name: string]: DtoTypes };
+        query: { [name: string]: DtoTypes };
+        header: { [headerKey: string]: DtoTypes };
+        cookie: { [cookieKey: string]: DtoTypes };
+    };
+    export type DeserializedRequestObject = DtoTypes;
+
+    export interface Request<DeserializedRequest = DeserializedRequestObject> {
+        /** meta information */
+        format?: string;
+        /** deserialize payload */
+        payload: DeserializedRequest;
+        /** transform dto to model object */
+        transform?: <Model, Dto extends DeserializedRequest>(payload: Dto) => Model | undefined;
+        deserialize?: (payload: string | number | undefined) => DeserializedRequest;
+    }
+
+    export type Response<DeserializedResponse = DeserializedResponsesObject> = {
+        [status in keyof DeserializedResponse]: {
+            /** meta information */
+            format?: string;
+            /** deserialize payload */
+            payload: DeserializedResponse[status];
+            /** transform model object to dto */
+            transform?: <Model>(model: Model) => DeserializedResponse[status];
+        };
+    };
+}
+",
   "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -1018,6 +1079,35 @@ export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
 
+",
+  "import { EndpointDefinition } from './EndpointDefinition'
+export module SomeTitleEndpoints {
+    export type Path = "/pets" | "/pets/{petId}"
+    export interface OperationToPath {
+        listPets: "/pets";
+        getPet: "/pets/{petId}";
+    }
+    export interface ListPets<Pets extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pets },
+        undefined,
+        { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "listPets";
+        operation: "get";
+        path: "/pets"
+    }
+
+    export interface GetPet<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pet },
+        undefined,
+        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "getPet";
+        operation: "get";
+        path: "/pets/{petId}"
+    }
+
+}
 ",
   "
 import { z } from "zod";
@@ -1748,6 +1838,67 @@ export class Configuration {
     }
 }
 ",
+  "/**
+ * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
+ * */
+export interface EndpointDefinition<
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
+    Params extends EndpointDefinition.Parameters | undefined = undefined
+> {
+    path: EndpointDefinition.Path;
+    /** operation id */
+    name: string;
+    operation: EndpointDefinition.Operation;
+    parameters?: Params;
+    response: EndpointDefinition.Response<DeserializedResponse>;
+    request?: EndpointDefinition.Request<DeserializedRequest>;
+}
+
+export module EndpointDefinition {
+    type PathSegment = \`\${string}\`;
+
+    type PathParam = \`{:\${string}}\`;
+
+    /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
+    export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
+
+    type DtoTypes = object | string | number | undefined;
+
+    export type DeserializedResponsesObject = { [status: number]: DtoTypes };
+
+    export type Operation = "get" | "post" | "put" | "delete" | "patch";
+
+    export type Parameters = {
+        path: { [name: string]: DtoTypes };
+        query: { [name: string]: DtoTypes };
+        header: { [headerKey: string]: DtoTypes };
+        cookie: { [cookieKey: string]: DtoTypes };
+    };
+    export type DeserializedRequestObject = DtoTypes;
+
+    export interface Request<DeserializedRequest = DeserializedRequestObject> {
+        /** meta information */
+        format?: string;
+        /** deserialize payload */
+        payload: DeserializedRequest;
+        /** transform dto to model object */
+        transform?: <Model, Dto extends DeserializedRequest>(payload: Dto) => Model | undefined;
+        deserialize?: (payload: string | number | undefined) => DeserializedRequest;
+    }
+
+    export type Response<DeserializedResponse = DeserializedResponsesObject> = {
+        [status in keyof DeserializedResponse]: {
+            /** meta information */
+            format?: string;
+            /** deserialize payload */
+            payload: DeserializedResponse[status];
+            /** transform model object to dto */
+            transform?: <Model>(model: Model) => DeserializedResponse[status];
+        };
+    };
+}
+",
   "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -1767,6 +1918,24 @@ export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
 
+",
+  "import { EndpointDefinition } from './EndpointDefinition'
+export module MyServiceEndpoints {
+    export type Path = "/v1/pets"
+    export interface OperationToPath {
+        getPets: "/v1/pets";
+    }
+    export interface GetPets<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pet },
+        undefined,
+        { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "getPets";
+        operation: "get";
+        path: "/v1/pets"
+    }
+
+}
 ",
   "openapi: 3.0.3
 info:
@@ -2983,6 +3152,67 @@ export class Configuration {
     }
 }
 ",
+  "/**
+ * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
+ * */
+export interface EndpointDefinition<
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
+    Params extends EndpointDefinition.Parameters | undefined = undefined
+> {
+    path: EndpointDefinition.Path;
+    /** operation id */
+    name: string;
+    operation: EndpointDefinition.Operation;
+    parameters?: Params;
+    response: EndpointDefinition.Response<DeserializedResponse>;
+    request?: EndpointDefinition.Request<DeserializedRequest>;
+}
+
+export module EndpointDefinition {
+    type PathSegment = \`\${string}\`;
+
+    type PathParam = \`{:\${string}}\`;
+
+    /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
+    export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
+
+    type DtoTypes = object | string | number | undefined;
+
+    export type DeserializedResponsesObject = { [status: number]: DtoTypes };
+
+    export type Operation = "get" | "post" | "put" | "delete" | "patch";
+
+    export type Parameters = {
+        path: { [name: string]: DtoTypes };
+        query: { [name: string]: DtoTypes };
+        header: { [headerKey: string]: DtoTypes };
+        cookie: { [cookieKey: string]: DtoTypes };
+    };
+    export type DeserializedRequestObject = DtoTypes;
+
+    export interface Request<DeserializedRequest = DeserializedRequestObject> {
+        /** meta information */
+        format?: string;
+        /** deserialize payload */
+        payload: DeserializedRequest;
+        /** transform dto to model object */
+        transform?: <Model, Dto extends DeserializedRequest>(payload: Dto) => Model | undefined;
+        deserialize?: (payload: string | number | undefined) => DeserializedRequest;
+    }
+
+    export type Response<DeserializedResponse = DeserializedResponsesObject> = {
+        [status in keyof DeserializedResponse]: {
+            /** meta information */
+            format?: string;
+            /** deserialize payload */
+            payload: DeserializedResponse[status];
+            /** transform model object to dto */
+            transform?: <Model>(model: Model) => DeserializedResponse[status];
+        };
+    };
+}
+",
   "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -3271,6 +3501,46 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+",
+  "import { EndpointDefinition } from './EndpointDefinition'
+export module SwaggerPetstoreEndpoints {
+    export type Path = "/pets" | "/pets/{petId}"
+    export interface OperationToPath {
+        listPets: "/pets";
+        createPets: "/pets";
+        showPetById: "/pets/{petId}";
+    }
+    export interface ListPets<Pets extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pets },
+        undefined,
+        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "listPets";
+        operation: "get";
+        path: "/pets"
+    }
+
+    export interface CreatePets<> extends EndpointDefinition<
+        {},
+        undefined,
+        { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "createPets";
+        operation: "post";
+        path: "/pets"
+    }
+
+    export interface ShowPetById<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pet },
+        undefined,
+        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "showPetById";
+        operation: "get";
+        path: "/pets/{petId}"
+    }
+
+}
 ",
   "
 import { z } from "zod";
@@ -3965,6 +4235,67 @@ export class Configuration {
     }
 }
 ",
+  "/**
+ * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
+ * */
+export interface EndpointDefinition<
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
+    Params extends EndpointDefinition.Parameters | undefined = undefined
+> {
+    path: EndpointDefinition.Path;
+    /** operation id */
+    name: string;
+    operation: EndpointDefinition.Operation;
+    parameters?: Params;
+    response: EndpointDefinition.Response<DeserializedResponse>;
+    request?: EndpointDefinition.Request<DeserializedRequest>;
+}
+
+export module EndpointDefinition {
+    type PathSegment = \`\${string}\`;
+
+    type PathParam = \`{:\${string}}\`;
+
+    /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
+    export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
+
+    type DtoTypes = object | string | number | undefined;
+
+    export type DeserializedResponsesObject = { [status: number]: DtoTypes };
+
+    export type Operation = "get" | "post" | "put" | "delete" | "patch";
+
+    export type Parameters = {
+        path: { [name: string]: DtoTypes };
+        query: { [name: string]: DtoTypes };
+        header: { [headerKey: string]: DtoTypes };
+        cookie: { [cookieKey: string]: DtoTypes };
+    };
+    export type DeserializedRequestObject = DtoTypes;
+
+    export interface Request<DeserializedRequest = DeserializedRequestObject> {
+        /** meta information */
+        format?: string;
+        /** deserialize payload */
+        payload: DeserializedRequest;
+        /** transform dto to model object */
+        transform?: <Model, Dto extends DeserializedRequest>(payload: Dto) => Model | undefined;
+        deserialize?: (payload: string | number | undefined) => DeserializedRequest;
+    }
+
+    export type Response<DeserializedResponse = DeserializedResponsesObject> = {
+        [status in keyof DeserializedResponse]: {
+            /** meta information */
+            format?: string;
+            /** deserialize payload */
+            payload: DeserializedResponse[status];
+            /** transform model object to dto */
+            transform?: <Model>(model: Model) => DeserializedResponse[status];
+        };
+    };
+}
+",
   "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4060,6 +4391,24 @@ components:
               example: DOG
           required:
             - type
+",
+  "import { EndpointDefinition } from './EndpointDefinition'
+export module SwaggerPetstoreEndpoints {
+    export type Path = "/pets"
+    export interface OperationToPath {
+        listPets: "/pets";
+    }
+    export interface ListPets<Pets extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pets },
+        undefined,
+        { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "listPets";
+        operation: "get";
+        path: "/pets"
+    }
+
+}
 ",
   "
 import { z } from "zod";
@@ -4728,6 +5077,67 @@ export class Configuration {
     }
 }
 ",
+  "/**
+ * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
+ * */
+export interface EndpointDefinition<
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
+    Params extends EndpointDefinition.Parameters | undefined = undefined
+> {
+    path: EndpointDefinition.Path;
+    /** operation id */
+    name: string;
+    operation: EndpointDefinition.Operation;
+    parameters?: Params;
+    response: EndpointDefinition.Response<DeserializedResponse>;
+    request?: EndpointDefinition.Request<DeserializedRequest>;
+}
+
+export module EndpointDefinition {
+    type PathSegment = \`\${string}\`;
+
+    type PathParam = \`{:\${string}}\`;
+
+    /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
+    export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
+
+    type DtoTypes = object | string | number | undefined;
+
+    export type DeserializedResponsesObject = { [status: number]: DtoTypes };
+
+    export type Operation = "get" | "post" | "put" | "delete" | "patch";
+
+    export type Parameters = {
+        path: { [name: string]: DtoTypes };
+        query: { [name: string]: DtoTypes };
+        header: { [headerKey: string]: DtoTypes };
+        cookie: { [cookieKey: string]: DtoTypes };
+    };
+    export type DeserializedRequestObject = DtoTypes;
+
+    export interface Request<DeserializedRequest = DeserializedRequestObject> {
+        /** meta information */
+        format?: string;
+        /** deserialize payload */
+        payload: DeserializedRequest;
+        /** transform dto to model object */
+        transform?: <Model, Dto extends DeserializedRequest>(payload: Dto) => Model | undefined;
+        deserialize?: (payload: string | number | undefined) => DeserializedRequest;
+    }
+
+    export type Response<DeserializedResponse = DeserializedResponsesObject> = {
+        [status in keyof DeserializedResponse]: {
+            /** meta information */
+            format?: string;
+            /** deserialize payload */
+            payload: DeserializedResponse[status];
+            /** transform model object to dto */
+            transform?: <Model>(model: Model) => DeserializedResponse[status];
+        };
+    };
+}
+",
   "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -4822,6 +5232,24 @@ components:
       maxItems: 100
       items:
         $ref: '#/components/schemas/Pet'
+",
+  "import { EndpointDefinition } from './EndpointDefinition'
+export module SomeTitleEndpoints {
+    export type Path = "/pets"
+    export interface OperationToPath {
+        listPets: "/pets";
+    }
+    export interface ListPets<Pets extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pets },
+        undefined,
+        { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "listPets";
+        operation: "get";
+        path: "/pets"
+    }
+
+}
 ",
   "
 import { z } from "zod";
@@ -5509,6 +5937,67 @@ export class Configuration {
     }
 }
 ",
+  "/**
+ * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
+ * */
+export interface EndpointDefinition<
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
+    Params extends EndpointDefinition.Parameters | undefined = undefined
+> {
+    path: EndpointDefinition.Path;
+    /** operation id */
+    name: string;
+    operation: EndpointDefinition.Operation;
+    parameters?: Params;
+    response: EndpointDefinition.Response<DeserializedResponse>;
+    request?: EndpointDefinition.Request<DeserializedRequest>;
+}
+
+export module EndpointDefinition {
+    type PathSegment = \`\${string}\`;
+
+    type PathParam = \`{:\${string}}\`;
+
+    /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
+    export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
+
+    type DtoTypes = object | string | number | undefined;
+
+    export type DeserializedResponsesObject = { [status: number]: DtoTypes };
+
+    export type Operation = "get" | "post" | "put" | "delete" | "patch";
+
+    export type Parameters = {
+        path: { [name: string]: DtoTypes };
+        query: { [name: string]: DtoTypes };
+        header: { [headerKey: string]: DtoTypes };
+        cookie: { [cookieKey: string]: DtoTypes };
+    };
+    export type DeserializedRequestObject = DtoTypes;
+
+    export interface Request<DeserializedRequest = DeserializedRequestObject> {
+        /** meta information */
+        format?: string;
+        /** deserialize payload */
+        payload: DeserializedRequest;
+        /** transform dto to model object */
+        transform?: <Model, Dto extends DeserializedRequest>(payload: Dto) => Model | undefined;
+        deserialize?: (payload: string | number | undefined) => DeserializedRequest;
+    }
+
+    export type Response<DeserializedResponse = DeserializedResponsesObject> = {
+        [status in keyof DeserializedResponse]: {
+            /** meta information */
+            format?: string;
+            /** deserialize payload */
+            payload: DeserializedResponse[status];
+            /** transform model object to dto */
+            transform?: <Model>(model: Model) => DeserializedResponse[status];
+        };
+    };
+}
+",
   "openapi: 3.0.3
 info:
   title: Extended Array Items
@@ -5573,6 +6062,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Dog'
+",
+  "import { EndpointDefinition } from './EndpointDefinition'
+export module ExtendedArrayItemsEndpoints {
+    export type Path = "/v1/pets"
+    export interface OperationToPath {
+        getPets: "/v1/pets";
+    }
+    export interface GetPets<PetInfo extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": PetInfo },
+        undefined,
+        { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "getPets";
+        operation: "get";
+        path: "/v1/pets"
+    }
+
+}
 ",
   "/* tslint:disable */
 /* eslint-disable */
@@ -6668,6 +7175,67 @@ export class Configuration {
     }
 }
 ",
+  "/**
+ * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
+ * */
+export interface EndpointDefinition<
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
+    Params extends EndpointDefinition.Parameters | undefined = undefined
+> {
+    path: EndpointDefinition.Path;
+    /** operation id */
+    name: string;
+    operation: EndpointDefinition.Operation;
+    parameters?: Params;
+    response: EndpointDefinition.Response<DeserializedResponse>;
+    request?: EndpointDefinition.Request<DeserializedRequest>;
+}
+
+export module EndpointDefinition {
+    type PathSegment = \`\${string}\`;
+
+    type PathParam = \`{:\${string}}\`;
+
+    /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
+    export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
+
+    type DtoTypes = object | string | number | undefined;
+
+    export type DeserializedResponsesObject = { [status: number]: DtoTypes };
+
+    export type Operation = "get" | "post" | "put" | "delete" | "patch";
+
+    export type Parameters = {
+        path: { [name: string]: DtoTypes };
+        query: { [name: string]: DtoTypes };
+        header: { [headerKey: string]: DtoTypes };
+        cookie: { [cookieKey: string]: DtoTypes };
+    };
+    export type DeserializedRequestObject = DtoTypes;
+
+    export interface Request<DeserializedRequest = DeserializedRequestObject> {
+        /** meta information */
+        format?: string;
+        /** deserialize payload */
+        payload: DeserializedRequest;
+        /** transform dto to model object */
+        transform?: <Model, Dto extends DeserializedRequest>(payload: Dto) => Model | undefined;
+        deserialize?: (payload: string | number | undefined) => DeserializedRequest;
+    }
+
+    export type Response<DeserializedResponse = DeserializedResponsesObject> = {
+        [status in keyof DeserializedResponse]: {
+            /** meta information */
+            format?: string;
+            /** deserialize payload */
+            payload: DeserializedResponse[status];
+            /** transform model object to dto */
+            transform?: <Model>(model: Model) => DeserializedResponse[status];
+        };
+    };
+}
+",
   "/* tslint:disable */
 /* eslint-disable */
 /**
@@ -6687,6 +7255,64 @@ export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
 
+",
+  "import { EndpointDefinition } from './EndpointDefinition'
+export module some titleEndpoints {
+    export type Path = "/pets" | "/pets/{petId}"
+    export interface OperationToPath {
+        listPets: "/pets";
+        getPet: "/pets/{petId}";
+    }
+    export interface ListPets<Pets extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pets },
+        undefined,
+        { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "listPets";
+        operation: "get";
+        path: "/pets"
+    }
+
+    export interface GetPet<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pet },
+        undefined,
+        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "getPet";
+        operation: "get";
+        path: "/pets/{petId}"
+    }
+
+}
+",
+  "import { EndpointDefinition } from './EndpointDefinition'
+export module SomeTitleEndpoints {
+    export type Path = "/pets" | "/pets/{petId}"
+    export interface OperationToPath {
+        listPets: "/pets";
+        getPet: "/pets/{petId}";
+    }
+    export interface ListPets<Pets extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pets },
+        undefined,
+        { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "listPets";
+        operation: "get";
+        path: "/pets"
+    }
+
+    export interface GetPet<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pet },
+        undefined,
+        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "getPet";
+        operation: "get";
+        path: "/pets/{petId}"
+    }
+
+}
 ",
   "
 import { z } from "zod";

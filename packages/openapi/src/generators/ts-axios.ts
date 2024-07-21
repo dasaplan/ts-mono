@@ -16,7 +16,7 @@ export async function generateTypescriptAxios(openapiSpec: string, out: string, 
   const log = appLog.childLog(generateTypescriptAxios);
   log.info(`start generate:`, openapiSpec, out);
 
-  const outDir = Folder.of(out);
+  const outDir = Folder.of(out).create();
 
   const zodEnabled = params?.generateZod ? "zodEnabled" : "zodDisabled";
   const templates = TemplateDir.getTmpDir();
