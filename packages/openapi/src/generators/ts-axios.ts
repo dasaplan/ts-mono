@@ -34,7 +34,7 @@ export async function generateTypescriptAxios(openapiSpec: string, out: string, 
       "--output": sanitizedInput.outDirPath,
       "--template-dir": sanitizedInput.templatesPath,
       "--additional-properties": zodEnabled,
-      "--model-name-suffix": params?.modelSuffix,
+      "--model-name-suffix": params?.modelSuffix ?? "",
     },
     {
       enumPropertyNaming: "original",

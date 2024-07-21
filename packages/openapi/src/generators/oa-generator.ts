@@ -56,11 +56,22 @@ export module OaGeneratorOptions {
       if (typeof value === "boolean" && value) {
         return [...acc, formattedFlag];
       }
-      const stringValueInQuotes = typeof value === "string" ? `"${value}"` : value;
-      if (!stringValueInQuotes) {
+
+      const stringValueInQuotes = typeof value === "string" && !_.isEmpty(value) ? `"${value}"` : value;
+      if (typeof stringValueInQuotes === "string" && !_.isEmpty(stringValueInQuotes)) {
+        // --some-flag "" will not execute the cli command - no errors..
+        return [...acc, formattedFlag, stringValueInQuotes];
+      }
+      if (typeof stringValueInQuotes === "boolean" && stringValueInQuotes) {
+        // when boolean, only add flag if set to true
         return [...acc, formattedFlag];
       }
-      return [...acc, formattedFlag, stringValueInQuotes];
+      if (_.isNil(stringValueInQuotes)) {
+        // when undefined, it could be just a true-flag without value
+        return [...acc, formattedFlag];
+      }
+
+      return acc;
     }, []);
   }
 

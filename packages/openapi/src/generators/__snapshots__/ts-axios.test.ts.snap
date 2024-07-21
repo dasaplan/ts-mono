@@ -68,36 +68,36 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
         /**
  * 
  * @export
- * @interface CatDto
+ * @interface Cat
  */
-export interface CatDto extends PetBaseDto {
+export interface Cat extends PetBase {
     /**
      * 
      * @type {string}
-     * @memberof CatDto
+     * @memberof Cat
      */
-    breed?: CatDtoBreed;
+    breed?: CatBreed;
     /**
      * 
      * @type {string}
-     * @memberof CatDto
+     * @memberof Cat
      */
     type: string;
 }
 
 
-export const CatDtoBreed = {
+export const CatBreed = {
     A: 'CAT_A',
     B: 'CAT_B'
 } as const;
 
-export module CatDtoBreeds {
+export module CatBreeds {
     type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends CatDtoBreed, R> = {
+    type MatchObj<T extends CatBreed, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
     }  & { onDefault: Handler<unknown, R> };
     /** All handler must return the same type*/
-    export function match<R>(enumValue: CatDtoBreed, handler: MatchObj<CatDtoBreed, R>): R {
+    export function match<R>(enumValue: CatBreed, handler: MatchObj<CatBreed, R>): R {
         if (enumValue in handler) {
             return handler[enumValue](enumValue as never);
         }
@@ -105,7 +105,7 @@ export module CatDtoBreeds {
     }
 
     /** All handler must return the same type*/
-    export function matchPartial<R>(enumValue: CatDtoBreed, handler: Partial<MatchObj<CatDtoBreed, R> >): R | undefined {
+    export function matchPartial<R>(enumValue: CatBreed, handler: Partial<MatchObj<CatBreed, R> >): R | undefined {
         if (enumValue in handler) {
             return handler[enumValue]?.(enumValue as never);
         }
@@ -113,31 +113,31 @@ export module CatDtoBreeds {
     }
 }
 
-export type CatDtoBreed = typeof CatDtoBreed[keyof typeof CatDtoBreed] | UNKNOWN_ENUM_VARIANT  ;
+export type CatBreed = typeof CatBreed[keyof typeof CatBreed] | UNKNOWN_ENUM_VARIANT  ;
 
     
         /**
  * 
  * @export
- * @interface DogDto
+ * @interface Dog
  */
-export interface DogDto extends PetBaseDto {
+export interface Dog extends PetBase {
     /**
      * 
      * @type {boolean}
-     * @memberof DogDto
+     * @memberof Dog
      */
     fluffy?: boolean;
     /**
      * 
-     * @type {DogEnumDto}
-     * @memberof DogDto
+     * @type {DogEnum}
+     * @memberof Dog
      */
-    breed?: DogEnumDto;
+    breed?: DogEnum;
     /**
      * 
      * @type {string}
-     * @memberof DogDto
+     * @memberof Dog
      */
     type: string;
 }
@@ -149,56 +149,35 @@ export interface DogDto extends PetBaseDto {
  * @enum {string}
  */
 
-export const DogEnumDto = {
+export const DogEnum = {
     A: 'DOG_A',
     B: 'DOG_B'
 } as const;
 
-export type DogEnumDto = typeof DogEnumDto[keyof typeof DogEnumDto]  | UNKNOWN_ENUM_VARIANT;
+export type DogEnum = typeof DogEnum[keyof typeof DogEnum]  | UNKNOWN_ENUM_VARIANT;
 
 
     
         /**
- * 
- * @export
- * @interface PetBaseDto
- */
-export interface PetBaseDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof PetBaseDto
-     * @discriminator type
-     */
-    type: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PetBaseDto
-     */
-    name?: string;
-}
-    
-        /**
-* @type PetDto
+* @type Pet
 * @export
 * @discriminatedUnion Pet
 * @discriminatorProperty type
 * @discriminatorValues CAT | DOG
-* @subTypes CatDto | DogDto
+* @subTypes Cat | Dog
 */
-export type PetDto = { type: 'CAT' } & CatDto | { type: 'DOG' } & DogDto | { type: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
+export type Pet = { type: 'CAT' } & Cat | { type: 'DOG' } & Dog | { type: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
-export module PetDto {
+export module Pet {
     type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends PetDto, R> = {
+    type MatchObj<T extends Pet, R> = {
         [K in T as K['type']]: Handler<Extract<T, { type: K['type'] }>, R>
     } & { onDefault: Handler<unknown, R> };
 
     /** All handler must return the same type*/
     export function match<R>(
-        union: PetDto,
-        handler: MatchObj<PetDto, R>
+        union: Pet,
+        handler: MatchObj<Pet, R>
     ): R {
         if (union.type in handler) {
             return handler[union.type](union as never);
@@ -208,8 +187,8 @@ export module PetDto {
 
     /** All handler must return the same type*/
     export function matchPartial<R>(
-        union: PetDto,
-        handler: Partial<MatchObj<PetDto, R>>
+        union: Pet,
+        handler: Partial<MatchObj<Pet, R>>
     ): R | undefined {
         if (union.type in handler) {
             return handler[union.type]?.(union as never);
@@ -220,6 +199,27 @@ export module PetDto {
 }
         
         
+    
+        /**
+ * 
+ * @export
+ * @interface PetBase
+ */
+export interface PetBase {
+    /**
+     * 
+     * @type {string}
+     * @memberof PetBase
+     * @discriminator type
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PetBase
+     */
+    name?: string;
+}
 
 
 
@@ -275,11 +275,11 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PetDto>> {
+        async getPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPets(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['DefaultApi.getPets']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.getPets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -297,7 +297,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPets(options?: any): AxiosPromise<PetDto> {
+        getPets(options?: any): AxiosPromise<Pet> {
             return localVarFp.getPets(options).then((request) => request(axios, basePath));
         },
     };
