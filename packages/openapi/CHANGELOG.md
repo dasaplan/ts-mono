@@ -1,5 +1,15 @@
 # @dasaplan/openapi
 
+## 0.0.15
+
+### Patch Changes
+
+- generate endpoints
+- Updated dependencies
+  - @dasaplan/openapi-bundler@0.0.12
+  - @dasaplan/openapi-codegen-endpoints@0.0.3
+  - @dasaplan/openapi-codegen-zod@0.0.3
+
 ## 0.0.14
 
 ### Patch Changes

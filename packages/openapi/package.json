@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Collection of ready to use tools to facilitate OpenApi specification centered workflows.",
   "keywords": [
     "openapi",
@@ -57,9 +57,10 @@
   },
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",
-    "@dasaplan/openapi-codegen-zod": "workspace:*",
     "@dasaplan/openapi-codegen-endpoints": "workspace:*",
+    "@dasaplan/openapi-codegen-zod": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:0.0.1",
+    "@openapitools/openapi-generator-cli": "^2.7.0",
     "@ts-morph/common": "^0.22.0",
     "commander": "^11.1.0",
     "handlebars": "^4.7.8",
@@ -67,8 +68,7 @@
     "openapi-zod-client": "^1.15.0",
     "pascal-case": "^4.0.0",
     "ts-morph": "^21.0.1",
-    "tslog": "^4.9.2",
-    "@openapitools/openapi-generator-cli": "^2.7.0"
+    "tslog": "^4.9.2"
   },
   "devDependencies": {
     "@redocly/cli": "^1.6.0",
