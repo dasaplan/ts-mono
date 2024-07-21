@@ -23,9 +23,13 @@ export module File {
       throw `Error: Expected file path to include fileName or a default but was given: path:${filePath}, nameWithExt: ${nameWithExt}`;
     }
     const _folder = Folder.of(filePath);
+
     return {
       get name() {
         return fileName;
+      },
+      normalize() {
+        return File.of(path.normalize(this.absolutePath));
       },
       get folder() {
         return Folder.of(_folder.absolutePath);
@@ -89,6 +93,9 @@ export module Folder {
     return {
       get absolutePath() {
         return _folder;
+      },
+      normalize() {
+        return Folder.of(path.normalize(this.absolutePath));
       },
       write(
         fileName: string,

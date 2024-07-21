@@ -1,5 +1,5 @@
 import { Folder } from "@dasaplan/ts-sdk";
-import { generateJava } from "./java.js";
+import { generateJava } from "./spring.js";
 import { bundleOpenapi, createSpecProcessor } from "@dasaplan/openapi-bundler";
 import { resolveSpecPath } from "openapi-example-specs";
 import path from "path";
@@ -17,7 +17,7 @@ describe("Generator: java", () => {
       }),
     });
 
-    const outFolder = generateJava(bundled, out.absolutePath);
+    const outFolder = await generateJava(bundled, out.absolutePath);
     const files = Folder.of(outFolder).readAllFilesAsString();
     files.forEach((f) => expect(f.content).toMatchSnapshot(`java-${spec}-${path.basename(f.src)}`));
   });

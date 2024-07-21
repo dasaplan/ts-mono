@@ -1,7 +1,7 @@
-import child_process from "node:child_process";
-import { Folder } from "@dasaplan/ts-sdk";
+import { File, Folder } from "@dasaplan/ts-sdk";
 import { appLog } from "../logger.js";
 import { TemplateDir } from "../template.js";
+import { OaGenerator } from "./oa-generator.js";
 
 export interface TsAxiosPublicGenOptions {
   generateZod?: boolean;
@@ -11,7 +11,7 @@ export interface TsAxiosInternalOptions extends TsAxiosPublicGenOptions {
   postProcessor?: (api: string) => string;
 }
 
-export function generateTypescriptAxios(openapiSpec: string, out: string, params?: TsAxiosInternalOptions) {
+export async function generateTypescriptAxios(openapiSpec: string, out: string, params?: TsAxiosInternalOptions) {
   const log = appLog.childLog(generateTypescriptAxios);
   log.info(`start generate:`, openapiSpec, out);
 
@@ -20,48 +20,26 @@ export function generateTypescriptAxios(openapiSpec: string, out: string, params
   const zodEnabled = params?.generateZod ? "zodEnabled" : "zodDisabled";
   const templates = TemplateDir.getTmpDir();
 
-  const cliParams = createOptions({
-    "-i": openapiSpec,
-    "-o": outDir.absolutePath,
-    "-t": templates.absolutePath,
+  const sanitizedInput = {
+    specPath: File.of(openapiSpec).normalize().absolutePath,
+    templatesPath: templates.normalize().absolutePath,
+    outDirPath: outDir.normalize().absolutePath,
+  };
+
+  await OaGenerator.generate<TypescriptAxiosConfigOptions>({
+    "-g": "typescript-axios",
+    "-i": sanitizedInput.specPath,
+    "-o": sanitizedInput.outDirPath,
+    "-t": sanitizedInput.templatesPath,
     "--additional-properties": zodEnabled,
+    generatorOptions: {
+      enumPropertyNaming: "original",
+    },
   });
-  const command = `npx openapi-generator-cli generate ${cliParams}`;
-  log.info(`start: ${command}`);
-  child_process.execSync(command);
+
   const apiFile = outDir.makeFile("api.ts");
   if (params?.postProcessor) params.postProcessor(apiFile.absolutePath);
-  log.debug(`end: ${command}`);
-  return outDir.absolutePath;
-}
-
-function createOptions(options: CliParamsObject): string {
-  const params = {
-    "--skip-validate-spec": undefined,
-    "-g": "typescript-axios",
-    ...options,
-  } satisfies CliParamsObject;
-
-  return Object.entries(params).reduce((acc, [flag, value]) => {
-    const formattedFlag = flag.startsWith("-") ? flag : `--${flag}`;
-    const stringValueInQuotes = typeof value === "string" ? `"${value}"` : value;
-    const formattedValue = value ? ` ${stringValueInQuotes}` : "";
-    return `${acc} ${formattedFlag}${formattedValue}`;
-  }, "");
-}
-
-type CliParamsObject = GeneratorOptions & TypescriptAxiosConfigOptions;
-interface GeneratorOptions {
-  /** path to spec */
-  "-i": string;
-  /** output dir*/
-  "-o": string;
-  /** templates dir*/
-  "-t": string;
-  /** generator */
-  "-g"?: "typescript-axios";
-  "--additional-properties": string;
-  "--skip-validate-spec"?: undefined;
+  return sanitizedInput.outDirPath;
 }
 
 interface TypescriptAxiosConfigOptions {
@@ -79,7 +57,7 @@ interface TypescriptAxiosConfigOptions {
   ensureUniqueParams?: boolean;
   /** Suffix that will be appended to all enum names.
    * @default "Enum";*/
-  enumNameSuffix?: "Enum";
+  enumNameSuffix?: string;
   /** Naming convention for enum properties: 'camelCase', 'PascalCase', 'snake_case', 'UPPERCASE', and 'original'
    * @default "PascalCase";*/
   enumPropertyNaming?: "camelCase" | "PascalCase" | "snake_case" | "UPPERCASE" | "original";

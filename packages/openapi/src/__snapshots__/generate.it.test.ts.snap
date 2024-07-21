@@ -94,8 +94,8 @@ export interface CatBase {
 
 
 export const CatBaseCatTypeEnum = {
-    Seam: 'SEAM',
-    Short: 'SHORT'
+    SEAM: 'SEAM',
+    SHORT: 'SHORT'
 } as const;
 
 export module CatBaseCatTypeEnums {
@@ -2089,8 +2089,8 @@ export interface ComponentsSchemasToy {
 
 
 export const ComponentsSchemasToySomeEnumEnum = {
-    Foo: 'FOO',
-    Bar: 'BAR'
+    FOO: 'FOO',
+    BAR: 'BAR'
 } as const;
 
 export module ComponentsSchemasToySomeEnumEnums {
@@ -2361,8 +2361,8 @@ export interface SchemasToy {
 
 
 export const SchemasToySomeEnumEnum = {
-    Foo: 'FOO',
-    Bar: 'BAR'
+    FOO: 'FOO',
+    BAR: 'BAR'
 } as const;
 
 export module SchemasToySomeEnumEnums {
@@ -5763,8 +5763,8 @@ export interface CatBase {
 
 
 export const CatBaseCatTypeEnum = {
-    Seam: 'SEAM',
-    Short: 'SHORT'
+    SEAM: 'SEAM',
+    SHORT: 'SHORT'
 } as const;
 
 export module CatBaseCatTypeEnums {
