@@ -13,12 +13,14 @@ export async function generateJava(openapiSpec: string, out: string) {
     outDirPath: outDir.normalize().absolutePath,
   };
 
-  await OaGenerator.generate({
-    "-g": "spring",
-    "-i": sanitizedInput.specPath,
-    "-o": sanitizedInput.outDirPath,
-    generatorOptions: { enumUnknownDefaultCase: true },
-  });
+  await OaGenerator.generate(
+    {
+      "-g": "spring",
+      "-i": sanitizedInput.specPath,
+      "-o": sanitizedInput.outDirPath,
+    },
+    { enumUnknownDefaultCase: true }
+  );
 
   return sanitizedInput.outDirPath;
 }

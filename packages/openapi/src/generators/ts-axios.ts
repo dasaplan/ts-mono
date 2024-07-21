@@ -26,16 +26,18 @@ export async function generateTypescriptAxios(openapiSpec: string, out: string, 
     outDirPath: outDir.normalize().absolutePath,
   };
 
-  await OaGenerator.generate<TypescriptAxiosConfigOptions>({
-    "-g": "typescript-axios",
-    "-i": sanitizedInput.specPath,
-    "-o": sanitizedInput.outDirPath,
-    "-t": sanitizedInput.templatesPath,
-    "--additional-properties": zodEnabled,
-    generatorOptions: {
-      enumPropertyNaming: "original",
+  await OaGenerator.generate<TypescriptAxiosConfigOptions>(
+    {
+      "-g": "typescript-axios",
+      "-i": sanitizedInput.specPath,
+      "-o": sanitizedInput.outDirPath,
+      "-t": sanitizedInput.templatesPath,
+      "--additional-properties": zodEnabled,
     },
-  });
+    {
+      enumPropertyNaming: "original",
+    }
+  );
 
   const apiFile = outDir.makeFile("api.ts");
   if (params?.postProcessor) params.postProcessor(apiFile.absolutePath);

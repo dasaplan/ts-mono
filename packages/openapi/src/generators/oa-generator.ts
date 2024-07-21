@@ -1,71 +1,46 @@
 import { appLog } from "../logger.js";
-import child_process from "node:child_process";
-import { _, ApplicationError } from "@dasaplan/ts-sdk";
-import util from "node:util";
+import { _, ApplicationError, CommandLine } from "@dasaplan/ts-sdk";
 
 export module OaGenerator {
   const logger = appLog.childLogger("OaGenerator");
 
   /** User Input must be sanitized from the caller*/
-  export function generateSync<ConcreteGenerator extends object>(options: OaGeneratorOptions<ConcreteGenerator>) {
-    const log = logger.childLog(generateSync);
+  export async function generate<ConcreteGenerator extends object>(options: OaGeneratorOptions, concreteGeneratorOptions: ConcreteGenerator) {
+    const log = logger.childLog(generate);
     log.info(`start generate with options:`, JSON.stringify(options));
 
-    const cliParams = OaGeneratorOptions.create<ConcreteGenerator>(options);
-    const command = `npx openapi-generator-cli generate ${cliParams}`;
-
-    tryExecSync(command);
+    const cliParams = OaGeneratorOptions.create(options, concreteGeneratorOptions);
+    const command = `npx`;
+    const args = [" openapi-generator-cli", "generate", ...cliParams];
+    await tryExec(command, args);
   }
 
-  /** User Input must be sanitized from the caller*/
-  export async function generate<ConcreteGenerator extends object>(options: OaGeneratorOptions<ConcreteGenerator>) {
-    const log = logger.childLog(generateSync);
-    log.info(`start generate with options:`, JSON.stringify(options));
-
-    const cliParams = OaGeneratorOptions.create<ConcreteGenerator>(options);
-    const command = `npx openapi-generator-cli generate ${cliParams}`;
-
-    await tryExec(command);
-  }
-
-  async function tryExec(command: string) {
+  async function tryExec(command: string, args: ReadonlyArray<string>) {
     const log = logger.childLog(tryExec);
-    const execAsync = util.promisify(child_process.exec);
-    try {
-      log.info(`start: ${command}`);
-      const { stdout, stderr } = await execAsync(command);
-      if (stderr) {
-        log.error(stderr);
-      }
-      log.debug(`end: ${command}`);
-      log.debug(stdout);
-    } catch (error) {
-      throw ApplicationError.create("failed code generation").chainUnknown(error);
-    }
-  }
 
-  function tryExecSync(command: string) {
-    const log = logger.childLog(tryExec);
     try {
-      log.info(`start: ${command}`);
-      const result = child_process.execSync(command);
+      log.info(`start: ${command}, args: ${args.join(", ")}`);
+      const stdout = await CommandLine.spawn(command, args);
       log.debug(`end: ${command}`);
-      log.debug(result);
+      log.debug("stdout:", stdout);
     } catch (error) {
       throw ApplicationError.create("failed code generation").chainUnknown(error);
     }
   }
 }
 
-export type OaGeneratorOptions<T extends object> = OaGeneratorOptions.CLIParams<T>;
+export type OaGeneratorOptions = OaGeneratorOptions.CLIParams;
 export module OaGeneratorOptions {
-  export function create<ConcreteGeneratorOptions extends object>(options: OaGeneratorOptions<ConcreteGeneratorOptions>): string {
-    const generatorOptions = Object.entries(options.generatorOptions)
+  export function create<ConcreteGeneratorOptions extends object>(
+    options: OaGeneratorOptions,
+    concreteGeneratorOptions: ConcreteGeneratorOptions
+  ): ReadonlyArray<string> {
+    const generatorOptions = Object.entries(concreteGeneratorOptions)
       .map(([key, value]) => `${key}=${value}`)
       .join(",");
 
     // use cases for additional-properties are "documented generator options" and "undocumented variables for templating"
-    const additionalProperties = [options["--additional-properties"], generatorOptions].join(",");
+    const additionalProperties = [options["--additional-properties"], generatorOptions].filter(_.isDefined).join(",");
 
     const params = {
       "--skip-validate-spec": undefined,
@@ -73,15 +48,20 @@ export module OaGeneratorOptions {
       "--additional-properties": additionalProperties,
     };
 
-    return Object.entries(params).reduce((acc, [flag, value]) => {
+    return Object.entries(params).reduce((acc: Array<string>, [flag, value]) => {
+      if (!flag) {
+        return acc;
+      }
       const formattedFlag = flag.startsWith("-") ? flag : `--${flag}`;
       const stringValueInQuotes = typeof value === "string" ? `"${value}"` : value;
-      const formattedValue = value ? ` ${stringValueInQuotes}` : "";
-      return `${acc} ${formattedFlag}${formattedValue}`;
-    }, "");
+      if (!stringValueInQuotes) {
+        return [...acc, formattedFlag];
+      }
+      return [...acc, formattedFlag, stringValueInQuotes];
+    }, []);
   }
 
-  export interface CLIParams<T extends object> {
+  export interface CLIParams {
     /** path to spec */
     "-i": string;
     /** output dir*/
@@ -93,6 +73,5 @@ export module OaGeneratorOptions {
     "--skip-validate-spec"?: undefined;
     /** generator options (or variables passed to the templates(*/
     "--additional-properties"?: string;
-    generatorOptions: T;
   }
 }
