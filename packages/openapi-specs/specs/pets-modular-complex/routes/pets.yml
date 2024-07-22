@@ -25,8 +25,15 @@ post:
   operationId: createPets
   tags:
     - pets
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../components/schemas.yml#/components/schemas/Pet'
   responses:
     '201':
       description: Null response
     default:
       $ref: '../components/responses.yml#/components/responses/Default'
+
+

@@ -1915,6 +1915,15 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
       },
       "post": {
         "operationId": "createPets",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet",
+              },
+            },
+          },
+        },
         "responses": {
           "201": {
             "description": "Null response",
@@ -1953,6 +1962,42 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
           },
         },
         "summary": "Info for a specific pet",
+        "tags": [
+          "pets",
+        ],
+      },
+      "patch": {
+        "operationId": "patchPet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet",
+              },
+            },
+          },
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Expected response to a valid request",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Patch pet",
         "tags": [
           "pets",
         ],
@@ -2400,6 +2445,15 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
       },
       "post": {
         "operationId": "createPets",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet",
+              },
+            },
+          },
+        },
         "responses": {
           "201": {
             "description": "Null response",
@@ -2438,6 +2492,42 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
           },
         },
         "summary": "Info for a specific pet",
+        "tags": [
+          "pets",
+        ],
+      },
+      "patch": {
+        "operationId": "patchPet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet",
+              },
+            },
+          },
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Expected response to a valid request",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Patch pet",
         "tags": [
           "pets",
         ],
@@ -2793,6 +2883,15 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
       },
       "post": {
         "operationId": "createPets",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet",
+              },
+            },
+          },
+        },
         "responses": {
           "201": {
             "description": "Null response",
@@ -2831,6 +2930,42 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
           },
         },
         "summary": "Info for a specific pet",
+        "tags": [
+          "pets",
+        ],
+      },
+      "patch": {
+        "operationId": "patchPet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet",
+              },
+            },
+          },
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Expected response to a valid request",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Patch pet",
         "tags": [
           "pets",
         ],
@@ -3274,6 +3409,15 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
       },
       "post": {
         "operationId": "createPets",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet",
+              },
+            },
+          },
+        },
         "responses": {
           "201": {
             "description": "Null response",
@@ -3312,6 +3456,42 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
           },
         },
         "summary": "Info for a specific pet",
+        "tags": [
+          "pets",
+        ],
+      },
+      "patch": {
+        "operationId": "patchPet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PathPetId",
+          },
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet",
+              },
+            },
+          },
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "Expected response to a valid request",
+          },
+          "default": {
+            "$ref": "#/components/responses/Default",
+          },
+        },
+        "summary": "Patch pet",
         "tags": [
           "pets",
         ],

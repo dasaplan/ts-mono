@@ -14,3 +14,24 @@ get:
             $ref: '../components/schemas.yml#/components/schemas/Pet'
     default:
       $ref: '../components/responses.yml#/components/responses/Default'
+patch:
+  summary: Patch pet
+  operationId: patchPet
+  tags:
+    - pets
+  parameters:
+    - $ref: '../components/parameter.yml#/components/parameters/PathPetId'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../components/schemas.yml#/components/schemas/Pet'
+  responses:
+    '200':
+      description: Expected response to a valid request
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas.yml#/components/schemas/Pet'
+    default:
+      $ref: '../components/responses.yml#/components/responses/Default'

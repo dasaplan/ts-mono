@@ -64137,7 +64137,1430 @@ exports[`transpiler > transpile pets-modular-complex/petstore-api.yml > endpoint
     "method": "post",
     "parameters": [],
     "path": "/pets",
-    "requestBody": undefined,
+    "requestBody": {
+      "format": "json",
+      "rawFormat": {
+        "format": "application/json",
+        "type": "KNOWN",
+      },
+      "schema": {
+        "component": {
+          "id": "#/components/schemas/Pet",
+          "kind": "COMPONENT",
+        },
+        "getId": [Function],
+        "getName": [Function],
+        "isCircular": false,
+        "kind": "OBJECT",
+        "parent": undefined,
+        "properties": [
+          {
+            "ownerId": "Pet",
+            "propertyName": "id",
+            "propertyValue": {
+              "component": {
+                "kind": "INLINE",
+                "name": "id",
+              },
+              "format": "int64",
+              "getId": [Function],
+              "getName": [Function],
+              "kind": "PRIMITIVE",
+              "raw": {
+                "format": "int64",
+                "type": "integer",
+              },
+              "type": "integer",
+            },
+            "required": true,
+          },
+          {
+            "ownerId": "Pet",
+            "propertyName": "toy",
+            "propertyValue": {
+              "component": {
+                "id": "#/components/schemas/components-schemas-Toy",
+                "kind": "COMPONENT",
+              },
+              "getId": [Function],
+              "getName": [Function],
+              "isCircular": false,
+              "kind": "OBJECT",
+              "parent": undefined,
+              "properties": [
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "name",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "name",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "color",
+                  "propertyValue": {
+                    "component": {
+                      "id": "#/components/schemas/Color",
+                      "kind": "COMPONENT",
+                    },
+                    "getId": [Function],
+                    "getName": [Function],
+                    "isCircular": false,
+                    "kind": "OBJECT",
+                    "parent": undefined,
+                    "properties": [
+                      {
+                        "ownerId": "Color",
+                        "propertyName": "colorId",
+                        "propertyValue": {
+                          "component": {
+                            "kind": "INLINE",
+                            "name": "colorId",
+                          },
+                          "format": undefined,
+                          "getId": [Function],
+                          "getName": [Function],
+                          "kind": "PRIMITIVE",
+                          "raw": {
+                            "type": "string",
+                          },
+                          "type": "string",
+                        },
+                        "required": false,
+                      },
+                      {
+                        "ownerId": "Color",
+                        "propertyName": "untitled",
+                        "propertyValue": {
+                          "component": {
+                            "id": "#/components/schemas/schema-untitled",
+                            "kind": "COMPONENT",
+                          },
+                          "getId": [Function],
+                          "getName": [Function],
+                          "isCircular": false,
+                          "kind": "OBJECT",
+                          "parent": undefined,
+                          "properties": [
+                            {
+                              "ownerId": "schema-untitled",
+                              "propertyName": "untitledProp",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "untitledProp",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                          ],
+                          "raw": {
+                            "::ref": "#/components/schemas/schema-untitled",
+                            "properties": {
+                              "untitledProp": {
+                                "type": "string",
+                              },
+                            },
+                          },
+                          "type": "object",
+                        },
+                        "required": false,
+                      },
+                      {
+                        "ownerId": "Color",
+                        "propertyName": "untitledProp",
+                        "propertyValue": {
+                          "component": {
+                            "kind": "INLINE",
+                            "name": "untitledProp",
+                          },
+                          "format": undefined,
+                          "getId": [Function],
+                          "getName": [Function],
+                          "kind": "PRIMITIVE",
+                          "raw": {
+                            "type": "string",
+                          },
+                          "type": "string",
+                        },
+                        "required": false,
+                      },
+                    ],
+                    "raw": {
+                      "::ref": "#/components/schemas/Color",
+                      "properties": {
+                        "colorId": {
+                          "type": "string",
+                        },
+                        "untitled": {
+                          "$ref": "#/components/schemas/schema-untitled",
+                        },
+                        "untitledProp": {
+                          "type": "string",
+                        },
+                      },
+                      "type": "object",
+                    },
+                    "type": "object",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "targetGroup",
+                  "propertyValue": {
+                    "component": {
+                      "id": "#/components/schemas/targetGroup",
+                      "kind": "COMPONENT",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "isCircular": false,
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "::ref": "#/components/schemas/targetGroup",
+                      "default": "CHILDREN",
+                      "type": "string",
+                      "x-extensible-enum": [
+                        "PETS",
+                        "CHILDREN",
+                      ],
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "relates",
+                  "propertyValue": {
+                    "component": {
+                      "id": "#/components/schemas/PetToy",
+                      "kind": "COMPONENT",
+                    },
+                    "discriminator": {
+                      "mappings": [
+                        {
+                          "component": {
+                            "id": "#/components/schemas/Ball",
+                            "kind": "COMPONENT",
+                          },
+                          "discriminatorValue": "BALL",
+                          "getId": [Function],
+                          "getName": [Function],
+                          "isCircular": false,
+                          "kind": "OBJECT",
+                          "parent": undefined,
+                          "properties": [
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "id",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "id",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "price",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "price",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "kind",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "kind",
+                                },
+                                "entityRef": [Circular],
+                                "enum": [
+                                  "BALL",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "DISCRIMINATOR",
+                                "raw": {
+                                  "example": "BALL",
+                                  "type": "string",
+                                  "x-const": "BALL",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "fluffLevel",
+                              "propertyValue": {
+                                "component": {
+                                  "id": "#/components/schemas/FluffLevel",
+                                  "kind": "COMPONENT",
+                                },
+                                "enum": [
+                                  "A",
+                                  "B",
+                                  "C",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "isCircular": false,
+                                "kind": "ENUM",
+                                "raw": {
+                                  "::ref": "#/components/schemas/FluffLevel",
+                                  "enum": [
+                                    "A",
+                                    "B",
+                                    "C",
+                                  ],
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "targetGroup",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "targetGroup",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "default": "CHILDREN",
+                                  "type": "string",
+                                  "x-extensible-enum": [
+                                    "PETS",
+                                    "CHILDREN",
+                                  ],
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                          ],
+                          "raw": {
+                            "::ref": "#/components/schemas/Ball",
+                            "properties": {
+                              "fluffLevel": {
+                                "$ref": "#/components/schemas/FluffLevel",
+                              },
+                              "id": {
+                                "type": "string",
+                              },
+                              "kind": {
+                                "example": "BALL",
+                                "type": "string",
+                                "x-const": "BALL",
+                              },
+                              "price": {
+                                "type": "string",
+                              },
+                              "targetGroup": {
+                                "default": "CHILDREN",
+                                "type": "string",
+                                "x-extensible-enum": [
+                                  "PETS",
+                                  "CHILDREN",
+                                ],
+                              },
+                            },
+                            "required": [
+                              "id",
+                              "price",
+                              "kind",
+                            ],
+                            "title": "Ball",
+                          },
+                          "type": "object",
+                        },
+                        {
+                          "component": {
+                            "id": "#/components/schemas/FluffyTeddy",
+                            "kind": "COMPONENT",
+                          },
+                          "discriminatorValue": "TEDDY",
+                          "getId": [Function],
+                          "getName": [Function],
+                          "isCircular": false,
+                          "kind": "OBJECT",
+                          "parent": undefined,
+                          "properties": [
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "fluffLevel",
+                              "propertyValue": {
+                                "component": {
+                                  "id": "#/components/schemas/FluffLevel",
+                                  "kind": "COMPONENT",
+                                },
+                                "enum": [
+                                  "A",
+                                  "B",
+                                  "C",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "isCircular": false,
+                                "kind": "ENUM",
+                                "raw": {
+                                  "::ref": "#/components/schemas/FluffLevel",
+                                  "enum": [
+                                    "A",
+                                    "B",
+                                    "C",
+                                  ],
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "id",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "id",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "price",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "price",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "kind",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "kind",
+                                },
+                                "entityRef": [Circular],
+                                "enum": [
+                                  "TEDDY",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "DISCRIMINATOR",
+                                "raw": {
+                                  "example": "TEDDY",
+                                  "type": "string",
+                                  "x-const": "TEDDY",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "targetGroup",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "targetGroup",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "default": "CHILDREN",
+                                  "type": "string",
+                                  "x-extensible-enum": [
+                                    "PETS",
+                                    "CHILDREN",
+                                  ],
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                          ],
+                          "raw": {
+                            "::ref": "#/components/schemas/FluffyTeddy",
+                            "properties": {
+                              "fluffLevel": {
+                                "$ref": "#/components/schemas/FluffLevel",
+                              },
+                              "id": {
+                                "type": "string",
+                              },
+                              "kind": {
+                                "example": "TEDDY",
+                                "type": "string",
+                                "x-const": "TEDDY",
+                              },
+                              "price": {
+                                "type": "string",
+                              },
+                              "targetGroup": {
+                                "default": "CHILDREN",
+                                "type": "string",
+                                "x-extensible-enum": [
+                                  "PETS",
+                                  "CHILDREN",
+                                ],
+                              },
+                            },
+                            "required": [
+                              "id",
+                              "price",
+                              "kind",
+                            ],
+                            "title": "Teddy",
+                          },
+                          "type": "object",
+                        },
+                      ],
+                      "name": "kind",
+                    },
+                    "getId": [Function],
+                    "getName": [Function],
+                    "isCircular": false,
+                    "kind": "UNION",
+                    "raw": {
+                      "::ref": "#/components/schemas/PetToy",
+                      "discriminator": {
+                        "mapping": {
+                          "BALL": "#/components/schemas/Ball",
+                          "TEDDY": "#/components/schemas/FluffyTeddy",
+                        },
+                        "propertyName": "kind",
+                      },
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/Ball",
+                        },
+                        {
+                          "$ref": "#/components/schemas/FluffyTeddy",
+                        },
+                      ],
+                    },
+                    "schemas": [
+                      {
+                        "component": {
+                          "id": "#/components/schemas/Ball",
+                          "kind": "COMPONENT",
+                        },
+                        "getId": [Function],
+                        "getName": [Function],
+                        "isCircular": false,
+                        "kind": "OBJECT",
+                        "parent": undefined,
+                        "properties": [
+                          {
+                            "ownerId": "Ball",
+                            "propertyName": "id",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "id",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "Ball",
+                            "propertyName": "price",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "price",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "Ball",
+                            "propertyName": "kind",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "kind",
+                              },
+                              "entityRef": [Circular],
+                              "enum": [
+                                "BALL",
+                              ],
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "DISCRIMINATOR",
+                              "raw": {
+                                "example": "BALL",
+                                "type": "string",
+                                "x-const": "BALL",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "Ball",
+                            "propertyName": "fluffLevel",
+                            "propertyValue": {
+                              "component": {
+                                "id": "#/components/schemas/FluffLevel",
+                                "kind": "COMPONENT",
+                              },
+                              "enum": [
+                                "A",
+                                "B",
+                                "C",
+                              ],
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "isCircular": false,
+                              "kind": "ENUM",
+                              "raw": {
+                                "::ref": "#/components/schemas/FluffLevel",
+                                "enum": [
+                                  "A",
+                                  "B",
+                                  "C",
+                                ],
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": false,
+                          },
+                          {
+                            "ownerId": "Ball",
+                            "propertyName": "targetGroup",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "targetGroup",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "default": "CHILDREN",
+                                "type": "string",
+                                "x-extensible-enum": [
+                                  "PETS",
+                                  "CHILDREN",
+                                ],
+                              },
+                              "type": "string",
+                            },
+                            "required": false,
+                          },
+                        ],
+                        "raw": {
+                          "::ref": "#/components/schemas/Ball",
+                          "properties": {
+                            "fluffLevel": {
+                              "$ref": "#/components/schemas/FluffLevel",
+                            },
+                            "id": {
+                              "type": "string",
+                            },
+                            "kind": {
+                              "example": "BALL",
+                              "type": "string",
+                              "x-const": "BALL",
+                            },
+                            "price": {
+                              "type": "string",
+                            },
+                            "targetGroup": {
+                              "default": "CHILDREN",
+                              "type": "string",
+                              "x-extensible-enum": [
+                                "PETS",
+                                "CHILDREN",
+                              ],
+                            },
+                          },
+                          "required": [
+                            "id",
+                            "price",
+                            "kind",
+                          ],
+                          "title": "Ball",
+                        },
+                        "type": "object",
+                      },
+                      {
+                        "component": {
+                          "id": "#/components/schemas/FluffyTeddy",
+                          "kind": "COMPONENT",
+                        },
+                        "getId": [Function],
+                        "getName": [Function],
+                        "isCircular": false,
+                        "kind": "OBJECT",
+                        "parent": undefined,
+                        "properties": [
+                          {
+                            "ownerId": "FluffyTeddy",
+                            "propertyName": "fluffLevel",
+                            "propertyValue": {
+                              "component": {
+                                "id": "#/components/schemas/FluffLevel",
+                                "kind": "COMPONENT",
+                              },
+                              "enum": [
+                                "A",
+                                "B",
+                                "C",
+                              ],
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "isCircular": false,
+                              "kind": "ENUM",
+                              "raw": {
+                                "::ref": "#/components/schemas/FluffLevel",
+                                "enum": [
+                                  "A",
+                                  "B",
+                                  "C",
+                                ],
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": false,
+                          },
+                          {
+                            "ownerId": "FluffyTeddy",
+                            "propertyName": "id",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "id",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "FluffyTeddy",
+                            "propertyName": "price",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "price",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "FluffyTeddy",
+                            "propertyName": "kind",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "kind",
+                              },
+                              "entityRef": [Circular],
+                              "enum": [
+                                "TEDDY",
+                              ],
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "DISCRIMINATOR",
+                              "raw": {
+                                "example": "TEDDY",
+                                "type": "string",
+                                "x-const": "TEDDY",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "FluffyTeddy",
+                            "propertyName": "targetGroup",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "targetGroup",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "default": "CHILDREN",
+                                "type": "string",
+                                "x-extensible-enum": [
+                                  "PETS",
+                                  "CHILDREN",
+                                ],
+                              },
+                              "type": "string",
+                            },
+                            "required": false,
+                          },
+                        ],
+                        "raw": {
+                          "::ref": "#/components/schemas/FluffyTeddy",
+                          "properties": {
+                            "fluffLevel": {
+                              "$ref": "#/components/schemas/FluffLevel",
+                            },
+                            "id": {
+                              "type": "string",
+                            },
+                            "kind": {
+                              "example": "TEDDY",
+                              "type": "string",
+                              "x-const": "TEDDY",
+                            },
+                            "price": {
+                              "type": "string",
+                            },
+                            "targetGroup": {
+                              "default": "CHILDREN",
+                              "type": "string",
+                              "x-extensible-enum": [
+                                "PETS",
+                                "CHILDREN",
+                              ],
+                            },
+                          },
+                          "required": [
+                            "id",
+                            "price",
+                            "kind",
+                          ],
+                          "title": "Teddy",
+                        },
+                        "type": "object",
+                      },
+                    ],
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "subId",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "subId",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "id",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "id",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "price",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "price",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "kind",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "kind",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "someEnum",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "someEnum",
+                    },
+                    "enum": [
+                      "FOO",
+                      "BAR",
+                    ],
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "ENUM",
+                    "raw": {
+                      "enum": [
+                        "FOO",
+                        "BAR",
+                      ],
+                      "title": "FooBar",
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "fluffLevel",
+                  "propertyValue": {
+                    "component": {
+                      "id": "#/components/schemas/FluffLevel",
+                      "kind": "COMPONENT",
+                    },
+                    "enum": [
+                      "A",
+                      "B",
+                      "C",
+                    ],
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "isCircular": false,
+                    "kind": "ENUM",
+                    "raw": {
+                      "::ref": "#/components/schemas/FluffLevel",
+                      "enum": [
+                        "A",
+                        "B",
+                        "C",
+                      ],
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+              ],
+              "raw": {
+                "::ref": "#/components/schemas/components-schemas-Toy",
+                "properties": {
+                  "color": {
+                    "$ref": "#/components/schemas/Color",
+                  },
+                  "fluffLevel": {
+                    "$ref": "#/components/schemas/FluffLevel",
+                  },
+                  "id": {
+                    "type": "string",
+                  },
+                  "kind": {
+                    "type": "string",
+                  },
+                  "name": {
+                    "type": "string",
+                  },
+                  "price": {
+                    "type": "string",
+                  },
+                  "relates": {
+                    "$ref": "#/components/schemas/PetToy",
+                  },
+                  "someEnum": {
+                    "enum": [
+                      "FOO",
+                      "BAR",
+                    ],
+                    "title": "FooBar",
+                    "type": "string",
+                  },
+                  "subId": {
+                    "type": "string",
+                  },
+                  "targetGroup": {
+                    "$ref": "#/components/schemas/targetGroup",
+                  },
+                },
+                "required": [
+                  "id",
+                  "kind",
+                  "price",
+                  "string",
+                ],
+                "title": "Toy",
+              },
+              "type": "object",
+            },
+            "required": false,
+          },
+          {
+            "ownerId": "Pet",
+            "propertyName": "leastFavToy",
+            "propertyValue": {
+              "component": {
+                "id": "#/components/schemas/schemas-Toy",
+                "kind": "COMPONENT",
+              },
+              "getId": [Function],
+              "getName": [Function],
+              "isCircular": false,
+              "kind": "OBJECT",
+              "parent": undefined,
+              "properties": [
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "id",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "id",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "price",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "price",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "kind",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "kind",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "someEnum",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "someEnum",
+                    },
+                    "enum": [
+                      "FOO",
+                      "BAR",
+                    ],
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "ENUM",
+                    "raw": {
+                      "enum": [
+                        "FOO",
+                        "BAR",
+                      ],
+                      "title": "FooBar",
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "fluffLevel",
+                  "propertyValue": {
+                    "component": {
+                      "id": "#/components/schemas/FluffLevel",
+                      "kind": "COMPONENT",
+                    },
+                    "enum": [
+                      "A",
+                      "B",
+                      "C",
+                    ],
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "isCircular": false,
+                    "kind": "ENUM",
+                    "raw": {
+                      "::ref": "#/components/schemas/FluffLevel",
+                      "enum": [
+                        "A",
+                        "B",
+                        "C",
+                      ],
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "targetGroup",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "targetGroup",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "default": "CHILDREN",
+                      "type": "string",
+                      "x-extensible-enum": [
+                        "PETS",
+                        "CHILDREN",
+                      ],
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+              ],
+              "raw": {
+                "::ref": "#/components/schemas/schemas-Toy",
+                "properties": {
+                  "fluffLevel": {
+                    "$ref": "#/components/schemas/FluffLevel",
+                  },
+                  "id": {
+                    "type": "string",
+                  },
+                  "kind": {
+                    "type": "string",
+                  },
+                  "price": {
+                    "type": "string",
+                  },
+                  "someEnum": {
+                    "enum": [
+                      "FOO",
+                      "BAR",
+                    ],
+                    "title": "FooBar",
+                    "type": "string",
+                  },
+                  "targetGroup": {
+                    "default": "CHILDREN",
+                    "type": "string",
+                    "x-extensible-enum": [
+                      "PETS",
+                      "CHILDREN",
+                    ],
+                  },
+                },
+                "required": [
+                  "id",
+                  "price",
+                  "kind",
+                ],
+                "title": "Toy",
+              },
+              "type": "object",
+            },
+            "required": false,
+          },
+          {
+            "ownerId": "Pet",
+            "propertyName": "favFluffLevel",
+            "propertyValue": {
+              "component": {
+                "id": "#/components/schemas/FluffLevel",
+                "kind": "COMPONENT",
+              },
+              "enum": [
+                "A",
+                "B",
+                "C",
+              ],
+              "format": undefined,
+              "getId": [Function],
+              "getName": [Function],
+              "isCircular": false,
+              "kind": "ENUM",
+              "raw": {
+                "::ref": "#/components/schemas/FluffLevel",
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                ],
+                "type": "string",
+              },
+              "type": "string",
+            },
+            "required": false,
+          },
+          {
+            "ownerId": "Pet",
+            "propertyName": "tag",
+            "propertyValue": {
+              "component": {
+                "kind": "INLINE",
+                "name": "tag",
+              },
+              "format": undefined,
+              "getId": [Function],
+              "getName": [Function],
+              "kind": "PRIMITIVE",
+              "raw": {
+                "example": {
+                  "description": "default string example",
+                  "value": "some string",
+                },
+                "type": "string",
+              },
+              "type": "string",
+            },
+            "required": false,
+          },
+          {
+            "ownerId": "Pet",
+            "propertyName": "name",
+            "propertyValue": {
+              "component": {
+                "kind": "INLINE",
+                "name": "name",
+              },
+              "format": undefined,
+              "getId": [Function],
+              "getName": [Function],
+              "kind": "PRIMITIVE",
+              "raw": {
+                "example": {
+                  "description": "default string example",
+                  "value": "some string",
+                },
+                "type": "string",
+              },
+              "type": "string",
+            },
+            "required": true,
+          },
+        ],
+        "raw": {
+          "::ref": "#/components/schemas/Pet",
+          "example": {
+            "bar": 1234,
+            "foo": "",
+            "foobar": true,
+          },
+          "properties": {
+            "favFluffLevel": {
+              "$ref": "#/components/schemas/FluffLevel",
+            },
+            "id": {
+              "format": "int64",
+              "type": "integer",
+            },
+            "leastFavToy": {
+              "$ref": "#/components/schemas/schemas-Toy",
+            },
+            "name": {
+              "example": {
+                "description": "default string example",
+                "value": "some string",
+              },
+              "type": "string",
+            },
+            "tag": {
+              "example": {
+                "description": "default string example",
+                "value": "some string",
+              },
+              "type": "string",
+            },
+            "toy": {
+              "$ref": "#/components/schemas/components-schemas-Toy",
+            },
+          },
+          "required": [
+            "id",
+            "name",
+          ],
+          "type": "object",
+        },
+        "type": "object",
+      },
+    },
     "responses": [],
   },
   {
@@ -64169,6 +65592,2887 @@ exports[`transpiler > transpile pets-modular-complex/petstore-api.yml > endpoint
     ],
     "path": "/pets/{petId}",
     "requestBody": undefined,
+    "responses": [
+      {
+        "description": "Expected response to a valid request",
+        "format": "json",
+        "rawFormat": {
+          "format": "application/json",
+          "type": "KNOWN",
+        },
+        "schema": {
+          "component": {
+            "id": "#/components/schemas/Pet",
+            "kind": "COMPONENT",
+          },
+          "getId": [Function],
+          "getName": [Function],
+          "isCircular": false,
+          "kind": "OBJECT",
+          "parent": undefined,
+          "properties": [
+            {
+              "ownerId": "Pet",
+              "propertyName": "id",
+              "propertyValue": {
+                "component": {
+                  "kind": "INLINE",
+                  "name": "id",
+                },
+                "format": "int64",
+                "getId": [Function],
+                "getName": [Function],
+                "kind": "PRIMITIVE",
+                "raw": {
+                  "format": "int64",
+                  "type": "integer",
+                },
+                "type": "integer",
+              },
+              "required": true,
+            },
+            {
+              "ownerId": "Pet",
+              "propertyName": "toy",
+              "propertyValue": {
+                "component": {
+                  "id": "#/components/schemas/components-schemas-Toy",
+                  "kind": "COMPONENT",
+                },
+                "getId": [Function],
+                "getName": [Function],
+                "isCircular": false,
+                "kind": "OBJECT",
+                "parent": undefined,
+                "properties": [
+                  {
+                    "ownerId": "components-schemas-Toy",
+                    "propertyName": "name",
+                    "propertyValue": {
+                      "component": {
+                        "kind": "INLINE",
+                        "name": "name",
+                      },
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "kind": "PRIMITIVE",
+                      "raw": {
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": false,
+                  },
+                  {
+                    "ownerId": "components-schemas-Toy",
+                    "propertyName": "color",
+                    "propertyValue": {
+                      "component": {
+                        "id": "#/components/schemas/Color",
+                        "kind": "COMPONENT",
+                      },
+                      "getId": [Function],
+                      "getName": [Function],
+                      "isCircular": false,
+                      "kind": "OBJECT",
+                      "parent": undefined,
+                      "properties": [
+                        {
+                          "ownerId": "Color",
+                          "propertyName": "colorId",
+                          "propertyValue": {
+                            "component": {
+                              "kind": "INLINE",
+                              "name": "colorId",
+                            },
+                            "format": undefined,
+                            "getId": [Function],
+                            "getName": [Function],
+                            "kind": "PRIMITIVE",
+                            "raw": {
+                              "type": "string",
+                            },
+                            "type": "string",
+                          },
+                          "required": false,
+                        },
+                        {
+                          "ownerId": "Color",
+                          "propertyName": "untitled",
+                          "propertyValue": {
+                            "component": {
+                              "id": "#/components/schemas/schema-untitled",
+                              "kind": "COMPONENT",
+                            },
+                            "getId": [Function],
+                            "getName": [Function],
+                            "isCircular": false,
+                            "kind": "OBJECT",
+                            "parent": undefined,
+                            "properties": [
+                              {
+                                "ownerId": "schema-untitled",
+                                "propertyName": "untitledProp",
+                                "propertyValue": {
+                                  "component": {
+                                    "kind": "INLINE",
+                                    "name": "untitledProp",
+                                  },
+                                  "format": undefined,
+                                  "getId": [Function],
+                                  "getName": [Function],
+                                  "kind": "PRIMITIVE",
+                                  "raw": {
+                                    "type": "string",
+                                  },
+                                  "type": "string",
+                                },
+                                "required": false,
+                              },
+                            ],
+                            "raw": {
+                              "::ref": "#/components/schemas/schema-untitled",
+                              "properties": {
+                                "untitledProp": {
+                                  "type": "string",
+                                },
+                              },
+                            },
+                            "type": "object",
+                          },
+                          "required": false,
+                        },
+                        {
+                          "ownerId": "Color",
+                          "propertyName": "untitledProp",
+                          "propertyValue": {
+                            "component": {
+                              "kind": "INLINE",
+                              "name": "untitledProp",
+                            },
+                            "format": undefined,
+                            "getId": [Function],
+                            "getName": [Function],
+                            "kind": "PRIMITIVE",
+                            "raw": {
+                              "type": "string",
+                            },
+                            "type": "string",
+                          },
+                          "required": false,
+                        },
+                      ],
+                      "raw": {
+                        "::ref": "#/components/schemas/Color",
+                        "properties": {
+                          "colorId": {
+                            "type": "string",
+                          },
+                          "untitled": {
+                            "$ref": "#/components/schemas/schema-untitled",
+                          },
+                          "untitledProp": {
+                            "type": "string",
+                          },
+                        },
+                        "type": "object",
+                      },
+                      "type": "object",
+                    },
+                    "required": false,
+                  },
+                  {
+                    "ownerId": "components-schemas-Toy",
+                    "propertyName": "targetGroup",
+                    "propertyValue": {
+                      "component": {
+                        "id": "#/components/schemas/targetGroup",
+                        "kind": "COMPONENT",
+                      },
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "isCircular": false,
+                      "kind": "PRIMITIVE",
+                      "raw": {
+                        "::ref": "#/components/schemas/targetGroup",
+                        "default": "CHILDREN",
+                        "type": "string",
+                        "x-extensible-enum": [
+                          "PETS",
+                          "CHILDREN",
+                        ],
+                      },
+                      "type": "string",
+                    },
+                    "required": false,
+                  },
+                  {
+                    "ownerId": "components-schemas-Toy",
+                    "propertyName": "relates",
+                    "propertyValue": {
+                      "component": {
+                        "id": "#/components/schemas/PetToy",
+                        "kind": "COMPONENT",
+                      },
+                      "discriminator": {
+                        "mappings": [
+                          {
+                            "component": {
+                              "id": "#/components/schemas/Ball",
+                              "kind": "COMPONENT",
+                            },
+                            "discriminatorValue": "BALL",
+                            "getId": [Function],
+                            "getName": [Function],
+                            "isCircular": false,
+                            "kind": "OBJECT",
+                            "parent": undefined,
+                            "properties": [
+                              {
+                                "ownerId": "Ball",
+                                "propertyName": "id",
+                                "propertyValue": {
+                                  "component": {
+                                    "kind": "INLINE",
+                                    "name": "id",
+                                  },
+                                  "format": undefined,
+                                  "getId": [Function],
+                                  "getName": [Function],
+                                  "kind": "PRIMITIVE",
+                                  "raw": {
+                                    "type": "string",
+                                  },
+                                  "type": "string",
+                                },
+                                "required": true,
+                              },
+                              {
+                                "ownerId": "Ball",
+                                "propertyName": "price",
+                                "propertyValue": {
+                                  "component": {
+                                    "kind": "INLINE",
+                                    "name": "price",
+                                  },
+                                  "format": undefined,
+                                  "getId": [Function],
+                                  "getName": [Function],
+                                  "kind": "PRIMITIVE",
+                                  "raw": {
+                                    "type": "string",
+                                  },
+                                  "type": "string",
+                                },
+                                "required": true,
+                              },
+                              {
+                                "ownerId": "Ball",
+                                "propertyName": "kind",
+                                "propertyValue": {
+                                  "component": {
+                                    "kind": "INLINE",
+                                    "name": "kind",
+                                  },
+                                  "entityRef": [Circular],
+                                  "enum": [
+                                    "BALL",
+                                  ],
+                                  "format": undefined,
+                                  "getId": [Function],
+                                  "getName": [Function],
+                                  "kind": "DISCRIMINATOR",
+                                  "raw": {
+                                    "example": "BALL",
+                                    "type": "string",
+                                    "x-const": "BALL",
+                                  },
+                                  "type": "string",
+                                },
+                                "required": true,
+                              },
+                              {
+                                "ownerId": "Ball",
+                                "propertyName": "fluffLevel",
+                                "propertyValue": {
+                                  "component": {
+                                    "id": "#/components/schemas/FluffLevel",
+                                    "kind": "COMPONENT",
+                                  },
+                                  "enum": [
+                                    "A",
+                                    "B",
+                                    "C",
+                                  ],
+                                  "format": undefined,
+                                  "getId": [Function],
+                                  "getName": [Function],
+                                  "isCircular": false,
+                                  "kind": "ENUM",
+                                  "raw": {
+                                    "::ref": "#/components/schemas/FluffLevel",
+                                    "enum": [
+                                      "A",
+                                      "B",
+                                      "C",
+                                    ],
+                                    "type": "string",
+                                  },
+                                  "type": "string",
+                                },
+                                "required": false,
+                              },
+                              {
+                                "ownerId": "Ball",
+                                "propertyName": "targetGroup",
+                                "propertyValue": {
+                                  "component": {
+                                    "kind": "INLINE",
+                                    "name": "targetGroup",
+                                  },
+                                  "format": undefined,
+                                  "getId": [Function],
+                                  "getName": [Function],
+                                  "kind": "PRIMITIVE",
+                                  "raw": {
+                                    "default": "CHILDREN",
+                                    "type": "string",
+                                    "x-extensible-enum": [
+                                      "PETS",
+                                      "CHILDREN",
+                                    ],
+                                  },
+                                  "type": "string",
+                                },
+                                "required": false,
+                              },
+                            ],
+                            "raw": {
+                              "::ref": "#/components/schemas/Ball",
+                              "properties": {
+                                "fluffLevel": {
+                                  "$ref": "#/components/schemas/FluffLevel",
+                                },
+                                "id": {
+                                  "type": "string",
+                                },
+                                "kind": {
+                                  "example": "BALL",
+                                  "type": "string",
+                                  "x-const": "BALL",
+                                },
+                                "price": {
+                                  "type": "string",
+                                },
+                                "targetGroup": {
+                                  "default": "CHILDREN",
+                                  "type": "string",
+                                  "x-extensible-enum": [
+                                    "PETS",
+                                    "CHILDREN",
+                                  ],
+                                },
+                              },
+                              "required": [
+                                "id",
+                                "price",
+                                "kind",
+                              ],
+                              "title": "Ball",
+                            },
+                            "type": "object",
+                          },
+                          {
+                            "component": {
+                              "id": "#/components/schemas/FluffyTeddy",
+                              "kind": "COMPONENT",
+                            },
+                            "discriminatorValue": "TEDDY",
+                            "getId": [Function],
+                            "getName": [Function],
+                            "isCircular": false,
+                            "kind": "OBJECT",
+                            "parent": undefined,
+                            "properties": [
+                              {
+                                "ownerId": "FluffyTeddy",
+                                "propertyName": "fluffLevel",
+                                "propertyValue": {
+                                  "component": {
+                                    "id": "#/components/schemas/FluffLevel",
+                                    "kind": "COMPONENT",
+                                  },
+                                  "enum": [
+                                    "A",
+                                    "B",
+                                    "C",
+                                  ],
+                                  "format": undefined,
+                                  "getId": [Function],
+                                  "getName": [Function],
+                                  "isCircular": false,
+                                  "kind": "ENUM",
+                                  "raw": {
+                                    "::ref": "#/components/schemas/FluffLevel",
+                                    "enum": [
+                                      "A",
+                                      "B",
+                                      "C",
+                                    ],
+                                    "type": "string",
+                                  },
+                                  "type": "string",
+                                },
+                                "required": false,
+                              },
+                              {
+                                "ownerId": "FluffyTeddy",
+                                "propertyName": "id",
+                                "propertyValue": {
+                                  "component": {
+                                    "kind": "INLINE",
+                                    "name": "id",
+                                  },
+                                  "format": undefined,
+                                  "getId": [Function],
+                                  "getName": [Function],
+                                  "kind": "PRIMITIVE",
+                                  "raw": {
+                                    "type": "string",
+                                  },
+                                  "type": "string",
+                                },
+                                "required": true,
+                              },
+                              {
+                                "ownerId": "FluffyTeddy",
+                                "propertyName": "price",
+                                "propertyValue": {
+                                  "component": {
+                                    "kind": "INLINE",
+                                    "name": "price",
+                                  },
+                                  "format": undefined,
+                                  "getId": [Function],
+                                  "getName": [Function],
+                                  "kind": "PRIMITIVE",
+                                  "raw": {
+                                    "type": "string",
+                                  },
+                                  "type": "string",
+                                },
+                                "required": true,
+                              },
+                              {
+                                "ownerId": "FluffyTeddy",
+                                "propertyName": "kind",
+                                "propertyValue": {
+                                  "component": {
+                                    "kind": "INLINE",
+                                    "name": "kind",
+                                  },
+                                  "entityRef": [Circular],
+                                  "enum": [
+                                    "TEDDY",
+                                  ],
+                                  "format": undefined,
+                                  "getId": [Function],
+                                  "getName": [Function],
+                                  "kind": "DISCRIMINATOR",
+                                  "raw": {
+                                    "example": "TEDDY",
+                                    "type": "string",
+                                    "x-const": "TEDDY",
+                                  },
+                                  "type": "string",
+                                },
+                                "required": true,
+                              },
+                              {
+                                "ownerId": "FluffyTeddy",
+                                "propertyName": "targetGroup",
+                                "propertyValue": {
+                                  "component": {
+                                    "kind": "INLINE",
+                                    "name": "targetGroup",
+                                  },
+                                  "format": undefined,
+                                  "getId": [Function],
+                                  "getName": [Function],
+                                  "kind": "PRIMITIVE",
+                                  "raw": {
+                                    "default": "CHILDREN",
+                                    "type": "string",
+                                    "x-extensible-enum": [
+                                      "PETS",
+                                      "CHILDREN",
+                                    ],
+                                  },
+                                  "type": "string",
+                                },
+                                "required": false,
+                              },
+                            ],
+                            "raw": {
+                              "::ref": "#/components/schemas/FluffyTeddy",
+                              "properties": {
+                                "fluffLevel": {
+                                  "$ref": "#/components/schemas/FluffLevel",
+                                },
+                                "id": {
+                                  "type": "string",
+                                },
+                                "kind": {
+                                  "example": "TEDDY",
+                                  "type": "string",
+                                  "x-const": "TEDDY",
+                                },
+                                "price": {
+                                  "type": "string",
+                                },
+                                "targetGroup": {
+                                  "default": "CHILDREN",
+                                  "type": "string",
+                                  "x-extensible-enum": [
+                                    "PETS",
+                                    "CHILDREN",
+                                  ],
+                                },
+                              },
+                              "required": [
+                                "id",
+                                "price",
+                                "kind",
+                              ],
+                              "title": "Teddy",
+                            },
+                            "type": "object",
+                          },
+                        ],
+                        "name": "kind",
+                      },
+                      "getId": [Function],
+                      "getName": [Function],
+                      "isCircular": false,
+                      "kind": "UNION",
+                      "raw": {
+                        "::ref": "#/components/schemas/PetToy",
+                        "discriminator": {
+                          "mapping": {
+                            "BALL": "#/components/schemas/Ball",
+                            "TEDDY": "#/components/schemas/FluffyTeddy",
+                          },
+                          "propertyName": "kind",
+                        },
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/Ball",
+                          },
+                          {
+                            "$ref": "#/components/schemas/FluffyTeddy",
+                          },
+                        ],
+                      },
+                      "schemas": [
+                        {
+                          "component": {
+                            "id": "#/components/schemas/Ball",
+                            "kind": "COMPONENT",
+                          },
+                          "getId": [Function],
+                          "getName": [Function],
+                          "isCircular": false,
+                          "kind": "OBJECT",
+                          "parent": undefined,
+                          "properties": [
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "id",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "id",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "price",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "price",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "kind",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "kind",
+                                },
+                                "entityRef": [Circular],
+                                "enum": [
+                                  "BALL",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "DISCRIMINATOR",
+                                "raw": {
+                                  "example": "BALL",
+                                  "type": "string",
+                                  "x-const": "BALL",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "fluffLevel",
+                              "propertyValue": {
+                                "component": {
+                                  "id": "#/components/schemas/FluffLevel",
+                                  "kind": "COMPONENT",
+                                },
+                                "enum": [
+                                  "A",
+                                  "B",
+                                  "C",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "isCircular": false,
+                                "kind": "ENUM",
+                                "raw": {
+                                  "::ref": "#/components/schemas/FluffLevel",
+                                  "enum": [
+                                    "A",
+                                    "B",
+                                    "C",
+                                  ],
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "targetGroup",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "targetGroup",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "default": "CHILDREN",
+                                  "type": "string",
+                                  "x-extensible-enum": [
+                                    "PETS",
+                                    "CHILDREN",
+                                  ],
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                          ],
+                          "raw": {
+                            "::ref": "#/components/schemas/Ball",
+                            "properties": {
+                              "fluffLevel": {
+                                "$ref": "#/components/schemas/FluffLevel",
+                              },
+                              "id": {
+                                "type": "string",
+                              },
+                              "kind": {
+                                "example": "BALL",
+                                "type": "string",
+                                "x-const": "BALL",
+                              },
+                              "price": {
+                                "type": "string",
+                              },
+                              "targetGroup": {
+                                "default": "CHILDREN",
+                                "type": "string",
+                                "x-extensible-enum": [
+                                  "PETS",
+                                  "CHILDREN",
+                                ],
+                              },
+                            },
+                            "required": [
+                              "id",
+                              "price",
+                              "kind",
+                            ],
+                            "title": "Ball",
+                          },
+                          "type": "object",
+                        },
+                        {
+                          "component": {
+                            "id": "#/components/schemas/FluffyTeddy",
+                            "kind": "COMPONENT",
+                          },
+                          "getId": [Function],
+                          "getName": [Function],
+                          "isCircular": false,
+                          "kind": "OBJECT",
+                          "parent": undefined,
+                          "properties": [
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "fluffLevel",
+                              "propertyValue": {
+                                "component": {
+                                  "id": "#/components/schemas/FluffLevel",
+                                  "kind": "COMPONENT",
+                                },
+                                "enum": [
+                                  "A",
+                                  "B",
+                                  "C",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "isCircular": false,
+                                "kind": "ENUM",
+                                "raw": {
+                                  "::ref": "#/components/schemas/FluffLevel",
+                                  "enum": [
+                                    "A",
+                                    "B",
+                                    "C",
+                                  ],
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "id",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "id",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "price",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "price",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "kind",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "kind",
+                                },
+                                "entityRef": [Circular],
+                                "enum": [
+                                  "TEDDY",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "DISCRIMINATOR",
+                                "raw": {
+                                  "example": "TEDDY",
+                                  "type": "string",
+                                  "x-const": "TEDDY",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "targetGroup",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "targetGroup",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "default": "CHILDREN",
+                                  "type": "string",
+                                  "x-extensible-enum": [
+                                    "PETS",
+                                    "CHILDREN",
+                                  ],
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                          ],
+                          "raw": {
+                            "::ref": "#/components/schemas/FluffyTeddy",
+                            "properties": {
+                              "fluffLevel": {
+                                "$ref": "#/components/schemas/FluffLevel",
+                              },
+                              "id": {
+                                "type": "string",
+                              },
+                              "kind": {
+                                "example": "TEDDY",
+                                "type": "string",
+                                "x-const": "TEDDY",
+                              },
+                              "price": {
+                                "type": "string",
+                              },
+                              "targetGroup": {
+                                "default": "CHILDREN",
+                                "type": "string",
+                                "x-extensible-enum": [
+                                  "PETS",
+                                  "CHILDREN",
+                                ],
+                              },
+                            },
+                            "required": [
+                              "id",
+                              "price",
+                              "kind",
+                            ],
+                            "title": "Teddy",
+                          },
+                          "type": "object",
+                        },
+                      ],
+                    },
+                    "required": false,
+                  },
+                  {
+                    "ownerId": "components-schemas-Toy",
+                    "propertyName": "subId",
+                    "propertyValue": {
+                      "component": {
+                        "kind": "INLINE",
+                        "name": "subId",
+                      },
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "kind": "PRIMITIVE",
+                      "raw": {
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": false,
+                  },
+                  {
+                    "ownerId": "components-schemas-Toy",
+                    "propertyName": "id",
+                    "propertyValue": {
+                      "component": {
+                        "kind": "INLINE",
+                        "name": "id",
+                      },
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "kind": "PRIMITIVE",
+                      "raw": {
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": true,
+                  },
+                  {
+                    "ownerId": "components-schemas-Toy",
+                    "propertyName": "price",
+                    "propertyValue": {
+                      "component": {
+                        "kind": "INLINE",
+                        "name": "price",
+                      },
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "kind": "PRIMITIVE",
+                      "raw": {
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": true,
+                  },
+                  {
+                    "ownerId": "components-schemas-Toy",
+                    "propertyName": "kind",
+                    "propertyValue": {
+                      "component": {
+                        "kind": "INLINE",
+                        "name": "kind",
+                      },
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "kind": "PRIMITIVE",
+                      "raw": {
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": true,
+                  },
+                  {
+                    "ownerId": "components-schemas-Toy",
+                    "propertyName": "someEnum",
+                    "propertyValue": {
+                      "component": {
+                        "kind": "INLINE",
+                        "name": "someEnum",
+                      },
+                      "enum": [
+                        "FOO",
+                        "BAR",
+                      ],
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "kind": "ENUM",
+                      "raw": {
+                        "enum": [
+                          "FOO",
+                          "BAR",
+                        ],
+                        "title": "FooBar",
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": false,
+                  },
+                  {
+                    "ownerId": "components-schemas-Toy",
+                    "propertyName": "fluffLevel",
+                    "propertyValue": {
+                      "component": {
+                        "id": "#/components/schemas/FluffLevel",
+                        "kind": "COMPONENT",
+                      },
+                      "enum": [
+                        "A",
+                        "B",
+                        "C",
+                      ],
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "isCircular": false,
+                      "kind": "ENUM",
+                      "raw": {
+                        "::ref": "#/components/schemas/FluffLevel",
+                        "enum": [
+                          "A",
+                          "B",
+                          "C",
+                        ],
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": false,
+                  },
+                ],
+                "raw": {
+                  "::ref": "#/components/schemas/components-schemas-Toy",
+                  "properties": {
+                    "color": {
+                      "$ref": "#/components/schemas/Color",
+                    },
+                    "fluffLevel": {
+                      "$ref": "#/components/schemas/FluffLevel",
+                    },
+                    "id": {
+                      "type": "string",
+                    },
+                    "kind": {
+                      "type": "string",
+                    },
+                    "name": {
+                      "type": "string",
+                    },
+                    "price": {
+                      "type": "string",
+                    },
+                    "relates": {
+                      "$ref": "#/components/schemas/PetToy",
+                    },
+                    "someEnum": {
+                      "enum": [
+                        "FOO",
+                        "BAR",
+                      ],
+                      "title": "FooBar",
+                      "type": "string",
+                    },
+                    "subId": {
+                      "type": "string",
+                    },
+                    "targetGroup": {
+                      "$ref": "#/components/schemas/targetGroup",
+                    },
+                  },
+                  "required": [
+                    "id",
+                    "kind",
+                    "price",
+                    "string",
+                  ],
+                  "title": "Toy",
+                },
+                "type": "object",
+              },
+              "required": false,
+            },
+            {
+              "ownerId": "Pet",
+              "propertyName": "leastFavToy",
+              "propertyValue": {
+                "component": {
+                  "id": "#/components/schemas/schemas-Toy",
+                  "kind": "COMPONENT",
+                },
+                "getId": [Function],
+                "getName": [Function],
+                "isCircular": false,
+                "kind": "OBJECT",
+                "parent": undefined,
+                "properties": [
+                  {
+                    "ownerId": "schemas-Toy",
+                    "propertyName": "id",
+                    "propertyValue": {
+                      "component": {
+                        "kind": "INLINE",
+                        "name": "id",
+                      },
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "kind": "PRIMITIVE",
+                      "raw": {
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": true,
+                  },
+                  {
+                    "ownerId": "schemas-Toy",
+                    "propertyName": "price",
+                    "propertyValue": {
+                      "component": {
+                        "kind": "INLINE",
+                        "name": "price",
+                      },
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "kind": "PRIMITIVE",
+                      "raw": {
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": true,
+                  },
+                  {
+                    "ownerId": "schemas-Toy",
+                    "propertyName": "kind",
+                    "propertyValue": {
+                      "component": {
+                        "kind": "INLINE",
+                        "name": "kind",
+                      },
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "kind": "PRIMITIVE",
+                      "raw": {
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": true,
+                  },
+                  {
+                    "ownerId": "schemas-Toy",
+                    "propertyName": "someEnum",
+                    "propertyValue": {
+                      "component": {
+                        "kind": "INLINE",
+                        "name": "someEnum",
+                      },
+                      "enum": [
+                        "FOO",
+                        "BAR",
+                      ],
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "kind": "ENUM",
+                      "raw": {
+                        "enum": [
+                          "FOO",
+                          "BAR",
+                        ],
+                        "title": "FooBar",
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": false,
+                  },
+                  {
+                    "ownerId": "schemas-Toy",
+                    "propertyName": "fluffLevel",
+                    "propertyValue": {
+                      "component": {
+                        "id": "#/components/schemas/FluffLevel",
+                        "kind": "COMPONENT",
+                      },
+                      "enum": [
+                        "A",
+                        "B",
+                        "C",
+                      ],
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "isCircular": false,
+                      "kind": "ENUM",
+                      "raw": {
+                        "::ref": "#/components/schemas/FluffLevel",
+                        "enum": [
+                          "A",
+                          "B",
+                          "C",
+                        ],
+                        "type": "string",
+                      },
+                      "type": "string",
+                    },
+                    "required": false,
+                  },
+                  {
+                    "ownerId": "schemas-Toy",
+                    "propertyName": "targetGroup",
+                    "propertyValue": {
+                      "component": {
+                        "kind": "INLINE",
+                        "name": "targetGroup",
+                      },
+                      "format": undefined,
+                      "getId": [Function],
+                      "getName": [Function],
+                      "kind": "PRIMITIVE",
+                      "raw": {
+                        "default": "CHILDREN",
+                        "type": "string",
+                        "x-extensible-enum": [
+                          "PETS",
+                          "CHILDREN",
+                        ],
+                      },
+                      "type": "string",
+                    },
+                    "required": false,
+                  },
+                ],
+                "raw": {
+                  "::ref": "#/components/schemas/schemas-Toy",
+                  "properties": {
+                    "fluffLevel": {
+                      "$ref": "#/components/schemas/FluffLevel",
+                    },
+                    "id": {
+                      "type": "string",
+                    },
+                    "kind": {
+                      "type": "string",
+                    },
+                    "price": {
+                      "type": "string",
+                    },
+                    "someEnum": {
+                      "enum": [
+                        "FOO",
+                        "BAR",
+                      ],
+                      "title": "FooBar",
+                      "type": "string",
+                    },
+                    "targetGroup": {
+                      "default": "CHILDREN",
+                      "type": "string",
+                      "x-extensible-enum": [
+                        "PETS",
+                        "CHILDREN",
+                      ],
+                    },
+                  },
+                  "required": [
+                    "id",
+                    "price",
+                    "kind",
+                  ],
+                  "title": "Toy",
+                },
+                "type": "object",
+              },
+              "required": false,
+            },
+            {
+              "ownerId": "Pet",
+              "propertyName": "favFluffLevel",
+              "propertyValue": {
+                "component": {
+                  "id": "#/components/schemas/FluffLevel",
+                  "kind": "COMPONENT",
+                },
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                ],
+                "format": undefined,
+                "getId": [Function],
+                "getName": [Function],
+                "isCircular": false,
+                "kind": "ENUM",
+                "raw": {
+                  "::ref": "#/components/schemas/FluffLevel",
+                  "enum": [
+                    "A",
+                    "B",
+                    "C",
+                  ],
+                  "type": "string",
+                },
+                "type": "string",
+              },
+              "required": false,
+            },
+            {
+              "ownerId": "Pet",
+              "propertyName": "tag",
+              "propertyValue": {
+                "component": {
+                  "kind": "INLINE",
+                  "name": "tag",
+                },
+                "format": undefined,
+                "getId": [Function],
+                "getName": [Function],
+                "kind": "PRIMITIVE",
+                "raw": {
+                  "example": {
+                    "description": "default string example",
+                    "value": "some string",
+                  },
+                  "type": "string",
+                },
+                "type": "string",
+              },
+              "required": false,
+            },
+            {
+              "ownerId": "Pet",
+              "propertyName": "name",
+              "propertyValue": {
+                "component": {
+                  "kind": "INLINE",
+                  "name": "name",
+                },
+                "format": undefined,
+                "getId": [Function],
+                "getName": [Function],
+                "kind": "PRIMITIVE",
+                "raw": {
+                  "example": {
+                    "description": "default string example",
+                    "value": "some string",
+                  },
+                  "type": "string",
+                },
+                "type": "string",
+              },
+              "required": true,
+            },
+          ],
+          "raw": {
+            "::ref": "#/components/schemas/Pet",
+            "example": {
+              "bar": 1234,
+              "foo": "",
+              "foobar": true,
+            },
+            "properties": {
+              "favFluffLevel": {
+                "$ref": "#/components/schemas/FluffLevel",
+              },
+              "id": {
+                "format": "int64",
+                "type": "integer",
+              },
+              "leastFavToy": {
+                "$ref": "#/components/schemas/schemas-Toy",
+              },
+              "name": {
+                "example": {
+                  "description": "default string example",
+                  "value": "some string",
+                },
+                "type": "string",
+              },
+              "tag": {
+                "example": {
+                  "description": "default string example",
+                  "value": "some string",
+                },
+                "type": "string",
+              },
+              "toy": {
+                "$ref": "#/components/schemas/components-schemas-Toy",
+              },
+            },
+            "required": [
+              "id",
+              "name",
+            ],
+            "type": "object",
+          },
+          "type": "object",
+        },
+        "status": 200,
+      },
+    ],
+  },
+  {
+    "alias": "patchPet",
+    "deprecated": false,
+    "description": undefined,
+    "method": "patch",
+    "parameters": [
+      {
+        "description": "The id of the pet to retrieve",
+        "name": "petId",
+        "schema": {
+          "component": {
+            "kind": "INLINE",
+            "name": "petIdSchema",
+          },
+          "format": undefined,
+          "getId": [Function],
+          "getName": [Function],
+          "isCircular": false,
+          "kind": "PRIMITIVE",
+          "raw": {
+            "type": "string",
+          },
+          "type": "string",
+        },
+        "type": "path",
+      },
+    ],
+    "path": "/pets/{petId}",
+    "requestBody": {
+      "format": "json",
+      "rawFormat": {
+        "format": "application/json",
+        "type": "KNOWN",
+      },
+      "schema": {
+        "component": {
+          "id": "#/components/schemas/Pet",
+          "kind": "COMPONENT",
+        },
+        "getId": [Function],
+        "getName": [Function],
+        "isCircular": false,
+        "kind": "OBJECT",
+        "parent": undefined,
+        "properties": [
+          {
+            "ownerId": "Pet",
+            "propertyName": "id",
+            "propertyValue": {
+              "component": {
+                "kind": "INLINE",
+                "name": "id",
+              },
+              "format": "int64",
+              "getId": [Function],
+              "getName": [Function],
+              "kind": "PRIMITIVE",
+              "raw": {
+                "format": "int64",
+                "type": "integer",
+              },
+              "type": "integer",
+            },
+            "required": true,
+          },
+          {
+            "ownerId": "Pet",
+            "propertyName": "toy",
+            "propertyValue": {
+              "component": {
+                "id": "#/components/schemas/components-schemas-Toy",
+                "kind": "COMPONENT",
+              },
+              "getId": [Function],
+              "getName": [Function],
+              "isCircular": false,
+              "kind": "OBJECT",
+              "parent": undefined,
+              "properties": [
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "name",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "name",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "color",
+                  "propertyValue": {
+                    "component": {
+                      "id": "#/components/schemas/Color",
+                      "kind": "COMPONENT",
+                    },
+                    "getId": [Function],
+                    "getName": [Function],
+                    "isCircular": false,
+                    "kind": "OBJECT",
+                    "parent": undefined,
+                    "properties": [
+                      {
+                        "ownerId": "Color",
+                        "propertyName": "colorId",
+                        "propertyValue": {
+                          "component": {
+                            "kind": "INLINE",
+                            "name": "colorId",
+                          },
+                          "format": undefined,
+                          "getId": [Function],
+                          "getName": [Function],
+                          "kind": "PRIMITIVE",
+                          "raw": {
+                            "type": "string",
+                          },
+                          "type": "string",
+                        },
+                        "required": false,
+                      },
+                      {
+                        "ownerId": "Color",
+                        "propertyName": "untitled",
+                        "propertyValue": {
+                          "component": {
+                            "id": "#/components/schemas/schema-untitled",
+                            "kind": "COMPONENT",
+                          },
+                          "getId": [Function],
+                          "getName": [Function],
+                          "isCircular": false,
+                          "kind": "OBJECT",
+                          "parent": undefined,
+                          "properties": [
+                            {
+                              "ownerId": "schema-untitled",
+                              "propertyName": "untitledProp",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "untitledProp",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                          ],
+                          "raw": {
+                            "::ref": "#/components/schemas/schema-untitled",
+                            "properties": {
+                              "untitledProp": {
+                                "type": "string",
+                              },
+                            },
+                          },
+                          "type": "object",
+                        },
+                        "required": false,
+                      },
+                      {
+                        "ownerId": "Color",
+                        "propertyName": "untitledProp",
+                        "propertyValue": {
+                          "component": {
+                            "kind": "INLINE",
+                            "name": "untitledProp",
+                          },
+                          "format": undefined,
+                          "getId": [Function],
+                          "getName": [Function],
+                          "kind": "PRIMITIVE",
+                          "raw": {
+                            "type": "string",
+                          },
+                          "type": "string",
+                        },
+                        "required": false,
+                      },
+                    ],
+                    "raw": {
+                      "::ref": "#/components/schemas/Color",
+                      "properties": {
+                        "colorId": {
+                          "type": "string",
+                        },
+                        "untitled": {
+                          "$ref": "#/components/schemas/schema-untitled",
+                        },
+                        "untitledProp": {
+                          "type": "string",
+                        },
+                      },
+                      "type": "object",
+                    },
+                    "type": "object",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "targetGroup",
+                  "propertyValue": {
+                    "component": {
+                      "id": "#/components/schemas/targetGroup",
+                      "kind": "COMPONENT",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "isCircular": false,
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "::ref": "#/components/schemas/targetGroup",
+                      "default": "CHILDREN",
+                      "type": "string",
+                      "x-extensible-enum": [
+                        "PETS",
+                        "CHILDREN",
+                      ],
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "relates",
+                  "propertyValue": {
+                    "component": {
+                      "id": "#/components/schemas/PetToy",
+                      "kind": "COMPONENT",
+                    },
+                    "discriminator": {
+                      "mappings": [
+                        {
+                          "component": {
+                            "id": "#/components/schemas/Ball",
+                            "kind": "COMPONENT",
+                          },
+                          "discriminatorValue": "BALL",
+                          "getId": [Function],
+                          "getName": [Function],
+                          "isCircular": false,
+                          "kind": "OBJECT",
+                          "parent": undefined,
+                          "properties": [
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "id",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "id",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "price",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "price",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "kind",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "kind",
+                                },
+                                "entityRef": [Circular],
+                                "enum": [
+                                  "BALL",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "DISCRIMINATOR",
+                                "raw": {
+                                  "example": "BALL",
+                                  "type": "string",
+                                  "x-const": "BALL",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "fluffLevel",
+                              "propertyValue": {
+                                "component": {
+                                  "id": "#/components/schemas/FluffLevel",
+                                  "kind": "COMPONENT",
+                                },
+                                "enum": [
+                                  "A",
+                                  "B",
+                                  "C",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "isCircular": false,
+                                "kind": "ENUM",
+                                "raw": {
+                                  "::ref": "#/components/schemas/FluffLevel",
+                                  "enum": [
+                                    "A",
+                                    "B",
+                                    "C",
+                                  ],
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                            {
+                              "ownerId": "Ball",
+                              "propertyName": "targetGroup",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "targetGroup",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "default": "CHILDREN",
+                                  "type": "string",
+                                  "x-extensible-enum": [
+                                    "PETS",
+                                    "CHILDREN",
+                                  ],
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                          ],
+                          "raw": {
+                            "::ref": "#/components/schemas/Ball",
+                            "properties": {
+                              "fluffLevel": {
+                                "$ref": "#/components/schemas/FluffLevel",
+                              },
+                              "id": {
+                                "type": "string",
+                              },
+                              "kind": {
+                                "example": "BALL",
+                                "type": "string",
+                                "x-const": "BALL",
+                              },
+                              "price": {
+                                "type": "string",
+                              },
+                              "targetGroup": {
+                                "default": "CHILDREN",
+                                "type": "string",
+                                "x-extensible-enum": [
+                                  "PETS",
+                                  "CHILDREN",
+                                ],
+                              },
+                            },
+                            "required": [
+                              "id",
+                              "price",
+                              "kind",
+                            ],
+                            "title": "Ball",
+                          },
+                          "type": "object",
+                        },
+                        {
+                          "component": {
+                            "id": "#/components/schemas/FluffyTeddy",
+                            "kind": "COMPONENT",
+                          },
+                          "discriminatorValue": "TEDDY",
+                          "getId": [Function],
+                          "getName": [Function],
+                          "isCircular": false,
+                          "kind": "OBJECT",
+                          "parent": undefined,
+                          "properties": [
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "fluffLevel",
+                              "propertyValue": {
+                                "component": {
+                                  "id": "#/components/schemas/FluffLevel",
+                                  "kind": "COMPONENT",
+                                },
+                                "enum": [
+                                  "A",
+                                  "B",
+                                  "C",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "isCircular": false,
+                                "kind": "ENUM",
+                                "raw": {
+                                  "::ref": "#/components/schemas/FluffLevel",
+                                  "enum": [
+                                    "A",
+                                    "B",
+                                    "C",
+                                  ],
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "id",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "id",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "price",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "price",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "type": "string",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "kind",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "kind",
+                                },
+                                "entityRef": [Circular],
+                                "enum": [
+                                  "TEDDY",
+                                ],
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "DISCRIMINATOR",
+                                "raw": {
+                                  "example": "TEDDY",
+                                  "type": "string",
+                                  "x-const": "TEDDY",
+                                },
+                                "type": "string",
+                              },
+                              "required": true,
+                            },
+                            {
+                              "ownerId": "FluffyTeddy",
+                              "propertyName": "targetGroup",
+                              "propertyValue": {
+                                "component": {
+                                  "kind": "INLINE",
+                                  "name": "targetGroup",
+                                },
+                                "format": undefined,
+                                "getId": [Function],
+                                "getName": [Function],
+                                "kind": "PRIMITIVE",
+                                "raw": {
+                                  "default": "CHILDREN",
+                                  "type": "string",
+                                  "x-extensible-enum": [
+                                    "PETS",
+                                    "CHILDREN",
+                                  ],
+                                },
+                                "type": "string",
+                              },
+                              "required": false,
+                            },
+                          ],
+                          "raw": {
+                            "::ref": "#/components/schemas/FluffyTeddy",
+                            "properties": {
+                              "fluffLevel": {
+                                "$ref": "#/components/schemas/FluffLevel",
+                              },
+                              "id": {
+                                "type": "string",
+                              },
+                              "kind": {
+                                "example": "TEDDY",
+                                "type": "string",
+                                "x-const": "TEDDY",
+                              },
+                              "price": {
+                                "type": "string",
+                              },
+                              "targetGroup": {
+                                "default": "CHILDREN",
+                                "type": "string",
+                                "x-extensible-enum": [
+                                  "PETS",
+                                  "CHILDREN",
+                                ],
+                              },
+                            },
+                            "required": [
+                              "id",
+                              "price",
+                              "kind",
+                            ],
+                            "title": "Teddy",
+                          },
+                          "type": "object",
+                        },
+                      ],
+                      "name": "kind",
+                    },
+                    "getId": [Function],
+                    "getName": [Function],
+                    "isCircular": false,
+                    "kind": "UNION",
+                    "raw": {
+                      "::ref": "#/components/schemas/PetToy",
+                      "discriminator": {
+                        "mapping": {
+                          "BALL": "#/components/schemas/Ball",
+                          "TEDDY": "#/components/schemas/FluffyTeddy",
+                        },
+                        "propertyName": "kind",
+                      },
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/Ball",
+                        },
+                        {
+                          "$ref": "#/components/schemas/FluffyTeddy",
+                        },
+                      ],
+                    },
+                    "schemas": [
+                      {
+                        "component": {
+                          "id": "#/components/schemas/Ball",
+                          "kind": "COMPONENT",
+                        },
+                        "getId": [Function],
+                        "getName": [Function],
+                        "isCircular": false,
+                        "kind": "OBJECT",
+                        "parent": undefined,
+                        "properties": [
+                          {
+                            "ownerId": "Ball",
+                            "propertyName": "id",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "id",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "Ball",
+                            "propertyName": "price",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "price",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "Ball",
+                            "propertyName": "kind",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "kind",
+                              },
+                              "entityRef": [Circular],
+                              "enum": [
+                                "BALL",
+                              ],
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "DISCRIMINATOR",
+                              "raw": {
+                                "example": "BALL",
+                                "type": "string",
+                                "x-const": "BALL",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "Ball",
+                            "propertyName": "fluffLevel",
+                            "propertyValue": {
+                              "component": {
+                                "id": "#/components/schemas/FluffLevel",
+                                "kind": "COMPONENT",
+                              },
+                              "enum": [
+                                "A",
+                                "B",
+                                "C",
+                              ],
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "isCircular": false,
+                              "kind": "ENUM",
+                              "raw": {
+                                "::ref": "#/components/schemas/FluffLevel",
+                                "enum": [
+                                  "A",
+                                  "B",
+                                  "C",
+                                ],
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": false,
+                          },
+                          {
+                            "ownerId": "Ball",
+                            "propertyName": "targetGroup",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "targetGroup",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "default": "CHILDREN",
+                                "type": "string",
+                                "x-extensible-enum": [
+                                  "PETS",
+                                  "CHILDREN",
+                                ],
+                              },
+                              "type": "string",
+                            },
+                            "required": false,
+                          },
+                        ],
+                        "raw": {
+                          "::ref": "#/components/schemas/Ball",
+                          "properties": {
+                            "fluffLevel": {
+                              "$ref": "#/components/schemas/FluffLevel",
+                            },
+                            "id": {
+                              "type": "string",
+                            },
+                            "kind": {
+                              "example": "BALL",
+                              "type": "string",
+                              "x-const": "BALL",
+                            },
+                            "price": {
+                              "type": "string",
+                            },
+                            "targetGroup": {
+                              "default": "CHILDREN",
+                              "type": "string",
+                              "x-extensible-enum": [
+                                "PETS",
+                                "CHILDREN",
+                              ],
+                            },
+                          },
+                          "required": [
+                            "id",
+                            "price",
+                            "kind",
+                          ],
+                          "title": "Ball",
+                        },
+                        "type": "object",
+                      },
+                      {
+                        "component": {
+                          "id": "#/components/schemas/FluffyTeddy",
+                          "kind": "COMPONENT",
+                        },
+                        "getId": [Function],
+                        "getName": [Function],
+                        "isCircular": false,
+                        "kind": "OBJECT",
+                        "parent": undefined,
+                        "properties": [
+                          {
+                            "ownerId": "FluffyTeddy",
+                            "propertyName": "fluffLevel",
+                            "propertyValue": {
+                              "component": {
+                                "id": "#/components/schemas/FluffLevel",
+                                "kind": "COMPONENT",
+                              },
+                              "enum": [
+                                "A",
+                                "B",
+                                "C",
+                              ],
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "isCircular": false,
+                              "kind": "ENUM",
+                              "raw": {
+                                "::ref": "#/components/schemas/FluffLevel",
+                                "enum": [
+                                  "A",
+                                  "B",
+                                  "C",
+                                ],
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": false,
+                          },
+                          {
+                            "ownerId": "FluffyTeddy",
+                            "propertyName": "id",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "id",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "FluffyTeddy",
+                            "propertyName": "price",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "price",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "type": "string",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "FluffyTeddy",
+                            "propertyName": "kind",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "kind",
+                              },
+                              "entityRef": [Circular],
+                              "enum": [
+                                "TEDDY",
+                              ],
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "DISCRIMINATOR",
+                              "raw": {
+                                "example": "TEDDY",
+                                "type": "string",
+                                "x-const": "TEDDY",
+                              },
+                              "type": "string",
+                            },
+                            "required": true,
+                          },
+                          {
+                            "ownerId": "FluffyTeddy",
+                            "propertyName": "targetGroup",
+                            "propertyValue": {
+                              "component": {
+                                "kind": "INLINE",
+                                "name": "targetGroup",
+                              },
+                              "format": undefined,
+                              "getId": [Function],
+                              "getName": [Function],
+                              "kind": "PRIMITIVE",
+                              "raw": {
+                                "default": "CHILDREN",
+                                "type": "string",
+                                "x-extensible-enum": [
+                                  "PETS",
+                                  "CHILDREN",
+                                ],
+                              },
+                              "type": "string",
+                            },
+                            "required": false,
+                          },
+                        ],
+                        "raw": {
+                          "::ref": "#/components/schemas/FluffyTeddy",
+                          "properties": {
+                            "fluffLevel": {
+                              "$ref": "#/components/schemas/FluffLevel",
+                            },
+                            "id": {
+                              "type": "string",
+                            },
+                            "kind": {
+                              "example": "TEDDY",
+                              "type": "string",
+                              "x-const": "TEDDY",
+                            },
+                            "price": {
+                              "type": "string",
+                            },
+                            "targetGroup": {
+                              "default": "CHILDREN",
+                              "type": "string",
+                              "x-extensible-enum": [
+                                "PETS",
+                                "CHILDREN",
+                              ],
+                            },
+                          },
+                          "required": [
+                            "id",
+                            "price",
+                            "kind",
+                          ],
+                          "title": "Teddy",
+                        },
+                        "type": "object",
+                      },
+                    ],
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "subId",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "subId",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "id",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "id",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "price",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "price",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "kind",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "kind",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "someEnum",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "someEnum",
+                    },
+                    "enum": [
+                      "FOO",
+                      "BAR",
+                    ],
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "ENUM",
+                    "raw": {
+                      "enum": [
+                        "FOO",
+                        "BAR",
+                      ],
+                      "title": "FooBar",
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "components-schemas-Toy",
+                  "propertyName": "fluffLevel",
+                  "propertyValue": {
+                    "component": {
+                      "id": "#/components/schemas/FluffLevel",
+                      "kind": "COMPONENT",
+                    },
+                    "enum": [
+                      "A",
+                      "B",
+                      "C",
+                    ],
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "isCircular": false,
+                    "kind": "ENUM",
+                    "raw": {
+                      "::ref": "#/components/schemas/FluffLevel",
+                      "enum": [
+                        "A",
+                        "B",
+                        "C",
+                      ],
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+              ],
+              "raw": {
+                "::ref": "#/components/schemas/components-schemas-Toy",
+                "properties": {
+                  "color": {
+                    "$ref": "#/components/schemas/Color",
+                  },
+                  "fluffLevel": {
+                    "$ref": "#/components/schemas/FluffLevel",
+                  },
+                  "id": {
+                    "type": "string",
+                  },
+                  "kind": {
+                    "type": "string",
+                  },
+                  "name": {
+                    "type": "string",
+                  },
+                  "price": {
+                    "type": "string",
+                  },
+                  "relates": {
+                    "$ref": "#/components/schemas/PetToy",
+                  },
+                  "someEnum": {
+                    "enum": [
+                      "FOO",
+                      "BAR",
+                    ],
+                    "title": "FooBar",
+                    "type": "string",
+                  },
+                  "subId": {
+                    "type": "string",
+                  },
+                  "targetGroup": {
+                    "$ref": "#/components/schemas/targetGroup",
+                  },
+                },
+                "required": [
+                  "id",
+                  "kind",
+                  "price",
+                  "string",
+                ],
+                "title": "Toy",
+              },
+              "type": "object",
+            },
+            "required": false,
+          },
+          {
+            "ownerId": "Pet",
+            "propertyName": "leastFavToy",
+            "propertyValue": {
+              "component": {
+                "id": "#/components/schemas/schemas-Toy",
+                "kind": "COMPONENT",
+              },
+              "getId": [Function],
+              "getName": [Function],
+              "isCircular": false,
+              "kind": "OBJECT",
+              "parent": undefined,
+              "properties": [
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "id",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "id",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "price",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "price",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "kind",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "kind",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": true,
+                },
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "someEnum",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "someEnum",
+                    },
+                    "enum": [
+                      "FOO",
+                      "BAR",
+                    ],
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "ENUM",
+                    "raw": {
+                      "enum": [
+                        "FOO",
+                        "BAR",
+                      ],
+                      "title": "FooBar",
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "fluffLevel",
+                  "propertyValue": {
+                    "component": {
+                      "id": "#/components/schemas/FluffLevel",
+                      "kind": "COMPONENT",
+                    },
+                    "enum": [
+                      "A",
+                      "B",
+                      "C",
+                    ],
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "isCircular": false,
+                    "kind": "ENUM",
+                    "raw": {
+                      "::ref": "#/components/schemas/FluffLevel",
+                      "enum": [
+                        "A",
+                        "B",
+                        "C",
+                      ],
+                      "type": "string",
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+                {
+                  "ownerId": "schemas-Toy",
+                  "propertyName": "targetGroup",
+                  "propertyValue": {
+                    "component": {
+                      "kind": "INLINE",
+                      "name": "targetGroup",
+                    },
+                    "format": undefined,
+                    "getId": [Function],
+                    "getName": [Function],
+                    "kind": "PRIMITIVE",
+                    "raw": {
+                      "default": "CHILDREN",
+                      "type": "string",
+                      "x-extensible-enum": [
+                        "PETS",
+                        "CHILDREN",
+                      ],
+                    },
+                    "type": "string",
+                  },
+                  "required": false,
+                },
+              ],
+              "raw": {
+                "::ref": "#/components/schemas/schemas-Toy",
+                "properties": {
+                  "fluffLevel": {
+                    "$ref": "#/components/schemas/FluffLevel",
+                  },
+                  "id": {
+                    "type": "string",
+                  },
+                  "kind": {
+                    "type": "string",
+                  },
+                  "price": {
+                    "type": "string",
+                  },
+                  "someEnum": {
+                    "enum": [
+                      "FOO",
+                      "BAR",
+                    ],
+                    "title": "FooBar",
+                    "type": "string",
+                  },
+                  "targetGroup": {
+                    "default": "CHILDREN",
+                    "type": "string",
+                    "x-extensible-enum": [
+                      "PETS",
+                      "CHILDREN",
+                    ],
+                  },
+                },
+                "required": [
+                  "id",
+                  "price",
+                  "kind",
+                ],
+                "title": "Toy",
+              },
+              "type": "object",
+            },
+            "required": false,
+          },
+          {
+            "ownerId": "Pet",
+            "propertyName": "favFluffLevel",
+            "propertyValue": {
+              "component": {
+                "id": "#/components/schemas/FluffLevel",
+                "kind": "COMPONENT",
+              },
+              "enum": [
+                "A",
+                "B",
+                "C",
+              ],
+              "format": undefined,
+              "getId": [Function],
+              "getName": [Function],
+              "isCircular": false,
+              "kind": "ENUM",
+              "raw": {
+                "::ref": "#/components/schemas/FluffLevel",
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                ],
+                "type": "string",
+              },
+              "type": "string",
+            },
+            "required": false,
+          },
+          {
+            "ownerId": "Pet",
+            "propertyName": "tag",
+            "propertyValue": {
+              "component": {
+                "kind": "INLINE",
+                "name": "tag",
+              },
+              "format": undefined,
+              "getId": [Function],
+              "getName": [Function],
+              "kind": "PRIMITIVE",
+              "raw": {
+                "example": {
+                  "description": "default string example",
+                  "value": "some string",
+                },
+                "type": "string",
+              },
+              "type": "string",
+            },
+            "required": false,
+          },
+          {
+            "ownerId": "Pet",
+            "propertyName": "name",
+            "propertyValue": {
+              "component": {
+                "kind": "INLINE",
+                "name": "name",
+              },
+              "format": undefined,
+              "getId": [Function],
+              "getName": [Function],
+              "kind": "PRIMITIVE",
+              "raw": {
+                "example": {
+                  "description": "default string example",
+                  "value": "some string",
+                },
+                "type": "string",
+              },
+              "type": "string",
+            },
+            "required": true,
+          },
+        ],
+        "raw": {
+          "::ref": "#/components/schemas/Pet",
+          "example": {
+            "bar": 1234,
+            "foo": "",
+            "foobar": true,
+          },
+          "properties": {
+            "favFluffLevel": {
+              "$ref": "#/components/schemas/FluffLevel",
+            },
+            "id": {
+              "format": "int64",
+              "type": "integer",
+            },
+            "leastFavToy": {
+              "$ref": "#/components/schemas/schemas-Toy",
+            },
+            "name": {
+              "example": {
+                "description": "default string example",
+                "value": "some string",
+              },
+              "type": "string",
+            },
+            "tag": {
+              "example": {
+                "description": "default string example",
+                "value": "some string",
+              },
+              "type": "string",
+            },
+            "toy": {
+              "$ref": "#/components/schemas/components-schemas-Toy",
+            },
+          },
+          "required": [
+            "id",
+            "name",
+          ],
+          "type": "object",
+        },
+        "type": "object",
+      },
+    },
     "responses": [
       {
         "description": "Expected response to a valid request",

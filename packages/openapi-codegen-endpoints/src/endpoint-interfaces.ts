@@ -7,22 +7,23 @@ import { pascalCase } from "pascal-case";
 import { EndpointDefinition } from "./endpoint-definition.js";
 
 export interface EndpointInterfaceGeneratorOptions {
-  tsImportModuleName?: string;
+  /** import * as <namespace> from 'moduleName' */
+  tsApiTypesModule?: { namespace: string; moduleName: string; kind: "IMPORT_AND_NAMESPACE" } | { namespace: string; kind: "NAMESPACE_WITHOUT_IMPORT" };
   typeSuffix?: string;
   apiName?: string;
 }
 
 type GroupedParams = { [param in Endpoint.Parameter["type"]]: Array<Endpoint.Parameter & { type: param }> };
 
+export function toObjectMap(obj: object): string {
+  return `{${Object.entries(obj)
+    .map(([key, val]) => `"${key}": ${typeof val === "object" ? toObjectMap(val) : val}`)
+    .join(",")}}`;
+}
+
 export async function generateEndpointInterfacesAsText(bundled: OpenApiBundled, params: EndpointInterfaceGeneratorOptions) {
   try {
     const endpoints = Transpiler.of(bundled).endpoints();
-
-    function toObjectMap(obj: object): string {
-      return `{${Object.entries(obj)
-        .map(([key, val]) => `"${key}": ${typeof val === "object" ? toObjectMap(val) : val}`)
-        .join(",")}}`;
-    }
 
     const interfaces = endpoints.map((e) => {
       const { path, name, request, parameters, response, operation } = generateEndpointInterface(e, params);
@@ -53,7 +54,7 @@ export async function generateEndpointInterfacesAsText(bundled: OpenApiBundled, 
   }
 }
 
-function generateEndpointInterface<T extends Endpoint = Endpoint>(endpoint: T, params: EndpointInterfaceGeneratorOptions) {
+export function generateEndpointInterface<T extends Endpoint = Endpoint>(endpoint: T, params: EndpointInterfaceGeneratorOptions) {
   const groupedParams = _.groupBy(endpoint.parameters ?? [], (it) => it.type) as GroupedParams;
   const parameters = {
     path: groupedParams?.["path"]?.reduce((acc, curr) => ({ [curr.name]: generatePayloadType(curr.schema, params) }), {}),
@@ -64,14 +65,14 @@ function generateEndpointInterface<T extends Endpoint = Endpoint>(endpoint: T, p
 
   const request = generatePayloadType(endpoint?.requestBody?.schema, params);
 
-  const response: EndpointDefinition.Response = endpoint.responses
+  const response: Record<number, string> = endpoint.responses
     .filter((r) => _.isDefined(r.status))
     .reduce(
       (acc, curr) => ({
         [curr.status!]: generatePayloadType(curr.schema, params),
       }),
       {}
-    ) satisfies EndpointDefinition.Response;
+    );
 
   return {
     path: endpoint.path as EndpointDefinition.Path,
@@ -85,32 +86,40 @@ function generateEndpointInterface<T extends Endpoint = Endpoint>(endpoint: T, p
 
 function createIdentifier(schema: Schema, params: EndpointInterfaceGeneratorOptions) {
   const identifier = [schema.getName(), params.typeSuffix].filter(_.isDefined).join("");
-  if (params.tsImportModuleName) {
-    return `${params.tsImportModuleName}.${identifier}`;
+  if (params.tsApiTypesModule) {
+    return `${params.tsApiTypesModule.namespace}.${identifier}`;
   }
   return identifier;
 }
 
-function generatePayloadType(schema: Schema | undefined, params: EndpointInterfaceGeneratorOptions) {
+function generatePayloadType(schema: Schema | undefined, params: EndpointInterfaceGeneratorOptions): string | undefined {
   if (_.isNil(schema)) return undefined;
-
-  switch (schema.component.kind) {
-    case "COMPONENT":
-      return createIdentifier(schema, params);
-    case "INLINE":
-      switch (schema.kind) {
-        case "PRIMITIVE":
-          return `${schema.type === "integer" ? "number" : schema.type}`;
-        case "OBJECT":
-        case "UNION":
-        case "ENUM":
-        case "ARRAY":
-        case "BOX":
+  switch (schema.kind) {
+    case "PRIMITIVE": {
+      return `${schema.type === "integer" ? "number" : schema.type}`;
+    }
+    case "OBJECT":
+    case "UNION": {
+      switch (schema.component.kind) {
+        case "COMPONENT":
+          return createIdentifier(schema, params);
+        case "INLINE":
           throw ApplicationError.create(
-            `Failed to generate parameter schema '${schema.getName()}':
-            non-primitive parameters schema are yet not supported.
-            Please define the payload as schema and reference it (#/components/schema/<Name>)`
+            `Failed to generate parameter schema: '${schema.getName()}':
+             Inline schema are yet not supported. Please define a schema and reference it (#/components/schema/<Name>)`
           );
       }
+      break;
+    }
+    case "ARRAY": {
+      return `Array<${generatePayloadType(schema.items, params)}>`;
+    }
+    case "ENUM":
+    case "BOX":
+      throw ApplicationError.create(
+        `Failed to generate parameter schema '${schema.getName()}':
+            non-primitive parameters schema are yet not supported.
+            Please define the payload as schema and reference it (#/components/schema/<Name>)`
+      );
   }
 }

@@ -2,11 +2,11 @@
 import { appLog } from "./logger.js";
 import { bundleParseOpenapi, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { _, Folder, File } from "@dasaplan/ts-sdk";
-import { Project, ScriptKind, ts } from "ts-morph";
-import path from "node:path";
+import { Project } from "ts-morph";
 import { Templates } from "./templates.js";
 import { EndpointInterfaceGeneratorOptions, generateEndpointInterfacesAsText } from "./endpoint-interfaces.js";
 import { pascalCase } from "pascal-case";
+import { createTsMorphSrcFile, createTsMorphSrcFileFromText } from "./ts-sources.js";
 
 export interface EndpointDefinitionGeneratorOptions extends EndpointInterfaceGeneratorOptions {
   outDir: string;
@@ -48,34 +48,4 @@ async function generateTemplates(params: EndpointDefinitionGeneratorOptions, pro
   const outFile = File.resolve(params.outDir, endpointTmpl.name);
   source.sourceFile.copy(outFile.absolutePath, { overwrite: true });
   return { project, sourceFile: source.sourceFile };
-}
-
-function createTsMorphSrcFile(tsFilePath: string, project: Project = new Project()) {
-  project.addSourceFileAtPath(tsFilePath);
-  const sourceFile = project.getSourceFile(path.basename(tsFilePath));
-  sourceFile?.formatText({
-    indentSwitchCase: true,
-    indentStyle: ts.IndentStyle.Smart,
-    indentMultiLineObjectLiteralBeginningOnBlankLine: true,
-  });
-
-  if (_.isNil(sourceFile)) {
-    throw `Error: Expected source file for provided path: srcFile: ${tsFilePath}`;
-  }
-  return { project, sourceFile: sourceFile };
-}
-
-function createTsMorphSrcFileFromText(tsFilePath: string, text: string | object, project: Project = new Project()) {
-  project.createSourceFile(tsFilePath, text, { overwrite: true, scriptKind: ScriptKind.TS });
-  const sourceFile = project.getSourceFile(path.basename(tsFilePath));
-  sourceFile?.formatText({
-    indentSwitchCase: true,
-    indentStyle: ts.IndentStyle.Smart,
-
-    indentMultiLineObjectLiteralBeginningOnBlankLine: true,
-  });
-  if (_.isNil(sourceFile)) {
-    throw `Error: Expected source file for provided path: srcFile: ${tsFilePath}`;
-  }
-  return { project, sourceFile: sourceFile };
 }

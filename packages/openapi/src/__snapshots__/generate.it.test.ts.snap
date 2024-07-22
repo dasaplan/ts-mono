@@ -1003,9 +1003,9 @@ export class Configuration {
  * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
  * */
 export interface EndpointDefinition<
-    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
-    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
-    Params extends EndpointDefinition.Parameters | undefined = undefined
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
+    Params extends EndpointDefinition.Parameters | undefined
 > {
     path: EndpointDefinition.Path;
     /** operation id */
@@ -1031,10 +1031,10 @@ export module EndpointDefinition {
     export type Operation = "get" | "post" | "put" | "delete" | "patch";
 
     export type Parameters = {
-        path: { [name: string]: DtoTypes };
-        query: { [name: string]: DtoTypes };
-        header: { [headerKey: string]: DtoTypes };
-        cookie: { [cookieKey: string]: DtoTypes };
+        path?: { [name: string]: DtoTypes };
+        query?: { [name: string]: DtoTypes };
+        header?: { [headerKey: string]: DtoTypes };
+        cookie?: { [cookieKey: string]: DtoTypes };
     };
     export type DeserializedRequestObject = DtoTypes;
 
@@ -1080,6 +1080,30 @@ export * from "./configuration.js";
 export * from "./zod.js";
 export * from "./SomeTitleEndpoints.js";
 ",
+  "import * as Dtos from './api.js'
+
+// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+// initialize an empty api service that we'll inject endpoints into later as needed
+export const api = createApi({
+    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+    endpoints: () => ({}),
+})
+
+
+export const injectedRtkApi = api.injectEndpoints({
+    endpoints: (build) => ({
+        listPets: build.query<Array<Dtos.Pet>, { "body": undefined }>({
+            query: queryArg => ({ url: \`/pets\` })
+        }),
+        getPet: build.query<Dtos.Pet, { "petId": string, "body": undefined }>({
+            query: queryArg => ({ url: \`/pets/{\${queryArg["petId"]}}\` })
+        })
+    }),
+    overrideExisting: false,
+});
+",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module SomeTitleEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
@@ -1087,15 +1111,15 @@ export module SomeTitleEndpoints {
         listPets: "/pets";
         getPet: "/pets/{petId}";
     }
-    export interface ListPets<Pets extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
-        { "200": Pets },
+    export interface ListPets<Array<Pet> extends EndpointDefinition.DtoTypes > extends EndpointDefinition <
+        { "200": Array<Pet> },
         undefined,
         { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
-    > {
-        name: "listPets";
-        operation: "get";
-        path: "/pets"
-    }
+        > {
+            name: "listPets";
+            operation: "get";
+            path: "/pets"
+        }
 
     export interface GetPet<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
         { "200": Pet },
@@ -1842,9 +1866,9 @@ export class Configuration {
  * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
  * */
 export interface EndpointDefinition<
-    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
-    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
-    Params extends EndpointDefinition.Parameters | undefined = undefined
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
+    Params extends EndpointDefinition.Parameters | undefined
 > {
     path: EndpointDefinition.Path;
     /** operation id */
@@ -1870,10 +1894,10 @@ export module EndpointDefinition {
     export type Operation = "get" | "post" | "put" | "delete" | "patch";
 
     export type Parameters = {
-        path: { [name: string]: DtoTypes };
-        query: { [name: string]: DtoTypes };
-        header: { [headerKey: string]: DtoTypes };
-        cookie: { [cookieKey: string]: DtoTypes };
+        path?: { [name: string]: DtoTypes };
+        query?: { [name: string]: DtoTypes };
+        header?: { [headerKey: string]: DtoTypes };
+        cookie?: { [cookieKey: string]: DtoTypes };
     };
     export type DeserializedRequestObject = DtoTypes;
 
@@ -2012,6 +2036,27 @@ components:
         mapping:
           DOG: '#/components/schemas/Dog'
           CAT: '#/components/schemas/Cat'
+",
+  "import * as Dtos from './api.js'
+
+// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+// initialize an empty api service that we'll inject endpoints into later as needed
+export const api = createApi({
+    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+    endpoints: () => ({}),
+})
+
+
+export const injectedRtkApi = api.injectEndpoints({
+    endpoints: (build) => ({
+        getPets: build.query<Dtos.Pet, { "body": undefined }>({
+            query: queryArg => ({ url: \`/v1/pets\` })
+        })
+    }),
+    overrideExisting: false,
+});
 ",
   "
 import { z } from "zod";
@@ -2570,10 +2615,11 @@ export const PetsApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Create a pet
+         * @param {Pet} [Pet] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPets: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createPets: async (Pet?: Pet, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = \`/pets\`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2588,9 +2634,12 @@ export const PetsApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(Pet, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2625,6 +2674,44 @@ export const PetsApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Patch pet
+         * @param {string} petId The id of the pet to retrieve
+         * @param {Pet} [Pet] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchPet: async (petId: string, Pet?: Pet, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'petId' is not null or undefined
+            assertParamExists('patchPet', 'petId', petId)
+            const localVarPath = \`/pets/{petId}\`
+                .replace(\`{\${"petId"}}\`, encodeURIComponent(String(petId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(Pet, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2678,11 +2765,12 @@ export const PetsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Create a pet
+         * @param {Pet} [Pet] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createPets(options);
+        async createPets(Pet?: Pet, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createPets(Pet, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PetsApi.createPets']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2698,6 +2786,20 @@ export const PetsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(petId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PetsApi.listPets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Patch pet
+         * @param {string} petId The id of the pet to retrieve
+         * @param {Pet} [Pet] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async patchPet(petId: string, Pet?: Pet, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.patchPet(petId, Pet, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PetsApi.patchPet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2726,11 +2828,12 @@ export const PetsApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Create a pet
+         * @param {Pet} [Pet] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPets(options?: any): AxiosPromise<void> {
-            return localVarFp.createPets(options).then((request) => request(axios, basePath));
+        createPets(Pet?: Pet, options?: any): AxiosPromise<void> {
+            return localVarFp.createPets(Pet, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2741,6 +2844,17 @@ export const PetsApiFactory = function (configuration?: Configuration, basePath?
          */
         listPets(petId: string, options?: any): AxiosPromise<Array<Pet>> {
             return localVarFp.listPets(petId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Patch pet
+         * @param {string} petId The id of the pet to retrieve
+         * @param {Pet} [Pet] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchPet(petId: string, Pet?: Pet, options?: any): AxiosPromise<Pet> {
+            return localVarFp.patchPet(petId, Pet, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2765,12 +2879,13 @@ export class PetsApi extends BaseAPI {
     /**
      * 
      * @summary Create a pet
+     * @param {Pet} [Pet] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetsApi
      */
-    public createPets(options?: RawAxiosRequestConfig) {
-        return PetsApiFp(this.configuration).createPets(options).then((request) => request(this.axios, this.basePath));
+    public createPets(Pet?: Pet, options?: RawAxiosRequestConfig) {
+        return PetsApiFp(this.configuration).createPets(Pet, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2783,6 +2898,19 @@ export class PetsApi extends BaseAPI {
      */
     public listPets(petId: string, options?: RawAxiosRequestConfig) {
         return PetsApiFp(this.configuration).listPets(petId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Patch pet
+     * @param {string} petId The id of the pet to retrieve
+     * @param {Pet} [Pet] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PetsApi
+     */
+    public patchPet(petId: string, Pet?: Pet, options?: RawAxiosRequestConfig) {
+        return PetsApiFp(this.configuration).patchPet(petId, Pet, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3156,9 +3284,9 @@ export class Configuration {
  * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
  * */
 export interface EndpointDefinition<
-    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
-    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
-    Params extends EndpointDefinition.Parameters | undefined = undefined
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
+    Params extends EndpointDefinition.Parameters | undefined
 > {
     path: EndpointDefinition.Path;
     /** operation id */
@@ -3184,10 +3312,10 @@ export module EndpointDefinition {
     export type Operation = "get" | "post" | "put" | "delete" | "patch";
 
     export type Parameters = {
-        path: { [name: string]: DtoTypes };
-        query: { [name: string]: DtoTypes };
-        header: { [headerKey: string]: DtoTypes };
-        cookie: { [cookieKey: string]: DtoTypes };
+        path?: { [name: string]: DtoTypes };
+        query?: { [name: string]: DtoTypes };
+        header?: { [headerKey: string]: DtoTypes };
+        cookie?: { [cookieKey: string]: DtoTypes };
     };
     export type DeserializedRequestObject = DtoTypes;
 
@@ -3269,6 +3397,11 @@ paths:
       operationId: createPets
       tags:
         - pets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
       responses:
         '201':
           description: Null response
@@ -3282,6 +3415,27 @@ paths:
         - pets
       parameters:
         - $ref: '#/components/parameters/PathPetId'
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        default:
+          $ref: '#/components/responses/Default'
+    patch:
+      summary: Patch pet
+      operationId: patchPet
+      tags:
+        - pets
+      parameters:
+        - $ref: '#/components/parameters/PathPetId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
       responses:
         '200':
           description: Expected response to a valid request
@@ -3502,6 +3656,36 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
 ",
+  "import * as Dtos from './api.js'
+
+// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+// initialize an empty api service that we'll inject endpoints into later as needed
+export const api = createApi({
+    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+    endpoints: () => ({}),
+})
+
+
+export const injectedRtkApi = api.injectEndpoints({
+    endpoints: (build) => ({
+        listPets: build.query<Array<Dtos.Pet>, { "petId": string, "body": undefined }>({
+            query: queryArg => ({ url: \`/pets\` })
+        }),
+        createPets: build.mutation<undefined, { "body": Dtos.Pet }>({
+            query: queryArg => ({ url: \`/pets\`, method: "POST", body: queryArg?.body })
+        }),
+        showPetById: build.query<Dtos.Pet, { "petId": string, "body": undefined }>({
+            query: queryArg => ({ url: \`/pets/{\${queryArg["petId"]}}\` })
+        }),
+        patchPet: build.mutation<Dtos.Pet, { "petId": string, "body": Dtos.Pet }>({
+            query: queryArg => ({ url: \`/pets/{\${queryArg["petId"]}}\`, method: "PATCH", body: queryArg?.body })
+        })
+    }),
+    overrideExisting: false,
+});
+",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module SwaggerPetstoreEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
@@ -3509,20 +3693,21 @@ export module SwaggerPetstoreEndpoints {
         listPets: "/pets";
         createPets: "/pets";
         showPetById: "/pets/{petId}";
+        patchPet: "/pets/{petId}";
     }
-    export interface ListPets<Pets extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
-        { "200": Pets },
+    export interface ListPets<Array<Pet> extends EndpointDefinition.DtoTypes > extends EndpointDefinition <
+        { "200": Array<Pet> },
         undefined,
         { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
-    > {
-        name: "listPets";
-        operation: "get";
-        path: "/pets"
-    }
+        > {
+            name: "listPets";
+            operation: "get";
+            path: "/pets"
+        }
 
-    export interface CreatePets<> extends EndpointDefinition<
+    export interface CreatePets<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
         {},
-        undefined,
+        Pet,
         { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
     > {
         name: "createPets";
@@ -3537,6 +3722,16 @@ export module SwaggerPetstoreEndpoints {
     > {
         name: "showPetById";
         operation: "get";
+        path: "/pets/{petId}"
+    }
+
+    export interface PatchPet<Pet extends EndpointDefinition.DtoTypes, Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pet },
+        Pet,
+        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "patchPet";
+        operation: "patch";
         path: "/pets/{petId}"
     }
 
@@ -4239,9 +4434,9 @@ export class Configuration {
  * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
  * */
 export interface EndpointDefinition<
-    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
-    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
-    Params extends EndpointDefinition.Parameters | undefined = undefined
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
+    Params extends EndpointDefinition.Parameters | undefined
 > {
     path: EndpointDefinition.Path;
     /** operation id */
@@ -4267,10 +4462,10 @@ export module EndpointDefinition {
     export type Operation = "get" | "post" | "put" | "delete" | "patch";
 
     export type Parameters = {
-        path: { [name: string]: DtoTypes };
-        query: { [name: string]: DtoTypes };
-        header: { [headerKey: string]: DtoTypes };
-        cookie: { [cookieKey: string]: DtoTypes };
+        path?: { [name: string]: DtoTypes };
+        query?: { [name: string]: DtoTypes };
+        header?: { [headerKey: string]: DtoTypes };
+        cookie?: { [cookieKey: string]: DtoTypes };
     };
     export type DeserializedRequestObject = DtoTypes;
 
@@ -4391,6 +4586,27 @@ components:
               example: DOG
           required:
             - type
+",
+  "import * as Dtos from './api.js'
+
+// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+// initialize an empty api service that we'll inject endpoints into later as needed
+export const api = createApi({
+    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+    endpoints: () => ({}),
+})
+
+
+export const injectedRtkApi = api.injectEndpoints({
+    endpoints: (build) => ({
+        listPets: build.query<Dtos.Pets, { "body": undefined }>({
+            query: queryArg => ({ url: \`/pets\` })
+        })
+    }),
+    overrideExisting: false,
+});
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module SwaggerPetstoreEndpoints {
@@ -5081,9 +5297,9 @@ export class Configuration {
  * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
  * */
 export interface EndpointDefinition<
-    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
-    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
-    Params extends EndpointDefinition.Parameters | undefined = undefined
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
+    Params extends EndpointDefinition.Parameters | undefined
 > {
     path: EndpointDefinition.Path;
     /** operation id */
@@ -5109,10 +5325,10 @@ export module EndpointDefinition {
     export type Operation = "get" | "post" | "put" | "delete" | "patch";
 
     export type Parameters = {
-        path: { [name: string]: DtoTypes };
-        query: { [name: string]: DtoTypes };
-        header: { [headerKey: string]: DtoTypes };
-        cookie: { [cookieKey: string]: DtoTypes };
+        path?: { [name: string]: DtoTypes };
+        query?: { [name: string]: DtoTypes };
+        header?: { [headerKey: string]: DtoTypes };
+        cookie?: { [cookieKey: string]: DtoTypes };
     };
     export type DeserializedRequestObject = DtoTypes;
 
@@ -5233,21 +5449,42 @@ components:
       items:
         $ref: '#/components/schemas/Pet'
 ",
+  "import * as Dtos from './api.js'
+
+// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+// initialize an empty api service that we'll inject endpoints into later as needed
+export const api = createApi({
+    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+    endpoints: () => ({}),
+})
+
+
+export const injectedRtkApi = api.injectEndpoints({
+    endpoints: (build) => ({
+        listPets: build.query<Array<Dtos.Pet>, { "body": undefined }>({
+            query: queryArg => ({ url: \`/pets\` })
+        })
+    }),
+    overrideExisting: false,
+});
+",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module SomeTitleEndpoints {
     export type Path = "/pets"
     export interface OperationToPath {
         listPets: "/pets";
     }
-    export interface ListPets<Pets extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
-        { "200": Pets },
+    export interface ListPets<Array<Pet> extends EndpointDefinition.DtoTypes > extends EndpointDefinition <
+        { "200": Array<Pet> },
         undefined,
         { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
-    > {
-        name: "listPets";
-        operation: "get";
-        path: "/pets"
-    }
+        > {
+            name: "listPets";
+            operation: "get";
+            path: "/pets"
+        }
 
 }
 ",
@@ -5941,9 +6178,9 @@ export class Configuration {
  * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
  * */
 export interface EndpointDefinition<
-    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
-    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
-    Params extends EndpointDefinition.Parameters | undefined = undefined
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
+    Params extends EndpointDefinition.Parameters | undefined
 > {
     path: EndpointDefinition.Path;
     /** operation id */
@@ -5969,10 +6206,10 @@ export module EndpointDefinition {
     export type Operation = "get" | "post" | "put" | "delete" | "patch";
 
     export type Parameters = {
-        path: { [name: string]: DtoTypes };
-        query: { [name: string]: DtoTypes };
-        header: { [headerKey: string]: DtoTypes };
-        cookie: { [cookieKey: string]: DtoTypes };
+        path?: { [name: string]: DtoTypes };
+        query?: { [name: string]: DtoTypes };
+        header?: { [headerKey: string]: DtoTypes };
+        cookie?: { [cookieKey: string]: DtoTypes };
     };
     export type DeserializedRequestObject = DtoTypes;
 
@@ -6100,6 +6337,27 @@ export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
 export * from "./ExtendedArrayItemsEndpoints.js";
+",
+  "import * as Dtos from './api.js'
+
+// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+// initialize an empty api service that we'll inject endpoints into later as needed
+export const api = createApi({
+    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+    endpoints: () => ({}),
+})
+
+
+export const injectedRtkApi = api.injectEndpoints({
+    endpoints: (build) => ({
+        getPets: build.query<Dtos.PetInfo, { "body": undefined }>({
+            query: queryArg => ({ url: \`/v1/pets\` })
+        })
+    }),
+    overrideExisting: false,
+});
 ",
   "
 import { z } from "zod";
@@ -7179,9 +7437,9 @@ export class Configuration {
  * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
  * */
 export interface EndpointDefinition<
-    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject = string,
-    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject = undefined,
-    Params extends EndpointDefinition.Parameters | undefined = undefined
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
+    Params extends EndpointDefinition.Parameters | undefined
 > {
     path: EndpointDefinition.Path;
     /** operation id */
@@ -7207,10 +7465,10 @@ export module EndpointDefinition {
     export type Operation = "get" | "post" | "put" | "delete" | "patch";
 
     export type Parameters = {
-        path: { [name: string]: DtoTypes };
-        query: { [name: string]: DtoTypes };
-        header: { [headerKey: string]: DtoTypes };
-        cookie: { [cookieKey: string]: DtoTypes };
+        path?: { [name: string]: DtoTypes };
+        query?: { [name: string]: DtoTypes };
+        header?: { [headerKey: string]: DtoTypes };
+        cookie?: { [cookieKey: string]: DtoTypes };
     };
     export type DeserializedRequestObject = DtoTypes;
 
@@ -7263,15 +7521,15 @@ export module SomeTitleEndpoints {
         listPets: "/pets";
         getPet: "/pets/{petId}";
     }
-    export interface ListPets<Pets extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
-        { "200": Pets },
+    export interface ListPets<Array<Pet> extends EndpointDefinition.DtoTypes > extends EndpointDefinition <
+        { "200": Array<Pet> },
         undefined,
         { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
-    > {
-        name: "listPets";
-        operation: "get";
-        path: "/pets"
-    }
+        > {
+            name: "listPets";
+            operation: "get";
+            path: "/pets"
+        }
 
     export interface GetPet<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
         { "200": Pet },

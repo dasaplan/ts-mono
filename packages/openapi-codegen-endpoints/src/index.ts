@@ -1,3 +1,4 @@
+export { generateRtkQueryDspText, generateRtkQueryDspTextFromBundled } from "./client/rtk-query-dsp.js";
 export { EndpointDefinition } from "./endpoint-definition.js";
 export { generateEndpointDefinitions, generateEndpointDefinitionsFromBundled, EndpointDefinitionGeneratorOptions } from "./endpoint-generator.js";
 

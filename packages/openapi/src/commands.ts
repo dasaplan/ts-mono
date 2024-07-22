@@ -9,8 +9,13 @@ export function createCommandGenerate(program: Command) {
     .argument("<openapi-spec>", "Relative filepath from the current cwd to the OpenApi root document file")
     .option("-o, --output [output]", "Target directory where the generated files will appear", "out")
     .option("--modelSuffix [modelSuffix]", "All model names are suffixed as provided")
-    .action(async (spec: string, options: { output: string; modelSuffix: string }) => {
-      await generateOpenapi(spec, options.output, { modelSuffix: options.modelSuffix, clearTemp: true });
+    .option("--experimentalRtkQuery", "Opt in for the experimental feature to create react query endpoints", false)
+    .action(async (spec: string, options: { output: string; modelSuffix: string; experimentalRtkQuery: boolean }) => {
+      await generateOpenapi(spec, options.output, {
+        modelSuffix: options.modelSuffix,
+        clearTemp: true,
+        experimental: { rtkQuery: options.experimentalRtkQuery },
+      });
       appLog.log.info(`finished generate`);
     });
 }

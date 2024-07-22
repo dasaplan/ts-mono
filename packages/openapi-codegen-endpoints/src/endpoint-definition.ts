@@ -16,18 +16,6 @@ export interface EndpointDefinition<
 }
 
 export module EndpointDefinition {
-  export type ToDeserializedResponse<T> = T extends EndpointDefinition.Response<infer DeserializedResponsesObject>
-    ? DeserializedResponsesObject
-    : T extends EndpointDefinition.DeserializedResponsesObject
-    ? T
-    : never;
-
-  export type ToDeserializedRequest<T> = T extends EndpointDefinition.Request<infer DeserializedRequest>
-    ? DeserializedRequest
-    : T extends EndpointDefinition.DeserializedRequestObject
-    ? T
-    : never;
-
   type PathSegment = `${string}`;
 
   type PathParam = `{:${string}}`;
@@ -42,10 +30,10 @@ export module EndpointDefinition {
   export type Operation = "get" | "post" | "put" | "delete" | "patch";
 
   export type Parameters = {
-    path: { [name: string]: DtoTypes };
-    query: { [name: string]: DtoTypes };
-    header: { [headerKey: string]: DtoTypes };
-    cookie: { [cookieKey: string]: DtoTypes };
+    path?: { [name: string]: DtoTypes };
+    query?: { [name: string]: DtoTypes };
+    header?: { [headerKey: string]: DtoTypes };
+    cookie?: { [cookieKey: string]: DtoTypes };
   };
   export type DeserializedRequestObject = DtoTypes;
 

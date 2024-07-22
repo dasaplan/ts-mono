@@ -53,10 +53,12 @@
     "@ts-morph/common": "^0.22.0",
     "commander": "^11.1.0",
     "pascal-case": "^4.0.0",
-    "ts-morph": "^21.0.1"
+    "ts-morph": "^21.0.1",
+    "@rtk-query/codegen-openapi": "^1.2.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@reduxjs/toolkit": "^2.2.6",
     "@types/pascal-case": "^1.1.2",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "clean-package": "^2.2.0",
