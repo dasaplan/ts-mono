@@ -1,5 +1,13 @@
 # @dasaplan/openapi-codegen-endpoints
 
+## 0.0.5
+
+### Patch Changes
+
+- feat: rtk-query
+- Updated dependencies
+  - @dasaplan/openapi-bundler@0.0.14
+
 ## 0.0.4
 
 ### Patch Changes

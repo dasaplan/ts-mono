@@ -1,5 +1,11 @@
 # @dasaplan/openapi-bundler
 
+## 0.0.14
+
+### Patch Changes
+
+- feat: rtk-query
+
 ## 0.0.13
 
 ### Patch Changes
