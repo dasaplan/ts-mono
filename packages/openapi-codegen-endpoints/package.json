@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "prepack": "sort-package-json --quiet && clean-package",
-    "pack": "npm pack",
+    "pack": "pnpm pack",
     "postpack": "clean-package restore",
     "build": "run-s rup cp:templates",
     "rup": "tsup-node --dts",
@@ -50,15 +50,15 @@
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:0.0.1",
+    "@rtk-query/codegen-openapi": "^1.2.0",
     "@ts-morph/common": "^0.22.0",
     "commander": "^11.1.0",
     "pascal-case": "^4.0.0",
-    "ts-morph": "^21.0.1",
-    "@rtk-query/codegen-openapi": "^1.2.0"
+    "ts-morph": "^21.0.1"
   },
   "devDependencies": {
-    "@types/express": "^4.17.21",
     "@reduxjs/toolkit": "^2.2.6",
+    "@types/express": "^4.17.21",
     "@types/pascal-case": "^1.1.2",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "clean-package": "^2.2.0",

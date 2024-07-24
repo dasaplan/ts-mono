@@ -3,13 +3,11 @@ import { generateTypescriptAxios, TsAxiosPublicGenOptions } from "./generators/i
 import { _, ApplicationError, File, Folder } from "@dasaplan/ts-sdk";
 import { bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { generateZodSchemas } from "@dasaplan/openapi-codegen-zod";
-import { generateEndpointDefinitionsFromBundled, generateRtkQueryDspTextFromBundled } from "@dasaplan/openapi-codegen-endpoints";
+import { generateEndpointDefinitionsFromBundled } from "@dasaplan/openapi-codegen-endpoints";
 import { Project } from "ts-morph";
 
 export interface ExperimentalFeatures {
-  experimental?: {
-    rtkQuery?: boolean;
-  };
+  experimental?: {};
 }
 export async function generateOpenapi(
   specFilePath: string,
@@ -23,18 +21,6 @@ export async function generateOpenapi(
     const out = Folder.of(outDir).create();
     await generateZod(parsed, out);
     await generateEndpoints(parsed, out);
-
-    if (params?.experimental?.rtkQuery) {
-      await generateRtkQueryDspTextFromBundled(parsed, {
-        outDir: out.absolutePath,
-        typeSuffix: params?.modelSuffix,
-        tsApiTypesModule: {
-          namespace: "Dtos",
-          moduleName: "./api.js",
-          kind: "IMPORT_AND_NAMESPACE",
-        },
-      });
-    }
 
     // save spec where the code is generated
     out.writeYml(File.of(specFilePath).name, parsed);

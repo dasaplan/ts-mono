@@ -1,8 +1,15 @@
-import { Endpoint, OpenApiBundled, Transpiler } from "@dasaplan/openapi-bundler";
+import { bundleParseOpenapi, Endpoint, OpenApiBundled, Transpiler } from "@dasaplan/openapi-bundler";
 import { EndpointInterfaceGeneratorOptions, generateEndpointInterface, toObjectMap } from "../endpoint-interfaces.js";
 import { EndpointDefinitionGeneratorOptions } from "../endpoint-generator.js";
 import { Folder } from "@dasaplan/ts-sdk";
 import { createTsMorphSrcFileFromText } from "../ts-sources.js";
+import { appLog } from "../logger.js";
+
+export async function generateRtkQueryDsp(openapiSpec: string, params: EndpointDefinitionGeneratorOptions) {
+  appLog.childLog(generateRtkQueryDsp).info(`start generate:`, openapiSpec);
+  const bundled = await bundleParseOpenapi(openapiSpec, { mergeAllOf: true, ensureDiscriminatorValues: true });
+  return await generateRtkQueryDspTextFromBundled(bundled, params);
+}
 
 export async function generateRtkQueryDspTextFromBundled(bundled: OpenApiBundled, options: EndpointDefinitionGeneratorOptions) {
   const sourceText = await generateRtkQueryDspText(Transpiler.of(bundled).endpoints(), options);
@@ -19,7 +26,7 @@ export async function generateRtkQueryDspText(endpoints: Array<Endpoint>, option
       const { path, name, parameters, operation, response, request } = generateEndpointInterface(e, options);
       const queryArg = "queryArg";
       const pathParams = parameters["path"] ?? {};
-      const transformedPath = Object.keys(pathParams).reduce((acc, curr) => acc.replace(`${curr}`, `\${${queryArg}["${curr}"]}`), path);
+      const transformedPath = Object.keys(pathParams).reduce((acc, curr) => acc.replace(`{${curr}}`, `\${${queryArg}["${curr}"]}`), path);
       const url = `\`${transformedPath}\``;
 
       const method = `"${operation.toUpperCase()}"`;
@@ -47,7 +54,7 @@ export async function generateRtkQueryDspText(endpoints: Array<Endpoint>, option
           return `
     ${name}: build.mutation<${okResponse}, ${queryArgs}>({
       query: ${queryArg} =>  ({ url:  ${url} , method: ${method}})
-    }),`;
+    })`;
       }
       return "";
     })

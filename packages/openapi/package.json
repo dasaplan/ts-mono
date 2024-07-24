@@ -72,6 +72,7 @@
   },
   "devDependencies": {
     "@redocly/cli": "^1.6.0",
+    "@reduxjs/toolkit": "^2.2.6",
     "@types/express": "^4.17.21",
     "@types/json-schema-merge-allof": "^0.6.5",
     "@types/lodash": "^4.14.202",
@@ -87,7 +88,6 @@
     "npm-run-all": "*",
     "openapi-example-specs": "workspace:*",
     "openapi3-ts": "^4.2.1",
-    "@reduxjs/toolkit": "^2.2.6",
     "sort-package-json": "^2.10.0",
     "tsc-alias": "^1.8.8",
     "tsconfig": "workspace:0.0.0",
