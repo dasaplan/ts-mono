@@ -23,7 +23,7 @@ export module EndpointDefinition {
   /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
   export type Path = `/${PathSegment}` | `/${PathSegment}/${PathSegment | PathParam}`;
 
-  type DtoTypes = object | string | number | undefined;
+  export type DtoTypes = object | string | number | undefined;
 
   export type DeserializedResponsesObject = { [status: number]: DtoTypes };
 

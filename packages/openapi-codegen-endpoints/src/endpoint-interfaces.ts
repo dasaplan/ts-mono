@@ -5,6 +5,7 @@ import { _, ApplicationError } from "@dasaplan/ts-sdk";
 import { pascalCase } from "pascal-case";
 
 import { EndpointDefinition } from "./endpoint-definition.js";
+import { EndpointDefinitionGeneratorOptions } from "./endpoint-generator.js";
 
 export interface EndpointInterfaceGeneratorOptions {
   /** import * as <namespace> from 'moduleName' */
@@ -21,17 +22,18 @@ export function toObjectMap(obj: object): string {
     .join(",")}}`;
 }
 
-export async function generateEndpointInterfacesAsText(bundled: OpenApiBundled, params: EndpointInterfaceGeneratorOptions) {
-  try {
-    const endpoints = Transpiler.of(bundled).endpoints();
-
-    const interfaces = endpoints.map((e) => {
-      const { path, name, request, parameters, response, operation } = generateEndpointInterface(e, params);
-      const schemas = [...Object.values(response), request]
-        .filter(_.isDefined)
-        .map((t) => `${t} extends EndpointDefinition.DtoTypes`)
-        .join(", ");
-      return `export interface ${pascalCase(name)}<${schemas}> extends EndpointDefinition<
+export function createTypeImport(params: EndpointDefinitionGeneratorOptions) {
+  return params.tsApiTypesModule?.kind === "IMPORT_AND_NAMESPACE"
+    ? `import * as ${params.tsApiTypesModule.namespace} from '${params.tsApiTypesModule.moduleName}'`
+    : "";
+}
+function generateEndpointWithGenericTypes(e: Endpoint, params: EndpointInterfaceGeneratorOptions) {
+  const { path, name, request, parameters, response, operation } = generateEndpointInterface(e, params);
+  const schemas = [...Object.values(response), request]
+    .filter(_.isDefined)
+    .map((t) => `${t.replace("[]", "")} extends EndpointDefinition.DtoTypes`)
+    .join(", ");
+  return `export interface ${pascalCase(name)}<${schemas}> extends EndpointDefinition<
                 ${toObjectMap(response)},
                 ${request},
                 ${toObjectMap(parameters)}
@@ -41,7 +43,30 @@ export async function generateEndpointInterfacesAsText(bundled: OpenApiBundled, 
         path: "${path}"
     }
     `;
-    });
+}
+
+function generateEndpointWithTypes(e: Endpoint, params: EndpointInterfaceGeneratorOptions) {
+  const { path, name, request, parameters, response, operation } = generateEndpointInterface(e, params);
+
+  return `export interface ${pascalCase(name)} extends EndpointDefinition<
+                ${toObjectMap(response)},
+                ${request},
+                ${toObjectMap(parameters)}
+            > {
+        name: "${name}";
+        operation: "${operation}";
+        path: "${path}"
+    }
+    `;
+}
+export async function generateEndpointInterfacesAsText(bundled: OpenApiBundled, params: EndpointInterfaceGeneratorOptions) {
+  try {
+    const endpoints = Transpiler.of(bundled).endpoints();
+
+    const interfaceGenerator = (e: Endpoint) =>
+      _.isDefined(params.tsApiTypesModule) ? generateEndpointWithTypes(e, params) : generateEndpointWithGenericTypes(e, params);
+
+    const interfaces = endpoints.map(interfaceGenerator);
     return `export module ${params.apiName} {
                 export type Path = ${_.uniq(endpoints.map((e) => `"${e.path}"`)).join(" | ")}
                 export interface OperationToPath {
@@ -112,7 +137,7 @@ function generatePayloadType(schema: Schema | undefined, params: EndpointInterfa
       break;
     }
     case "ARRAY": {
-      return `Array<${generatePayloadType(schema.items, params)}>`;
+      return `${generatePayloadType(schema.items, params)}[]`;
     }
     case "ENUM":
     case "BOX":

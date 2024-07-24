@@ -4,7 +4,7 @@ import { bundleParseOpenapi, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { _, Folder, File } from "@dasaplan/ts-sdk";
 import { Project } from "ts-morph";
 import { Templates } from "./templates.js";
-import { EndpointInterfaceGeneratorOptions, generateEndpointInterfacesAsText } from "./endpoint-interfaces.js";
+import { createTypeImport, EndpointInterfaceGeneratorOptions, generateEndpointInterfacesAsText } from "./endpoint-interfaces.js";
 import { pascalCase } from "pascal-case";
 import { createTsMorphSrcFile, createTsMorphSrcFileFromText } from "./ts-sources.js";
 
@@ -22,7 +22,9 @@ export async function generateEndpointDefinitions(openapiSpec: string, params: E
 export async function generateEndpointDefinitionsFromBundled(bundled: OpenApiBundled, params: EndpointDefinitionGeneratorOptions) {
   const apiName = createApiName(bundled, params);
   const endpoints = await generateEndpointInterfacesAsText(bundled, { ...params, apiName });
-  const withImports = ["import {EndpointDefinition} from './EndpointDefinition'", endpoints].join("\n");
+
+  const maybeTypeImport = createTypeImport(params);
+  const withImports = [maybeTypeImport, "import {EndpointDefinition} from './EndpointDefinition'", endpoints].filter((i) => !_.isEmpty(i)).join("\n");
 
   const out = Folder.of(params?.outDir ?? "out").create();
   const { project } = await generateTemplates({ ...params, outDir: out.absolutePath });
