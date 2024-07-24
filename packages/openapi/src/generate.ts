@@ -7,7 +7,7 @@ import { generateEndpointDefinitionsFromBundled } from "@dasaplan/openapi-codege
 import { Project } from "ts-morph";
 
 export interface ExperimentalFeatures {
-  experimental?: {};
+  experimental?: never;
 }
 export async function generateOpenapi(
   specFilePath: string,

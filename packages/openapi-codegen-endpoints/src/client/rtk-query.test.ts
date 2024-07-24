@@ -24,17 +24,17 @@ describe("rtk-query", () => {
         
         export const injectedRtkApi = api.injectEndpoints({
             endpoints: (build) => ({
-                  listPets: build.query<Array<Api.Pet>, {"petId": string,"body": undefined}>({
+                  listPets: build.query<Api.Pet[], {"petId": string,"body": undefined}>({
             query: queryArg =>  ({ url: \`/pets\` })
           }),
       createPets: build.mutation<undefined, {"body": Api.Pet}>({
             query: queryArg =>  ({ url:  \`/pets\` , method: "POST" ,  body: queryArg?.body})
           }),
       showPetById: build.query<Api.Pet, {"petId": string,"body": undefined}>({
-            query: queryArg =>  ({ url: \`/pets/{\${queryArg["petId"]}}\` })
+            query: queryArg =>  ({ url: \`/pets/\${queryArg["petId"]}\` })
           }),
       patchPet: build.mutation<Api.Pet, {"petId": string,"body": Api.Pet}>({
-            query: queryArg =>  ({ url:  \`/pets/{\${queryArg["petId"]}}\` , method: "PATCH" , body: queryArg?.body})
+            query: queryArg =>  ({ url:  \`/pets/\${queryArg["petId"]}\` , method: "PATCH" , body: queryArg?.body})
           })
               }),
           overrideExisting: false,

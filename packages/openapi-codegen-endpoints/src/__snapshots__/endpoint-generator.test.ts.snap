@@ -24,7 +24,7 @@ export module EndpointDefinition {
     /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
     export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
 
-    type DtoTypes = object | string | number | undefined;
+    export type DtoTypes = object | string | number | undefined;
 
     export type DeserializedResponsesObject = { [status: number]: DtoTypes };
 
@@ -82,7 +82,7 @@ export module EndpointDefinition {
     /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
     export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
 
-    type DtoTypes = object | string | number | undefined;
+    export type DtoTypes = object | string | number | undefined;
 
     export type DeserializedResponsesObject = { [status: number]: DtoTypes };
 
@@ -185,7 +185,7 @@ export module EndpointDefinition {
     /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
     export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
 
-    type DtoTypes = object | string | number | undefined;
+    export type DtoTypes = object | string | number | undefined;
 
     export type DeserializedResponsesObject = { [status: number]: DtoTypes };
 
@@ -243,7 +243,7 @@ export module EndpointDefinition {
     /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
     export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
 
-    type DtoTypes = object | string | number | undefined;
+    export type DtoTypes = object | string | number | undefined;
 
     export type DeserializedResponsesObject = { [status: number]: DtoTypes };
 
@@ -288,15 +288,15 @@ export module TestApiEndpoints {
         showPetById: "/pets/{petId}";
         patchPet: "/pets/{petId}";
     }
-    export interface ListPets<Array<Pet> extends EndpointDefinition.DtoTypes > extends EndpointDefinition <
-        { "200": Array<Pet> },
+    export interface ListPets<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pet[] },
         undefined,
         { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
-        > {
-            name: "listPets";
-            operation: "get";
-            path: "/pets"
-        }
+    > {
+        name: "listPets";
+        operation: "get";
+        path: "/pets"
+    }
 
     export interface CreatePets<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
         {},
