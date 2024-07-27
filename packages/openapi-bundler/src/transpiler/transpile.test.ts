@@ -228,4 +228,32 @@ describe("transpiler", () => {
       "List",
     ]);
   });
+
+  test("should toposort array items correctly - multiple inheritance", () => {
+    const openapi: OpenApiBundled = createApi(
+      withSchemas({
+        C: {
+          type: "object",
+          properties: {
+            propC: { type: "string" },
+          },
+        },
+        A: {
+          type: "object",
+          properties: {
+            propA: { $ref: "#/components/schemas/C" },
+          },
+        },
+        B: {
+          type: "object",
+          properties: {
+            propB: { $ref: "#/components/schemas/A" },
+          },
+        },
+      })
+    );
+    const spec = Transpiler.of(openapi);
+    const schemas = spec.schemasTopoSorted();
+    expect(schemas.map((s) => s.getName())).toEqual(["C", "A", "B"]);
+  });
 });

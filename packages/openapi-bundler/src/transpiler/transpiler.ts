@@ -2,7 +2,7 @@ import { OpenApiBundled } from "../bundle.js";
 import { Endpoint, TranspileEndpointCtx } from "./transpile-endpoint.js";
 import { Schema } from "./transpile-schema.js";
 import { TranspileContext } from "./transpile-context.js";
-import { Toposort } from "./toposort.js";
+import { Toposort } from "./toposort/toposort.js";
 import { _ } from "@dasaplan/ts-sdk";
 
 export module Transpiler {

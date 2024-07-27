@@ -47,7 +47,6 @@
     "lodash": "^4.17.21",
     "merge-json-schemas": "^1.0.0",
     "openapi3-ts": "^4.3.3",
-    "toposort": "^2.0.2",
     "tslog": "^4.9.2"
   },
   "devDependencies": {

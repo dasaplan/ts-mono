@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Schema } from "./transpile-schema.js";
-import { appLog } from "../logger.js";
+import { Schema } from "../transpile-schema.js";
+import { appLog } from "../../logger.js";
 import { _ } from "@dasaplan/ts-sdk";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import toposort from "toposort";
+import * as toposort from "./lib.js";
 
 export module Toposort {
   const logger = appLog.childLogger("Toposort");
-
+  type Edge<T> = [T, T];
   export function sortSchemas(schemas: Array<Schema>): Array<Schema> {
     const collectedEdges: Map<string, Set<string>> = new Map();
     const nodes = new Map<string, Schema>();
@@ -17,12 +16,22 @@ export module Toposort {
       Array.from(nodes.values()).filter(
         (d) => d.component.kind === "COMPONENT"
       ),
-      (d) => d.getName()
-    ).map((d) => d.getName());
-    const edges = Array.from(collectedEdges.entries()).reduce((acc, entry) => {
-      const [parent, children] = entry as unknown as [Schema, Set<Schema>];
-      return [...acc, ...Array.from(children).map((c) => [parent, c])];
-    }, <Array<Array<Schema>>>[]);
+      (d) => d.getId()
+    ).map((d) => d.getId());
+
+    const edges = Array.from(collectedEdges.entries()).reduce(
+      (acc, entry: [string, Set<string>]) => {
+        const [parent, children] = entry;
+        return [
+          ...acc,
+          ...Array.from(children).map(
+            (c) => [parent, c] satisfies Edge<string>
+          ),
+        ];
+      },
+      <Array<Edge<string>>>[]
+    );
+
     try {
       const sorted: Array<string> = toposort.array(nodeComponents, edges);
       return sorted.reverse().map((d) => nodes.get(d)!);
@@ -39,31 +48,34 @@ export module Toposort {
     ctx: Map<string, Set<string>>,
     nodes: Map<string, Schema>
   ) {
-    if (child.component.kind === "COMPONENT" && !nodes.has(child.getName())) {
-      nodes.set(child.getName(), child);
+    if (child.component.kind === "COMPONENT" && !nodes.has(child.getId())) {
+      nodes.set(child.getId(), child);
     }
     if (
       _.isDefined(parent) &&
       parent.component.kind === "COMPONENT" &&
-      !nodes.has(parent.getName())
+      !nodes.has(parent.getId())
     ) {
-      nodes.set(parent.getName(), parent);
+      nodes.set(parent.getId(), parent);
     }
+
     function withoutCircles(s: Schema, fn: () => void) {
       if (s.isCircular) return;
       return fn();
     }
+
     function addEdge(_parent: Schema, _child: Schema) {
-      if (!ctx.has(_parent.getName())) {
-        ctx.set(_parent.getName(), new Set());
+      if (!ctx.has(_parent.getId())) {
+        ctx.set(_parent.getId(), new Set());
       }
-      ctx.get(_parent.getName())?.add(_child.getName());
+      ctx.get(_parent.getId())?.add(_child.getId());
     }
+
     // only components which we can identify
-    if (child.getName() === parent?.getName()) {
+    if (child.getId() === parent?.getId()) {
       logger
         .childLog(collectEdges)
-        .warn(`recursion found ${child.getName()} - skip`);
+        .warn(`recursion found ${child.getId()} - skip`);
       return;
     }
     if (
