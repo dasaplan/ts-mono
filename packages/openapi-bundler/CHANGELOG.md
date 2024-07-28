@@ -1,5 +1,11 @@
 # @dasaplan/openapi-bundler
 
+## 0.0.16
+
+### Patch Changes
+
+- feat: x-omit
+
 ## 0.0.15
 
 ### Patch Changes

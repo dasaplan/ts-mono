@@ -1,5 +1,13 @@
 # @dasaplan/openapi-codegen-endpoints
 
+## 0.0.7
+
+### Patch Changes
+
+- feat: x-omit
+- Updated dependencies
+  - @dasaplan/openapi-bundler@0.0.16
+
 ## 0.0.6
 
 ### Patch Changes
