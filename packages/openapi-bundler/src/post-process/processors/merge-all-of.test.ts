@@ -1,22 +1,22 @@
 import { describe, expect, test } from "vitest";
 import { BundleMock } from "../../bundle-mock.js";
 import { mergeAllOf } from "./merge-all-of.js";
+import { OpenapiApiDoc } from "./spec-accessor.js";
 
 describe("mergeAllOf", () => {
   const {
     createApi,
-    withObjectSchema,
     withSchema,
-    factory: { schemaRef },
+    factory: { schemaRef, mockSchema },
   } = BundleMock.create();
 
   test("merges required - allOf ", () => {
     const spec = createApi(
-      withObjectSchema("A", {
+      withSchema("A", {
         required: ["a"],
         properties: { a: { type: "string" } },
       }),
-      withObjectSchema("B", {
+      withSchema("B", {
         required: ["b"],
         properties: { b: { type: "string" } },
       }),
@@ -79,7 +79,7 @@ describe("mergeAllOf", () => {
 
   test("merges required - oneOf + allOf ", () => {
     const spec = createApi(
-      withObjectSchema("Base", {
+      withSchema("Base", {
         required: ["common"],
         properties: { a: { type: "string" }, common: { type: "string" } },
       }),
@@ -134,7 +134,6 @@ describe("mergeAllOf", () => {
                   "$ref": "#/components/schemas/B",
                 },
               ],
-              "type": "object",
             },
             "B": {
               "properties": {
@@ -178,5 +177,37 @@ describe("mergeAllOf", () => {
         "paths": {},
       }
     `);
+  });
+
+  test.skip("merges required - multiple inheritance", () => {
+    /**
+     * When we have multiple inheritance, we may try to infer a common parent.
+     * Or we fall back to merge everything
+     * */
+    const spec = createApi(
+      withSchema("Base", {
+        required: ["type"],
+        properties: { type: { type: "string" } },
+        discriminator: { propertyName: "type" },
+      }),
+      withSchema("A", {
+        allOf: [schemaRef("Base")],
+        required: ["a"],
+        properties: { a: { type: "string" } },
+      }),
+      withSchema("B", {
+        allOf: [schemaRef("Base")],
+        required: ["b"],
+        properties: { b: { type: "string" } },
+      }),
+      withSchema("AB", {
+        allOf: [schemaRef("A"), schemaRef("B"), mockSchema({ properties: { c: { type: "string" } } })],
+      })
+    );
+    const actual = mergeAllOf(spec);
+    const accessor = OpenapiApiDoc.accessor(actual);
+    expect(accessor.schemas.length, "expected known number of schemas").toBe(2);
+    expect(accessor.getSchemaByName("Base"), "expected schema 'Base' to be defined").toBeDefined();
+    expect(accessor.getSchemaByName("A"), "expected schema 'A' to be defined").toBeDefined();
   });
 });

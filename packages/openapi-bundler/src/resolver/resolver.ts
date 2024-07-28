@@ -15,6 +15,10 @@ export interface Resolver {
     data: T,
     params?: { deleteRef: boolean }
   ): typeof params extends { deletedRef: true } ? WithoutRef<T> : WithOptionalRef<T>;
+  resolveRefImmutable<T extends oas30.ReferenceObject | OaComponent>(
+    data: T,
+    params?: { deleteRef: boolean }
+  ): typeof params extends { deletedRef: true } ? WithoutRef<T> : WithOptionalRef<T>;
 }
 export module Resolver {
   export function create(bundled: OpenApiBundled): Resolver {
@@ -53,6 +57,26 @@ export module Resolver {
             delete (data as any).$ref;
           }
           return pointer.get(this.root, propPath);
+        } catch {
+          throw `Error: could not resolve ref ${ref}`;
+        }
+      },
+      resolveRefImmutable<T extends oas30.ReferenceObject | OaComponent>(
+        _data: { $ref: string } | unknown,
+        params?: { deleteRef: boolean }
+      ): typeof params extends { deletedRef: true } ? WithoutRef<T> : WithOptionalRef<T> {
+        const data = _.cloneDeep(_data);
+        if (!isRef(data)) {
+          return data as WithOptionalRef<T>;
+        }
+        const ref = data.$ref;
+        try {
+          const propPath = ref.replace("#/", "/");
+          if (params?.deleteRef ?? false) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            delete (data as any).$ref;
+          }
+          return _.cloneDeep(pointer.get(this.root, propPath));
         } catch {
           throw `Error: could not resolve ref ${ref}`;
         }

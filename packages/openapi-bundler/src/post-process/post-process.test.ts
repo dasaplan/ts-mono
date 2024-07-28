@@ -27,9 +27,7 @@ describe("post process", () => {
 
         const mergedAllOf = mergeAllOf(_.cloneDeep(parsed));
         const ensured = ensureDiscriminatorValues(_.cloneDeep(parsed));
-        const ensuredMerged = mergeAllOf(
-          ensureDiscriminatorValues(_.cloneDeep(ensured))
-        );
+        const ensuredMerged = mergeAllOf(ensureDiscriminatorValues(_.cloneDeep(ensured)));
 
         const testOut = Folder.resolve(`test/out/discriminator-values`, spec);
         testOut.writeYml(`bundled-${path.basename(spec)}`, parsed);
@@ -65,8 +63,7 @@ describe("post process", () => {
           },
           {
             resolvers: {
-              title: ([a, b]: [a: string | undefined, b: string | undefined]) =>
-                b ?? a!,
+              title: ([a, b]: [a: string | undefined, b: string | undefined]) => b ?? a!,
             },
           }
         )

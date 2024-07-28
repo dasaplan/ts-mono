@@ -25,6 +25,25 @@ export class ApplicationError extends Error {
     );
   }
 
+  static assert<T>(
+    condition: T extends () => infer R ? R : T,
+    message: string
+  ): asserts condition is T extends () => infer R
+    ? NonNullable<R>
+    : NonNullable<T> {
+    const result = typeof condition === "function" ? condition() : condition;
+    if (_.isNil(result)) {
+      throw ApplicationError.create(
+        "assertion failed. expected assert condition to be a defined value."
+      ).chain(ApplicationError.create(message));
+    }
+    if (typeof result === "boolean" && !result) {
+      throw ApplicationError.create(
+        "assertion failed. expected assert condition to be true"
+      ).chain(ApplicationError.create(message));
+    }
+  }
+
   static create(message: string): ApplicationError {
     return new ApplicationError(message);
   }

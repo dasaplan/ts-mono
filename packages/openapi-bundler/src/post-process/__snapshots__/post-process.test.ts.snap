@@ -1,5 +1,1079 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`post process > spec > ensureDiscriminatorValues > debug > bndl-generic/api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "discriminator": {
+          "mapping": {
+            "SEAM": "#/components/schemas/Seam",
+            "SHORT": "#/components/schemas/ShortHair",
+          },
+          "propertyName": "catType",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Seam",
+          },
+          {
+            "$ref": "#/components/schemas/ShortHair",
+          },
+        ],
+      },
+      "CatBase": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "catType": {
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+              "catType",
+            ],
+            "title": "CatBase",
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+        ],
+        "properties": {
+          "bark": {
+            "type": "string",
+          },
+          "type": {
+            "example": "DOG",
+            "type": "string",
+            "x-const": "DOG",
+          },
+        },
+        "required": [
+          "bark",
+          "type",
+        ],
+      },
+      "GenericPet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+              },
+              "type": {
+                "example": "HAMSTER",
+                "type": "string",
+                "x-const": [
+                  "BIRD",
+                  "HAMSTER",
+                ],
+              },
+            },
+            "required": [
+              "type",
+            ],
+            "title": "GenericPet",
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "BIRD": "#/components/schemas/GenericPet",
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+            "HAMSTER": "#/components/schemas/GenericPet",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+          {
+            "$ref": "#/components/schemas/GenericPet",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "id": {
+            "exclusiveMaximum": true,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+        ],
+        "title": "PetBase",
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Seam": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CatBase",
+          },
+          {
+            "description": "this is 
+a multiline
+description
+",
+            "properties": {
+              "catType": {
+                "default": "SEAM",
+                "example": "SEAM",
+                "maxLength": 3,
+                "minLength": 1,
+                "type": "string",
+                "x-const": "SEAM",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "catType",
+              "type",
+            ],
+          },
+          {
+            "properties": {
+              "angryLevel": {
+                "pattern": "\\w+",
+                "type": "string",
+              },
+              "catType": {
+                "default": "SEAM",
+                "maxLength": 3,
+                "minLength": 1,
+                "type": "string",
+              },
+            },
+            "title": "Seam",
+          },
+        ],
+      },
+      "ShortHair": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CatBase",
+          },
+          {
+            "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
+",
+            "properties": {
+              "angryLevel": {
+                "type": "string",
+              },
+              "catType": {
+                "default": "SHORT",
+                "example": "SHORT",
+                "type": "string",
+                "x-const": "SHORT",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "catType",
+              "type",
+            ],
+            "title": "ShortHair",
+          },
+        ],
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "getPet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "petId",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "Get a Pet",
+      },
+    },
+  },
+}
+`;
+
+exports[`post process > spec > ensureDiscriminatorValues > debug > ensured-generic/api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "discriminator": {
+          "mapping": {
+            "SEAM": "#/components/schemas/Seam",
+            "SHORT": "#/components/schemas/ShortHair",
+          },
+          "propertyName": "catType",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Seam",
+          },
+          {
+            "$ref": "#/components/schemas/ShortHair",
+          },
+        ],
+      },
+      "CatBase": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "catType": {
+                "enum": [
+                  "SEAM",
+                  "SHORT",
+                ],
+                "title": "CatType",
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+            ],
+            "title": "CatBase",
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+        ],
+        "properties": {
+          "bark": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "bark",
+        ],
+      },
+      "GenericPet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+              },
+            },
+            "title": "GenericPet",
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "BIRD": "#/components/schemas/GenericPet",
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+            "HAMSTER": "#/components/schemas/GenericPet",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+          {
+            "$ref": "#/components/schemas/GenericPet",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "id": {
+            "exclusiveMaximum": true,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+        ],
+        "title": "PetBase",
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Seam": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CatBase",
+          },
+          {
+            "description": "this is 
+a multiline
+description
+",
+          },
+          {
+            "properties": {
+              "angryLevel": {
+                "pattern": "\\w+",
+                "type": "string",
+              },
+              "catType": {
+                "default": "SEAM",
+                "maxLength": 3,
+                "minLength": 1,
+                "type": "string",
+              },
+            },
+            "title": "Seam",
+          },
+        ],
+      },
+      "ShortHair": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CatBase",
+          },
+          {
+            "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
+",
+            "properties": {
+              "angryLevel": {
+                "type": "string",
+              },
+              "catType": {
+                "default": "SHORT",
+                "type": "string",
+              },
+            },
+            "title": "ShortHair",
+          },
+        ],
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "getPet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "petId",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "Get a Pet",
+      },
+    },
+  },
+}
+`;
+
+exports[`post process > spec > ensureDiscriminatorValues > debug > ensured-merged-generic/api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "discriminator": {
+          "mapping": {
+            "SEAM": "#/components/schemas/Seam",
+            "SHORT": "#/components/schemas/ShortHair",
+          },
+          "propertyName": "catType",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Seam",
+          },
+          {
+            "$ref": "#/components/schemas/ShortHair",
+          },
+        ],
+      },
+      "CatBase": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "catType": {
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+              "catType",
+            ],
+            "title": "CatBase",
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "bark": {
+                "type": "string",
+              },
+              "type": {
+                "example": "DOG",
+                "type": "string",
+                "x-const": "DOG",
+              },
+            },
+            "required": [
+              "bark",
+              "type",
+            ],
+          },
+        ],
+      },
+      "GenericPet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+              },
+              "type": {
+                "example": "BIRD",
+                "type": "string",
+                "x-const": [
+                  "BIRD",
+                  "HAMSTER",
+                ],
+              },
+            },
+            "required": [
+              "type",
+            ],
+            "title": "GenericPet",
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "BIRD": "#/components/schemas/GenericPet",
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+            "HAMSTER": "#/components/schemas/GenericPet",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+          {
+            "$ref": "#/components/schemas/GenericPet",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "id": {
+            "exclusiveMaximum": true,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+        ],
+        "title": "PetBase",
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Seam": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "description": "this is 
+a multiline
+description
+",
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "angryLevel": {
+                "pattern": "\\w+",
+                "type": "string",
+              },
+              "catType": {
+                "default": "SEAM",
+                "example": "SEAM",
+                "maxLength": 3,
+                "minLength": 1,
+                "type": "string",
+                "x-const": "SEAM",
+              },
+              "color": {
+                "type": "string",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "catType",
+              "color",
+              "type",
+            ],
+            "title": "Seam",
+          },
+        ],
+      },
+      "ShortHair": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
+",
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "angryLevel": {
+                "type": "string",
+              },
+              "catType": {
+                "default": "SHORT",
+                "example": "SHORT",
+                "type": "string",
+                "x-const": "SHORT",
+              },
+              "color": {
+                "type": "string",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "catType",
+              "color",
+              "type",
+            ],
+            "title": "ShortHair",
+          },
+        ],
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "getPet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "petId",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "Get a Pet",
+      },
+    },
+  },
+}
+`;
+
+exports[`post process > spec > ensureDiscriminatorValues > debug > merged-generic/api.yml 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "discriminator": {
+          "mapping": {
+            "SEAM": "#/components/schemas/Seam",
+            "SHORT": "#/components/schemas/ShortHair",
+          },
+          "propertyName": "catType",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Seam",
+          },
+          {
+            "$ref": "#/components/schemas/ShortHair",
+          },
+        ],
+      },
+      "CatBase": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "catType": {
+                "enum": [
+                  "SEAM",
+                  "SHORT",
+                ],
+                "title": "CatType",
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+            ],
+            "title": "CatBase",
+          },
+        ],
+      },
+      "Dog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "bark": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "bark",
+            ],
+          },
+        ],
+      },
+      "GenericPet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+              },
+            },
+            "title": "GenericPet",
+          },
+        ],
+      },
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "BIRD": "#/components/schemas/GenericPet",
+            "CAT": "#/components/schemas/Cat",
+            "DOG": "#/components/schemas/Dog",
+            "HAMSTER": "#/components/schemas/GenericPet",
+          },
+          "propertyName": "type",
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat",
+          },
+          {
+            "$ref": "#/components/schemas/Dog",
+          },
+          {
+            "$ref": "#/components/schemas/GenericPet",
+          },
+        ],
+      },
+      "PetBase": {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "id": {
+            "exclusiveMaximum": true,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "name",
+        ],
+        "title": "PetBase",
+        "type": "object",
+      },
+      "Pets": {
+        "items": {
+          "$ref": "#/components/schemas/Pet",
+        },
+        "maxItems": 100,
+        "type": "array",
+      },
+      "Seam": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "description": "this is 
+a multiline
+description
+",
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "angryLevel": {
+                "pattern": "\\w+",
+                "type": "string",
+              },
+              "catType": {
+                "default": "SEAM",
+                "enum": [
+                  "SEAM",
+                  "SHORT",
+                ],
+                "maxLength": 3,
+                "minLength": 1,
+                "title": "CatType",
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+            ],
+            "title": "Seam",
+          },
+        ],
+      },
+      "ShortHair": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
+",
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "angryLevel": {
+                "type": "string",
+              },
+              "catType": {
+                "default": "SHORT",
+                "enum": [
+                  "SEAM",
+                  "SHORT",
+                ],
+                "title": "CatType",
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
+            ],
+            "title": "ShortHair",
+          },
+        ],
+      },
+    },
+  },
+  "info": {
+    "title": "some title",
+    "version": "1.0.1",
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "List all pets",
+      },
+    },
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "getPet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "petId",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet",
+                },
+              },
+            },
+            "description": "A paged array of pets",
+          },
+        },
+        "summary": "Get a Pet",
+      },
+    },
+  },
+}
+`;
+
 exports[`post process > spec > ensureDiscriminatorValues > generic/api.yml > bndl-generic/api.yml 1`] = `
 {
   "components": {
@@ -543,7 +1617,9 @@ exports[`post process > spec > ensureDiscriminatorValues > generic/api.yml > ens
       },
       "CatBase": {
         "allOf": [
-          {},
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
           {
             "discriminator": {
               "propertyName": "catType",
@@ -710,36 +1786,43 @@ description
         ],
       },
       "ShortHair": {
-        "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
 ",
-        "discriminator": {
-          "propertyName": "catType",
-        },
-        "properties": {
-          "angryLevel": {
-            "type": "string",
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "angryLevel": {
+                "type": "string",
+              },
+              "catType": {
+                "default": "SHORT",
+                "example": "SHORT",
+                "type": "string",
+                "x-const": "SHORT",
+              },
+              "color": {
+                "type": "string",
+              },
+              "type": {
+                "example": "CAT",
+                "type": "string",
+                "x-const": "CAT",
+              },
+            },
+            "required": [
+              "catType",
+              "color",
+              "type",
+            ],
+            "title": "ShortHair",
           },
-          "catType": {
-            "default": "SHORT",
-            "example": "SHORT",
-            "type": "string",
-            "x-const": "SHORT",
-          },
-          "color": {
-            "type": "string",
-          },
-          "type": {
-            "example": "CAT",
-            "type": "string",
-            "x-const": "CAT",
-          },
-        },
-        "required": [
-          "catType",
-          "color",
-          "type",
         ],
-        "title": "ShortHair",
       },
     },
   },
@@ -822,7 +1905,9 @@ exports[`post process > spec > ensureDiscriminatorValues > generic/api.yml > mer
       },
       "CatBase": {
         "allOf": [
-          {},
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
           {
             "discriminator": {
               "propertyName": "catType",
@@ -971,32 +2056,39 @@ description
         ],
       },
       "ShortHair": {
-        "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PetBase",
+          },
+          {
+            "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
 ",
-        "discriminator": {
-          "propertyName": "catType",
-        },
-        "properties": {
-          "angryLevel": {
-            "type": "string",
-          },
-          "catType": {
-            "default": "SHORT",
-            "enum": [
-              "SEAM",
-              "SHORT",
+            "discriminator": {
+              "propertyName": "catType",
+            },
+            "properties": {
+              "angryLevel": {
+                "type": "string",
+              },
+              "catType": {
+                "default": "SHORT",
+                "enum": [
+                  "SEAM",
+                  "SHORT",
+                ],
+                "title": "CatType",
+                "type": "string",
+              },
+              "color": {
+                "type": "string",
+              },
+            },
+            "required": [
+              "color",
             ],
-            "title": "CatType",
-            "type": "string",
+            "title": "ShortHair",
           },
-          "color": {
-            "type": "string",
-          },
-        },
-        "required": [
-          "color",
         ],
-        "title": "ShortHair",
       },
     },
   },

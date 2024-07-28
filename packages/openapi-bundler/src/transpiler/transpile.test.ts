@@ -12,8 +12,7 @@ describe("transpiler", () => {
   test("endpoints", async () => {
     const specPath = resolveSpecPath("pets-modular/pets-api.yml");
     const { parsed } = await bundleOpenapi(specPath ?? "", {
-      outFile: Folder.cwd("tmp", "endpoints").makeFile(File.of(specPath).name)
-        .absolutePath,
+      outFile: Folder.cwd("tmp", "endpoints").makeFile(File.of(specPath).name).absolutePath,
       postProcessor: createSpecProcessor({
         mergeAllOf: true,
         ensureDiscriminatorValues: true,
@@ -28,8 +27,7 @@ describe("transpiler", () => {
   test("schemas", async () => {
     const specPath = resolveSpecPath("pets-modular/pets-api.yml");
     const { parsed } = await bundleOpenapi(specPath, {
-      outFile: Folder.cwd("tmp", "schemas").makeFile(File.of(specPath).name)
-        .absolutePath,
+      outFile: Folder.cwd("tmp", "schemas").makeFile(File.of(specPath).name).absolutePath,
       postProcessor: createSpecProcessor({
         mergeAllOf: true,
         ensureDiscriminatorValues: true,
@@ -40,17 +38,10 @@ describe("transpiler", () => {
     expect(schemas).toMatchSnapshot("schemas");
     expect(schemas).toMatchSnapshot("schemas");
   });
-
-  test.each([
-    "pets-modular/pets-api.yml",
-    "pets-simple/pets-api.yml",
-    "pets-modular-complex/petstore-api.yml",
-    "generic/api.yml",
-  ] satisfies Array<ExampleSpec>)("transpile %s", async (specName) => {
-    const api = resolveSpecPath(specName);
+  test("transpile debug", async () => {
+    const api = resolveSpecPath("generic/api.yml");
     const { parsed } = await bundleOpenapi(api, {
-      outFile: Folder.cwd("tmp", "transpile").makeFile(File.of(api).name)
-        .absolutePath,
+      outFile: Folder.cwd("tmp", "transpile").makeFile(File.of(api).name).absolutePath,
       postProcessor: createSpecProcessor({
         mergeAllOf: true,
         ensureDiscriminatorValues: true,
@@ -61,6 +52,23 @@ describe("transpiler", () => {
     expect(spec.schemasTopoSorted()).toMatchSnapshot("schemas-sorted");
     expect(spec.endpoints()).toMatchSnapshot("endpoints");
   });
+  test.each(["pets-modular/pets-api.yml", "pets-simple/pets-api.yml", "pets-modular-complex/petstore-api.yml", "generic/api.yml"] satisfies Array<ExampleSpec>)(
+    "transpile %s",
+    async (specName) => {
+      const api = resolveSpecPath(specName);
+      const { parsed } = await bundleOpenapi(api, {
+        outFile: Folder.cwd("tmp", "transpile").makeFile(File.of(api).name).absolutePath,
+        postProcessor: createSpecProcessor({
+          mergeAllOf: true,
+          ensureDiscriminatorValues: true,
+        }),
+      });
+      const spec = Transpiler.of(parsed);
+      expect(spec.schemas()).toMatchSnapshot("schemas");
+      expect(spec.schemasTopoSorted()).toMatchSnapshot("schemas-sorted");
+      expect(spec.endpoints()).toMatchSnapshot("endpoints");
+    }
+  );
 
   test("should toposort array items correctly for allOf item", () => {
     const openapi: OpenApiBundled = createApi(
@@ -109,22 +117,14 @@ describe("transpiler", () => {
       })
     );
     const spec = Transpiler.of(openapi);
-    expect(spec.schemasTopoSorted().map((s) => s.getName())).toEqual([
-      "Parent",
-      "B",
-      "A",
-      "List",
-    ]);
+    expect(spec.schemasTopoSorted().map((s) => s.getName())).toEqual(["Parent", "B", "A", "List"]);
   });
 
   test("should toposort array items correctly - union", () => {
     const openapi: OpenApiBundled = createApi(
       withSchemas({
         Union: {
-          oneOf: [
-            { $ref: "#/components/schemas/A" },
-            { $ref: "#/components/schemas/B" },
-          ],
+          oneOf: [{ $ref: "#/components/schemas/A" }, { $ref: "#/components/schemas/B" }],
           discriminator: {
             propertyName: "kind",
             mapping: {
@@ -158,22 +158,14 @@ describe("transpiler", () => {
       })
     );
     const spec = Transpiler.of(openapi);
-    expect(spec.schemasTopoSorted().map((s) => s.getName())).toEqual([
-      "B",
-      "A",
-      "Union",
-      "List",
-    ]);
+    expect(spec.schemasTopoSorted().map((s) => s.getName())).toEqual(["B", "A", "Union", "List"]);
   });
 
   test("should toposort array items correctly - top level array", () => {
     const openapi: OpenApiBundled = createApi(
       withSchemas({
         Union: {
-          oneOf: [
-            { $ref: "#/components/schemas/A" },
-            { $ref: "#/components/schemas/B" },
-          ],
+          oneOf: [{ $ref: "#/components/schemas/A" }, { $ref: "#/components/schemas/B" }],
           discriminator: {
             propertyName: "kind",
             mapping: {
@@ -220,13 +212,7 @@ describe("transpiler", () => {
     );
     const spec = Transpiler.of(openapi);
     const schemas = spec.schemasTopoSorted();
-    expect(schemas.map((s) => s.getName())).toEqual([
-      "Parent",
-      "B",
-      "A",
-      "Union",
-      "List",
-    ]);
+    expect(schemas.map((s) => s.getName())).toEqual(["Parent", "B", "A", "Union", "List"]);
   });
 
   test("should toposort array items correctly - multiple inheritance", () => {
