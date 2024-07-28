@@ -4,13 +4,14 @@ import { Opaque } from "type-fest";
 import { describe, test, expect } from "vitest";
 
 declare const tag: unique symbol;
-type UNKNOWN = string & { readonly [tag]: "UNKNOWN" };
+type UNKNOWN_VARIANT = string & { readonly [tag]: "UNKNOWN" };
+
 describe("zod test", () => {
   test("switch 1", () => {
-    type union = { type: "A"; a: number } | { type: "B"; b: number } | { type: UNKNOWN };
+    type union = { type: "A"; a: number } | { type: "B"; b: number } | { type: UNKNOWN_VARIANT };
     const union = z
       .discriminatedUnion("type", [z.object({ type: z.literal("A"), a: z.number() }), z.object({ type: z.literal("B"), b: z.number() })])
-      .or(z.object({ type: z.string().transform((d) => d as UNKNOWN) }));
+      .or(z.object({ type: z.string().transform((d) => d as UNKNOWN_VARIANT) }));
 
     const a: union = union.parse({ type: "A", a: 1 });
     switch (a.type) {

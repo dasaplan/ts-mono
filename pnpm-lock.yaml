@@ -210,9 +210,6 @@ importers:
       openapi3-ts:
         specifier: ^4.3.3
         version: 4.3.3
-      toposort:
-        specifier: ^2.0.2
-        version: 2.0.2
       tslog:
         specifier: ^4.9.2
         version: 4.9.3
@@ -394,6 +391,43 @@ importers:
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
+
+  packages/openapi-tolerant-reader:
+    dependencies:
+      '@openapitools/openapi-generator-cli':
+        specifier: ^2.7.0
+        version: 2.7.0
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.17.0
+        version: 6.17.0(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)(typescript@5.5.3)
+      clean-package:
+        specifier: ^2.2.0
+        version: 2.2.0
+      eslint:
+        specifier: ^8.0.1
+        version: 8.55.0
+      eslint-plugin-import:
+        specifier: ^2.25.2
+        version: 2.29.1(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)
+      eslint-plugin-n:
+        specifier: '^15.0.0 || ^16.0.0 '
+        version: 16.4.0(eslint@8.55.0)
+      eslint-plugin-promise:
+        specifier: ^6.0.0
+        version: 6.1.1(eslint@8.55.0)
+      npm-run-all:
+        specifier: '*'
+        version: 4.1.5
+      sort-package-json:
+        specifier: ^2.10.0
+        version: 2.10.0
+      tsconfig:
+        specifier: workspace:0.0.0
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.5.3
+        version: 5.5.3
 
   packages/sdk:
     dependencies:
@@ -766,6 +800,7 @@ packages:
   '@humanwhocodes/config-array@0.11.13':
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -773,6 +808,7 @@ packages:
 
   '@humanwhocodes/object-schema@2.0.1':
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
+    deprecated: Use @eslint/object-schema instead
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -3305,6 +3341,7 @@ packages:
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@5.0.5:
@@ -3674,9 +3711,6 @@ packages:
   toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
-
-  toposort@2.0.2:
-    resolution: {integrity: sha512-0a5EOkAUp8D4moMi2W8ZF8jcga7BgZd91O/yabJCFY8az+XSzeGyTKs0Aoo897iV1Nj6guFq8orWDS96z91oGg==}
 
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
@@ -5010,12 +5044,12 @@ snapshots:
       '@typescript-eslint/type-utils': 6.17.0(eslint@8.55.0)(typescript@5.5.3)
       '@typescript-eslint/utils': 6.17.0(eslint@8.55.0)(typescript@5.5.3)
       '@typescript-eslint/visitor-keys': 6.17.0
-      debug: 4.3.4
+      debug: 4.3.5
       eslint: 8.55.0
       graphemer: 1.4.0
       ignore: 5.3.0
       natural-compare: 1.4.0
-      semver: 7.5.4
+      semver: 7.6.2
       ts-api-utils: 1.0.3(typescript@5.5.3)
     optionalDependencies:
       typescript: 5.5.3
@@ -5367,7 +5401,7 @@ snapshots:
 
   builtins@5.0.1:
     dependencies:
-      semver: 7.5.4
+      semver: 7.6.2
 
   bundle-require@4.2.1(esbuild@0.21.5):
     dependencies:
@@ -5917,7 +5951,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
-      debug: 4.3.4
+      debug: 4.3.5
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.2.2
@@ -7822,8 +7856,6 @@ snapshots:
       is-number: 7.0.0
 
   toidentifier@1.0.1: {}
-
-  toposort@2.0.2: {}
 
   tr46@0.0.3: {}
 
