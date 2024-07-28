@@ -1,0 +1,78 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`x-omit > omits 1`] = `
+{
+  "components": {
+    "schemas": {
+      "A": {
+        "properties": {
+          "a": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "a",
+        ],
+        "type": "object",
+      },
+      "AB": {
+        "properties": {
+          "a": {
+            "type": "string",
+          },
+          "b": {
+            "type": "string",
+          },
+          "bb": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "a",
+          "b",
+          "bb",
+        ],
+        "type": "object",
+        "x-omit": {
+          "properties": {
+            "b": true,
+            "bb": true,
+          },
+          "required": [
+            "a",
+            "bb",
+          ],
+        },
+      },
+      "B": {
+        "properties": {
+          "b": {
+            "type": "string",
+          },
+          "bb": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "b",
+          "bb",
+        ],
+        "x-omit": {
+          "properties": {
+            "bb": true,
+          },
+          "required": [
+            "bb",
+          ],
+        },
+      },
+    },
+  },
+  "info": {
+    "title": "",
+    "version": "",
+  },
+  "openapi": "3.0.3",
+  "paths": {},
+}
+`;

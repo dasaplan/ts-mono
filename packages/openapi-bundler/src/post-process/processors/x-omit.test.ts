@@ -19,8 +19,13 @@ describe("x-omit", () => {
         properties: { a: { type: "string" } },
       }),
       withSchema("B", {
-        required: ["b"],
-        properties: { b: { type: "string" } },
+        allOf: [
+          { required: ["b", "bb"], properties: { b: { type: "string" }, bb: { type: "string" } } },
+          mockXOmit({
+            required: ["bb"],
+            properties: { bb: true },
+          }),
+        ],
       }),
       withSchema("AB", {
         allOf: [
@@ -35,12 +40,13 @@ describe("x-omit", () => {
     );
 
     const merged = mergeAllOf(spec);
+    expect(merged).toMatchSnapshot();
     const accessor = OpenapiApiDoc.accessor(merged);
     expect(accessor.getSchemaByName("A"), "expected schema 'A' to be defined").toBeDefined();
     expect(accessor.getSchemaByName("B"), "expected schema 'b' to be defined").toBeDefined();
 
     const AB_afterMerge = accessor.getSchemaByName("AB");
-    expect(AB_afterMerge.required, "expected 'required' not to be processed").toEqual(["a", "b"]);
+    expect(AB_afterMerge.required, "expected 'required' not to be processed").toEqual(["a", "b", "bb"]);
     expect(AB_afterMerge["x-omit"], "expected x-omit to be defined").toBeDefined();
     expect(AB_afterMerge.properties?.a, "expected property 'a' not to be processed").toBeDefined();
     expect(AB_afterMerge.properties?.a, "expected property 'b' not to be processed").toBeDefined();

@@ -8,12 +8,12 @@ import { isRef } from "@redocly/openapi-core";
 import { appLog } from "../../logger.js";
 import { _, ApplicationError } from "@dasaplan/ts-sdk";
 import { cleanObj, SchemaResolverContext } from "../../resolver/index.js";
-import { cloneDeep } from "lodash";
+import { mergeXOmit, XOmitConfig } from "./x-omit.js";
 
 export function mergeAllOf(bundled: OpenApiBundled) {
   const mergedAllOf = _.cloneDeep(bundled);
   const { collected, ctx } = findSchemaObjectsWithAllOf(mergedAllOf);
-  collected.forEach((s, idx, all) => {
+  collected.forEach((s) => {
     try {
       doMerge(s, ctx);
     } catch (e) {
@@ -126,23 +126,40 @@ function resolveSubSchemas(
   }));
 }
 
-function getJsonSchemaMergeAllOff(
+function getJsonSchemaMergeAllOff<T extends oas30.SchemaObject>(
   subschemas: Array<{
     pointer: string | undefined;
-    resolved: oas30.SchemaObject;
+    resolved: T;
   }>
-) {
+): T {
   try {
-    return jsonSchemaMergeAllOff(
+    return jsonSchemaMergeAllOff<oas30.SchemaObject & { "x-omit"?: XOmitConfig }>(
       { allOf: subschemas.map((s) => s.resolved) },
       {
         resolvers: {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          additionalProperties: (values, path, mergeSchemas, options) => {
+            return jsonSchemaMergeAllOff.options.resolvers.additionalProperties(values, path, mergeSchemas, options);
+          },
           // overwrite title by higher indexed schema: [ {title: a}, {title:b}] => {title:b}
           // default title means take first occurance
-          defaultResolver: jsonSchemaMergeAllOff.options.resolvers.title,
+          defaultResolver: (values, path, mergeSchemas, options) => {
+            if (path?.[0] === "x-omit") {
+              const [a, b] = values;
+              return mergeXOmit(a, b);
+            }
+
+            if (options.resolvers?.title) {
+              // use configured resolver
+              return options.resolvers.title(values, path, mergeSchemas, options);
+            }
+            // use fallback resolver
+            return jsonSchemaMergeAllOff.options.resolvers.title(values, path, mergeSchemas, options);
+          },
         },
       }
-    );
+    ) as T;
   } catch (e: unknown) {
     throw ApplicationError.create("failed merging allOf sub schemas").chainUnknown(e);
   }
@@ -163,7 +180,7 @@ function mergeSubSchemas(
   const merged = getJsonSchemaMergeAllOff(subschemas.reverse());
   // clean references in properties
   Object.values(merged.properties ?? {}).forEach((propValue) => {
-    if (_.isNil(propValue.$ref) || _.isEmpty(_.omit(propValue, "$ref"))) {
+    if (!isRef(propValue) || _.isEmpty(_.omit(propValue, "$ref"))) {
       // property is either a ref or an object => that is fine
       return;
     }
@@ -179,7 +196,7 @@ function mergeSubSchemas(
       return;
     }
     Object.assign(propValue, getJsonSchemaMergeAllOff([schema, referenced]));
-    delete propValue["$ref"];
+    delete (propValue as never)["$ref"];
   });
   return {
     pointer: undefined,

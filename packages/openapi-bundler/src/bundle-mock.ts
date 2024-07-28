@@ -1,5 +1,6 @@
 import { OpenApiBundled } from "./bundle.js";
 import { oas30 } from "openapi3-ts";
+import { XOmitConfig } from "./post-process/processors/x-omit.js";
 
 export module BundleMock {
   export function create() {
@@ -15,13 +16,6 @@ export module BundleMock {
       },
     };
   }
-
-  type XOmitConfig = {
-    required: Array<string> | boolean;
-    properties: Record<string, boolean> | boolean;
-  } & {
-    [prop in Exclude<keyof oas30.SchemaObject, "required" | "properties">]?: boolean;
-  };
 
   function mockXOmit(config: Partial<XOmitConfig>) {
     return { "x-omit": config };
