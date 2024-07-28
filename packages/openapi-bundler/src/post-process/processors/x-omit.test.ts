@@ -4,6 +4,7 @@ import { mergeAllOf } from "./merge-all-of.js";
 import { BundleMock } from "@dasaplan/openapi-bundler";
 
 import { OpenapiApiDoc } from "./spec-accessor.js";
+import { xOmit } from "./x-omit.js";
 
 describe("x-omit", () => {
   const {
@@ -40,7 +41,6 @@ describe("x-omit", () => {
     );
 
     const merged = mergeAllOf(spec);
-    expect(merged).toMatchSnapshot();
     const accessor = OpenapiApiDoc.accessor(merged);
     expect(accessor.getSchemaByName("A"), "expected schema 'A' to be defined").toBeDefined();
     expect(accessor.getSchemaByName("B"), "expected schema 'b' to be defined").toBeDefined();
@@ -52,12 +52,14 @@ describe("x-omit", () => {
     expect(AB_afterMerge.properties?.a, "expected property 'b' not to be processed").toBeDefined();
 
     // x-omit
-    // todo
-    // expect(AbfterMerge["x-omit"]).toBeUndefined();
-    // expect(AbfterMerge.allOf).toBeUndefined();
-    // expect(AbfterMerge.required).toEqual(["b"]);
-    // expect(AbfterMerge.properties?.a).toBeDefined();
-    // expect(AbfterMerge.properties?.b).toBeUndefined();
-    // expect(merged).toMatchSnapshot();
+    const omitted = xOmit(spec);
+    const omittedAccessor = OpenapiApiDoc.accessor(omitted);
+    const AB_afterOmit = omittedAccessor.getSchemaByName("AB");
+    expect(AB_afterOmit["x-omit"]).toBeUndefined();
+    expect(AB_afterOmit.allOf).toBeUndefined();
+    expect(AB_afterOmit.required).toEqual(["b"]);
+    expect(AB_afterOmit.properties?.a).toBeDefined();
+    expect(AB_afterOmit.properties?.b).toBeUndefined();
+    expect(merged).toMatchSnapshot();
   });
 });

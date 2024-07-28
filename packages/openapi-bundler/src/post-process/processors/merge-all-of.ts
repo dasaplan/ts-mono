@@ -11,8 +11,13 @@ import { cleanObj, SchemaResolverContext } from "../../resolver/index.js";
 import { mergeXOmit, XOmitConfig } from "./x-omit.js";
 
 export function mergeAllOf(bundled: OpenApiBundled) {
+  const log = appLog.childLog(mergeAllOf);
+
   const mergedAllOf = _.cloneDeep(bundled);
   const { collected, ctx } = findSchemaObjectsWithAllOf(mergedAllOf);
+  log.info(`mergeAllOf. Merging allOf arrays in ${collected.length} schemas`);
+  log.debug(`mergeAllOf. Merging in schemas: ${collected.map((s) => s.id).join(", ")}`);
+
   collected.forEach((s) => {
     try {
       doMerge(s, ctx);
@@ -165,7 +170,7 @@ function getJsonSchemaMergeAllOff<T extends oas30.SchemaObject>(
   }
 }
 
-function mergeSubSchemas(
+export function mergeSubSchemas(
   _resolvedSchemas: Array<{
     pointer: string | undefined;
     resolved: oas30.SchemaObject;

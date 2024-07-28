@@ -76,7 +76,7 @@ export module Cat {
  * @export
  * @interface CatBase
  */
-export interface CatBase {
+export interface CatBase extends PetBase {
     /**
      * 
      * @type {string}
@@ -261,11 +261,11 @@ export interface Seam extends PetBase {
 }
     
         /**
- * Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s 
+ * 
  * @export
  * @interface ShortHair
  */
-export interface ShortHair {
+export interface ShortHair extends PetBase {
     /**
      * 
      * @type {string}
@@ -533,8 +533,12 @@ components:
               example: DOG
     CatBase:
       allOf:
-        - {}
+        - $ref: '#/components/schemas/PetBase'
         - title: CatBase
+          required:
+            - color
+          discriminator:
+            propertyName: catType
           properties:
             color:
               type: string
@@ -544,10 +548,6 @@ components:
                 - SEAM
                 - SHORT
               title: CatType
-          required:
-            - color
-          discriminator:
-            propertyName: catType
     Seam:
       allOf:
         - $ref: '#/components/schemas/PetBase'
@@ -581,31 +581,34 @@ components:
               x-const: CAT
               example: CAT
     ShortHair:
-      title: ShortHair
-      description: >
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
-      required:
-        - color
-        - catType
-        - type
-      discriminator:
-        propertyName: catType
-      properties:
-        catType:
-          type: string
-          default: SHORT
-          title: CatType
-          x-const: SHORT
-          example: SHORT
-        angryLevel:
-          type: string
-        color:
-          type: string
-        type:
-          type: string
-          x-const: CAT
-          example: CAT
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - title: ShortHair
+          description: >
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+            erat, s
+          required:
+            - color
+            - catType
+            - type
+          discriminator:
+            propertyName: catType
+          properties:
+            catType:
+              type: string
+              default: SHORT
+              title: CatType
+              x-const: SHORT
+              example: SHORT
+            angryLevel:
+              type: string
+            color:
+              type: string
+            type:
+              type: string
+              x-const: CAT
+              example: CAT
     Cat:
       oneOf:
         - $ref: '#/components/schemas/Seam'
@@ -1192,12 +1195,12 @@ export module Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
-    export const ShortHair = z.object({ catType: z.literal('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') });
+    export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
     export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
     export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Cat>;
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets = z.array(Pet).max(100);
-    export const CatBase = z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() });
+    export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() }));
 
     export module Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
@@ -6510,7 +6513,7 @@ export module Cat {
  * @export
  * @interface CatBase
  */
-export interface CatBase {
+export interface CatBase extends PetBase {
     /**
      * 
      * @type {string}
@@ -6695,11 +6698,11 @@ export interface Seam extends PetBase {
 }
     
         /**
- * Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s 
+ * 
  * @export
  * @interface ShortHair
  */
-export interface ShortHair {
+export interface ShortHair extends PetBase {
     /**
      * 
      * @type {string}
@@ -6967,8 +6970,12 @@ components:
               example: DOG
     CatBase:
       allOf:
-        - {}
+        - $ref: '#/components/schemas/PetBase'
         - title: CatBase
+          required:
+            - color
+          discriminator:
+            propertyName: catType
           properties:
             color:
               type: string
@@ -6978,10 +6985,6 @@ components:
                 - SEAM
                 - SHORT
               title: CatType
-          required:
-            - color
-          discriminator:
-            propertyName: catType
     Seam:
       allOf:
         - $ref: '#/components/schemas/PetBase'
@@ -7015,31 +7018,34 @@ components:
               x-const: CAT
               example: CAT
     ShortHair:
-      title: ShortHair
-      description: >
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
-      required:
-        - color
-        - catType
-        - type
-      discriminator:
-        propertyName: catType
-      properties:
-        catType:
-          type: string
-          default: SHORT
-          title: CatType
-          x-const: SHORT
-          example: SHORT
-        angryLevel:
-          type: string
-        color:
-          type: string
-        type:
-          type: string
-          x-const: CAT
-          example: CAT
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - title: ShortHair
+          description: >
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+            erat, s
+          required:
+            - color
+            - catType
+            - type
+          discriminator:
+            propertyName: catType
+          properties:
+            catType:
+              type: string
+              default: SHORT
+              title: CatType
+              x-const: SHORT
+              example: SHORT
+            angryLevel:
+              type: string
+            color:
+              type: string
+            type:
+              type: string
+              x-const: CAT
+              example: CAT
     Cat:
       oneOf:
         - $ref: '#/components/schemas/Seam'
@@ -7602,12 +7608,12 @@ export module Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
-    export const ShortHair = z.object({ catType: z.literal('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') });
+    export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
     export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
     export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Cat>;
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets = z.array(Pet).max(100);
-    export const CatBase = z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() });
+    export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() }));
 
     export module Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
