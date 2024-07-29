@@ -15,4 +15,9 @@ createCommandGenerateTs(program);
 createCommandGenerateZod(program);
 createCommandGenerateEndpoints(program);
 
+// common options
+program.commands.forEach((cmd) => {
+  cmd.option("--verbose", "Sets log level to highest verbosity");
+});
+
 program.parse(process.argv);

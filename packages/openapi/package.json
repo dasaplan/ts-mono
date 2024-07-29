@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Collection of ready to use tools to facilitate OpenApi specification centered workflows.",
   "keywords": [
     "openapi",
@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "prepack": "sort-package-json --quiet && clean-package",
-    "pack": "npm pack",
+    "pack": "pnpm pack",
     "postpack": "clean-package restore",
     "build": "run-s rup cp:templates cp:configs",
     "rup": "tsup-node --dts",

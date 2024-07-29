@@ -37,7 +37,6 @@ describe("Generate Integration", () => {
       const outDir = await generateOpenapi(api, out.absolutePath, {
         clearTemp: true,
         tempFolder: out.cd("tmp").absolutePath,
-        experimental: { rtkQuery: true },
       });
       const files = Folder.of(outDir)
         .readAllFilesAsString()

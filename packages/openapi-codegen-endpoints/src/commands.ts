@@ -2,6 +2,7 @@ import { Command } from "commander";
 import { EndpointDefinitionGeneratorOptions, generateEndpointDefinitions } from "./endpoint-generator.js";
 import { generateRtkQueryDsp } from "./client/rtk-query-dsp.js";
 import { _ } from "@dasaplan/ts-sdk";
+import { appLog } from "./logger.js";
 
 export function createCommandGenerateEndpoints(program: Command) {
   program
@@ -15,7 +16,13 @@ export function createCommandGenerateEndpoints(program: Command) {
     .option("--typeNamespace [typeNamespace]", "Namespace used to index type module imports.")
     .option("--typeModuleName [typeModuleName]", "Module name for importing types.")
     .action(
-      async (spec: string, options: { out: string; templates: string; typeSuffix: string; apiName: string; typeNamespace: string; typeModuleName: string }) => {
+      async (
+        spec: string,
+        options: { verbose: boolean; out: string; templates: string; typeSuffix: string; apiName: string; typeNamespace: string; typeModuleName: string }
+      ) => {
+        if (options.verbose) {
+          appLog.setLogLevel("debug");
+        }
         const tsApiTypesModule = parseApiTypesModule(options);
         await generateEndpointDefinitions(spec, {
           templatesDir: options.templates,

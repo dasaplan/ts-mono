@@ -4,6 +4,18 @@
 import { ILogObj, Logger } from "tslog";
 
 export module AppLogger {
+  export const logLevels = {
+    silly: 0,
+    trace: 1,
+    debug: 2,
+    info: 3,
+    warn: 4,
+    error: 5,
+    fatal: 6,
+  } as const;
+
+  export type LogLevel = keyof typeof logLevels;
+
   export function from(appLogger: ReturnType<typeof doCreate>) {
     return doCreate(appLogger.log);
   }
@@ -30,8 +42,9 @@ export module AppLogger {
           })
         );
       },
-      setLogLevel(level: number) {
-        _log.settings.minLevel = level;
+      setLogLevel(level: number | keyof typeof logLevels) {
+        _log.settings.minLevel = parseLogLevel(level);
+        return this;
       },
       get log() {
         return _log;
@@ -39,14 +52,19 @@ export module AppLogger {
     };
   }
 
+  function parseLogLevel(level: number | LogLevel) {
+    if (typeof level === "number") {
+      return level;
+    }
+    return logLevels[level];
+  }
+
   export function createDefaultLogger(): Logger<ILogObj> {
     return new Logger<ILogObj>({
       name: "dsp-openapi",
-      // 0: silly, 1: trace, 2: debug, 3: info, 4: warn, 5: error, 6: fatal
-      minLevel: 0,
+      minLevel: logLevels.info,
       type: "pretty",
-      prettyLogTemplate:
-        "{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t[{{name}}]\t",
+      prettyLogTemplate: "{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t[{{name}}]\t",
       // stylePrettyLogs: true,
     });
   }
@@ -54,12 +72,9 @@ export module AppLogger {
 
 function makePretty() {
   return {
-    prettyLogTemplate:
-      "{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t[{{filePathWithLine}}{{name}}]\t",
-    prettyErrorTemplate:
-      "\n{{errorName}} {{errorMessage}}\nerror stack:\n{{errorStack}}",
-    prettyErrorStackTemplate:
-      "  • {{fileName}}\t{{method}}\n\t{{filePathWithLine}}",
+    prettyLogTemplate: "{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t[{{filePathWithLine}}{{name}}]\t",
+    prettyErrorTemplate: "\n{{errorName}} {{errorMessage}}\nerror stack:\n{{errorStack}}",
+    prettyErrorStackTemplate: "  • {{fileName}}\t{{method}}\n\t{{filePathWithLine}}",
     prettyErrorParentNamesSeparator: ":",
     prettyErrorLoggerNameDelimiter: "\t",
     stylePrettyLogs: true,

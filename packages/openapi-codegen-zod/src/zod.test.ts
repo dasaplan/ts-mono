@@ -22,6 +22,7 @@ describe("generateZod", () => {
       postProcessor: createSpecProcessor({
         mergeAllOf: true,
         ensureDiscriminatorValues: true,
+        xOmit: true,
       }),
     });
     const name = spec.replace(".yml", "");

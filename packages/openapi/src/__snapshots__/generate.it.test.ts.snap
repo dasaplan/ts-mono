@@ -1083,30 +1083,6 @@ export * from "./configuration.js";
 export * from "./zod.js";
 export * from "./SomeTitleEndpoints.js";
 ",
-  "import * as Dtos from './api.js'
-
-// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
-// initialize an empty api service that we'll inject endpoints into later as needed
-export const api = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
-    endpoints: () => ({}),
-})
-
-
-export const injectedRtkApi = api.injectEndpoints({
-    endpoints: (build) => ({
-        listPets: build.query<Array<Dtos.Pet>, { "body": undefined }>({
-            query: queryArg => ({ url: \`/pets\` })
-        }),
-        getPet: build.query<Dtos.Pet, { "petId": string, "body": undefined }>({
-            query: queryArg => ({ url: \`/pets/{\${queryArg["petId"]}}\` })
-        })
-    }),
-    overrideExisting: false,
-});
-",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module SomeTitleEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
@@ -2039,27 +2015,6 @@ components:
         mapping:
           DOG: '#/components/schemas/Dog'
           CAT: '#/components/schemas/Cat'
-",
-  "import * as Dtos from './api.js'
-
-// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
-// initialize an empty api service that we'll inject endpoints into later as needed
-export const api = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
-    endpoints: () => ({}),
-})
-
-
-export const injectedRtkApi = api.injectEndpoints({
-    endpoints: (build) => ({
-        getPets: build.query<Dtos.Pet, { "body": undefined }>({
-            query: queryArg => ({ url: \`/v1/pets\` })
-        })
-    }),
-    overrideExisting: false,
-});
 ",
   "
 import { z } from "zod";
@@ -3659,36 +3614,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
 ",
-  "import * as Dtos from './api.js'
-
-// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
-// initialize an empty api service that we'll inject endpoints into later as needed
-export const api = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
-    endpoints: () => ({}),
-})
-
-
-export const injectedRtkApi = api.injectEndpoints({
-    endpoints: (build) => ({
-        listPets: build.query<Array<Dtos.Pet>, { "petId": string, "body": undefined }>({
-            query: queryArg => ({ url: \`/pets\` })
-        }),
-        createPets: build.mutation<undefined, { "body": Dtos.Pet }>({
-            query: queryArg => ({ url: \`/pets\`, method: "POST", body: queryArg?.body })
-        }),
-        showPetById: build.query<Dtos.Pet, { "petId": string, "body": undefined }>({
-            query: queryArg => ({ url: \`/pets/{\${queryArg["petId"]}}\` })
-        }),
-        patchPet: build.mutation<Dtos.Pet, { "petId": string, "body": Dtos.Pet }>({
-            query: queryArg => ({ url: \`/pets/{\${queryArg["petId"]}}\`, method: "PATCH", body: queryArg?.body })
-        })
-    }),
-    overrideExisting: false,
-});
-",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module SwaggerPetstoreEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
@@ -4590,27 +4515,6 @@ components:
           required:
             - type
 ",
-  "import * as Dtos from './api.js'
-
-// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
-// initialize an empty api service that we'll inject endpoints into later as needed
-export const api = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
-    endpoints: () => ({}),
-})
-
-
-export const injectedRtkApi = api.injectEndpoints({
-    endpoints: (build) => ({
-        listPets: build.query<Dtos.Pets, { "body": undefined }>({
-            query: queryArg => ({ url: \`/pets\` })
-        })
-    }),
-    overrideExisting: false,
-});
-",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module SwaggerPetstoreEndpoints {
     export type Path = "/pets"
@@ -5451,27 +5355,6 @@ components:
       maxItems: 100
       items:
         $ref: '#/components/schemas/Pet'
-",
-  "import * as Dtos from './api.js'
-
-// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
-// initialize an empty api service that we'll inject endpoints into later as needed
-export const api = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
-    endpoints: () => ({}),
-})
-
-
-export const injectedRtkApi = api.injectEndpoints({
-    endpoints: (build) => ({
-        listPets: build.query<Array<Dtos.Pet>, { "body": undefined }>({
-            query: queryArg => ({ url: \`/pets\` })
-        })
-    }),
-    overrideExisting: false,
-});
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module SomeTitleEndpoints {
@@ -6340,27 +6223,6 @@ export * from "./api.js";
 export * from "./configuration.js";
 export * from "./zod.js";
 export * from "./ExtendedArrayItemsEndpoints.js";
-",
-  "import * as Dtos from './api.js'
-
-// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
-// initialize an empty api service that we'll inject endpoints into later as needed
-export const api = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
-    endpoints: () => ({}),
-})
-
-
-export const injectedRtkApi = api.injectEndpoints({
-    endpoints: (build) => ({
-        getPets: build.query<Dtos.PetInfo, { "body": undefined }>({
-            query: queryArg => ({ url: \`/v1/pets\` })
-        })
-    }),
-    overrideExisting: false,
-});
 ",
   "
 import { z } from "zod";

@@ -9,7 +9,10 @@ export function createCommandGenerate(program: Command) {
     .argument("<openapi-spec>", "Relative filepath from the current cwd to the OpenApi root document file")
     .option("-o, --output [output]", "Target directory where the generated files will appear", "out")
     .option("--modelSuffix [modelSuffix]", "All model names are suffixed as provided")
-    .action(async (spec: string, options: { output: string; modelSuffix: string }) => {
+    .action(async (spec: string, options: { output: string; modelSuffix: string; verbose: boolean }) => {
+      if (options.verbose) {
+        appLog.setLogLevel("debug");
+      }
       await generateOpenapi(spec, options.output, {
         modelSuffix: options.modelSuffix,
         clearTemp: true,
@@ -25,7 +28,10 @@ export function createCommandGenerateTs(program: Command) {
     .argument("<openapi-spec>", "Relative filepath from the current cwd to the OpenApi root document file")
     .option("-o, --output [output]", "Target directory for the generated files", "out")
     .option("--modelSuffix [modelSuffix]", "All model names are suffixed as provided")
-    .action(async (spec: string, options: { output: string; modelSuffix: string }) => {
+    .action(async (spec: string, options: { output: string; modelSuffix: string; verbose: boolean }) => {
+      if (options.verbose) {
+        appLog.setLogLevel("debug");
+      }
       await generateTsAxios(spec, options.output, { generateZod: false, modelSuffix: options.modelSuffix });
       appLog.log.info(`finished generate`);
     });
