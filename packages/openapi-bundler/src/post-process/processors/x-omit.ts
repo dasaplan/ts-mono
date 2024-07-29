@@ -40,7 +40,8 @@ function doOmit({ schema, id }: { id: string; schema: any }, ctx: SchemaResolver
   if (_.isEmpty(schema.allOf)) {
     // resolve x-omit in schema: after mergeAllOf it could be the case that there is no allOf anymore
     const omitted = applyOmit({ id, schema, merged: schema });
-    Object.assign(schema, omitted);
+    delete (omitted as any)["x-omit"];
+    Object.assign(cleanObj(schema), omitted);
     return;
   }
 
@@ -91,7 +92,7 @@ function applyOmit<T>(args: { id: string; schema: T; merged: WithOmit<T> }) {
         // filter out entry to remove
         return acc;
       }
-      return { [key]: val };
+      return { ...acc, [key]: val };
     }, {});
   }
 

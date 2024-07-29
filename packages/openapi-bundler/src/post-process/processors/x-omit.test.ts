@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, expect, test } from "vitest";
+import { beforeAll, describe, expect, test } from "vitest";
 import { mergeAllOf } from "./merge-all-of.js";
 import { BundleMock } from "@dasaplan/openapi-bundler";
 
 import { OpenapiApiDoc } from "./spec-accessor.js";
 import { xOmit } from "./x-omit.js";
+import { appLog } from "../../logger.js";
 
 describe("x-omit", () => {
+  beforeAll(() => {
+    appLog.setLogLevel("silly");
+  });
   const {
     createApi,
     withSchema,
@@ -61,5 +65,27 @@ describe("x-omit", () => {
     expect(AB_afterOmit.properties?.a).toBeDefined();
     expect(AB_afterOmit.properties?.b).toBeUndefined();
     expect(merged).toMatchSnapshot();
+  });
+
+  test("nothing to omit", () => {
+    const spec = createApi(
+      withSchema("B", {
+        allOf: [schemaRef("Omit"), { required: ["b", "bb"], properties: { b: { type: "string" }, bb: { type: "string" } } }],
+      }),
+      withSchema("Omit", {
+        "x-omit": { required: ["c"], properties: { c: true } },
+      })
+    );
+
+    const omitted = xOmit(mergeAllOf(spec));
+    const accessor = OpenapiApiDoc.accessor(omitted);
+    const schema = accessor.getSchemaByName("B");
+
+    expect(schema, "expected schema to be defined").toBeDefined();
+    expect(schema.required, "expected 'required' not to be processed").toEqual(["b", "bb"]);
+    expect(schema.properties?.b, "expected property 'b' not to be processed").toBeDefined();
+    expect(schema.properties?.bb, "expected property 'bb' not to be processed").toBeDefined();
+
+    expect(schema["x-omit"], "expected x-omit toBeUndefined").toBeUndefined();
   });
 });

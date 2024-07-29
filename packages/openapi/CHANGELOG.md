@@ -1,5 +1,15 @@
 # @dasaplan/openapi
 
+## 0.0.21
+
+### Patch Changes
+
+- feat: xOmit
+- Updated dependencies
+  - @dasaplan/openapi-bundler@0.0.18
+  - @dasaplan/openapi-codegen-endpoints@0.0.9
+  - @dasaplan/openapi-codegen-zod@0.0.9
+
 ## 0.0.20
 
 ### Patch Changes
