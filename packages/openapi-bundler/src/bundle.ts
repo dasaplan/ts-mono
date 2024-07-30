@@ -35,6 +35,7 @@ export async function bundleParseOpenapi(_pathToApi: string, params?: Partial<Om
       mergeAllOf: params?.mergeAllOf,
       ensureDiscriminatorValues: params?.ensureDiscriminatorValues,
       xOmit: params?.xOmit,
+      xPick: params?.xPick,
     });
   const bundleResults = await parseOpenapi(inputFile.absolutePath);
   const parsed: OpenApiBundled = _.isNil(postProcessor) ? bundleResults.bundle.parsed : postProcessor(bundleResults.bundle.parsed);

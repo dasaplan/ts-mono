@@ -12,6 +12,7 @@ export function createCommandBundle(program: Command) {
     .option("--disableMergeAllOf", "If set, allOf arrays will be left as is after bundling", false)
     .option("--disableEnsureDiscriminatorValues", "If set, discriminator values won't be ensured on every subType", false)
     .option("--disableXOmit", "If set, x-omit keyword won't be processed", false)
+    .option("--disableXPick", "If set, x-pick keyword won't be processed", false)
     .action(
       async (
         spec: string,
@@ -20,6 +21,7 @@ export function createCommandBundle(program: Command) {
           disableMergeAllOf: boolean;
           disableEnsureDiscriminatorValues: boolean;
           disableXOmit: boolean;
+          disableXPick: boolean;
           verbose: boolean;
         }
       ) => {
@@ -31,6 +33,7 @@ export function createCommandBundle(program: Command) {
           mergeAllOf: !options.disableMergeAllOf,
           ensureDiscriminatorValues: !options.disableEnsureDiscriminatorValues,
           xOmit: !options.disableXOmit,
+          xPick: !options.disableXPick,
         });
         const result = await withPerformance(() => bundleOpenapi(spec, { postProcessor, outFile: options.outputFile }));
         appLog.log.info(`finished bundling in ${(result.duration / 1000).toFixed(3)} s`, { outFile: result.ret.outFile });

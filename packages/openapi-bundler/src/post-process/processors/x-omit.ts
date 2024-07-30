@@ -30,7 +30,7 @@ export function xOmit(bundled: OpenApiBundled) {
     try {
       doOmit(s, ctx);
     } catch (e) {
-      throw ApplicationError.create(`failed to merge allOf for schema.id ${s.id}`).chainUnknown(e);
+      throw ApplicationError.create(`failed to omit fields for schema.id ${s.id}`).chainUnknown(e);
     }
   });
   return omitted;
@@ -106,7 +106,7 @@ function applyOmit<T>(args: { id: string; schema: T; merged: WithOmit<T> }) {
       return acc;
     }
     return { ...acc, [key]: val };
-  }, {});
+  }, _.pick(omitted, "properties", "required"));
 }
 
 function resolveSubSchemas(

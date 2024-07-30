@@ -39,7 +39,7 @@ export async function generateOpenapi(
 export async function bundle(spec: string, params?: { tempFolder?: string }) {
   const { parsed, outFile: bundledFilePath } = await bundleOpenapi(spec, {
     outFile: params?.tempFolder,
-    postProcessor: createSpecProcessor({ mergeAllOf: true, ensureDiscriminatorValues: true, xOmit: true }),
+    postProcessor: createSpecProcessor(),
   });
   return { parsed, bundledFilePath };
 }

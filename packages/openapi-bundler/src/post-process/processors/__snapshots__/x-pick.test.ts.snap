@@ -1,0 +1,47 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`x-pick > pick 1`] = `
+{
+  "components": {
+    "schemas": {
+      "A": {
+        "properties": {
+          "a": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "a",
+        ],
+        "type": "object",
+      },
+      "AB": {
+        "properties": {
+          "b": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "a",
+        ],
+      },
+      "B": {
+        "properties": {
+          "bb": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "bb",
+        ],
+      },
+    },
+  },
+  "info": {
+    "title": "",
+    "version": "",
+  },
+  "openapi": "3.0.3",
+  "paths": {},
+}
+`;

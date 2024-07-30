@@ -13,12 +13,17 @@ export module BundleMock {
         schemaRef,
         mockSchema,
         mockXOmit,
+        mockXPick,
       },
     };
   }
 
   function mockXOmit(config: Partial<XOmitConfig>) {
     return { "x-omit": config };
+  }
+
+  function mockXPick(config: Partial<XOmitConfig>) {
+    return { "x-pick": config };
   }
 
   function schemaRef(name: string) {
