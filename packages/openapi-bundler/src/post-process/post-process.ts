@@ -1,7 +1,7 @@
 import { OpenApiBundled } from "../bundle.js";
 import { ensureDiscriminatorValues } from "./processors/ensure-discriminator-values.js";
 import { mergeAllOf } from "./processors/merge-all-of.js";
-import { xOmit } from "./processors/x-omit.js";
+import { xOmitDeep } from "./processors/x-omit-deep.js";
 import { xPick } from "./processors/x-pick.js";
 
 export interface PostProcessingOptions {
@@ -16,7 +16,7 @@ export function createSpecProcessor(options: PostProcessingOptions = defaultPost
 
   if (options.mergeAllOf) processors.push(mergeAllOf);
   if (options.ensureDiscriminatorValues) processors.push(ensureDiscriminatorValues);
-  if (options.xOmit) processors.push(xOmit);
+  if (options.xOmit) processors.push(xOmitDeep);
   if (options.xPick) processors.push(xPick);
 
   if (processors.length < 1) {

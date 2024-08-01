@@ -4,7 +4,7 @@ import { mergeAllOf } from "./merge-all-of.js";
 import { BundleMock } from "@dasaplan/openapi-bundler";
 
 import { OpenapiApiDoc } from "./spec-accessor.js";
-import { xOmit } from "./x-omit.js";
+import { xOmitDeep } from "./x-omit-deep.js";
 import { appLog } from "../../logger.js";
 
 describe("x-omit", () => {
@@ -56,7 +56,7 @@ describe("x-omit", () => {
     expect(AB_afterMerge.properties?.a, "expected property 'b' not to be processed").toBeDefined();
 
     // x-omit
-    const omitted = xOmit(spec);
+    const omitted = xOmitDeep(spec);
     const omittedAccessor = OpenapiApiDoc.accessor(omitted);
     const AB_afterOmit = omittedAccessor.getSchemaByName("AB");
     expect(AB_afterOmit["x-omit"]).toBeUndefined();
@@ -65,6 +65,34 @@ describe("x-omit", () => {
     expect(AB_afterOmit.properties?.a).toBeDefined();
     expect(AB_afterOmit.properties?.b).toBeUndefined();
     expect(merged).toMatchSnapshot();
+  });
+
+  test("omits deep", () => {
+    const spec = createApi(
+      withSchema("A", {
+        required: ["a"],
+        properties: { a: { type: "string" } },
+      }),
+      withSchema("B", {
+        required: ["b", "bb"],
+        properties: { b: { type: "string" }, bb: { type: "string" }, entity: schemaRef("A") },
+      }),
+      withSchema("AB", {
+        allOf: [
+          schemaRef("B"),
+          mockXOmit({
+            required: ["a"],
+            properties: { entity: { properties: { a: true } } },
+          }),
+        ],
+      })
+    );
+
+    // x-omit
+    const omitted = xOmitDeep(mergeAllOf(spec));
+    const omittedAccessor = OpenapiApiDoc.accessor(omitted);
+    const AB_afterOmit = omittedAccessor.getSchemaByName("AB");
+    expect(AB_afterOmit["x-omit"]).toBeUndefined();
   });
 
   test("nothing to omit", () => {
@@ -77,7 +105,7 @@ describe("x-omit", () => {
       })
     );
 
-    const omitted = xOmit(mergeAllOf(spec));
+    const omitted = xOmitDeep(mergeAllOf(spec));
     const accessor = OpenapiApiDoc.accessor(omitted);
     const schema = accessor.getSchemaByName("B");
 

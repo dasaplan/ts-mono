@@ -1,6 +1,6 @@
 import { OpenApiBundled } from "./bundle.js";
 import { oas30 } from "openapi3-ts";
-import { XOmitConfig } from "./post-process/processors/x-omit.js";
+import { XOmitConfig } from "./post-process/processors/x-omit-deep.js";
 
 export module BundleMock {
   export function create() {

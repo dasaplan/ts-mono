@@ -16,10 +16,11 @@ export interface Resolver {
     params?: { deleteRef: boolean }
   ): typeof params extends { deletedRef: true } ? WithoutRef<T> : WithOptionalRef<T>;
   resolveRefImmutable<T extends oas30.ReferenceObject | OaComponent>(
-    data: T,
+    data: T | { $ref: string },
     params?: { deleteRef: boolean }
   ): typeof params extends { deletedRef: true } ? WithoutRef<T> : WithOptionalRef<T>;
 }
+
 export module Resolver {
   export function create(bundled: OpenApiBundled): Resolver {
     return {
@@ -62,7 +63,7 @@ export module Resolver {
         }
       },
       resolveRefImmutable<T extends oas30.ReferenceObject | OaComponent>(
-        _data: { $ref: string } | unknown,
+        _data: T | { $ref: string } | unknown,
         params?: { deleteRef: boolean }
       ): typeof params extends { deletedRef: true } ? WithoutRef<T> : WithOptionalRef<T> {
         const data = _.cloneDeep(_data);

@@ -8,7 +8,7 @@ import { isRef } from "@redocly/openapi-core";
 import { appLog } from "../../logger.js";
 import { _, ApplicationError } from "@dasaplan/ts-sdk";
 import { cleanObj, SchemaResolverContext } from "../../resolver/index.js";
-import { mergeXOmit, XOmitConfig } from "./x-omit.js";
+import { mergeXOmit, XOmitConfig } from "./x-omit-deep.js";
 
 export function mergeAllOf(bundled: OpenApiBundled) {
   const log = appLog.childLog(mergeAllOf);
