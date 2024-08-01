@@ -9,6 +9,7 @@ import { appLog } from "../../logger.js";
 import { _, ApplicationError } from "@dasaplan/ts-sdk";
 import { cleanObj, SchemaResolverContext } from "../../resolver/index.js";
 import { mergeXOmit, XOmitConfig } from "./x-omit-deep.js";
+import { mergeXPick } from "./x-pick.js";
 
 export function mergeAllOf(bundled: OpenApiBundled) {
   const log = appLog.childLog(mergeAllOf);
@@ -153,6 +154,11 @@ function getJsonSchemaMergeAllOff<T extends oas30.SchemaObject>(
             if (path?.[0] === "x-omit") {
               const [a, b] = values;
               return mergeXOmit(a, b);
+            }
+
+            if (path?.[0] === "x-pick") {
+              const [a, b] = values;
+              return mergeXPick(a, b);
             }
 
             if (options.resolvers?.title) {

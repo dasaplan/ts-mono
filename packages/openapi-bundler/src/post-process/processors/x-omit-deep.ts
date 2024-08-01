@@ -10,8 +10,8 @@ import { appLog } from "../../logger.js";
 import { mergeSubSchemas } from "./merge-all-of.js";
 
 export type XOmitConfig = {
-  required: Array<string> | boolean;
-  properties: Record<string, boolean | XOmitConfig> | boolean;
+  required?: Array<string> | boolean;
+  properties?: Record<string, boolean | XOmitConfig> | boolean;
 } & {
   [prop in Exclude<keyof oas30.SchemaObject, "required" | "properties">]?: boolean;
 };
@@ -70,10 +70,10 @@ function applyOmit<T>(args: { id: string; schema: any; merged: WithOptionalRef<o
     delete omitted.required;
   } else if (!_.isEmpty(omitConfig.required)) {
     const requiredToRemove = omitConfig.required;
-    omitted.required = omitted.required?.filter((e) => !requiredToRemove.includes(e));
+    omitted.required = omitted.required?.filter((e) => !requiredToRemove?.includes(e));
     if (merged.required?.length === omitted.required) {
       log.warn(
-        `Nothing to omit. The required array of schema.id ${args.id} does not include any defined values to omit. required(omit): ${requiredToRemove.join(
+        `Nothing to omit. The required array of schema.id ${args.id} does not include any defined values to omit. required(omit): ${requiredToRemove?.join(
           ","
         )}  `
       );
