@@ -179,6 +179,109 @@ describe("mergeAllOf", () => {
     `);
   });
 
+  test("merges required - multiple inheritance 1", () => {
+    /**
+     * When we have multiple inheritance, we may try to infer a common parent.
+     * Or we fall back to merge everything
+     * */
+    const spec = createApi(
+      withSchema("BaseBase", {
+        required: ["id"],
+        properties: { id: { type: "string" } },
+      }),
+      withSchema("Base", {
+        allOf: [
+          schemaRef("BaseBase"),
+          {
+            required: ["type"],
+            properties: { type: { type: "string" } },
+            discriminator: { propertyName: "type" },
+          },
+        ],
+      }),
+      withSchema("A", {
+        allOf: [schemaRef("Base")],
+        required: ["a"],
+        properties: { a: { type: "string" } },
+      }),
+      withSchema("B", {
+        allOf: [schemaRef("Base")],
+        required: ["b"],
+        properties: { b: { type: "string" } },
+      }),
+      withSchema("AB", {
+        allOf: [schemaRef("A"), schemaRef("B"), mockSchema({ properties: { c: { type: "string" } } })],
+      })
+    );
+    const actual = mergeAllOf(spec);
+    const accessor = OpenapiApiDoc.accessor(actual);
+    expect(accessor.getSchemaByName("Base"), "expected schema 'Base' to be defined").toMatchInlineSnapshot(`
+      {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "id": {
+            "type": "string",
+          },
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+          "type",
+        ],
+        "type": "object",
+      }
+    `);
+  });
+
+  test("merges required - multiple inheritance 1", () => {
+    /**
+     * When we have multiple inheritance, we may try to infer a common parent.
+     * Or we fall back to merge everything
+     * */
+    const spec = createApi(
+      withSchema("Base", {
+        required: ["type"],
+        properties: { type: { type: "string" } },
+        discriminator: { propertyName: "type" },
+      }),
+      withSchema("A", {
+        allOf: [schemaRef("Base")],
+        required: ["a"],
+        properties: { a: { type: "string" } },
+      }),
+      withSchema("B", {
+        allOf: [schemaRef("Base")],
+        required: ["b"],
+        properties: { b: { type: "string" } },
+      }),
+      withSchema("AB", {
+        allOf: [schemaRef("A"), schemaRef("B"), mockSchema({ properties: { c: { type: "string" } } })],
+      })
+    );
+    const actual = mergeAllOf(spec);
+    const accessor = OpenapiApiDoc.accessor(actual);
+    expect(accessor.getSchemaByName("Base"), "expected schema 'Base' to be defined").toMatchInlineSnapshot(`
+      {
+        "discriminator": {
+          "propertyName": "type",
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "type",
+        ],
+        "type": "object",
+      }
+    `);
+  });
+
   test.skip("merges required - multiple inheritance", () => {
     /**
      * When we have multiple inheritance, we may try to infer a common parent.

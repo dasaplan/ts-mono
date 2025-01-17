@@ -60,6 +60,7 @@ function doMerge({ schema, id }: { id: string; schema: any }, ctx: SchemaResolve
 
   // scenario(composition of a base schema): a allOf.element defines a schema with a discriminator by reference and inlined
   const inlinesWithDiscriminator = resolvedSchemas.filter((p) => !_.isDefined(p.pointer) && _.isDefined(p.resolved.discriminator));
+
   if (parentsWithDiscriminator.length == 1 && inlinesWithDiscriminator.length > 0) {
     // we may have an allOf expressing inheritance and multiple schemas we need to merge (while keeping inherited schema)
     const mergedWithInlineParent = mergeSubSchemas([...inlinesWithDiscriminator, ...resolvedSchemasWithoutDiscriminator], ctx);
@@ -67,6 +68,15 @@ function doMerge({ schema, id }: { id: string; schema: any }, ctx: SchemaResolve
     schema.allOf = [{ $ref: parentsWithDiscriminator[0].pointer }, mergedWithInlineParent.resolved];
     return schema;
   }
+
+  if (parentsWithDiscriminator.length < 1 && inlinesWithDiscriminator.length > 0) {
+    // we may have an allOf expressing inheritance and multiple schemas we need to merge (while keeping inherited schema)
+    const mergedWithInlineParent = mergeSubSchemas([...inlinesWithDiscriminator, ...resolvedSchemasWithoutDiscriminator], ctx);
+    Object.assign(schema, mergedWithInlineParent.resolved);
+    delete schema["allOf"];
+    return schema;
+  }
+
   if (resolvedSchemas.length < 1) {
     // something is off: could be a schema with a single allOf or an allOf comprised of multiple discriminators...
     log.warn(`found allOf with single element in schema.id '${id}': ${JSON.stringify(schema)}`);
