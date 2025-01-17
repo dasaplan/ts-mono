@@ -35,48 +35,65 @@ export async function formatSpec(filePath: File, outFile: File): Promise<{ outFi
 }
 
 function customSort(mutableDoc: OaDocument): OaDocument {
+  const sorted = recSortAlphabetically(mutableDoc);
+  if (_.isNil(sorted)) {
+    throw ApplicationError.create("internal error: could not format spec. spec returned undefined after formatting");
+  }
   // sort operation object first alphabetically then by priority
-  if (_.isDefined(mutableDoc.paths)) {
-    const sortedPath = Object.entries(mutableDoc.paths).map(([route, operation]) => {
+  if (_.isDefined(sorted.paths)) {
+    const sortedPath = Object.entries(sorted.paths).map(([route, operation]) => {
       if (_.isNil(operation)) {
         return [route, operation];
       }
-      const sortedEntry = OpenapiFormatImport.sortByAlphabet(operation);
-      const sortedOperation = OpenapiFormatImport.prioritySort(sortedEntry, ["get", "post", "put", "patch", "delete"]);
+      const sortedOperation = OpenapiFormatImport.prioritySort(operation, ["get", "post", "put", "patch", "delete"]);
       return [route, sortedOperation];
     });
 
     if (!_.isEmpty(sortedPath)) {
-      mutableDoc.paths = Object.fromEntries(sortedPath);
-      return mutableDoc;
+      sorted.paths = Object.fromEntries(sortedPath);
+      return sorted;
     }
   }
 
+  return sorted;
+}
+
+function recSortAlphabetically(mutableDoc: OaDocument | undefined): OaDocument | undefined {
   // sort components alphabetically
-  if (_.isDefined(mutableDoc.components)) {
-    Object.entries(mutableDoc.components).forEach(([key, comp]) => {
-      if (_.isDefined(comp)) {
-        const sortedObj = OpenapiFormatImport.sortByAlphabet(comp);
-        if (!_.isEmpty(sortedObj)) {
-          (mutableDoc.components as any)[key] = sortedObj;
-          return;
-        }
-      }
-    });
+  if (_.isNil(mutableDoc) || typeof mutableDoc !== "object") {
+    return;
   }
 
-  // sort schema properties alphabetically
-  if (_.isDefined(mutableDoc.components?.schemas)) {
-    Object.entries(mutableDoc.components?.schemas).forEach(([key, schema]) => {
-      if (_.isDefined(schema)) {
-        const sortedObj = OpenapiFormatImport.sortByAlphabet(schema);
-        if (!_.isEmpty(sortedObj)) {
-          mutableDoc.components!.schemas![key] = sortedObj;
-          return;
-        }
-      }
-    });
-  }
+  Object.entries(mutableDoc).forEach(([key, comp]) => {
+    if (typeof comp !== "object") {
+      return;
+    }
+
+    if (["allOf", "oneOf", "anyOf"].includes(key)) {
+      // not safe to sort
+      return;
+    }
+
+    if (["required", "parameters", "enum", "tags", "x-extensible-enum"].includes(key) && Array.isArray(comp)) {
+      // should be safe to sort
+      (mutableDoc as any)[key] = comp.sort();
+      return;
+    }
+
+    if (Array.isArray(comp)) {
+      // we do not want to sort by accident and maybe break semantics
+      return;
+    }
+
+    // recurse
+    recSortAlphabetically(comp);
+
+    const sortedObj = OpenapiFormatImport.sortByAlphabet(comp);
+    if (!_.isEmpty(sortedObj)) {
+      (mutableDoc as any)[key] = sortedObj;
+      return;
+    }
+  });
 
   return mutableDoc;
 }
