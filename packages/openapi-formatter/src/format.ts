@@ -28,10 +28,10 @@ export async function formatSpec(filePath: File, outFile: File): Promise<{ outFi
   const spec = await oafmt.parseFile(filePath.absolutePath);
   const customSorted = customSort(spec as never);
   const libSorted = await oafmt.openapiSort(customSorted, { sortSet, sortComponentsSet });
-  if (typeof libSorted === "string") {
+  if (typeof libSorted.data === "string") {
     throw ApplicationError.create("could not format spec");
   }
-  return Promise.resolve({ outFile: outFile.writeYml(customSorted) });
+  return Promise.resolve({ outFile: outFile.writeYml(libSorted.data) });
 }
 
 function customSort(mutableDoc: OaDocument): OaDocument {
