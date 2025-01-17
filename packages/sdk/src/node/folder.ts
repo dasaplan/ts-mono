@@ -15,10 +15,9 @@ export module File {
   export function resolve(...segments: string[]) {
     return of(path.resolve(...segments));
   }
+
   export function of(filePath: string, nameWithExt?: string) {
-    const fileName = isFilePath(filePath)
-      ? path.basename(filePath)
-      : nameWithExt;
+    const fileName = isFilePath(filePath) ? path.basename(filePath) : nameWithExt;
     if (_.isNil(fileName)) {
       throw `Error: Expected file path to include fileName or a default but was given: path:${filePath}, nameWithExt: ${nameWithExt}`;
     }
@@ -37,14 +36,14 @@ export module File {
       readAsString() {
         return fs.readFileSync(this.absolutePath, "utf-8");
       },
+      exists() {
+        return fs.existsSync(this.absolutePath);
+      },
       siblingFile(nameWithExt: string) {
         return of(_folder.makeFilePath(nameWithExt));
       },
       writeYml(content: string | object | NodeJS.ArrayBufferView) {
-        fs.writeFileSync(
-          this.absolutePath,
-          stringifyYaml(content, { noRefs: true })
-        );
+        fs.writeFileSync(this.absolutePath, stringifyYaml(content, { noRefs: true }));
         return filePath;
       },
       write(content: string | object | NodeJS.ArrayBufferView) {
@@ -56,6 +55,7 @@ export module File {
       },
     };
   }
+
   export function stringify(content: string | object | NodeJS.ArrayBufferView) {
     if (ArrayBuffer.isView(content)) {
       return content as NodeJS.ArrayBufferView;
@@ -72,16 +72,17 @@ export module Folder {
   export function temp() {
     return resolve(process.cwd(), "tmp");
   }
+
   export function cwd(...segments: string[]) {
     return of(path.resolve(process.cwd(), ...segments));
   }
+
   export function resolve(...segments: string[]) {
     return of(path.resolve(...segments));
   }
+
   export function of(folderPath: string) {
-    const _absPath = path.isAbsolute(folderPath)
-      ? folderPath
-      : path.resolve(process.cwd(), folderPath);
+    const _absPath = path.isAbsolute(folderPath) ? folderPath : path.resolve(process.cwd(), folderPath);
     const _folder = parsePath(_absPath);
 
     return {
@@ -91,22 +92,13 @@ export module Folder {
       normalize() {
         return Folder.of(path.normalize(this.absolutePath));
       },
-      write(
-        fileName: string,
-        content: string | object | NodeJS.ArrayBufferView
-      ) {
+      write(fileName: string, content: string | object | NodeJS.ArrayBufferView) {
         this.create();
         fs.writeFileSync(this.makeFilePath(fileName), File.stringify(content));
         return this;
       },
-      appendSync(
-        fileName: string,
-        content: string | object | NodeJS.ArrayBufferView
-      ) {
-        fs.appendFileSync(
-          this.makeFilePath(fileName),
-          JSON.stringify(content) + "\n"
-        );
+      appendSync(fileName: string, content: string | object | NodeJS.ArrayBufferView) {
+        fs.appendFileSync(this.makeFilePath(fileName), JSON.stringify(content) + "\n");
         return this;
       },
       parent() {
@@ -115,10 +107,7 @@ export module Folder {
       cd(...segments: Array<string>) {
         return Folder.resolve(_folder, ...segments);
       },
-      writeYml(
-        fileName: string,
-        content: string | object | NodeJS.ArrayBufferView
-      ) {
+      writeYml(fileName: string, content: string | object | NodeJS.ArrayBufferView) {
         this.create();
         return File.of(this.makeFilePath(fileName)).writeYml(content);
       },
@@ -131,9 +120,7 @@ export module Folder {
         return File.of(this.makeFilePath(file));
       },
       delete(...files: string[]) {
-        files
-          .map((f) => this.makeFilePath(f))
-          .forEach((f) => this.deleteFileOrDirectory(f));
+        files.map((f) => this.makeFilePath(f)).forEach((f) => this.deleteFileOrDirectory(f));
         return this;
       },
       readAllFilesAsString(): Array<{ src: string; content: string }> {

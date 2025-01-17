@@ -1,0 +1,86 @@
+{
+  "name": "@dasaplan/openapi-formatter",
+  "version": "0.0.2",
+  "description": "Opinionated formatter for Openapi (Swagger)",
+  "keywords": [
+    "openapi",
+    "typescript",
+    "ts",
+    "zod",
+    "codegen"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dasaplan/ts-mono.git",
+    "directory": "packages/openapi-bundler"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "bin": {
+    "openapi-formatter-cli": "dist/oa-formatter-cli.js"
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "pnpm rup",
+    "clean": "rimraf dist",
+    "lint": "eslint \"./src/*.ts\" index.ts oa-formatter-cli.ts",
+    "prepack": "sort-package-json --quiet && clean-package",
+    "pack": "pnpm pack",
+    "postpack": "clean-package restore",
+    "rup": "tsup-node --dts",
+    "test": "vitest",
+    "test:update": "vitest -u"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "lodash": "^4.17.21",
+    "openapi-format": "^1.25.0",
+    "openapi3-ts": "^4.3.3",
+    "tslog": "^4.9.2"
+  },
+  "devDependencies": {
+    "@dasaplan/ts-sdk": "workspace:*",
+    "@types/lodash": "^4.17.5",
+    "openapi-example-specs": "workspace:*",
+    "tsconfig": "workspace:0.0.0",
+    "typescript": "^5.5.3"
+  },
+  "peerDependencies": {
+    "@redocly/openapi-core": "^1.6.0"
+  },
+  "clean-package": {
+    "remove": [
+      "scripts",
+      "devDependencies",
+      "tsup",
+      "clean-package",
+      "dependencies.@dasaplan/ts-sdk"
+    ]
+  },
+  "tsup": {
+    "entry": [
+      "index.ts",
+      "oa-formatter-cli.ts"
+    ],
+    "noExternal": [
+      "@dasaplan/ts-sdk",
+      "tsconfig"
+    ],
+    "format": [
+      "cjs",
+      "esm"
+    ],
+    "tsconfig": "tsconfig.build.json",
+    "clean": true,
+    "sourcemap": true
+  }
+}
