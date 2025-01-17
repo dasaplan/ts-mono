@@ -1,5 +1,11 @@
 # @dasaplan/openapi-bundler
 
+## 0.0.19
+
+### Patch Changes
+
+- fix(bundler): when mergeAllOf fails for only inline schema having discriminator
+
 ## 0.0.18
 
 ### Patch Changes
