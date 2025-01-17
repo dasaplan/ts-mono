@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import oafmt, { OpenAPISortOptions } from "openapi-format";
 import { File, _, ApplicationError } from "@dasaplan/ts-sdk";
-import { an } from "vitest/dist/reporters-BECoY4-b.js";
 
 const sortSet: OpenAPISortOptions["sortSet"] = {
   sortPathsBy: "path",

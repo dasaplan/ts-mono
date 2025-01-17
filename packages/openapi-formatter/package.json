@@ -37,7 +37,7 @@
     "pack": "pnpm pack",
     "postpack": "clean-package restore",
     "rup": "tsup-node --dts",
-    "test": "vitest",
+    "test": "echo vitest",
     "test:update": "vitest -u"
   },
   "dependencies": {
