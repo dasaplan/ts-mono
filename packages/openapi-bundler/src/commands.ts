@@ -9,6 +9,7 @@ export function createCommandBundle(program: Command) {
     .description("Bundle Openapi specified files into a single file")
     .argument("<openapi-spec>", "Absolut or Relative filepath from the cwd to the OpenApi root document file")
     .option("-o, --outputFile [outputFile]", "Absolut or relative filepath to cwd of the resulting bundled file")
+    .option("--forceMergeAllOf", "If set, allOf arrays will be entirely merged. Discriminator may be overridden.", false)
     .option("--disableMergeAllOf", "If set, allOf arrays will be left as is after bundling", false)
     .option("--disableEnsureDiscriminatorValues", "If set, discriminator values won't be ensured on every subType", false)
     .option("--disableXOmit", "If set, x-omit keyword won't be processed", false)
@@ -22,6 +23,7 @@ export function createCommandBundle(program: Command) {
           disableEnsureDiscriminatorValues: boolean;
           disableXOmit: boolean;
           disableXPick: boolean;
+          forceMergeAllOf: boolean;
           verbose: boolean;
         }
       ) => {
@@ -34,7 +36,9 @@ export function createCommandBundle(program: Command) {
           ensureDiscriminatorValues: !options.disableEnsureDiscriminatorValues,
           xOmit: !options.disableXOmit,
           xPick: !options.disableXPick,
+          processorOptions: { forceMerge: options.forceMergeAllOf },
         });
+
         const result = await withPerformance(() => bundleOpenapi(spec, { postProcessor, outFile: options.outputFile }));
         appLog.log.info(`finished bundling in ${(result.duration / 1000).toFixed(3)} s`, { outFile: result.ret.outFile });
       }

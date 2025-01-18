@@ -1,6 +1,6 @@
 import { OpenApiBundled } from "../bundle.js";
 import { ensureDiscriminatorValues } from "./processors/ensure-discriminator-values.js";
-import { mergeAllOf } from "./processors/merge-all-of.js";
+import { mergeAllOf, MergeAllOfOptions } from "./processors/merge-all-of.js";
 import { xOmitDeep } from "./processors/x-omit-deep.js";
 import { xPick } from "./processors/x-pick.js";
 
@@ -9,10 +9,13 @@ export interface PostProcessingOptions {
   ensureDiscriminatorValues?: boolean;
   xOmit?: boolean;
   xPick?: boolean;
+  processorOptions?: ProcessorOptions;
 }
 
+type ProcessorOptions = MergeAllOfOptions;
+
 export function createSpecProcessor(options: PostProcessingOptions = defaultPostProcessingOptions()) {
-  const processors: Array<(spec: OpenApiBundled) => OpenApiBundled> = [];
+  const processors: Array<(spec: OpenApiBundled, options: ProcessorOptions | undefined) => OpenApiBundled> = [];
 
   if (options.mergeAllOf) processors.push(mergeAllOf);
   if (options.ensureDiscriminatorValues) processors.push(ensureDiscriminatorValues);
@@ -23,7 +26,7 @@ export function createSpecProcessor(options: PostProcessingOptions = defaultPost
     return undefined;
   }
 
-  return (spec: OpenApiBundled) => processors.reduce((acc, curr) => curr(acc), spec);
+  return (spec: OpenApiBundled) => processors.reduce((acc, curr) => curr(acc, options.processorOptions), spec);
 }
 
 export function defaultPostProcessingOptions(): PostProcessingOptions {

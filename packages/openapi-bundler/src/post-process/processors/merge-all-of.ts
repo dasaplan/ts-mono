@@ -3,7 +3,7 @@
 import { OpenApiBundled } from "../../bundle.js";
 import { oas30 } from "openapi3-ts";
 
-import jsonSchemaMergeAllOff from "json-schema-merge-allof";
+import jsonSchemaMergeAllOff, { options } from "json-schema-merge-allof";
 import { isRef } from "@redocly/openapi-core";
 import { appLog } from "../../logger.js";
 import { _, ApplicationError } from "@dasaplan/ts-sdk";
@@ -11,7 +11,11 @@ import { cleanObj, SchemaResolverContext } from "../../resolver/index.js";
 import { mergeXOmit, XOmitConfig } from "./x-omit-deep.js";
 import { mergeXPick } from "./x-pick.js";
 
-export function mergeAllOf(bundled: OpenApiBundled) {
+export interface MergeAllOfOptions {
+  /** resolve all allOfArrays*/
+  forceMerge?: boolean;
+}
+export function mergeAllOf(bundled: OpenApiBundled, options?: MergeAllOfOptions) {
   const log = appLog.childLog(mergeAllOf);
 
   const mergedAllOf = _.cloneDeep(bundled);
@@ -21,7 +25,7 @@ export function mergeAllOf(bundled: OpenApiBundled) {
 
   collected.forEach((s) => {
     try {
-      doMerge(s, ctx);
+      doMerge(s, ctx, options);
     } catch (e) {
       throw ApplicationError.create(`failed to merge allOf for schema.id ${s.id}`).chainUnknown(e);
     }
@@ -29,7 +33,7 @@ export function mergeAllOf(bundled: OpenApiBundled) {
   return mergedAllOf;
 }
 
-function doMerge({ schema, id }: { id: string; schema: any }, ctx: SchemaResolverContext) {
+function doMerge({ schema, id }: { id: string; schema: any }, ctx: SchemaResolverContext, options?: MergeAllOfOptions) {
   const log = appLog.childLog(doMerge);
   const subSchemas: Array<oas30.ReferenceObject | oas30.SchemaObject> = schema.allOf ?? [];
   // include dangling properties {allOf: [], danglingA: {}, danglingB: [], danglingC: null, ... }
@@ -47,35 +51,6 @@ function doMerge({ schema, id }: { id: string; schema: any }, ctx: SchemaResolve
   if (!_.isEmpty(danglingProperties)) {
     resolvedSchemas.push({ pointer: undefined, resolved: danglingProperties });
   }
-  const hasOneOfOrAnyOf = resolvedSchemas.filter((f) => !_.isEmpty(f.resolved.oneOf) || !_.isEmpty(f.resolved.anyOf))?.length > 0;
-  if (hasOneOfOrAnyOf) {
-    throw ApplicationError.create(`unsupported allOf element. anyOf or oneOf are yet not supported as an allOf subschema: ${JSON.stringify(schema)}`);
-  }
-
-  // scenario(real inheritance): a allOf.element holds a ref where the target has a discriminator
-  const parentsWithDiscriminator = resolvedSchemas.filter((p) => _.isDefined(p.pointer) && _.isDefined(p.resolved.discriminator));
-
-  // scenario(composition): a allOf.element is a schema
-  const resolvedSchemasWithoutDiscriminator = resolvedSchemas.filter((p) => !_.isDefined(p.resolved.discriminator));
-
-  // scenario(composition of a base schema): a allOf.element defines a schema with a discriminator by reference and inlined
-  const inlinesWithDiscriminator = resolvedSchemas.filter((p) => !_.isDefined(p.pointer) && _.isDefined(p.resolved.discriminator));
-
-  if (parentsWithDiscriminator.length == 1 && inlinesWithDiscriminator.length > 0) {
-    // we may have an allOf expressing inheritance and multiple schemas we need to merge (while keeping inherited schema)
-    const mergedWithInlineParent = mergeSubSchemas([...inlinesWithDiscriminator, ...resolvedSchemasWithoutDiscriminator], ctx);
-    // build hierarchy
-    schema.allOf = [{ $ref: parentsWithDiscriminator[0].pointer }, mergedWithInlineParent.resolved];
-    return schema;
-  }
-
-  if (parentsWithDiscriminator.length < 1 && inlinesWithDiscriminator.length > 0) {
-    // we may have an allOf expressing inheritance and multiple schemas we need to merge (while keeping inherited schema)
-    const mergedWithInlineParent = mergeSubSchemas([...inlinesWithDiscriminator, ...resolvedSchemasWithoutDiscriminator], ctx);
-    Object.assign(schema, mergedWithInlineParent.resolved);
-    delete schema["allOf"];
-    return schema;
-  }
 
   if (resolvedSchemas.length < 1) {
     // something is off: could be a schema with a single allOf or an allOf comprised of multiple discriminators...
@@ -83,42 +58,50 @@ function doMerge({ schema, id }: { id: string; schema: any }, ctx: SchemaResolve
     return schema;
   }
 
-  if (parentsWithDiscriminator.length == 1 && resolvedSchemasWithoutDiscriminator.length == 1) {
+  const hasOneOfOrAnyOf = resolvedSchemas.filter((f) => !_.isEmpty(f.resolved.oneOf) || !_.isEmpty(f.resolved.anyOf))?.length > 0;
+  if (hasOneOfOrAnyOf) {
+    throw ApplicationError.create(`unsupported allOf element. anyOf or oneOf are yet not supported as an allOf subschema: ${JSON.stringify(schema)}`);
+  }
+
+  // scenario(real inheritance): an allOf.element holds a ref where the target has a discriminator
+  const _parentsWithDiscriminator = resolvedSchemas.filter((p) => _.isDefined(p.pointer) && _.isDefined(p.resolved.discriminator));
+  const parentsWithDiscriminator = _.uniqBy(_parentsWithDiscriminator, (a) => a.pointer);
+
+  // scenario(composition): an allOf.element is a schema
+  const resolvedSchemasWithoutDiscriminator = resolvedSchemas.filter((p) => !_.isDefined(p.resolved.discriminator));
+
+  // scenario(composition of a base schema): an allOf.element defines a schema with a discriminator by inlined
+  const inlinesWithDiscriminator = resolvedSchemas.filter((p) => !_.isDefined(p.pointer) && _.isDefined(p.resolved.discriminator));
+
+  if (parentsWithDiscriminator.length == 1 && resolvedSchemasWithoutDiscriminator.length == 1 && inlinesWithDiscriminator.length == 0) {
     // we may have an allOf expressing inheritance - most tooling can handle two allOfs
     return schema;
   }
 
-  if (parentsWithDiscriminator.length == 1 && resolvedSchemasWithoutDiscriminator.length > 1) {
-    // we may have an allOf expressing inheritance and multiple schemas we need to merge (while keeping inherited schema)
-    const merged = mergeSubSchemas(resolvedSchemasWithoutDiscriminator, ctx);
-    // build hierarchy
-    schema.allOf = [{ $ref: parentsWithDiscriminator[0].pointer }, merged.resolved];
-    return schema;
-  }
-
-  if (parentsWithDiscriminator.length > 1) {
-    // we may have an allOf expressing multiple inheritance we will try to find a common base
-
-    const merged = mergeSubSchemas(resolvedSchemasWithoutDiscriminator, ctx);
-    // build hierarchy
-    const hierarchy = parentsWithDiscriminator.reduce((acc, curr) => {
-      return { allOf: [{ $ref: curr.pointer }, acc] };
-    }, merged.resolved);
-    delete schema["$ref"];
-    Object.assign(schema, hierarchy);
-    return schema;
-  }
-
-  if (parentsWithDiscriminator.length < 1) {
-    // we only have schemas which we can merge together
-    const merged = mergeSubSchemas(resolvedSchemasWithoutDiscriminator, ctx);
-    Object.assign(schema, merged.resolved);
+  if (options?.forceMerge) {
+    const forceMerged = mergeSubSchemas([...parentsWithDiscriminator, ...inlinesWithDiscriminator, ...resolvedSchemasWithoutDiscriminator], ctx);
+    Object.assign(schema, forceMerged.resolved);
     delete schema["allOf"];
     delete schema["$ref"];
     return schema;
   }
 
-  throw "Error: should not have been reached";
+  const mergedWithInlineParent = mergeSubSchemas([...inlinesWithDiscriminator, ...resolvedSchemasWithoutDiscriminator], ctx);
+  if (parentsWithDiscriminator.length === 0) {
+    Object.assign(schema, mergedWithInlineParent.resolved);
+    delete schema["allOf"];
+    delete schema["$ref"];
+    return schema;
+  }
+
+  // build hierarchy because we have multiple refs with discriminator
+  const hierarchy = parentsWithDiscriminator.reduce((acc, curr) => {
+    return { allOf: [{ $ref: curr.pointer }, acc] };
+  }, mergedWithInlineParent.resolved);
+
+  Object.assign(schema, hierarchy);
+  delete schema["$ref"];
+  return schema;
 }
 
 function resolveSubSchemas(
