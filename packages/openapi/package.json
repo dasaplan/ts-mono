@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Collection of ready to use tools to facilitate OpenApi specification centered workflows.",
   "keywords": [
     "openapi",
