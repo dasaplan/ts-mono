@@ -1,5 +1,11 @@
 # @dasaplan/openapi-bundler
 
+## 0.0.20
+
+### Patch Changes
+
+- feat(bundler): force merge allOf
+
 ## 0.0.19
 
 ### Patch Changes
