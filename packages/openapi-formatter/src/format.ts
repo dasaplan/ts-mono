@@ -7,6 +7,7 @@ import { AnySchema, Parsed, resolveSpec } from "./resolve.js";
 import * as path from "node:path";
 import { createSpecProcessor } from "./post-process/index.js";
 import { appLog } from "./logger.js";
+import { PostProcessingOptions } from "./post-process/post-process.js";
 const sortSet: OpenAPISortOptions["sortSet"] = {
   sortPathsBy: "path",
   root: ["openapi", "info", "servers", "paths", "components", "tags", "x-tagGroups", "externalDocs"],
@@ -27,13 +28,17 @@ const sortSet: OpenAPISortOptions["sortSet"] = {
 
 const sortComponentsSet: OpenAPISortOptions["sortComponentsSet"] = ["schemas", "parameters", "headers", "requestBodies", "responses", "securitySchemes"];
 
-export async function formatSpec(filePath: File, outFolder: Folder): Promise<{ outFile: string }> {
+export interface FormatterOptions extends PostProcessingOptions {
+  outFolder: Folder;
+}
+
+export async function formatSpec(filePath: File, options: FormatterOptions): Promise<{ outFile: string }> {
   const log = appLog.childLog(formatSpec);
   const resolved = await resolveSpec(filePath);
   const common = findCommonPath(resolved.map((r) => r.refFile));
   log.info(`formatting in: ${common}`);
 
-  const { schemaProcessor, documentProcessor } = createSpecProcessor({ fixTitles: true });
+  const { schemaProcessor, documentProcessor } = createSpecProcessor(options);
   for (const r of resolved) {
     log.info(`start: formatting: ${r.refFile.replace(common, "")}`);
 
@@ -55,10 +60,10 @@ export async function formatSpec(filePath: File, outFolder: Folder): Promise<{ o
       s.update(schema);
     }
 
-    exportSpec(r, common, outFolder);
+    exportSpec(r, common, options.outFolder);
     log.debug(`done formatting: ${r.refFile.replace(common, "")}`);
   }
-  return { outFile: outFolder.absolutePath };
+  return { outFile: options.outFolder.absolutePath };
 }
 
 function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any }, common: string, outFolder: Folder) {

@@ -4,15 +4,24 @@ import { AnySchema, Parsed } from "../resolve.js";
 import { cleanObj } from "@dasaplan/openapi-bundler";
 
 export interface PostProcessingOptions {
-  fixTitles: boolean;
+  fixTitles?: boolean;
+  fisDescription?: boolean;
+  fixDanglingAllOfProps?: boolean;
 }
 
-export function createSpecProcessor(options: PostProcessingOptions = defaultPostProcessingOptions()) {
+export function createSpecProcessor(_options?: PostProcessingOptions) {
   const documentProcessor: Array<(spec: AnySchema) => AnySchema> = [];
   const schemaProcessor: Array<(spec: Parsed) => Parsed> = [];
 
+  const options = {
+    ...defaultPostProcessingOptions(),
+    ..._options,
+  };
+
   if (options.fixTitles) documentProcessor.push(fixSchemaTitles);
-  schemaProcessor.push(fixDanglingPropsForAllOf);
+  if (options.fixDanglingAllOfProps) schemaProcessor.push(fixDanglingPropsForAllOf);
+  if (options.fisDescription) schemaProcessor.push(fixDescription);
+
   if (documentProcessor.length < 1) {
     return {
       schemaProcessor: (spec: Parsed) => spec,
@@ -29,7 +38,27 @@ export function createSpecProcessor(options: PostProcessingOptions = defaultPost
 export function defaultPostProcessingOptions(): PostProcessingOptions {
   return {
     fixTitles: true,
+    fixDanglingAllOfProps: true,
+    fisDescription: true,
   };
+}
+
+function fixDescription(parsed: Parsed): Parsed {
+  const log = appLog.childLog(fixDescription);
+  const spec = parsed.schema;
+  const description = spec.description ?? spec.allOf?.find((a) => a.description)?.description;
+  if (description) {
+    return parsed;
+  }
+  const lastKey = parsed.path.at(-1);
+  if (!lastKey || lastKey === "schema") {
+    return parsed;
+  }
+  const pathRef = parsed.path.join(".");
+  log.info(`[FIX_DESCRIPTION] path: ${pathRef}, description: ${lastKey}`);
+  spec.description = lastKey;
+
+  return parsed;
 }
 
 function collectDanglingPropsForAllOf(spec: AnySchema) {

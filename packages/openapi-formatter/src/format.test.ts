@@ -7,7 +7,7 @@ describe("format", () => {
   test("spec", async () => {
     const specPath = resolveSpecPath("pets-modular-complex/petstore-api.yml");
     const file = File.of(specPath);
-    const fmt = await formatSpec(file, Folder.of("tmp"));
+    const fmt = await formatSpec(file, { outFolder: Folder.of("tmp") });
     expect(fmt).toBeDefined();
   });
 });
