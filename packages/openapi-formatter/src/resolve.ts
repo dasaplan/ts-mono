@@ -3,10 +3,11 @@
 
 import { resolve } from "@apidevtools/swagger-parser";
 import { ApplicationError, File } from "@dasaplan/ts-sdk";
-import { Oas3Schema } from "@redocly/openapi-core";
 import { appLog } from "./logger.js";
+import { Oas3Schema } from "@redocly/openapi-core";
+import { Oas3Definition } from "@redocly/openapi-core/src/typings/openapi.js";
 
-export interface AnySchema extends Oas3Schema {}
+export interface AnySchema extends Oas3Schema, Partial<Oas3Definition> {}
 
 export async function resolveSpec(filePath: File) {
   const resolved = await resolve(filePath.absolutePath);
@@ -98,10 +99,6 @@ export module InferOa {
     return "type" in obj && typeof obj.type === "string" && ["array", "string", "object", "number", "integer", "boolean"].includes(obj.type);
   }
 
-  export function hasDescription<T extends object>(obj: T): obj is T & { description: string } {
-    return "description" in obj && typeof obj.description === "string";
-  }
-
   export function hasRequired<T extends object>(obj: T): obj is T & { required: Array<string> } {
     return "required" in obj && typeof obj.required === "object" && Array.isArray(obj.required);
   }
@@ -132,10 +129,6 @@ export module InferOa {
       "minProperties",
       "enum",
     ].some((propKey) => keys.includes(propKey));
-  }
-
-  export function hasTitle<T extends object>(obj: T): obj is T & { title: object } {
-    return "title" in obj && typeof obj.title === "string";
   }
 }
 

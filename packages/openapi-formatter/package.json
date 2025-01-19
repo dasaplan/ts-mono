@@ -46,10 +46,11 @@
     "openapi-format": "^1.25.0",
     "openapi3-ts": "^4.3.3",
     "@apidevtools/swagger-parser": "^10.1.1",
+    "@dasaplan/ts-sdk": "workspace:*",
+    "@dasaplan/openapi-bundler": "workspace:*",
     "tslog": "^4.9.2"
   },
   "devDependencies": {
-    "@dasaplan/ts-sdk": "workspace:*",
     "@types/lodash": "^4.17.5",
     "openapi-example-specs": "workspace:*",
     "tsconfig": "workspace:0.0.0",

@@ -3,8 +3,10 @@
 
 import oafmt, { OpenAPISortOptions } from "openapi-format";
 import { File, _, ApplicationError, Folder } from "@dasaplan/ts-sdk";
-import { Parsed, resolveSpec } from "./resolve.js";
+import { AnySchema, Parsed, resolveSpec } from "./resolve.js";
 import * as path from "node:path";
+import { createSpecProcessor } from "./post-process/index.js";
+import { appLog } from "./logger.js";
 const sortSet: OpenAPISortOptions["sortSet"] = {
   sortPathsBy: "path",
   root: ["openapi", "info", "servers", "paths", "components", "tags", "x-tagGroups", "externalDocs"],
@@ -25,7 +27,48 @@ const sortSet: OpenAPISortOptions["sortSet"] = {
 
 const sortComponentsSet: OpenAPISortOptions["sortComponentsSet"] = ["schemas", "parameters", "headers", "requestBodies", "responses", "securitySchemes"];
 
-type OaDocument = Parameters<typeof oafmt.openapiSort>[0];
+export async function formatSpec(filePath: File, outFolder: Folder): Promise<{ outFile: string }> {
+  const log = appLog.childLog(formatSpec);
+  const resolved = await resolveSpec(filePath);
+  const common = findCommonPath(resolved.map((r) => r.refFile));
+  log.info(`formatting in: ${common}`);
+
+  const { schemaProcessor, documentProcessor } = createSpecProcessor({ fixTitles: true });
+  for (const r of resolved) {
+    log.info(`start: formatting: ${r.refFile.replace(common, "")}`);
+
+    const file = r.getFile();
+    // format openapi document
+    if ("openapi" in file) {
+      const processed = documentProcessor(file);
+      const customSorted = customSort(processed);
+      const libSorted = await oafmt.openapiSort(customSorted as never, { sortSet, sortComponentsSet });
+      if (typeof libSorted.data === "string") {
+        throw ApplicationError.create("could not format spec");
+      }
+      r.updateFile(customSorted);
+    }
+
+    // format openapi schemas
+    for (const s of r.schemas) {
+      const { schema } = schemaProcessor(s);
+      s.update(schema);
+    }
+
+    exportSpec(r, common, outFolder);
+    log.debug(`done formatting: ${r.refFile.replace(common, "")}`);
+  }
+  return { outFile: outFolder.absolutePath };
+}
+
+function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any }, common: string, outFolder: Folder) {
+  const file = File.of(r.refFile);
+  const commonPath = path.resolve(common);
+  let current = file.absolutePath.replace(commonPath, "");
+  current = current.startsWith(path.sep) ? current.slice(1) : current;
+  const c = Folder.resolve(outFolder.absolutePath).makeFile(current);
+  c.writeYml(r.getFile());
+}
 
 function findCommonPath(filePaths: Array<string>) {
   let commonPath = "";
@@ -43,42 +86,7 @@ function findCommonPath(filePaths: Array<string>) {
   return commonPath;
 }
 
-function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any }, common: string, outFile: File) {
-  const file = File.of(r.refFile);
-  const commonPath = path.resolve(common);
-  let current = file.absolutePath.replace(commonPath, "");
-  current = current.startsWith(path.sep) ? current.slice(1) : current;
-  const c = Folder.resolve(outFile.folder.absolutePath).makeFile(current);
-  c.writeYml(r.getFile());
-}
-
-export async function formatSpec(filePath: File, outFile: File): Promise<{ outFile: string }> {
-  const resolved = await resolveSpec(filePath);
-  const common = findCommonPath(resolved.map((r) => r.refFile));
-
-  for (const r of resolved) {
-    const customSorted = customSort(r.getFile() as never);
-    const libSorted = await oafmt.openapiSort(customSorted, { sortSet, sortComponentsSet });
-    if (typeof libSorted.data === "string") {
-      throw ApplicationError.create("could not format spec");
-    }
-    r.updateFile(customSorted);
-    exportSpec(r, common, outFile);
-  }
-  return { outFile: outFile.folder.absolutePath };
-}
-
-export async function formatSpec2(filePath: File, outFile: File): Promise<{ outFile: string }> {
-  const spec = await oafmt.parseFile(filePath.absolutePath);
-  const customSorted = customSort(spec as never);
-  const libSorted = await oafmt.openapiSort(customSorted, { sortSet, sortComponentsSet });
-  if (typeof libSorted.data === "string") {
-    throw ApplicationError.create("could not format spec");
-  }
-  return Promise.resolve({ outFile: outFile.writeYml(libSorted.data) });
-}
-
-function customSort(mutableDoc: OaDocument): OaDocument {
+function customSort(mutableDoc: AnySchema): AnySchema {
   const sorted = recSortAlphabetically(mutableDoc);
   if (_.isNil(sorted)) {
     throw ApplicationError.create("internal error: could not format spec. spec returned undefined after formatting");
@@ -102,7 +110,7 @@ function customSort(mutableDoc: OaDocument): OaDocument {
   return sorted;
 }
 
-function recSortAlphabetically(mutableDoc: OaDocument | undefined): OaDocument | undefined {
+function recSortAlphabetically(mutableDoc: AnySchema | undefined): AnySchema | undefined {
   // sort components alphabetically
   if (_.isNil(mutableDoc) || typeof mutableDoc !== "object") {
     return;

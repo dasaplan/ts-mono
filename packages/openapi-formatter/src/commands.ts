@@ -1,7 +1,7 @@
 import { Command } from "commander";
 import { appLog } from "./logger.js";
 import { formatSpec } from "./format.js";
-import { File } from "@dasaplan/ts-sdk";
+import { File, Folder } from "@dasaplan/ts-sdk";
 import * as process from "node:process";
 
 export function createCommandFormat(program: Command) {
@@ -9,13 +9,13 @@ export function createCommandFormat(program: Command) {
     .command("format")
     .description("Format Openapi specified files into a single file")
     .argument("<openapi-spec>", "Absolut or Relative filepath from the cwd to the OpenApi root document file")
-    .option("-o, --outputFile [outputFile]", "Absolut or relative filepath to cwd of the resulting bundled file")
+    .option("-o, --outputFolder [outputFolder]", "Absolut or relative filepath to the folder where all files will be written to")
     .option("-v, --verbose", "Enable verbose logging")
     .action(
       async (
         spec: string,
         options: {
-          outputFile?: string;
+          outputFolder?: string;
           verbose: boolean;
         }
       ) => {
@@ -28,8 +28,8 @@ export function createCommandFormat(program: Command) {
           process.exit(1);
         }
 
-        const outFile = options.outputFile ? File.of(options.outputFile) : File.of(`fmt-${specFile.name}`);
-        const result = await withPerformance(() => formatSpec(specFile, outFile));
+        const outFolder = options.outputFolder ? Folder.of(options.outputFolder) : specFile.folder;
+        const result = await withPerformance(() => formatSpec(specFile, outFolder));
         appLog.log.info(`finished bundling in ${(result.duration / 1000).toFixed(3)} s`, { outFile: result.ret.outFile });
       }
     );
