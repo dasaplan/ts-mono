@@ -45,6 +45,7 @@
     "lodash": "^4.17.21",
     "openapi-format": "^1.25.0",
     "openapi3-ts": "^4.3.3",
+    "@apidevtools/swagger-parser": "^10.1.1",
     "tslog": "^4.9.2"
   },
   "devDependencies": {

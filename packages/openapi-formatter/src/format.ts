@@ -1,7 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import oafmt, { OpenAPISortOptions } from "openapi-format";
-import { File, _, ApplicationError } from "@dasaplan/ts-sdk";
+/* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars */
+// noinspection JSUnusedLocalSymbols,JSVoidFunctionReturnValueUsed
 
+import oafmt, { OpenAPISortOptions } from "openapi-format";
+import { File, _, ApplicationError, Folder } from "@dasaplan/ts-sdk";
+import { Parsed, resolveSpec } from "./resolve.js";
+import * as path from "node:path";
 const sortSet: OpenAPISortOptions["sortSet"] = {
   sortPathsBy: "path",
   root: ["openapi", "info", "servers", "paths", "components", "tags", "x-tagGroups", "externalDocs"],
@@ -24,7 +27,48 @@ const sortComponentsSet: OpenAPISortOptions["sortComponentsSet"] = ["schemas", "
 
 type OaDocument = Parameters<typeof oafmt.openapiSort>[0];
 
+function findCommonPath(filePaths: Array<string>) {
+  let commonPath = "";
+  const [first, ...rest] = filePaths;
+  const segments = first.split("/");
+  for (const segment of segments) {
+    const next = commonPath === "" ? segment : `${commonPath}/${segment}`;
+    const isCommon = rest.every((f) => f.startsWith(next));
+    if (isCommon) {
+      commonPath = next;
+      continue;
+    }
+    break;
+  }
+  return commonPath;
+}
+
+function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any }, common: string, outFile: File) {
+  const file = File.of(r.refFile);
+  const commonPath = path.resolve(common);
+  let current = file.absolutePath.replace(commonPath, "");
+  current = current.startsWith(path.sep) ? current.slice(1) : current;
+  const c = Folder.resolve(outFile.folder.absolutePath).makeFile(current);
+  c.writeYml(r.getFile());
+}
+
 export async function formatSpec(filePath: File, outFile: File): Promise<{ outFile: string }> {
+  const resolved = await resolveSpec(filePath);
+  const common = findCommonPath(resolved.map((r) => r.refFile));
+
+  for (const r of resolved) {
+    const customSorted = customSort(r.getFile() as never);
+    const libSorted = await oafmt.openapiSort(customSorted, { sortSet, sortComponentsSet });
+    if (typeof libSorted.data === "string") {
+      throw ApplicationError.create("could not format spec");
+    }
+    r.updateFile(customSorted);
+    exportSpec(r, common, outFile);
+  }
+  return { outFile: outFile.folder.absolutePath };
+}
+
+export async function formatSpec2(filePath: File, outFile: File): Promise<{ outFile: string }> {
   const spec = await oafmt.parseFile(filePath.absolutePath);
   const customSorted = customSort(spec as never);
   const libSorted = await oafmt.openapiSort(customSorted, { sortSet, sortComponentsSet });
@@ -65,12 +109,7 @@ function recSortAlphabetically(mutableDoc: OaDocument | undefined): OaDocument |
   }
 
   Object.entries(mutableDoc).forEach(([key, comp]) => {
-    if (typeof comp !== "object") {
-      return;
-    }
-
-    if (["allOf", "oneOf", "anyOf"].includes(key)) {
-      // not safe to sort
+    if (typeof comp !== "object" || comp === null) {
       return;
     }
 
@@ -82,6 +121,8 @@ function recSortAlphabetically(mutableDoc: OaDocument | undefined): OaDocument |
 
     if (Array.isArray(comp)) {
       // we do not want to sort by accident and maybe break semantics
+      // recurse e.g. allOf arrays
+      comp.forEach(recSortAlphabetically);
       return;
     }
 
