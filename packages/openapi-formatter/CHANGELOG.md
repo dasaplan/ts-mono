@@ -1,5 +1,11 @@
 # @dasaplan/openapi-formatter
 
+## 0.0.6
+
+### Patch Changes
+
+- add more formatting features
+
 ## 0.0.5
 
 ### Patch Changes
