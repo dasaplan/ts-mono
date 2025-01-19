@@ -41,13 +41,13 @@
     "test:update": "vitest -u"
   },
   "dependencies": {
+    "@apidevtools/swagger-parser": "^10.1.1",
+    "@dasaplan/openapi-bundler": "workspace:*",
+    "@dasaplan/ts-sdk": "workspace:*",
     "commander": "^11.1.0",
     "lodash": "^4.17.21",
     "openapi-format": "^1.25.0",
     "openapi3-ts": "^4.3.3",
-    "@apidevtools/swagger-parser": "^10.1.1",
-    "@dasaplan/ts-sdk": "workspace:*",
-    "@dasaplan/openapi-bundler": "workspace:*",
     "tslog": "^4.9.2"
   },
   "devDependencies": {
