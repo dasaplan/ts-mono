@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars */
 // noinspection JSUnusedLocalSymbols
 
-import { resolve } from "@apidevtools/swagger-parser";
+import swagger from "@apidevtools/swagger-parser";
 import { ApplicationError, File } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
 import { Oas3Schema } from "@redocly/openapi-core";
@@ -10,7 +10,7 @@ import { Oas3Definition } from "@redocly/openapi-core/src/typings/openapi.js";
 export interface AnySchema extends Oas3Schema, Partial<Oas3Definition> {}
 
 export async function resolveSpec(filePath: File) {
-  const resolved = await resolve(filePath.absolutePath);
+  const resolved = await swagger.resolve(filePath.absolutePath);
   const refs = resolved.paths();
   const mapped = refs.map((refFile) => {
     const getFile = () => resolved.get(refFile);

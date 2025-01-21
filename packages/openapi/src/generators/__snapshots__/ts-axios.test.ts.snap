@@ -277,9 +277,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async getPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPets(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.getPets']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DefaultApi.getPets']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -418,21 +418,21 @@ export const operationServerMap: ServerMap = {
 `;
 
 exports[`Generator: ts-axios > generate generateTypescriptAxios > generate-ts-pets-modular/pets-api.yml-bundled.yml 1`] = `
-"openapi: 3.0.3
+"openapi: '3.0.3'
 info:
-  title: My service
-  description: My service
-  version: 1.0.0
+  title: 'My service'
+  description: 'My service'
+  version: '1.0.0'
 servers:
-  - url: https://
+  - url: 'https://'
 paths:
   /v1/pets:
     get:
-      summary: Get pets
-      operationId: getPets
+      summary: 'Get pets'
+      operationId: 'getPets'
       responses:
         '200':
-          description: Ok response
+          description: 'Ok response'
           content:
             application/json:
               schema:
@@ -440,56 +440,56 @@ paths:
 components:
   schemas:
     PetBase:
-      type: object
+      type: 'object'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
       required:
-        - type
+        - 'type'
       properties:
         type:
-          type: string
+          type: 'string'
         name:
-          type: string
+          type: 'string'
     DogEnum:
-      type: string
+      type: 'string'
       enum:
-        - DOG_A
-        - DOG_B
+        - 'DOG_A'
+        - 'DOG_B'
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - properties:
             fluffy:
-              type: boolean
+              type: 'boolean'
             breed:
               $ref: '#/components/schemas/DogEnum'
             type:
-              type: string
-              x-const: DOG
-              example: DOG
+              type: 'string'
+              x-const: 'DOG'
+              example: 'DOG'
           required:
-            - type
+            - 'type'
     Cat:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - properties:
             breed:
-              type: string
+              type: 'string'
               enum:
-                - CAT_A
-                - CAT_B
+                - 'CAT_A'
+                - 'CAT_B'
             type:
-              type: string
-              x-const: CAT
-              example: CAT
+              type: 'string'
+              x-const: 'CAT'
+              example: 'CAT'
           required:
-            - type
+            - 'type'
     Pet:
       oneOf:
         - $ref: '#/components/schemas/Cat'
         - $ref: '#/components/schemas/Dog'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
         mapping:
           DOG: '#/components/schemas/Dog'
           CAT: '#/components/schemas/Cat'
