@@ -1,5 +1,11 @@
 # @dasaplan/openapi-formatter
 
+## 0.0.7
+
+### Patch Changes
+
+- fix(formatter): swagger esm
+
 ## 0.0.6
 
 ### Patch Changes

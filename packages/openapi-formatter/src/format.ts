@@ -36,11 +36,12 @@ export async function formatSpec(filePath: File, options: FormatterOptions): Pro
   const log = appLog.childLog(formatSpec);
   const resolved = await resolveSpec(filePath);
   const common = findCommonPath(resolved.map((r) => r.refFile));
-  log.info(`formatting in: ${common}`);
+  log.info(`formatting in: ${common === "" ? filePath.absolutePath : common}`);
 
   const { schemaProcessor, documentProcessor } = createSpecProcessor(options);
   for (const r of resolved) {
-    log.info(`start: formatting: ${r.refFile.replace(common, "")}`);
+    const fileWithoutRoot = common === "" ? r.refFile : common;
+    log.info(`start: formatting: ${fileWithoutRoot}`);
 
     const file = r.getFile();
     // format openapi document
@@ -60,14 +61,18 @@ export async function formatSpec(filePath: File, options: FormatterOptions): Pro
       s.update(schema);
     }
 
+    log.debug(`done formatting: ${fileWithoutRoot}`);
     exportSpec(r, common, options.outFolder);
-    log.debug(`done formatting: ${r.refFile.replace(common, "")}`);
   }
   return { outFile: options.outFolder.absolutePath };
 }
 
 function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any }, common: string, outFolder: Folder) {
   const file = File.of(r.refFile);
+  if (common === "") {
+    file.writeYml(r.getFile());
+    return;
+  }
   const commonPath = path.resolve(common);
   let current = file.absolutePath.replace(commonPath, "");
   current = current.startsWith(path.sep) ? current.slice(1) : current;
@@ -76,6 +81,10 @@ function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any 
 }
 
 function findCommonPath(filePaths: Array<string>) {
+  if (filePaths.length === 1) {
+    // if we only have one file, the common path is the parent where the file lives in
+    return Folder.of(filePaths[0]).absolutePath;
+  }
   let commonPath = "";
   const [first, ...rest] = filePaths;
   const segments = first.split("/");

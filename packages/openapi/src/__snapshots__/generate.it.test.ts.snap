@@ -384,1207 +384,6 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async getPet(petId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPet(petId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.getPet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @summary List all pets
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async listPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Pet>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.listPets']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * DefaultApi - factory interface
- * @export
- */
-export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = DefaultApiFp(configuration)
-    return {
-        /**
-         * 
-         * @summary Get a Pet
-         * @param {string} petId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getPet(petId: string, options?: any): AxiosPromise<Pet> {
-            return localVarFp.getPet(petId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary List all pets
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listPets(options?: any): AxiosPromise<Array<Pet>> {
-            return localVarFp.listPets(options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * DefaultApi - object-oriented interface
- * @export
- * @class DefaultApi
- * @extends {BaseAPI}
- */
-export class DefaultApi extends BaseAPI {
-    /**
-     * 
-     * @summary Get a Pet
-     * @param {string} petId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public getPet(petId: string, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getPet(petId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary List all pets
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public listPets(options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).listPets(options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-",
-  "openapi: 3.0.3
-info:
-  version: 1.0.1
-  title: some title
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      operationId: listPets
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-  /pets/{petId}:
-    get:
-      summary: Get a Pet
-      operationId: getPet
-      parameters:
-        - name: petId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A paged array of pets
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      title: PetBase
-      type: object
-      required:
-        - id
-        - name
-        - type
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          exclusiveMaximum: true
-          format: int64
-        type:
-          type: string
-      discriminator:
-        propertyName: type
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - required:
-            - bark
-            - type
-          properties:
-            bark:
-              type: string
-            type:
-              type: string
-              x-const: DOG
-              example: DOG
-    CatBase:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: CatBase
-          required:
-            - color
-          discriminator:
-            propertyName: catType
-          properties:
-            color:
-              type: string
-            catType:
-              type: string
-              enum:
-                - SEAM
-                - SHORT
-              title: CatType
-    Seam:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: Seam
-          description: |
-            this is 
-            a multiline
-            description
-          required:
-            - color
-            - catType
-            - type
-          discriminator:
-            propertyName: catType
-          properties:
-            catType:
-              type: string
-              default: SEAM
-              maxLength: 3
-              minLength: 1
-              title: CatType
-              x-const: SEAM
-              example: SEAM
-            angryLevel:
-              type: string
-              pattern: \\w+
-            color:
-              type: string
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-    ShortHair:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: ShortHair
-          description: >
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, s
-          required:
-            - color
-            - catType
-            - type
-          discriminator:
-            propertyName: catType
-          properties:
-            catType:
-              type: string
-              default: SHORT
-              title: CatType
-              x-const: SHORT
-              example: SHORT
-            angryLevel:
-              type: string
-            color:
-              type: string
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-    Cat:
-      oneOf:
-        - $ref: '#/components/schemas/Seam'
-        - $ref: '#/components/schemas/ShortHair'
-      discriminator:
-        propertyName: catType
-        mapping:
-          SEAM: '#/components/schemas/Seam'
-          SHORT: '#/components/schemas/ShortHair'
-    GenericPet:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
-          properties:
-            name:
-              type: string
-            type:
-              type: string
-              x-const:
-                - BIRD
-                - HAMSTER
-              example: HAMSTER
-          required:
-            - type
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-        - $ref: '#/components/schemas/GenericPet'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
-          BIRD: '#/components/schemas/GenericPet'
-          HAMSTER: '#/components/schemas/GenericPet'
-    Pets:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
-",
-  "/* tslint:disable */
-/* eslint-disable */
-/**
- * some title
- * No description provided (generated by Openapi Generator https://github.com/openapitools/openapi-generator)
- *
- * The version of the OpenAPI document: 1.0.1
- * 
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-
-
-import type { Configuration } from './configuration.js';
-// Some imports not used depending on template conditions
-// @ts-ignore
-import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
-import globalAxios from 'axios';
-
-export const BASE_PATH = "http://localhost".replace(/\\/+$/, "");
-
-/**
- *
- * @export
- */
-export const COLLECTION_FORMATS = {
-    csv: ",",
-    ssv: " ",
-    tsv: "\\t",
-    pipes: "|",
-};
-
-/**
- *
- * @export
- * @interface RequestArgs
- */
-export interface RequestArgs {
-    url: string;
-    options: RawAxiosRequestConfig;
-}
-
-/**
- *
- * @export
- * @class BaseAPI
- */
-export class BaseAPI {
-    protected configuration: Configuration | undefined;
-
-    constructor(configuration?: Configuration, protected basePath: string = BASE_PATH, protected axios: AxiosInstance = globalAxios) {
-        if (configuration) {
-            this.configuration = configuration;
-            this.basePath = configuration.basePath ?? basePath;
-        }
-    }
-};
-
-/**
- *
- * @export
- * @class RequiredError
- * @extends {Error}
- */
-export class RequiredError extends Error {
-    constructor(public field: string, msg?: string) {
-        super(msg);
-        this.name = "RequiredError"
-    }
-}
-
-interface ServerMap {
-    [key: string]: {
-        url: string,
-        description: string,
-    }[];
-}
-
-/**
- *
- * @export
- */
-export const operationServerMap: ServerMap = {
-}
-",
-  "/* tslint:disable */
-/* eslint-disable */
-/**
- * some title
- * No description provided (generated by Openapi Generator https://github.com/openapitools/openapi-generator)
- *
- * The version of the OpenAPI document: 1.0.1
- * 
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-
-
-import type {Configuration} from "./configuration.js";
-import type {RequestArgs} from "./base.js";
-import type {AxiosInstance, AxiosResponse} from 'axios';
-import {RequiredError} from "./base.js";
-export * from "./zod-common.js"
-
-/**
- *
- * @export
- */
-export const DUMMY_BASE_URL = 'https://example.com'
-
-/**
- *
- * @throws {RequiredError}
- * @export
- */
-export const assertParamExists = function (functionName: string, paramName: string, paramValue: unknown) {
-    if (paramValue === null || paramValue === undefined) {
-        throw new RequiredError(paramName, \`Required parameter \${paramName} was null or undefined when calling \${functionName}.\`);
-    }
-}
-
-/**
- *
- * @export
- */
-export const setApiKeyToObject = async function (object: any, keyParamName: string, configuration?: Configuration) {
-    if (configuration && configuration.apiKey) {
-        const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-            ? await configuration.apiKey(keyParamName)
-            : await configuration.apiKey;
-        object[keyParamName] = localVarApiKeyValue;
-    }
-}
-
-/**
- *
- * @export
- */
-export const setBasicAuthToObject = function (object: any, configuration?: Configuration) {
-    if (configuration && (configuration.username || configuration.password)) {
-        object["auth"] = {username: configuration.username, password: configuration.password};
-    }
-}
-
-/**
- *
- * @export
- */
-export const setBearerAuthToObject = async function (object: any, configuration?: Configuration) {
-    if (configuration && configuration.accessToken) {
-        const accessToken = typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken;
-        object["Authorization"] = "Bearer " + accessToken;
-    }
-}
-
-/**
- *
- * @export
- */
-export const setOAuthToObject = async function (object: any, name: string, scopes: string[], configuration?: Configuration) {
-    if (configuration && configuration.accessToken) {
-        const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken(name, scopes)
-            : await configuration.accessToken;
-        object["Authorization"] = "Bearer " + localVarAccessTokenValue;
-    }
-}
-
-function setFlattenedQueryParams(urlSearchParams: URLSearchParams, parameter: any, key: string = ""): void {
-    if (parameter == null) return;
-    if (typeof parameter === "object") {
-        if (Array.isArray(parameter)) {
-            (parameter as any[]).forEach(item => setFlattenedQueryParams(urlSearchParams, item, key));
-        } else {
-            Object.keys(parameter).forEach(currentKey =>
-                setFlattenedQueryParams(urlSearchParams, parameter[currentKey], \`\${key}\${key !== '' ? '.' : ''}\${currentKey}\`)
-            );
-        }
-    } else {
-        if (urlSearchParams.has(key)) {
-            urlSearchParams.append(key, parameter);
-        } else {
-            urlSearchParams.set(key, parameter);
-        }
-    }
-}
-
-/**
- *
- * @export
- */
-export const setSearchParams = function (url: URL, ...objects: any[]) {
-    const searchParams = new URLSearchParams(url.search);
-    setFlattenedQueryParams(searchParams, objects);
-    url.search = searchParams.toString();
-}
-
-/**
- *
- * @export
- */
-export const serializeDataIfNeeded = function (value: any, requestOptions: any, configuration?: Configuration) {
-    const nonString = typeof value !== 'string';
-    const needsSerialization = nonString && configuration && configuration.isJsonMime
-        ? configuration.isJsonMime(requestOptions.headers['Content-Type'])
-        : nonString;
-    return needsSerialization
-        ? JSON.stringify(value !== undefined ? value : {})
-        : (value || "");
-}
-
-/**
- *
- * @export
- */
-export const toPathString = function (url: URL) {
-    return url.pathname + url.search + url.hash
-}
-
-/**
- *
- * @export
- */
-export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxios: AxiosInstance, BASE_PATH: string, configuration?: Configuration) {
-    return <T = unknown, R = AxiosResponse<T>>(axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-        const axiosRequestArgs = {...axiosArgs.options, url: (axios.defaults.baseURL ? '' : configuration?.basePath ?? basePath) + axiosArgs.url};
-        return axios.request<T, R>(axiosRequestArgs);
-    };
-}
-
-
-import { z } from "zod";
-export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
-",
-  "/* tslint:disable */
-/* eslint-disable */
-/**
- * some title
- * No description provided (generated by Openapi Generator https://github.com/openapitools/openapi-generator)
- *
- * The version of the OpenAPI document: 1.0.1
- * 
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-
-
-export interface ConfigurationParameters {
-    apiKey?: string | Promise<string> | ((name: string) => string) | ((name: string) => Promise<string>);
-    username?: string;
-    password?: string;
-    accessToken?: string | Promise<string> | ((name?: string, scopes?: string[]) => string) | ((name?: string, scopes?: string[]) => Promise<string>);
-    basePath?: string;
-    serverIndex?: number;
-    baseOptions?: any;
-    formDataCtor?: new () => any;
-}
-
-export class Configuration {
-    /**
-     * parameter for apiKey security
-     * @param name security name
-     * @memberof Configuration
-     */
-    apiKey?: string | Promise<string> | ((name: string) => string) | ((name: string) => Promise<string>);
-    /**
-     * parameter for basic security
-     *
-     * @type {string}
-     * @memberof Configuration
-     */
-    username?: string;
-    /**
-     * parameter for basic security
-     *
-     * @type {string}
-     * @memberof Configuration
-     */
-    password?: string;
-    /**
-     * parameter for oauth2 security
-     * @param name security name
-     * @param scopes oauth2 scope
-     * @memberof Configuration
-     */
-    accessToken?: string | Promise<string> | ((name?: string, scopes?: string[]) => string) | ((name?: string, scopes?: string[]) => Promise<string>);
-    /**
-     * override base path
-     *
-     * @type {string}
-     * @memberof Configuration
-     */
-    basePath?: string;
-    /**
-     * override server index
-     *
-     * @type {number}
-     * @memberof Configuration
-     */
-    serverIndex?: number;
-    /**
-     * base options for axios calls
-     *
-     * @type {any}
-     * @memberof Configuration
-     */
-    baseOptions?: any;
-    /**
-     * The FormData constructor that will be used to create multipart form data
-     * requests. You can inject this here so that execution environments that
-     * do not support the FormData class can still run the generated client.
-     *
-     * @type {new () => FormData}
-     */
-    formDataCtor?: new () => any;
-
-    constructor(param: ConfigurationParameters = {}) {
-        this.apiKey = param.apiKey;
-        this.username = param.username;
-        this.password = param.password;
-        this.accessToken = param.accessToken;
-        this.basePath = param.basePath;
-        this.serverIndex = param.serverIndex;
-        this.baseOptions = param.baseOptions;
-        this.formDataCtor = param.formDataCtor;
-    }
-
-    /**
-     * Check if the given MIME is a JSON MIME.
-     * JSON MIME examples:
-     *   application/json
-     *   application/json; charset=UTF8
-     *   APPLICATION/JSON
-     *   application/vnd.company+json
-     * @param mime - MIME (Multipurpose Internet Mail Extensions)
-     * @return True if the given MIME is JSON, false otherwise.
-     */
-    public isJsonMime(mime: string): boolean {
-        const jsonMime: RegExp = new RegExp('^(application\\/json|[^;/ \\t]+\\/[^;/ \\t]+[+]json)[ \\t]*(;.*)?$', 'i');
-        return mime !== null && (jsonMime.test(mime) || mime.toLowerCase() === 'application/json-patch+json');
-    }
-}
-",
-  "/**
- * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
- * */
-export interface EndpointDefinition<
-    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
-    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
-    Params extends EndpointDefinition.Parameters | undefined
-> {
-    path: EndpointDefinition.Path;
-    /** operation id */
-    name: string;
-    operation: EndpointDefinition.Operation;
-    parameters?: Params;
-    response: EndpointDefinition.Response<DeserializedResponse>;
-    request?: EndpointDefinition.Request<DeserializedRequest>;
-}
-
-export module EndpointDefinition {
-    type PathSegment = \`\${string}\`;
-
-    type PathParam = \`{:\${string}}\`;
-
-    /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
-    export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
-
-    export type DtoTypes = object | string | number | undefined;
-
-    export type DeserializedResponsesObject = { [status: number]: DtoTypes };
-
-    export type Operation = "get" | "post" | "put" | "delete" | "patch";
-
-    export type Parameters = {
-        path?: { [name: string]: DtoTypes };
-        query?: { [name: string]: DtoTypes };
-        header?: { [headerKey: string]: DtoTypes };
-        cookie?: { [cookieKey: string]: DtoTypes };
-    };
-    export type DeserializedRequestObject = DtoTypes;
-
-    export interface Request<DeserializedRequest = DeserializedRequestObject> {
-        /** meta information */
-        format?: string;
-        /** deserialize payload */
-        payload: DeserializedRequest;
-        /** transform dto to model object */
-        transform?: <Model, Dto extends DeserializedRequest>(payload: Dto) => Model | undefined;
-        deserialize?: (payload: string | number | undefined) => DeserializedRequest;
-    }
-
-    export type Response<DeserializedResponse = DeserializedResponsesObject> = {
-        [status in keyof DeserializedResponse]: {
-            /** meta information */
-            format?: string;
-            /** deserialize payload */
-            payload: DeserializedResponse[status];
-            /** transform model object to dto */
-            transform?: <Model>(model: Model) => DeserializedResponse[status];
-        };
-    };
-}
-",
-  "/* tslint:disable */
-/* eslint-disable */
-/**
- * some title
- * No description provided (generated by Openapi Generator https://github.com/openapitools/openapi-generator)
- *
- * The version of the OpenAPI document: 1.0.1
- * 
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-
-
-export * from "./api.js";
-export * from "./configuration.js";
-export * from "./zod.js";
-export * from "./SomeTitleEndpoints.js";
-",
-  "import { EndpointDefinition } from './EndpointDefinition'
-export module SomeTitleEndpoints {
-    export type Path = "/pets" | "/pets/{petId}"
-    export interface OperationToPath {
-        listPets: "/pets";
-        getPet: "/pets/{petId}";
-    }
-    export interface ListPets<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
-        { "200": Pet[] },
-        undefined,
-        { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
-    > {
-        name: "listPets";
-        operation: "get";
-        path: "/pets"
-    }
-
-    export interface GetPet<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
-        { "200": Pet },
-        undefined,
-        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
-    > {
-        name: "getPet";
-        operation: "get";
-        path: "/pets/{petId}"
-    }
-
-}
-",
-  "
-import { z } from "zod";
-
-export module ZodUnionMatch {
-    // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
-    export type Matcher = Record<string, z.ZodSchema>;
-
-    export type Schemas<T extends Matcher> = T[keyof T];
-    export type Discriminator<T extends Matcher> = RecDiscriminator<Schemas<T>>;
-    export type RecDiscriminator<T extends z.ZodSchema> = T extends z.ZodUnion<infer Options> ? RecDiscriminator<Options[number]> : keyof z.infer<T>;
-
-    export function matcher<T extends Matcher>(discriminator: Discriminator<T>, matcher: T): Schemas<T> {
-        return z
-            .custom<T>()
-            .transform((val) => {
-                const result = matchSafe(val, matcher, discriminator);
-                return { result, val };
-            })
-            .superRefine((prev, ctx) => {
-                if (!prev.result.success) {
-                    const discriminatorValue = prev.val?.[discriminator as keyof T];
-                    const discriminatorProp = JSON.stringify(discriminator);
-                    const discriminatorWithValue = \`\${discriminatorProp}: \${discriminatorValue}\`;
-                    const expected =
-                        typeof discriminatorValue === "string" && discriminatorValue in matcher
-                            ? "respective schema"
-                            : \`{\${discriminatorProp}: \${Object.keys(matcher).join(" | ")}}\`;
-                    ctx.addIssue({
-                        code: "invalid_union",
-                        unionErrors: [prev.result.error],
-                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${discriminatorWithValue ?? ""
-                            }) \`,
-                    });
-                }
-            })
-            .transform((v) => (v.result.success ? v.result.data : v.val)) as unknown as Schemas<T>;
-    }
-    export function match<T extends Matcher>(union: z.infer<Schemas<T>>, matcher: T, discriminator: Discriminator<T>): T {
-        const handlerKey = union[discriminator] as keyof typeof matcher;
-        return handlerKey in matcher ? (matcher[handlerKey] as z.Schema).parse(union) : matcher.onDefault.parse(union);
-    }
-    export function matchSafe<T extends Matcher>(
-        union: z.infer<Schemas<T>>,
-        matcher: T,
-        discriminator: Discriminator<T>
-    ): z.SafeParseSuccess<Schemas<T>> | z.SafeParseError<z.ZodError> {
-        const handlerKey = union?.[discriminator] as keyof typeof matcher;
-        return handlerKey in matcher ? (matcher?.[handlerKey] as z.Schema)?.safeParse(union) : matcher.onDefault.safeParse(union);
-    }
-}
-",
-  "import { z } from 'zod'
-import * as zc from './zod-common.js'
-import * as api from './api.js'
-
-export module Schemas {
-    export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
-    export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
-    export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
-    export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
-    export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
-    export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Cat>;
-    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
-    export const Pets = z.array(Pet).max(100);
-    export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() }));
-
-    export module Types {
-        export type PetBase = z.infer<typeof Schemas.PetBase>;
-        export type GenericPet = z.infer<typeof Schemas.GenericPet>;
-        export type Dog = z.infer<typeof Schemas.Dog>;
-        export type ShortHair = z.infer<typeof Schemas.ShortHair>;
-        export type Seam = z.infer<typeof Schemas.Seam>;
-        export type Cat = z.infer<typeof Schemas.Cat>;
-        export type Pet = z.infer<typeof Schemas.Pet>;
-        export type Pets = z.infer<typeof Schemas.Pets>;
-        export type CatBase = z.infer<typeof Schemas.CatBase>;
-    }
-
-
-    export module Unions {
-        export const Cat = z.union([Seam, ShortHair]);
-        export const Pet = z.union([Cat, Dog, GenericPet]);
-    }
-
-}
-",
-]
-`;
-
-exports[`Generate Integration > all > pets-modular/pets-api.yml > cleaned-generic/api.yml 1`] = `
-[
-  "/* tslint:disable */
-/* eslint-disable */
-/**
- * some title
- * No description provided (generated by Openapi Generator https://github.com/openapitools/openapi-generator)
- *
- * The version of the OpenAPI document: 1.0.1
- * 
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-
-
-import type { Configuration } from './configuration.js';
-import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
-import globalAxios from 'axios';
-
-// Some imports not used depending on template conditions
-// @ts-ignore
-import { UNKNOWN_ENUM_VARIANT, DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common.js';
-import type { RequestArgs } from './base.js';
-// @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base.js';
-
-    
-        /**
-* @type Cat
-* @export
-* @discriminatedUnion Cat
-* @discriminatorProperty catType
-* @discriminatorValues SEAM | SHORT
-* @subTypes Seam | ShortHair
-*/
-export type Cat = { catType: 'SEAM' } & Seam | { catType: 'SHORT' } & ShortHair | { catType: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
-
-export module Cat {
-    type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends Cat, R> = {
-        [K in T as K['catType']]: Handler<Extract<T, { type: K['catType'] }>, R>
-    } & { onDefault: Handler<unknown, R> };
-
-    /** All handler must return the same type*/
-    export function match<R>(
-        union: Cat,
-        handler: MatchObj<Cat, R>
-    ): R {
-        if (union.catType in handler) {
-            return handler[union.catType](union as never);
-        }
-        return handler.onDefault(union);
-    }
-
-    /** All handler must return the same type*/
-    export function matchPartial<R>(
-        union: Cat,
-        handler: Partial<MatchObj<Cat, R>>
-    ): R | undefined {
-        if (union.catType in handler) {
-            return handler[union.catType]?.(union as never);
-        }
-        return handler.onDefault?.(union);
-    }
-
-}
-        
-        
-    
-        /**
- * 
- * @export
- * @interface CatBase
- */
-export interface CatBase extends PetBase {
-    /**
-     * 
-     * @type {string}
-     * @memberof CatBase
-     */
-    color: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CatBase
-     * @discriminator catType
-     */
-    catType?: CatBaseCatType;
-}
-
-
-export const CatBaseCatType = {
-    SEAM: 'SEAM',
-    SHORT: 'SHORT'
-} as const;
-
-export module CatBaseCatTypes {
-    type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends CatBaseCatType, R> = {
-        [K in T as K]: Handler<Extract<T, K>, R>;
-    }  & { onDefault: Handler<unknown, R> };
-    /** All handler must return the same type*/
-    export function match<R>(enumValue: CatBaseCatType, handler: MatchObj<CatBaseCatType, R>): R {
-        if (enumValue in handler) {
-            return handler[enumValue](enumValue as never);
-        }
-        return handler.onDefault(enumValue);
-    }
-
-    /** All handler must return the same type*/
-    export function matchPartial<R>(enumValue: CatBaseCatType, handler: Partial<MatchObj<CatBaseCatType, R> >): R | undefined {
-        if (enumValue in handler) {
-            return handler[enumValue]?.(enumValue as never);
-        }
-        return handler.onDefault?.(enumValue);
-    }
-}
-
-export type CatBaseCatType = typeof CatBaseCatType[keyof typeof CatBaseCatType] | UNKNOWN_ENUM_VARIANT  ;
-
-    
-        /**
- * 
- * @export
- * @interface Dog
- */
-export interface Dog extends PetBase {
-    /**
-     * 
-     * @type {string}
-     * @memberof Dog
-     */
-    bark: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Dog
-     */
-    type: 'DOG';
-}
-    
-        /**
- * 
- * @export
- * @interface GenericPet
- */
-export interface GenericPet extends PetBase {
-    /**
-     * 
-     * @type {string}
-     * @memberof GenericPet
-     */
-    name?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GenericPet
-     */
-    type: 'BIRD' | 'HAMSTER';
-}
-    
-        /**
-* @type Pet
-* @export
-* @discriminatedUnion Pet
-* @discriminatorProperty type
-* @discriminatorValues BIRD | CAT | DOG | HAMSTER
-* @subTypes GenericPet | Cat | Dog | GenericPet
-*/
-export type Pet = { type: 'BIRD' } & GenericPet | { type: 'CAT' } & Cat | { type: 'DOG' } & Dog | { type: 'HAMSTER' } & GenericPet | { type: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
-
-export module Pet {
-    type Handler<I, R> = (e: I) => R;
-    type MatchObj<T extends Pet, R> = {
-        [K in T as K['type']]: Handler<Extract<T, { type: K['type'] }>, R>
-    } & { onDefault: Handler<unknown, R> };
-
-    /** All handler must return the same type*/
-    export function match<R>(
-        union: Pet,
-        handler: MatchObj<Pet, R>
-    ): R {
-        if (union.type in handler) {
-            return handler[union.type](union as never);
-        }
-        return handler.onDefault(union);
-    }
-
-    /** All handler must return the same type*/
-    export function matchPartial<R>(
-        union: Pet,
-        handler: Partial<MatchObj<Pet, R>>
-    ): R | undefined {
-        if (union.type in handler) {
-            return handler[union.type]?.(union as never);
-        }
-        return handler.onDefault?.(union);
-    }
-
-}
-        
-        
-        
-    
-        /**
- * 
- * @export
- * @interface PetBase
- */
-export interface PetBase {
-    /**
-     * 
-     * @type {number}
-     * @memberof PetBase
-     */
-    id: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof PetBase
-     * @discriminator type
-     */
-    type: string;
-}
-    
-        /**
- * 
- * @export
- * @interface Seam
- */
-export interface Seam extends PetBase {
-    /**
-     * 
-     * @type {string}
-     * @memberof Seam
-     * @discriminator catType
-     */
-    catType: 'SEAM';
-    /**
-     * 
-     * @type {string}
-     * @memberof Seam
-     */
-    angryLevel?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Seam
-     */
-    color: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Seam
-     */
-    type: 'CAT';
-}
-    
-        /**
- * 
- * @export
- * @interface ShortHair
- */
-export interface ShortHair extends PetBase {
-    /**
-     * 
-     * @type {string}
-     * @memberof ShortHair
-     * @discriminator catType
-     */
-    catType: 'SHORT';
-    /**
-     * 
-     * @type {string}
-     * @memberof ShortHair
-     */
-    angryLevel?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShortHair
-     */
-    color: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShortHair
-     */
-    type: 'CAT';
-}
-
-
-
-/**
- * DefaultApi - axios parameter creator
- * @export
- */
-export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary Get a Pet
-         * @param {string} petId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getPet: async (petId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'petId' is not null or undefined
-            assertParamExists('getPet', 'petId', petId)
-            const localVarPath = \`/pets/{petId}\`
-                .replace(\`{\${"petId"}}\`, encodeURIComponent(String(petId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary List all pets
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listPets: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = \`/pets\`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * DefaultApi - functional programming interface
- * @export
- */
-export const DefaultApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @summary Get a Pet
-         * @param {string} petId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getPet(petId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPet(petId, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['DefaultApi.getPet']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
@@ -1667,35 +466,35 @@ export class DefaultApi extends BaseAPI {
 
 
 ",
-  "openapi: 3.0.3
+  "openapi: '3.0.3'
 info:
-  version: 1.0.1
-  title: some title
+  version: '1.0.1'
+  title: 'some title'
 paths:
   /pets:
     get:
-      summary: List all pets
-      operationId: listPets
+      summary: 'List all pets'
+      operationId: 'listPets'
       responses:
         '200':
-          description: A paged array of pets
+          description: 'A paged array of pets'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Pets'
   /pets/{petId}:
     get:
-      summary: Get a Pet
-      operationId: getPet
+      summary: 'Get a Pet'
+      operationId: 'getPet'
       parameters:
-        - name: petId
-          in: path
+        - name: 'petId'
+          in: 'path'
           required: true
           schema:
-            type: string
+            type: 'string'
       responses:
         '200':
-          description: A paged array of pets
+          description: 'A paged array of pets'
           content:
             application/json:
               schema:
@@ -1703,151 +502,142 @@ paths:
 components:
   schemas:
     PetBase:
-      title: PetBase
-      type: object
+      title: 'PetBase'
+      type: 'object'
       required:
-        - id
-        - name
-        - type
+        - 'id'
+        - 'name'
+        - 'type'
       properties:
         id:
-          type: integer
+          type: 'integer'
           minimum: 1
           exclusiveMaximum: true
-          format: int64
+          format: 'int64'
         type:
-          type: string
+          type: 'string'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - required:
-            - bark
-            - type
+            - 'bark'
+            - 'type'
           properties:
             bark:
-              type: string
+              type: 'string'
             type:
-              type: string
-              x-const: DOG
-              example: DOG
+              type: 'string'
+              x-const: 'DOG'
+              example: 'DOG'
     CatBase:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - title: CatBase
+        - title: 'CatBase'
           required:
-            - color
+            - 'color'
           discriminator:
-            propertyName: catType
+            propertyName: 'catType'
           properties:
             color:
-              type: string
+              type: 'string'
             catType:
-              type: string
+              type: 'string'
               enum:
-                - SEAM
-                - SHORT
-              title: CatType
+                - 'SEAM'
+                - 'SHORT'
+              title: 'CatType'
     Seam:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - title: Seam
-          description: |
-            this is 
-            a multiline
-            description
+        - title: 'Seam'
+          description: "this is \\na multiline\\ndescription\\n"
           required:
-            - color
-            - catType
-            - type
+            - 'color'
+            - 'catType'
+            - 'type'
           discriminator:
-            propertyName: catType
+            propertyName: 'catType'
           properties:
             catType:
-              type: string
-              default: SEAM
+              type: 'string'
+              default: 'SEAM'
               maxLength: 3
               minLength: 1
-              title: CatType
-              x-const: SEAM
-              example: SEAM
+              title: 'CatType'
+              x-const: 'SEAM'
+              example: 'SEAM'
             angryLevel:
-              type: string
-              pattern: \\w+
+              type: 'string'
+              pattern: '\\w+'
             color:
-              type: string
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
+              type: 'string'
+            type: &ref_0
+              type: 'string'
+              x-const: 'CAT'
+              example: 'CAT'
     ShortHair:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - title: ShortHair
-          description: >
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, s
+        - title: 'ShortHair'
+          description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s\\n"
           required:
-            - color
-            - catType
-            - type
+            - 'color'
+            - 'catType'
+            - 'type'
           discriminator:
-            propertyName: catType
+            propertyName: 'catType'
           properties:
             catType:
-              type: string
-              default: SHORT
-              title: CatType
-              x-const: SHORT
-              example: SHORT
+              type: 'string'
+              default: 'SHORT'
+              title: 'CatType'
+              x-const: 'SHORT'
+              example: 'SHORT'
             angryLevel:
-              type: string
+              type: 'string'
             color:
-              type: string
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
+              type: 'string'
+            type: *ref_0
     Cat:
       oneOf:
         - $ref: '#/components/schemas/Seam'
         - $ref: '#/components/schemas/ShortHair'
       discriminator:
-        propertyName: catType
+        propertyName: 'catType'
         mapping:
           SEAM: '#/components/schemas/Seam'
           SHORT: '#/components/schemas/ShortHair'
     GenericPet:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
+        - title: 'GenericPet'
           properties:
             name:
-              type: string
+              type: 'string'
             type:
-              type: string
+              type: 'string'
               x-const:
-                - BIRD
-                - HAMSTER
-              example: HAMSTER
+                - 'BIRD'
+                - 'HAMSTER'
+              example: 'HAMSTER'
           required:
-            - type
+            - 'type'
     Pet:
       oneOf:
         - $ref: '#/components/schemas/Cat'
         - $ref: '#/components/schemas/Dog'
         - $ref: '#/components/schemas/GenericPet'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
         mapping:
           DOG: '#/components/schemas/Dog'
           CAT: '#/components/schemas/Cat'
           BIRD: '#/components/schemas/GenericPet'
           HAMSTER: '#/components/schemas/GenericPet'
     Pets:
-      type: array
+      type: 'array'
       maxItems: 100
       items:
         $ref: '#/components/schemas/Pet'
@@ -2643,9 +1433,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async getPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPets(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.getPets']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DefaultApi.getPets']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -3141,21 +1931,21 @@ export module MyServiceEndpoints {
 
 }
 ",
-  "openapi: 3.0.3
+  "openapi: '3.0.3'
 info:
-  title: My service
-  description: My service
-  version: 1.0.0
+  title: 'My service'
+  description: 'My service'
+  version: '1.0.0'
 servers:
-  - url: https://
+  - url: 'https://'
 paths:
   /v1/pets:
     get:
-      summary: Get pets
-      operationId: getPets
+      summary: 'Get pets'
+      operationId: 'getPets'
       responses:
         '200':
-          description: Ok response
+          description: 'Ok response'
           content:
             application/json:
               schema:
@@ -3163,56 +1953,56 @@ paths:
 components:
   schemas:
     PetBase:
-      type: object
+      type: 'object'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
       required:
-        - type
+        - 'type'
       properties:
         type:
-          type: string
+          type: 'string'
         name:
-          type: string
+          type: 'string'
     DogEnum:
-      type: string
+      type: 'string'
       enum:
-        - DOG_A
-        - DOG_B
+        - 'DOG_A'
+        - 'DOG_B'
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - properties:
             fluffy:
-              type: boolean
+              type: 'boolean'
             breed:
               $ref: '#/components/schemas/DogEnum'
             type:
-              type: string
-              x-const: DOG
-              example: DOG
+              type: 'string'
+              x-const: 'DOG'
+              example: 'DOG'
           required:
-            - type
+            - 'type'
     Cat:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - properties:
             breed:
-              type: string
+              type: 'string'
               enum:
-                - CAT_A
-                - CAT_B
+                - 'CAT_A'
+                - 'CAT_B'
             type:
-              type: string
-              x-const: CAT
-              example: CAT
+              type: 'string'
+              x-const: 'CAT'
+              example: 'CAT'
           required:
-            - type
+            - 'type'
     Pet:
       oneOf:
         - $ref: '#/components/schemas/Cat'
         - $ref: '#/components/schemas/Dog'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
         mapping:
           DOG: '#/components/schemas/Dog'
           CAT: '#/components/schemas/Cat'
@@ -3930,9 +2720,9 @@ export const PetsApiFp = function(configuration?: Configuration) {
          */
         async createPets(Pet?: Pet, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createPets(Pet, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PetsApi.createPets']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['PetsApi.createPets']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3943,9 +2733,9 @@ export const PetsApiFp = function(configuration?: Configuration) {
          */
         async listPets(petId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Pet>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(petId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PetsApi.listPets']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['PetsApi.listPets']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3957,9 +2747,9 @@ export const PetsApiFp = function(configuration?: Configuration) {
          */
         async patchPet(petId: string, Pet?: Pet, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.patchPet(petId, Pet, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PetsApi.patchPet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['PetsApi.patchPet']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3970,9 +2760,9 @@ export const PetsApiFp = function(configuration?: Configuration) {
          */
         async showPetById(petId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.showPetById(petId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PetsApi.showPetById']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['PetsApi.showPetById']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -4520,31 +3310,31 @@ export * from "./configuration.js";
 export * from "./zod.js";
 export * from "./SwaggerPetstoreEndpoints.js";
 ",
-  "openapi: 3.0.3
+  "openapi: '3.0.3'
 info:
-  version: 1.0.0
-  title: Swagger Petstore
+  version: '1.0.0'
+  title: 'Swagger Petstore'
   license:
-    name: MIT
+    name: 'MIT'
 servers:
-  - url: http://petstore.swagger.io/v1
+  - url: 'http://petstore.swagger.io/v1'
 paths:
   /pets:
     get:
-      summary: List all pets
-      operationId: listPets
+      summary: 'List all pets'
+      operationId: 'listPets'
       tags:
-        - pets
+        - 'pets'
       parameters:
         - $ref: '#/components/parameters/PathPetId'
       responses:
         '200':
-          description: A paged array of pets
+          description: 'A paged array of pets'
           headers:
             x-next:
-              description: A link to the next page of responses
+              description: 'A link to the next page of responses'
               schema:
-                type: string
+                type: 'string'
           content:
             application/json:
               schema:
@@ -4552,10 +3342,10 @@ paths:
         default:
           $ref: '#/components/responses/Default'
     post:
-      summary: Create a pet
-      operationId: createPets
+      summary: 'Create a pet'
+      operationId: 'createPets'
       tags:
-        - pets
+        - 'pets'
       requestBody:
         content:
           application/json:
@@ -4563,20 +3353,20 @@ paths:
               $ref: '#/components/schemas/Pet'
       responses:
         '201':
-          description: Null response
+          description: 'Null response'
         default:
           $ref: '#/components/responses/Default'
   /pets/{petId}:
     get:
-      summary: Info for a specific pet
-      operationId: showPetById
+      summary: 'Info for a specific pet'
+      operationId: 'showPetById'
       tags:
-        - pets
+        - 'pets'
       parameters:
         - $ref: '#/components/parameters/PathPetId'
       responses:
         '200':
-          description: Expected response to a valid request
+          description: 'Expected response to a valid request'
           content:
             application/json:
               schema:
@@ -4584,10 +3374,10 @@ paths:
         default:
           $ref: '#/components/responses/Default'
     patch:
-      summary: Patch pet
-      operationId: patchPet
+      summary: 'Patch pet'
+      operationId: 'patchPet'
       tags:
-        - pets
+        - 'pets'
       parameters:
         - $ref: '#/components/parameters/PathPetId'
       requestBody:
@@ -4597,7 +3387,7 @@ paths:
               $ref: '#/components/schemas/Pet'
       responses:
         '200':
-          description: Expected response to a valid request
+          description: 'Expected response to a valid request'
           content:
             application/json:
               schema:
@@ -4607,150 +3397,150 @@ paths:
 components:
   parameters:
     PathPetId:
-      name: petId
-      in: path
+      name: 'petId'
+      in: 'path'
       required: true
-      description: The id of the pet to retrieve
+      description: 'The id of the pet to retrieve'
       schema:
-        type: string
+        type: 'string'
   schemas:
     HttpErrorCode:
-      type: integer
-      format: int32
+      type: 'integer'
+      format: 'int32'
     schema-titled:
-      title: Titled Schema
+      title: 'Titled Schema'
       properties:
         titledProp:
-          type: string
+          type: 'string'
     Error:
-      type: object
+      type: 'object'
       required:
-        - code
-        - message
+        - 'code'
+        - 'message'
       properties:
         code:
           $ref: '#/components/schemas/HttpErrorCode'
         message:
-          type: string
+          type: 'string'
         titledSchema:
           $ref: '#/components/schemas/schema-titled'
     FluffLevel:
-      type: string
+      type: 'string'
       enum:
-        - A
-        - B
-        - C
+        - 'A'
+        - 'B'
+        - 'C'
     schemas-Toy:
-      title: Toy
+      title: 'Toy'
       required:
-        - id
-        - price
-        - kind
+        - 'id'
+        - 'price'
+        - 'kind'
       properties:
         id:
-          type: string
+          type: 'string'
         price:
-          type: string
+          type: 'string'
         kind:
-          type: string
+          type: 'string'
         someEnum:
-          type: string
+          type: 'string'
           enum:
-            - FOO
-            - BAR
-          title: FooBar
+            - 'FOO'
+            - 'BAR'
+          title: 'FooBar'
         fluffLevel:
           $ref: '#/components/schemas/FluffLevel'
         targetGroup:
-          type: string
+          type: 'string'
           x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
+            - 'PETS'
+            - 'CHILDREN'
+          default: 'CHILDREN'
     schema-untitled:
       properties:
         untitledProp:
-          type: string
+          type: 'string'
     Color:
-      type: object
+      type: 'object'
       properties:
         colorId:
-          type: string
+          type: 'string'
         untitled:
           $ref: '#/components/schemas/schema-untitled'
         untitledProp:
-          type: string
+          type: 'string'
     targetGroup:
-      type: string
+      type: 'string'
       x-extensible-enum:
-        - PETS
-        - CHILDREN
-      default: CHILDREN
+        - 'PETS'
+        - 'CHILDREN'
+      default: 'CHILDREN'
     Ball:
-      title: Ball
+      title: 'Ball'
       required:
-        - id
-        - price
-        - kind
+        - 'id'
+        - 'price'
+        - 'kind'
       properties:
         id:
-          type: string
+          type: 'string'
         price:
-          type: string
+          type: 'string'
         kind:
-          type: string
-          x-const: BALL
-          example: BALL
+          type: 'string'
+          x-const: 'BALL'
+          example: 'BALL'
         fluffLevel:
           $ref: '#/components/schemas/FluffLevel'
         targetGroup:
-          type: string
+          type: 'string'
           x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
+            - 'PETS'
+            - 'CHILDREN'
+          default: 'CHILDREN'
     FluffyTeddy:
-      title: Teddy
+      title: 'Teddy'
       required:
-        - id
-        - price
-        - kind
+        - 'id'
+        - 'price'
+        - 'kind'
       properties:
         fluffLevel:
           $ref: '#/components/schemas/FluffLevel'
         id:
-          type: string
+          type: 'string'
         price:
-          type: string
+          type: 'string'
         kind:
-          type: string
-          x-const: TEDDY
-          example: TEDDY
+          type: 'string'
+          x-const: 'TEDDY'
+          example: 'TEDDY'
         targetGroup:
-          type: string
+          type: 'string'
           x-extensible-enum:
-            - PETS
-            - CHILDREN
-          default: CHILDREN
+            - 'PETS'
+            - 'CHILDREN'
+          default: 'CHILDREN'
     PetToy:
       oneOf:
         - $ref: '#/components/schemas/Ball'
         - $ref: '#/components/schemas/FluffyTeddy'
       discriminator:
-        propertyName: kind
+        propertyName: 'kind'
         mapping:
           BALL: '#/components/schemas/Ball'
           TEDDY: '#/components/schemas/FluffyTeddy'
     components-schemas-Toy:
-      title: Toy
+      title: 'Toy'
       required:
-        - id
-        - kind
-        - price
-        - string
+        - 'id'
+        - 'kind'
+        - 'price'
+        - 'string'
       properties:
         name:
-          type: string
+          type: 'string'
         color:
           $ref: '#/components/schemas/Color'
         targetGroup:
@@ -4758,34 +3548,34 @@ components:
         relates:
           $ref: '#/components/schemas/PetToy'
         subId:
-          type: string
+          type: 'string'
         id:
-          type: string
+          type: 'string'
         price:
-          type: string
+          type: 'string'
         kind:
-          type: string
+          type: 'string'
         someEnum:
-          type: string
+          type: 'string'
           enum:
-            - FOO
-            - BAR
-          title: FooBar
+            - 'FOO'
+            - 'BAR'
+          title: 'FooBar'
         fluffLevel:
           $ref: '#/components/schemas/FluffLevel'
     Pet:
-      type: object
+      type: 'object'
       required:
-        - id
-        - name
+        - 'id'
+        - 'name'
       example:
         foo: ''
         bar: 1234
         foobar: true
       properties:
         id:
-          type: integer
-          format: int64
+          type: 'integer'
+          format: 'int64'
         toy:
           $ref: '#/components/schemas/components-schemas-Toy'
         leastFavToy:
@@ -4793,23 +3583,23 @@ components:
         favFluffLevel:
           $ref: '#/components/schemas/FluffLevel'
         tag:
-          type: string
+          type: 'string'
           example:
-            description: default string example
-            value: some string
+            description: 'default string example'
+            value: 'some string'
         name:
-          type: string
+          type: 'string'
           example:
-            description: default string example
-            value: some string
+            description: 'default string example'
+            value: 'some string'
     Pets:
-      type: array
+      type: 'array'
       maxItems: 100
       items:
         $ref: '#/components/schemas/Pet'
   responses:
     Default:
-      description: unexpected error
+      description: 'unexpected error'
       content:
         application/json:
           schema:
@@ -5160,9 +3950,9 @@ export const PetsApiFp = function(configuration?: Configuration) {
          */
         async listPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pets>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PetsApi.listPets']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['PetsApi.listPets']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -5640,23 +4430,23 @@ export * from "./configuration.js";
 export * from "./zod.js";
 export * from "./SwaggerPetstoreEndpoints.js";
 ",
-  "openapi: 3.1.0
+  "openapi: '3.1.0'
 info:
-  version: 1.0.0
-  title: Swagger Petstore
+  version: '1.0.0'
+  title: 'Swagger Petstore'
 paths:
   /pets:
     get:
-      summary: List all pets
-      operationId: listPets
+      summary: 'List all pets'
+      operationId: 'listPets'
       tags:
-        - pets
+        - 'pets'
       responses:
         '200':
-          description: A paged array of pets
+          description: 'A paged array of pets'
           headers:
             x-next:
-              description: A link to the next page of responses
+              description: 'A link to the next page of responses'
               schema:
                 $ref: '#/components/schemas/Pets'
           content:
@@ -5666,10 +4456,10 @@ paths:
 components:
   schemas:
     Pets:
-      type: object
+      type: 'object'
       properties:
         pets:
-          type: array
+          type: 'array'
           maxItems: 100
           items:
             $ref: '#/components/schemas/Pet'
@@ -5678,19 +4468,19 @@ components:
         - $ref: '#/components/schemas/Cat'
         - $ref: '#/components/schemas/Dog'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
         mapping:
           CAT: '#/components/schemas/Cat'
           DOG: '#/components/schemas/Dog'
     PetBase:
-      type: object
+      type: 'object'
       required:
-        - type
+        - 'type'
       properties:
         type:
-          type: string
+          type: 'string'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
     Cat:
       allOf:
         - $ref: '#/components/schemas/PetBase'
@@ -5698,11 +4488,11 @@ components:
             enemies:
               $ref: '#/components/schemas/Pets'
             type:
-              type: string
-              x-const: CAT
-              example: CAT
+              type: 'string'
+              x-const: 'CAT'
+              example: 'CAT'
           required:
-            - type
+            - 'type'
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
@@ -5710,11 +4500,11 @@ components:
             friends:
               $ref: '#/components/schemas/Pets'
             type:
-              type: string
-              x-const: DOG
-              example: DOG
+              type: 'string'
+              x-const: 'DOG'
+              example: 'DOG'
           required:
-            - type
+            - 'type'
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
 export module SwaggerPetstoreEndpoints {
@@ -6002,9 +4792,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async listPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Pet>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.listPets']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DefaultApi.listPets']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -6482,18 +5272,18 @@ export * from "./configuration.js";
 export * from "./zod.js";
 export * from "./SomeTitleEndpoints.js";
 ",
-  "openapi: 3.0.3
+  "openapi: '3.0.3'
 info:
-  version: 1.0.1
-  title: some title
+  version: '1.0.1'
+  title: 'some title'
 paths:
   /pets:
     get:
-      summary: List all pets
-      operationId: listPets
+      summary: 'List all pets'
+      operationId: 'listPets'
       responses:
         '200':
-          description: A paged array of pets
+          description: 'A paged array of pets'
           content:
             application/json:
               schema:
@@ -6501,58 +5291,58 @@ paths:
 components:
   schemas:
     PetBase:
-      type: object
+      type: 'object'
       required:
-        - id
-        - name
-        - type
+        - 'id'
+        - 'name'
+        - 'type'
       example:
-        some: props
+        some: 'props'
       properties:
         id:
-          type: integer
-          format: int64
+          type: 'integer'
+          format: 'int64'
         type:
-          type: string
+          type: 'string'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - properties:
             bark:
-              type: string
+              type: 'string'
             type:
-              type: string
-              x-const: DOG
-              example: DOG
+              type: 'string'
+              x-const: 'DOG'
+              example: 'DOG'
           required:
-            - bark
-            - type
+            - 'bark'
+            - 'type'
     Cat:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - properties:
             color:
-              type: string
+              type: 'string'
             type:
-              type: string
-              x-const: CAT
-              example: CAT
+              type: 'string'
+              x-const: 'CAT'
+              example: 'CAT'
           required:
-            - color
-            - type
+            - 'color'
+            - 'type'
     Pet:
       oneOf:
         - $ref: '#/components/schemas/Cat'
         - $ref: '#/components/schemas/Dog'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
         mapping:
           DOG: '#/components/schemas/Dog'
           CAT: '#/components/schemas/Cat'
     Pets:
-      type: array
+      type: 'array'
       maxItems: 100
       items:
         $ref: '#/components/schemas/Pet'
@@ -6862,9 +5652,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async getPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PetInfo>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPets(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.getPets']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DefaultApi.getPets']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -7322,21 +6112,21 @@ export module EndpointDefinition {
     };
 }
 ",
-  "openapi: 3.0.3
+  "openapi: '3.0.3'
 info:
-  title: Extended Array Items
-  description: Toposorting deps didn't work out for array elements, when they were extended
-  version: 1.0.0
+  title: 'Extended Array Items'
+  description: 'Toposorting deps didn''t work out for array elements, when they were extended'
+  version: '1.0.0'
 servers:
-  - url: https://
+  - url: 'https://'
 paths:
   /v1/pets:
     get:
-      summary: Get pets
-      operationId: getPets
+      summary: 'Get pets'
+      operationId: 'getPets'
       responses:
         '200':
-          description: Ok response
+          description: 'Ok response'
           content:
             application/json:
               schema:
@@ -7344,27 +6134,27 @@ paths:
 components:
   schemas:
     PetBase:
-      type: object
+      type: 'object'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
       required:
-        - type
+        - 'type'
       properties:
         type:
-          type: string
+          type: 'string'
         name:
-          type: string
+          type: 'string'
     DogEnum:
-      type: string
+      type: 'string'
       enum:
-        - DOG_A
-        - DOG_B
+        - 'DOG_A'
+        - 'DOG_B'
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - properties:
             fluffy:
-              type: boolean
+              type: 'boolean'
             breed:
               $ref: '#/components/schemas/DogEnum'
     Cat:
@@ -7372,18 +6162,18 @@ components:
         - $ref: '#/components/schemas/PetBase'
         - properties:
             breed:
-              type: string
+              type: 'string'
               enum:
-                - CAT_A
-                - CAT_B
+                - 'CAT_A'
+                - 'CAT_B'
     PetInfo:
       properties:
         cats:
-          type: array
+          type: 'array'
           items:
             $ref: '#/components/schemas/Cat'
         dogs:
-          type: array
+          type: 'array'
           items:
             $ref: '#/components/schemas/Dog'
 ",
@@ -7884,9 +6674,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async getPet(petId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPet(petId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.getPet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DefaultApi.getPet']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -7896,9 +6686,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async listPets(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Pet>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.listPets']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DefaultApi.listPets']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -7966,35 +6756,35 @@ export class DefaultApi extends BaseAPI {
 
 
 ",
-  "openapi: 3.0.3
+  "openapi: '3.0.3'
 info:
-  version: 1.0.1
-  title: some title
+  version: '1.0.1'
+  title: 'some title'
 paths:
   /pets:
     get:
-      summary: List all pets
-      operationId: listPets
+      summary: 'List all pets'
+      operationId: 'listPets'
       responses:
         '200':
-          description: A paged array of pets
+          description: 'A paged array of pets'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Pets'
   /pets/{petId}:
     get:
-      summary: Get a Pet
-      operationId: getPet
+      summary: 'Get a Pet'
+      operationId: 'getPet'
       parameters:
-        - name: petId
-          in: path
+        - name: 'petId'
+          in: 'path'
           required: true
           schema:
-            type: string
+            type: 'string'
       responses:
         '200':
-          description: A paged array of pets
+          description: 'A paged array of pets'
           content:
             application/json:
               schema:
@@ -8002,151 +6792,142 @@ paths:
 components:
   schemas:
     PetBase:
-      title: PetBase
-      type: object
+      title: 'PetBase'
+      type: 'object'
       required:
-        - id
-        - name
-        - type
+        - 'id'
+        - 'name'
+        - 'type'
       properties:
         id:
-          type: integer
+          type: 'integer'
           minimum: 1
           exclusiveMaximum: true
-          format: int64
+          format: 'int64'
         type:
-          type: string
+          type: 'string'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
     Dog:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - required:
-            - bark
-            - type
+            - 'bark'
+            - 'type'
           properties:
             bark:
-              type: string
+              type: 'string'
             type:
-              type: string
-              x-const: DOG
-              example: DOG
+              type: 'string'
+              x-const: 'DOG'
+              example: 'DOG'
     CatBase:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - title: CatBase
+        - title: 'CatBase'
           required:
-            - color
+            - 'color'
           discriminator:
-            propertyName: catType
+            propertyName: 'catType'
           properties:
             color:
-              type: string
+              type: 'string'
             catType:
-              type: string
+              type: 'string'
               enum:
-                - SEAM
-                - SHORT
-              title: CatType
+                - 'SEAM'
+                - 'SHORT'
+              title: 'CatType'
     Seam:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - title: Seam
-          description: |
-            this is 
-            a multiline
-            description
+        - title: 'Seam'
+          description: "this is \\na multiline\\ndescription\\n"
           required:
-            - color
-            - catType
-            - type
+            - 'color'
+            - 'catType'
+            - 'type'
           discriminator:
-            propertyName: catType
+            propertyName: 'catType'
           properties:
             catType:
-              type: string
-              default: SEAM
+              type: 'string'
+              default: 'SEAM'
               maxLength: 3
               minLength: 1
-              title: CatType
-              x-const: SEAM
-              example: SEAM
+              title: 'CatType'
+              x-const: 'SEAM'
+              example: 'SEAM'
             angryLevel:
-              type: string
-              pattern: \\w+
+              type: 'string'
+              pattern: '\\w+'
             color:
-              type: string
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
+              type: 'string'
+            type: &ref_0
+              type: 'string'
+              x-const: 'CAT'
+              example: 'CAT'
     ShortHair:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - title: ShortHair
-          description: >
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, s
+        - title: 'ShortHair'
+          description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s\\n"
           required:
-            - color
-            - catType
-            - type
+            - 'color'
+            - 'catType'
+            - 'type'
           discriminator:
-            propertyName: catType
+            propertyName: 'catType'
           properties:
             catType:
-              type: string
-              default: SHORT
-              title: CatType
-              x-const: SHORT
-              example: SHORT
+              type: 'string'
+              default: 'SHORT'
+              title: 'CatType'
+              x-const: 'SHORT'
+              example: 'SHORT'
             angryLevel:
-              type: string
+              type: 'string'
             color:
-              type: string
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
+              type: 'string'
+            type: *ref_0
     Cat:
       oneOf:
         - $ref: '#/components/schemas/Seam'
         - $ref: '#/components/schemas/ShortHair'
       discriminator:
-        propertyName: catType
+        propertyName: 'catType'
         mapping:
           SEAM: '#/components/schemas/Seam'
           SHORT: '#/components/schemas/ShortHair'
     GenericPet:
       allOf:
         - $ref: '#/components/schemas/PetBase'
-        - title: GenericPet
+        - title: 'GenericPet'
           properties:
             name:
-              type: string
+              type: 'string'
             type:
-              type: string
+              type: 'string'
               x-const:
-                - BIRD
-                - HAMSTER
-              example: HAMSTER
+                - 'BIRD'
+                - 'HAMSTER'
+              example: 'HAMSTER'
           required:
-            - type
+            - 'type'
     Pet:
       oneOf:
         - $ref: '#/components/schemas/Cat'
         - $ref: '#/components/schemas/Dog'
         - $ref: '#/components/schemas/GenericPet'
       discriminator:
-        propertyName: type
+        propertyName: 'type'
         mapping:
           DOG: '#/components/schemas/Dog'
           CAT: '#/components/schemas/Cat'
           BIRD: '#/components/schemas/GenericPet'
           HAMSTER: '#/components/schemas/GenericPet'
     Pets:
-      type: array
+      type: 'array'
       maxItems: 100
       items:
         $ref: '#/components/schemas/Pet'
