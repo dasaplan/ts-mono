@@ -10,4 +10,10 @@ describe("format", () => {
     const fmt = await formatSpec(file, { outFolder: Folder.of("tmp") });
     expect(fmt).toBeDefined();
   });
+
+  test("bundled", async () => {
+    const file = File.of("tmp/bundled-petstore-api.yml");
+    const fmt = await formatSpec(file, { outFolder: Folder.of("tmp2") });
+    expect(fmt).toBeDefined();
+  });
 });

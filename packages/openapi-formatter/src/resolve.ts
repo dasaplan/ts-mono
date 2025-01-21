@@ -15,7 +15,7 @@ export async function resolveSpec(filePath: File) {
   const mapped = refs.map((refFile) => {
     const getFile = () => resolved.get(refFile);
     const updateFile = (obj: object) => resolved.set(refFile, obj);
-    const schemas = resolveSchemas(getFile(), { basePath: [], updateFile, getFile });
+    const schemas = resolveSchemas(getFile());
     return { refFile, schemas, getFile, updateFile };
   });
 
@@ -27,10 +27,10 @@ export async function resolveSpec(filePath: File) {
 export interface Parsed {
   schema: AnySchema;
   path: Array<string>;
-  update: (obj: object) => void;
 }
 
-function resolveSchemas(obj: unknown, ctx: { basePath: Array<string>; updateFile: (obj: object) => void; getFile: () => object }) {
+export function resolveSchemas(obj: unknown, ctx: { basePath: Array<string> } = { basePath: [] }) {
+  const log = appLog.childLog(resolveSchemas);
   if (!InferOa.isObj(obj)) {
     return []; // Base case: not an object
   }
@@ -44,12 +44,6 @@ function resolveSchemas(obj: unknown, ctx: { basePath: Array<string>; updateFile
     refs.push({
       schema: obj,
       path: ctx.basePath,
-      update: (obj: object) => {
-        const file = ctx.getFile();
-        const mutValue = mutResolvePath(file, ctx.basePath);
-        Object.assign(mutValue, obj);
-        ctx.updateFile(file);
-      },
     });
   }
 

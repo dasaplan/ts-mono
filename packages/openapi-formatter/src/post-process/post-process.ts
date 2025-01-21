@@ -19,18 +19,19 @@ export function createSpecProcessor(_options?: PostProcessingOptions) {
   };
 
   if (options.fixTitles) documentProcessor.push(fixSchemaTitles);
-  if (options.fixDanglingAllOfProps) schemaProcessor.push(fixDanglingPropsForAllOf);
   if (options.fisDescription) schemaProcessor.push(fixDescription);
 
+  // needs to be last because it destroys structure
+  if (options.fixDanglingAllOfProps) schemaProcessor.push(fixDanglingPropsForAllOf);
   if (documentProcessor.length < 1) {
     return {
-      schemaProcessor: (spec: Parsed) => spec,
+      schemasProcessor: (spec: Array<Parsed>) => spec,
       documentProcessor: (spec: AnySchema) => spec,
     };
   }
 
   return {
-    schemaProcessor: (spec: Parsed) => schemaProcessor.reduce((acc, curr) => curr(acc), spec),
+    schemasProcessor: (specs: Array<Parsed>) => schemaProcessor.reduce((acc, curr) => acc.map(curr), specs),
     documentProcessor: (spec: AnySchema) => documentProcessor.reduce((acc, curr) => curr(acc), spec),
   };
 }
@@ -46,7 +47,8 @@ export function defaultPostProcessingOptions(): PostProcessingOptions {
 function fixDescription(parsed: Parsed): Parsed {
   const log = appLog.childLog(fixDescription);
   const spec = parsed.schema;
-  const description = spec.description ?? spec.allOf?.find((a) => a.description)?.description;
+
+  const description = OaSchemaObject.findMember("description", spec);
   if (description) {
     return parsed;
   }
@@ -55,9 +57,8 @@ function fixDescription(parsed: Parsed): Parsed {
     return parsed;
   }
   const pathRef = parsed.path.join(".");
-  log.info(`[FIX_DESCRIPTION] path: ${pathRef}, description: ${lastKey}`);
-  spec.description = lastKey;
-
+  log.info(`fixing schema.description: ${lastKey}, path: ${pathRef}, `);
+  OaSchemaObject.setMember("description", lastKey, spec);
   return parsed;
 }
 
@@ -83,7 +84,6 @@ function fixDanglingPropsForAllOf(parsed: Parsed): Parsed {
   if (!(spec.allOf || spec.oneOf || spec.anyOf)) {
     return parsed;
   }
-
   const danglingPropCollectResult = collectDanglingPropsForAllOf(spec);
   const pathRef = parsed.path.join(".");
   if (!danglingPropCollectResult.hasDangling) {
@@ -91,11 +91,10 @@ function fixDanglingPropsForAllOf(parsed: Parsed): Parsed {
     return parsed;
   }
   if (spec.allOf && _.isDefined(spec.allOf)) {
-    log.info(`[FIX_DANGLING_PROPS] danglingProps: [${Object.keys(danglingPropCollectResult.dangling).join(", ")}], path: ${pathRef}`);
+    log.info(`fixing danglingProps: [${Object.keys(danglingPropCollectResult.dangling).join(", ")}], path: ${pathRef}`);
     spec.allOf.push(danglingPropCollectResult.dangling);
     cleanObj(spec, danglingPropCollectResult.ignoreList);
   }
-
   return parsed;
 }
 
@@ -114,11 +113,11 @@ function fixSchemaTitles(spec: AnySchema): AnySchema {
       return [key, schema];
     }
 
-    const title = getTitle(schema);
+    const title = OaSchemaObject.findMember("title", schema);
     if (!title || title !== key) {
       count++;
-      log.info(`[FIX_TITLE] schema.title: ${schema.title} -> ${key}`);
-      schema.title = key;
+      log.info(`fixing schema.title: ${title} -> ${key}}, path: components.schemas.${key}`);
+      OaSchemaObject.setMember("title", key, schema);
       return [key, schema];
     }
 
@@ -130,12 +129,22 @@ function fixSchemaTitles(spec: AnySchema): AnySchema {
   return spec;
 }
 
-function getTitle(schema: AnySchema) {
-  if (schema.title) {
-    return schema.title;
+export module OaSchemaObject {
+  export function findMember(member: keyof AnySchema, schema: AnySchema) {
+    if (schema[member]) {
+      return schema[member];
+    }
+    if (schema.allOf) {
+      return schema.allOf.toReversed().find((a): a is AnySchema => a?.[member as never])?.[member];
+    }
+    return undefined;
   }
-  if (schema.allOf) {
-    return schema.allOf.find((a) => a?.title)?.title;
+
+  export function setMember(memberName: keyof AnySchema, memberValue: unknown, schema: AnySchema) {
+    if (schema.allOf) {
+      return schema.allOf.push({ [memberName]: memberValue });
+    }
+    schema[memberName] = memberValue;
+    return undefined;
   }
-  return undefined;
 }

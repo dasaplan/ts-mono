@@ -3,11 +3,12 @@
 
 import oafmt, { OpenAPISortOptions } from "openapi-format";
 import { File, _, ApplicationError, Folder } from "@dasaplan/ts-sdk";
-import { AnySchema, Parsed, resolveSpec } from "./resolve.js";
+import { AnySchema, Parsed, resolveSchemas, resolveSpec } from "./resolve.js";
 import * as path from "node:path";
 import { createSpecProcessor } from "./post-process/index.js";
 import { appLog } from "./logger.js";
 import { PostProcessingOptions } from "./post-process/post-process.js";
+import { oas30 } from "openapi3-ts";
 const sortSet: OpenAPISortOptions["sortSet"] = {
   sortPathsBy: "path",
   root: ["openapi", "info", "servers", "paths", "components", "tags", "x-tagGroups", "externalDocs"],
@@ -27,6 +28,7 @@ const sortSet: OpenAPISortOptions["sortSet"] = {
 };
 
 const sortComponentsSet: OpenAPISortOptions["sortComponentsSet"] = ["schemas", "parameters", "headers", "requestBodies", "responses", "securitySchemes"];
+const sortDocumentSet: Array<keyof oas30.OpenAPIObject> = ["openapi", "info", "tags", "servers", "paths", "components", "security", "externalDocs"];
 
 export interface FormatterOptions extends PostProcessingOptions {
   outFolder: Folder;
@@ -38,14 +40,16 @@ export async function formatSpec(filePath: File, options: FormatterOptions): Pro
   const common = findCommonPath(resolved.map((r) => r.refFile));
   log.info(`formatting in: ${common === "" ? filePath.absolutePath : common}`);
 
-  const { schemaProcessor, documentProcessor } = createSpecProcessor(options);
+  const { schemasProcessor, documentProcessor } = createSpecProcessor(options);
   for (const r of resolved) {
     const fileWithoutRoot = common === "" ? r.refFile : common;
     log.info(`start: formatting: ${fileWithoutRoot}`);
 
     const file = r.getFile();
+
     // format openapi document
     if ("openapi" in file) {
+      log.debug(`start: formatting document`);
       const processed = documentProcessor(file);
       const customSorted = customSort(processed);
       const libSorted = await oafmt.openapiSort(customSorted as never, { sortSet, sortComponentsSet });
@@ -56,10 +60,10 @@ export async function formatSpec(filePath: File, options: FormatterOptions): Pro
     }
 
     // format openapi schemas
-    for (const s of r.schemas) {
-      const { schema } = schemaProcessor(s);
-      s.update(schema);
-    }
+    log.debug(`start: formatting schemas`);
+    const schemas = resolveSchemas(file);
+    schemasProcessor(schemas);
+    r.updateFile(file);
 
     log.debug(`done formatting: ${fileWithoutRoot}`);
     exportSpec(r, common, options.outFolder);
@@ -68,6 +72,8 @@ export async function formatSpec(filePath: File, options: FormatterOptions): Pro
 }
 
 function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any }, common: string, outFolder: Folder) {
+  const log = appLog.childLog(exportSpec);
+  log.info("start exporting formatted files");
   const file = File.of(r.refFile);
   if (common === "") {
     file.writeYml(r.getFile());
@@ -78,6 +84,7 @@ function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any 
   current = current.startsWith(path.sep) ? current.slice(1) : current;
   const c = Folder.resolve(outFolder.absolutePath).makeFile(current);
   c.writeYml(r.getFile());
+  log.info(`done: exporting ${c.absolutePath}`);
 }
 
 function findCommonPath(filePaths: Array<string>) {
@@ -114,14 +121,11 @@ function customSort(mutableDoc: AnySchema): AnySchema {
       const sortedOperation = OpenapiFormatImport.prioritySort(operation, ["get", "post", "put", "patch", "delete"]);
       return [route, sortedOperation];
     });
-
     if (!_.isEmpty(sortedPath)) {
-      sorted.paths = Object.fromEntries(sortedPath);
-      return sorted;
+      mutableDoc.paths = Object.fromEntries(sortedPath);
     }
   }
-
-  return sorted;
+  return OpenapiFormatImport.prioritySort(sorted, sortDocumentSet);
 }
 
 function recSortAlphabetically(mutableDoc: AnySchema | undefined): AnySchema | undefined {
