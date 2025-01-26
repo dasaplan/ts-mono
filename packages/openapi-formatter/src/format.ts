@@ -1,14 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars */
 // noinspection JSUnusedLocalSymbols,JSVoidFunctionReturnValueUsed
 
-import oafmt, {OpenAPISortOptions} from "openapi-format";
 import {File, _, ApplicationError, Folder} from "@dasaplan/ts-sdk";
 import {AnySchema, Parsed, resolveSchemas, resolveSpec} from "./resolve.js";
 import * as path from "node:path";
 import {createSpecProcessor} from "./post-process/index.js";
 import {appLog} from "./logger.js";
 import {PostProcessingOptions} from "./post-process/post-process.js";
-import {oas30} from "openapi3-ts";
 import {sortOpenapi} from "./post-process/sort-openapi.js";
 
 export interface FormatterOptions extends PostProcessingOptions {
@@ -21,6 +19,7 @@ export async function formatSpec(filePath: File, options: FormatterOptions): Pro
     const resolved = await resolveSpec(filePath);
     const common = findCommonPath(resolved.map((r) => r.refFile));
     log.info(`formatting in: ${common === "" ? filePath.absolutePath : common}`);
+    log.info(`format.options: ${Object.entries(_.omit(options, "outFolder")).map(([key, val]) => `${key}: ${val}`).join(", ")}`);
 
     const {schemasProcessor, documentProcessor} = createSpecProcessor(options);
     for (const r of resolved) {

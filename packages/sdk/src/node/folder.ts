@@ -43,7 +43,7 @@ export module File {
         return of(_folder.makeFilePath(nameWithExt));
       },
       writeYml(content: string | object | NodeJS.ArrayBufferView) {
-        fs.writeFileSync(this.absolutePath, stringifyYaml(content, { noRefs: false, quotingType: 1, forceQuotes: true }));
+        fs.writeFileSync(this.absolutePath, stringifyYaml(content, { noRefs: false, quotingType: 1, lineWidth: -1}));
         return filePath;
       },
       write(content: string | object | NodeJS.ArrayBufferView) {
