@@ -5,7 +5,7 @@ import { cleanObj } from "@dasaplan/openapi-bundler";
 
 export interface PostProcessingOptions {
   fixTitles?: boolean;
-  fisDescription?: boolean;
+  fixDescription?: boolean;
   fixDanglingAllOfProps?: boolean;
 }
 
@@ -19,7 +19,7 @@ export function createSpecProcessor(_options?: PostProcessingOptions) {
   };
 
   if (options.fixTitles) documentProcessor.push(fixSchemaTitles);
-  if (options.fisDescription) schemaProcessor.push(fixDescription);
+  if (options.fixDescription) schemaProcessor.push(fixDescription);
 
   // needs to be last because it destroys structure
   if (options.fixDanglingAllOfProps) schemaProcessor.push(fixDanglingPropsForAllOf);
@@ -40,7 +40,7 @@ export function defaultPostProcessingOptions(): PostProcessingOptions {
   return {
     fixTitles: true,
     fixDanglingAllOfProps: true,
-    fisDescription: true,
+    fixDescription: true,
   };
 }
 
