@@ -399,6 +399,9 @@ importers:
       commander:
         specifier: ^11.1.0
         version: 11.1.0
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.0
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -412,6 +415,9 @@ importers:
         specifier: ^4.9.2
         version: 4.9.3
     devDependencies:
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
       '@types/lodash':
         specifier: ^4.17.5
         version: 4.17.5
@@ -1169,6 +1175,9 @@ packages:
 
   '@types/http-errors@2.0.4':
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
+
+  '@types/js-yaml@4.0.9':
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
 
   '@types/json-schema-merge-allof@0.6.5':
     resolution: {integrity: sha512-5mS11ZUTyFNUVEMpK3uKoPb6BWL/nLgW/ln2VOiI8OOxKEYC4Gl9O3WjS5P49yqVTfkcbCAPKw3T1O4erUah5g==}
@@ -4773,12 +4782,13 @@ packages:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
 
-  yaml@2.3.4:
-    resolution: {integrity: sha512-8aAvwVUSHpfEqTQ4w/KMlf3HcRdt50E5ODIQJBw1fQ5RL34xabzxtUlzTXVqc4rkZsPbvrXKWnABCD7kWSmocA==}
-    engines: {node: '>= 14'}
-
   yaml@2.4.5:
     resolution: {integrity: sha512-aBx2bnqDzVOyNKfsysjA2ms5ZlnjSAW2eG3/L5G/CSujfjLJTJsEw1bGw8kCf04KodQWk1pxlGnZ56CRxiawmg==}
+    engines: {node: '>= 14'}
+    hasBin: true
+
+  yaml@2.7.0:
+    resolution: {integrity: sha512-+hSoy/QHluxmC9kCIJyL/uyFmLmc+e5CFR5Wa+bpIhIj85LVb9ZH2nVnqrHoSvKogwODv0ClqZkmiSSaIH5LTA==}
     engines: {node: '>= 14'}
     hasBin: true
 
@@ -5673,6 +5683,8 @@ snapshots:
       '@types/node': 20.10.4
 
   '@types/http-errors@2.0.4': {}
+
+  '@types/js-yaml@4.0.9': {}
 
   '@types/json-schema-merge-allof@0.6.5':
     dependencies:
@@ -8231,7 +8243,7 @@ snapshots:
 
   openapi3-ts@3.1.0:
     dependencies:
-      yaml: 2.3.4
+      yaml: 2.7.0
 
   openapi3-ts@4.3.3:
     dependencies:
@@ -8414,7 +8426,7 @@ snapshots:
   postcss-load-config@4.0.2(postcss@8.4.39)(ts-node@10.9.2(@types/node@20.10.4)(typescript@5.5.3)):
     dependencies:
       lilconfig: 3.1.2
-      yaml: 2.4.5
+      yaml: 2.7.0
     optionalDependencies:
       postcss: 8.4.39
       ts-node: 10.9.2(@types/node@20.10.4)(typescript@5.5.3)
@@ -9746,9 +9758,9 @@ snapshots:
 
   yaml@1.10.2: {}
 
-  yaml@2.3.4: {}
-
   yaml@2.4.5: {}
+
+  yaml@2.7.0: {}
 
   yargs-parser@18.1.3:
     dependencies:

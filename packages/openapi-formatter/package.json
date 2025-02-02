@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-formatter",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Opinionated formatter for Openapi (Swagger)",
   "keywords": [
     "openapi",
@@ -45,12 +45,14 @@
     "@dasaplan/openapi-bundler": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:*",
     "commander": "^11.1.0",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "openapi-format": "^1.25.0",
     "openapi3-ts": "^4.3.3",
     "tslog": "^4.9.2"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/lodash": "^4.17.5",
     "openapi-example-specs": "workspace:*",
     "tsconfig": "workspace:0.0.0",

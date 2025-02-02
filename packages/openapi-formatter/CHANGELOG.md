@@ -1,5 +1,14 @@
 # @dasaplan/openapi-formatter
 
+## 0.0.9
+
+### Patch Changes
+
+- update formatter
+- Updated dependencies
+  - @dasaplan/ts-sdk@0.0.2
+  - @dasaplan/openapi-bundler@0.0.20
+
 ## 0.0.8
 
 ### Patch Changes
