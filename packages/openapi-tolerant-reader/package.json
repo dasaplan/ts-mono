@@ -39,7 +39,8 @@
     "test": "vitest",
     "test:update": "vitest -u",
     "clean": "rimraf dist out tmp",
-    "lint": "eslint \"./src/*.ts\" index.ts"
+    "lint": "eslint \"./src/*.ts\" index.ts",
+    "lint:fix": "eslint \"./src/*.ts\" index.ts --fix"
   },
   "dependencies": {},
   "devDependencies": {

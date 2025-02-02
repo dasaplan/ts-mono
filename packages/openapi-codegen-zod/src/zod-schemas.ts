@@ -176,7 +176,7 @@ module Factory {
   export function createDiscriminatedUnion(
     discriminatorProperty: string,
     mappings: Array<{ discriminatorValue: string; entityRef: string }>,
-    options: ZodGenOptions
+    options: ZodGenOptions,
   ): string {
     const matchProperties = mappings.map((p) => createObjectProperty(p.discriminatorValue, p.entityRef, options));
     // add unknown schema

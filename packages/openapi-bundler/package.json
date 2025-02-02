@@ -33,6 +33,7 @@
     "build": "pnpm rup",
     "clean": "rimraf dist",
     "lint": "eslint \"./src/*.ts\" index.ts oa-bundler-cli.ts",
+    "lint:fix": "eslint \"./src/*.ts\" index.ts oa-bundler-cli.ts --fix",
     "prepack": "sort-package-json --quiet && clean-package",
     "postpack": "clean-package restore",
     "rup": "tsup-node --dts",

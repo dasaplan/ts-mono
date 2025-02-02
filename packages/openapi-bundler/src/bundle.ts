@@ -19,8 +19,8 @@ export async function bundleOpenapi(_pathToApi: string, params?: Partial<BundleO
   const outputFile = File.isFilePath(params?.outFile)
     ? File.of(params.outFile)
     : _.isDefined(params?.outFile)
-    ? Folder.of(params.outFile).makeFile(`bundled-${inputFile.name}`)
-    : Folder.temp().makeFile(`bundled-${inputFile.name}`);
+      ? Folder.of(params.outFile).makeFile(`bundled-${inputFile.name}`)
+      : Folder.temp().makeFile(`bundled-${inputFile.name}`);
   const parsed = await bundleParseOpenapi(_pathToApi, params);
   return { parsed, outFile: outputFile.writeYml(parsed) };
 }

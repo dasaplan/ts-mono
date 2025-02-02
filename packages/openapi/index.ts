@@ -1,1 +1,1 @@
-export { generateTypescriptAxios  } from "./src/index.js";
+export { generateTypescriptAxios } from "./src/index.js";

@@ -53,7 +53,8 @@
     "test:unit:update": "vitest -u --project unit-test",
     "test:it:update": "vitest -u --project integration-test",
     "clean": "rimraf dist out tmp",
-    "lint": "eslint \"./src/*.ts\" index.ts oa-cli.ts"
+    "lint": "eslint \"./src/*.ts\" index.ts oa-cli.ts",
+    "lint:fix": "eslint \"./src/*.ts\" index.ts oa-cli.ts --fix"
   },
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",

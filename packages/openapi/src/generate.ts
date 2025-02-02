@@ -12,7 +12,7 @@ export interface ExperimentalFeatures {
 export async function generateOpenapi(
   specFilePath: string,
   outputFile: string,
-  params?: { clearTemp: boolean; tempFolder?: string } & TsAxiosPublicGenOptions & ExperimentalFeatures
+  params?: { clearTemp: boolean; tempFolder?: string } & TsAxiosPublicGenOptions & ExperimentalFeatures,
 ) {
   try {
     const { bundledFilePath, parsed } = await bundle(specFilePath, { tempFolder: params?.tempFolder });

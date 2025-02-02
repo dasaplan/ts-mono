@@ -96,7 +96,7 @@ export function generateEndpointInterface<T extends Endpoint = Endpoint>(endpoin
       (acc, curr) => ({
         [curr.status!]: generatePayloadType(curr.schema, params),
       }),
-      {}
+      {},
     );
 
   return {
@@ -131,7 +131,7 @@ function generatePayloadType(schema: Schema | undefined, params: EndpointInterfa
         case "INLINE":
           throw ApplicationError.create(
             `Failed to generate parameter schema: '${schema.getName()}':
-             Inline schema are yet not supported. Please define a schema and reference it (#/components/schema/<Name>)`
+             Inline schema are yet not supported. Please define a schema and reference it (#/components/schema/<Name>)`,
           );
       }
       break;
@@ -144,7 +144,7 @@ function generatePayloadType(schema: Schema | undefined, params: EndpointInterfa
       throw ApplicationError.create(
         `Failed to generate parameter schema '${schema.getName()}':
             non-primitive parameters schema are yet not supported.
-            Please define the payload as schema and reference it (#/components/schema/<Name>)`
+            Please define the payload as schema and reference it (#/components/schema/<Name>)`,
       );
   }
 }

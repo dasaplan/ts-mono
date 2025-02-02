@@ -33,6 +33,7 @@
     "build": "pnpm rup",
     "clean": "rimraf dist",
     "lint": "eslint \"./src/*.ts\" index.ts oa-formatter-cli.ts",
+    "lint:fix": "eslint \"./src/*.ts\" index.ts oa-formatter-cli.ts --fix",
     "prepack": "sort-package-json --quiet && clean-package",
     "pack": "pnpm pack",
     "postpack": "clean-package restore",

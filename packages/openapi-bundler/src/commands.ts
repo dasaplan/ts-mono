@@ -25,7 +25,7 @@ export function createCommandBundle(program: Command) {
           disableXPick: boolean;
           forceMergeAllOf: boolean;
           verbose: boolean;
-        }
+        },
       ) => {
         if (options.verbose) {
           appLog.setLogLevel("debug");
@@ -41,7 +41,7 @@ export function createCommandBundle(program: Command) {
 
         const result = await withPerformance(() => bundleOpenapi(spec, { postProcessor, outFile: options.outputFile }));
         appLog.log.info(`finished bundling in ${(result.duration / 1000).toFixed(3)} s`, { outFile: result.ret.outFile });
-      }
+      },
     );
 }
 

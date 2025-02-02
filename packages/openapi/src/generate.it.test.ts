@@ -19,7 +19,7 @@ describe("Generate Integration", () => {
           .map((f) => f.content);
         expect(files).toMatchSnapshot(`cleaned-${spec}`);
       },
-      { timeout: 6000 }
+      { timeout: 6000 },
     );
   });
 

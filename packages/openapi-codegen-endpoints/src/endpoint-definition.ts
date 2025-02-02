@@ -4,7 +4,7 @@
 export interface EndpointDefinition<
   DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
   DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
-  Params extends EndpointDefinition.Parameters | undefined
+  Params extends EndpointDefinition.Parameters | undefined,
 > {
   path: EndpointDefinition.Path;
   /** operation id */

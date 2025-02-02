@@ -18,7 +18,7 @@ export function createCommandGenerateEndpoints(program: Command) {
     .action(
       async (
         spec: string,
-        options: { verbose: boolean; out: string; templates: string; typeSuffix: string; apiName: string; typeNamespace: string; typeModuleName: string }
+        options: { verbose: boolean; out: string; templates: string; typeSuffix: string; apiName: string; typeNamespace: string; typeModuleName: string },
       ) => {
         if (options.verbose) {
           appLog.setLogLevel("debug");
@@ -31,7 +31,7 @@ export function createCommandGenerateEndpoints(program: Command) {
           apiName: options.apiName,
           tsApiTypesModule: tsApiTypesModule,
         });
-      }
+      },
     );
 }
 
