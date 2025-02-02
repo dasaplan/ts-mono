@@ -1,0 +1,258 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+  license:
+    name: MIT
+servers:
+  - url: http://petstore.swagger.io/v1
+components:
+  parameters:
+    PathPetId:
+      name: petId
+      in: path
+      required: true
+      description: The id of the pet to retrieve
+      schema:
+        type: string
+  schemas:
+    HttpErrorCode:
+      type: integer
+      format: int32
+    schema-titled:
+      title: Titled Schema
+      properties:
+        titledProp:
+          type: string
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: '#/components/schemas/HttpErrorCode'
+        message:
+          type: string
+        titledSchema:
+          $ref: '#/components/schemas/schema-titled'
+    FluffLevel:
+      type: string
+      enum:
+        - A
+        - B
+        - C
+    Toy:
+      required:
+        - id
+        - price
+        - kind
+      title: Toy
+      properties:
+        id:
+          type: string
+        price:
+          type: string
+        kind:
+          type: string
+        fluffLevel:
+          $ref: '#/components/schemas/FluffLevel'
+        targetGroup: &ref_0
+          type: string
+          x-extensible-enum:
+            - PETS
+            - CHILDREN
+          default: CHILDREN
+    schemas-Toy:
+      allOf:
+        - $ref: '#/components/schemas/Toy'
+      title: Toy
+      properties:
+        id:
+          type: string
+        price:
+          type: string
+        kind:
+          type: string
+        someEnum:
+          type: string
+          enum:
+            - FOO
+            - BAR
+          title: FooBar
+    schema-sub:
+      required:
+        - string
+      properties:
+        subId:
+          type: string
+    schema-untitled:
+      properties:
+        untitledProp:
+          type: string
+    Color:
+      allOf:
+        - $ref: '#/components/schemas/schema-untitled'
+      type: object
+      properties:
+        colorId:
+          type: string
+        untitled:
+          $ref: '#/components/schemas/schema-untitled'
+    targetGroup: *ref_0
+    Ball:
+      allOf:
+        - $ref: '#/components/schemas/Toy'
+        - title: Ball
+    Teddy:
+      allOf:
+        - $ref: '#/components/schemas/Toy'
+        - title: Teddy
+    Fluffy:
+      properties:
+        fluffLevel:
+          $ref: '#/components/schemas/FluffLevel'
+    FluffyTeddy:
+      allOf:
+        - $ref: '#/components/schemas/Teddy'
+        - $ref: '#/components/schemas/Fluffy'
+    PetToy:
+      oneOf:
+        - $ref: '#/components/schemas/Ball'
+        - $ref: '#/components/schemas/FluffyTeddy'
+      discriminator:
+        propertyName: kind
+        mapping:
+          BALL: '#/components/schemas/Ball'
+          TEDDY: '#/components/schemas/FluffyTeddy'
+    components-schemas-Toy:
+      allOf:
+        - $ref: '#/components/schemas/schemas-Toy'
+        - $ref: '#/components/schemas/schema-sub'
+        - title: Toy
+          properties:
+            name:
+              type: string
+            color:
+              $ref: '#/components/schemas/Color'
+            targetGroup:
+              $ref: '#/components/schemas/targetGroup'
+            relates:
+              $ref: '#/components/schemas/PetToy'
+    Pet:
+      type: object
+      required:
+        - id
+        - name
+      example:
+        foo: ''
+        bar: 1234
+        foobar: true
+      properties:
+        id:
+          type: integer
+          format: int64
+        toy:
+          $ref: '#/components/schemas/components-schemas-Toy'
+        leastFavToy:
+          $ref: '#/components/schemas/schemas-Toy'
+        favFluffLevel:
+          $ref: '#/components/schemas/FluffLevel'
+        tag:
+          type: string
+          example:
+            description: default string example
+            value: some string
+        name:
+          type: string
+          example:
+            description: default string example
+            value: some string
+    Pets:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/Pet'
+  responses:
+    Default:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      operationId: listPets
+      tags:
+        - pets
+      parameters:
+        - $ref: '#/components/parameters/PathPetId'
+      responses:
+        '200':
+          description: A paged array of pets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pets'
+        default:
+          $ref: '#/components/responses/Default'
+    post:
+      summary: Create a pet
+      operationId: createPets
+      tags:
+        - pets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        '201':
+          description: Null response
+        default:
+          $ref: '#/components/responses/Default'
+  /pets/{petId}:
+    get:
+      summary: Info for a specific pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - $ref: '#/components/parameters/PathPetId'
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        default:
+          $ref: '#/components/responses/Default'
+    patch:
+      summary: Patch pet
+      operationId: patchPet
+      tags:
+        - pets
+      parameters:
+        - $ref: '#/components/parameters/PathPetId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        default:
+          $ref: '#/components/responses/Default'

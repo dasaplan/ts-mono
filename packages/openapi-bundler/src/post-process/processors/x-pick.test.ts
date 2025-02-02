@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { beforeAll, describe, expect, test } from "vitest";
 import { mergeAllOf } from "./merge-all-of.js";
-import { BundleMock } from "@dasaplan/openapi-bundler";
+import { OpenapiBundledMock } from "@dasaplan/openapi-bundler";
 
 import { OpenapiApiDoc } from "./spec-accessor.js";
 import { appLog } from "../../logger.js";
@@ -15,7 +15,7 @@ describe("x-pick", () => {
     createApi,
     withSchema,
     factory: { schemaRef, mockXPick },
-  } = BundleMock.create();
+  } = OpenapiBundledMock.create();
 
   test("pick", () => {
     const spec = createApi(
@@ -41,7 +41,7 @@ describe("x-pick", () => {
             properties: { b: true },
           }),
         ],
-      })
+      }),
     );
 
     const picked = xPick(mergeAllOf(spec));
@@ -62,7 +62,7 @@ describe("x-pick", () => {
       }),
       withSchema("Pick", {
         "x-pick": { required: ["c"], properties: { c: true } },
-      })
+      }),
     );
 
     const picked = xPick(mergeAllOf(spec));

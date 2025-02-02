@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { BundleMock } from "../../bundle-mock.js";
+import { OpenapiBundledMock } from "../../bundled-mock.js";
 import { mergeAllOf } from "./merge-all-of.js";
 import { OpenapiApiDoc } from "./spec-accessor.js";
 
@@ -8,7 +8,7 @@ describe("mergeAllOf", () => {
     createApi,
     withSchema,
     factory: { schemaRef, mockSchema },
-  } = BundleMock.create();
+  } = OpenapiBundledMock.create();
 
   test("merges required - allOf ", () => {
     const spec = createApi(
@@ -22,7 +22,7 @@ describe("mergeAllOf", () => {
       }),
       withSchema("AB", {
         allOf: [schemaRef("A"), schemaRef("B")],
-      })
+      }),
     );
     expect(mergeAllOf(spec)).toMatchInlineSnapshot(`
       {
@@ -103,7 +103,7 @@ describe("mergeAllOf", () => {
       }),
       withSchema("AB", {
         oneOf: [schemaRef("A"), schemaRef("B")],
-      })
+      }),
     );
 
     expect(mergeAllOf(spec)).toMatchInlineSnapshot(`
@@ -211,7 +211,7 @@ describe("mergeAllOf", () => {
       }),
       withSchema("AB", {
         allOf: [schemaRef("A"), schemaRef("B"), mockSchema({ properties: { c: { type: "string" } } })],
-      })
+      }),
     );
     const actual = mergeAllOf(spec);
     const accessor = OpenapiApiDoc.accessor(actual);
@@ -260,7 +260,7 @@ describe("mergeAllOf", () => {
       }),
       withSchema("AB", {
         allOf: [schemaRef("A"), schemaRef("B"), mockSchema({ properties: { c: { type: "string" } } })],
-      })
+      }),
     );
     const actual = mergeAllOf(spec);
     const accessor = OpenapiApiDoc.accessor(actual);
@@ -305,7 +305,7 @@ describe("mergeAllOf", () => {
       }),
       withSchema("AB", {
         allOf: [schemaRef("A"), schemaRef("B"), mockSchema({ properties: { c: { type: "string" } } })],
-      })
+      }),
     );
     const actual = mergeAllOf(spec);
     const accessor = OpenapiApiDoc.accessor(actual);
@@ -426,7 +426,7 @@ describe("mergeAllOf", () => {
       }),
       withSchema("AB", {
         allOf: [schemaRef("A"), schemaRef("B"), mockSchema({ properties: { c: { type: "string" } } })],
-      })
+      }),
     );
     const actual = mergeAllOf(spec, { forceMerge: true });
     const accessor = OpenapiApiDoc.accessor(actual);

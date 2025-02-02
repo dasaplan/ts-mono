@@ -5,8 +5,9 @@ import { cleanObj } from "@dasaplan/openapi-bundler";
 
 export interface PostProcessingOptions {
   fixTitles?: boolean;
-  fisDescription?: boolean;
+  fixDescription?: boolean;
   fixDanglingAllOfProps?: boolean;
+  deleteExamples?: boolean;
 }
 
 export function createSpecProcessor(_options?: PostProcessingOptions) {
@@ -19,11 +20,12 @@ export function createSpecProcessor(_options?: PostProcessingOptions) {
   };
 
   if (options.fixTitles) documentProcessor.push(fixSchemaTitles);
-  if (options.fisDescription) schemaProcessor.push(fixDescription);
+  if (options.fixDescription) schemaProcessor.push(fixDescription);
+  if (options.deleteExamples) schemaProcessor.push(deleteExamples);
 
   // needs to be last because it destroys structure
   if (options.fixDanglingAllOfProps) schemaProcessor.push(fixDanglingPropsForAllOf);
-  if (documentProcessor.length < 1) {
+  if (documentProcessor.length < 1 && schemaProcessor.length < 1) {
     return {
       schemasProcessor: (spec: Array<Parsed>) => spec,
       documentProcessor: (spec: AnySchema) => spec,
@@ -31,7 +33,7 @@ export function createSpecProcessor(_options?: PostProcessingOptions) {
   }
 
   return {
-    schemasProcessor: (specs: Array<Parsed>) => schemaProcessor.reduce((acc, curr) => acc.map(curr), specs),
+    schemasProcessor: (specs: Array<Parsed>) => schemaProcessor.reduce((allSpecs, processor) => allSpecs.map(processor), specs),
     documentProcessor: (spec: AnySchema) => documentProcessor.reduce((acc, curr) => curr(acc), spec),
   };
 }
@@ -40,8 +42,16 @@ export function defaultPostProcessingOptions(): PostProcessingOptions {
   return {
     fixTitles: true,
     fixDanglingAllOfProps: true,
-    fisDescription: true,
+    fixDescription: false,
+    deleteExamples: false,
   };
+}
+
+function deleteExamples(parsed: Parsed): Parsed {
+  if (parsed.schema.example) {
+    delete parsed.schema.example;
+  }
+  return parsed;
 }
 
 function fixDescription(parsed: Parsed): Parsed {
@@ -141,10 +151,22 @@ export module OaSchemaObject {
   }
 
   export function setMember(memberName: keyof AnySchema, memberValue: unknown, schema: AnySchema) {
-    if (schema.allOf) {
-      return schema.allOf.push({ [memberName]: memberValue });
+    if (!schema.allOf) {
+      schema[memberName] = memberValue;
+      return undefined;
     }
-    schema[memberName] = memberValue;
-    return undefined;
+    // handle allOf
+    const reversed = schema.allOf.toReversed();
+    const subSchema = reversed.find((a): a is AnySchema => a?.[memberName as never]);
+    if (subSchema) {
+      subSchema[memberName] = memberValue;
+      return undefined;
+    }
+    // last allOf is an inline schema => add to it
+    if (reversed.at(0) && !reversed.at(0)?.$ref) {
+      reversed[0][memberName as never] = memberValue as never;
+      return;
+    }
+    return schema.allOf.push({ [memberName]: memberValue });
   }
 }

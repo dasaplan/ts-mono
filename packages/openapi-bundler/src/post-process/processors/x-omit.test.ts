@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { beforeAll, describe, expect, test } from "vitest";
 import { mergeAllOf } from "./merge-all-of.js";
-import { BundleMock } from "@dasaplan/openapi-bundler";
+import { OpenapiBundledMock } from "@dasaplan/openapi-bundler";
 
 import { OpenapiApiDoc } from "./spec-accessor.js";
 import { xOmitDeep } from "./x-omit-deep.js";
@@ -15,7 +15,7 @@ describe("x-omit", () => {
     createApi,
     withSchema,
     factory: { schemaRef, mockXOmit },
-  } = BundleMock.create();
+  } = OpenapiBundledMock.create();
 
   test("omits", () => {
     const spec = createApi(
@@ -41,7 +41,7 @@ describe("x-omit", () => {
             properties: { b: true },
           }),
         ],
-      })
+      }),
     );
 
     const merged = mergeAllOf(spec);
@@ -85,7 +85,7 @@ describe("x-omit", () => {
             properties: { entity: { properties: { a: true } } },
           }),
         ],
-      })
+      }),
     );
 
     // x-omit
@@ -102,7 +102,7 @@ describe("x-omit", () => {
       }),
       withSchema("Omit", {
         "x-omit": { required: ["c"], properties: { c: true } },
-      })
+      }),
     );
 
     const omitted = xOmitDeep(mergeAllOf(spec));

@@ -4,10 +4,10 @@ import { createSpecProcessor } from "../post-process/index.js";
 import { Transpiler } from "./transpiler.js";
 import { ExampleSpec, resolveSpecPath } from "openapi-example-specs";
 import { describe, test, expect } from "vitest";
-import { BundleMock } from "../bundle-mock.js";
+import { OpenapiBundledMock } from "../bundled-mock.js";
 
 describe("transpiler", () => {
-  const { withSchemas, createApi } = BundleMock.create();
+  const { withSchemas, createApi } = OpenapiBundledMock.create();
 
   test("endpoints", async () => {
     const specPath = resolveSpecPath("pets-modular/pets-api.yml");
@@ -67,7 +67,7 @@ describe("transpiler", () => {
       expect(spec.schemas()).toMatchSnapshot("schemas");
       expect(spec.schemasTopoSorted()).toMatchSnapshot("schemas-sorted");
       expect(spec.endpoints()).toMatchSnapshot("endpoints");
-    }
+    },
   );
 
   test("should toposort array items correctly for allOf item", () => {
@@ -114,7 +114,7 @@ describe("transpiler", () => {
             },
           },
         },
-      })
+      }),
     );
     const spec = Transpiler.of(openapi);
     expect(spec.schemasTopoSorted().map((s) => s.getName())).toEqual(["Parent", "B", "A", "List"]);
@@ -155,7 +155,7 @@ describe("transpiler", () => {
             },
           },
         },
-      })
+      }),
     );
     const spec = Transpiler.of(openapi);
     expect(spec.schemasTopoSorted().map((s) => s.getName())).toEqual(["B", "A", "Union", "List"]);
@@ -208,7 +208,7 @@ describe("transpiler", () => {
           type: "array",
           items: { $ref: "#/components/schemas/Union" },
         },
-      })
+      }),
     );
     const spec = Transpiler.of(openapi);
     const schemas = spec.schemasTopoSorted();
@@ -236,7 +236,7 @@ describe("transpiler", () => {
             propB: { $ref: "#/components/schemas/A" },
           },
         },
-      })
+      }),
     );
     const spec = Transpiler.of(openapi);
     const schemas = spec.schemasTopoSorted();

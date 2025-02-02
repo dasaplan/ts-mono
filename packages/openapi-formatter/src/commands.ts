@@ -12,9 +12,10 @@ export function createCommandFormat(program: Command) {
     .option("-o, --outputFolder [outputFolder]", "Absolut or relative filepath to the folder where all files will be written to")
     .option("--sortSpec [sortSpec]", "Will sort the entire openapi spec", "true")
     .option("-f, --fix [fix]", "Apply all fixes", false)
-    .option("--fixDanglingAllOfProps [fixDanglingAllOfProps]", "Insert sibling properties of an allOf within a schema as an allOf sub schema", false)
-    .option("--fixDanglingAllOfProps [fixDanglingAllOfProps]", "Insert sibling properties of an allOf within a schema as an allOf sub schema", false)
-    .option("--fixTitles [fixTitles]", "Insert or fix titles for schemas.", false)
+    .option("--deleteExamples [deleteExamples]", "Will delete all examples from the document", false)
+    .option("--fixDanglingAllOfProps [fixDanglingAllOfProps]", "Insert sibling properties of an allOf within a schema as an allOf sub schema.", false)
+    .option("--generateDescription [generateDescription]", "Insert description based on schema name.", false)
+    .option("--fixTitles [fixTitles]", "Insert or fix titles for schemas based on schema name", false)
     .option("-v, --verbose", "Enable verbose logging")
     .action(
       async (
@@ -23,8 +24,9 @@ export function createCommandFormat(program: Command) {
           outputFolder?: string;
           verbose: boolean;
           fix: boolean;
-          sortSpec: string
-        } & Omit<FormatterOptions, 'sortSpec'>
+          sortSpec: string;
+          generateDescription: boolean;
+        } & Omit<FormatterOptions, "sortSpec" | "fixDescription">,
       ) => {
         if (options.verbose) {
           appLog.setLogLevel("debug");
@@ -34,19 +36,20 @@ export function createCommandFormat(program: Command) {
           appLog.log.error(`could not find specFile: ${specFile.absolutePath}`);
           process.exit(1);
         }
-        console.log("--options", JSON.stringify(options))
+        console.log("--options", JSON.stringify(options));
         const outFolder = options.outputFolder ? Folder.of(options.outputFolder) : specFile.folder;
         const result = await withPerformance(() =>
           formatSpec(specFile, {
             outFolder,
-            fisDescription: options.fix || options.fisDescription,
             fixDanglingAllOfProps: options.fix || options.fixDanglingAllOfProps,
             fixTitles: options.fix || options.fixTitles,
             sortSpec: options.fix || options.sortSpec === "true",
-          })
+            fixDescription: options.generateDescription,
+            deleteExamples: options.deleteExamples,
+          }),
         );
         appLog.log.info(`finished bundling in ${(result.duration / 1000).toFixed(3)} s`, { outFile: result.ret.outFile });
-      }
+      },
     );
 }
 

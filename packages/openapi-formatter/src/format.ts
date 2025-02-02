@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars */
 // noinspection JSUnusedLocalSymbols,JSVoidFunctionReturnValueUsed
 
-import oafmt, {OpenAPISortOptions} from "openapi-format";
-import {File, _, ApplicationError, Folder} from "@dasaplan/ts-sdk";
-import {AnySchema, Parsed, resolveSchemas, resolveSpec} from "./resolve.js";
+import oafmt, { OpenAPISortOptions } from "openapi-format";
+import { File, _, ApplicationError, Folder } from "@dasaplan/ts-sdk";
+import { AnySchema, Parsed, ResolvedSpec, resolveOaDocument, resolveSchemas, resolveSpec } from "./resolve.js";
 import * as path from "node:path";
-import {createSpecProcessor} from "./post-process/index.js";
-import {appLog} from "./logger.js";
-import {PostProcessingOptions} from "./post-process/post-process.js";
-import {oas30} from "openapi3-ts";
+import { createSpecProcessor } from "./post-process/index.js";
+import { appLog } from "./logger.js";
+import { PostProcessingOptions } from "./post-process/post-process.js";
+import { oas30 } from "openapi3-ts";
+import { OpenApiBundled } from "@dasaplan/openapi-bundler";
 
 const sortSet: OpenAPISortOptions["sortSet"] = {
   sortPathsBy: "path",
@@ -33,53 +34,65 @@ const sortDocumentSet: Array<keyof oas30.OpenAPIObject> = ["openapi", "info", "t
 
 export interface FormatterOptions extends PostProcessingOptions {
   outFolder: Folder;
-  sortSpec: boolean
+  sortSpec?: boolean;
 }
 
 export async function formatSpec(filePath: File, options: FormatterOptions): Promise<{ outFile: string }> {
   const log = appLog.childLog(formatSpec);
   const resolved = await resolveSpec(filePath);
+  const { common, formattedSpecs } = await formatResolvedSpec(resolved, options);
+  formattedSpecs.forEach((r) => exportSpec(r, common, options.outFolder));
+  return { outFile: options.outFolder.absolutePath };
+}
+
+export async function formatOaSpec(spec: OpenApiBundled, options: Omit<FormatterOptions, "outFolder">) {
+  const resolved = await resolveOaDocument(spec);
+  const { common, formattedSpecs } = await formatResolvedSpec(resolved, options);
+  return formattedSpecs.map((r) => r.getFile());
+}
+
+async function formatResolvedSpec(resolved: ResolvedSpec, options: Omit<FormatterOptions, "outFolder">) {
+  const log = appLog.childLog(formatSpec);
   const common = findCommonPath(resolved.map((r) => r.refFile));
-  log.info(`formatting in: ${common === "" ? filePath.absolutePath : common}`);
+  const { schemasProcessor, documentProcessor } = createSpecProcessor(options);
+  const formattedSpecs = await Promise.all(
+    resolved.map(async (r) => {
+      const fileWithoutRoot = common === "" ? r.refFile : common;
+      log.info(`start: formatting: ${fileWithoutRoot}`);
 
-  const {schemasProcessor, documentProcessor} = createSpecProcessor(options);
-  for (const r of resolved) {
-    const fileWithoutRoot = common === "" ? r.refFile : common;
-    log.info(`start: formatting: ${fileWithoutRoot}`);
+      // format openapi document
+      let mutFile = r.getFile();
+      if ("openapi" in r.getFile()) {
+        log.debug(`start: formatting document`);
+        const processed = documentProcessor(mutFile);
+        r.updateFile(processed);
 
-    // format openapi document
-    let mutFile = r.getFile();
-    if ("openapi" in r.getFile()) {
-      log.debug(`start: formatting document`);
-      const processed = documentProcessor(mutFile);
-      r.updateFile(processed);
-
-      if (options.sortSpec) {
-        const customSorted = customSort(processed);
-        const libSorted = await oafmt.openapiSort(customSorted as never, {sortSet, sortComponentsSet});
-        if (typeof libSorted.data === "string") {
-          throw ApplicationError.create("could not format spec");
+        if (options.sortSpec) {
+          const customSorted = customSort(processed);
+          const libSorted = await oafmt.openapiSort(customSorted as never, { sortSet, sortComponentsSet });
+          if (typeof libSorted.data === "string") {
+            throw ApplicationError.create("could not format spec");
+          }
+          r.updateFile(libSorted.data);
         }
-        r.updateFile(libSorted.data);
       }
-    }
 
-    // format openapi schemas
-    log.debug(`start: formatting schemas`);
-    mutFile = r.getFile();
-    const schemas = resolveSchemas(mutFile);
-    schemasProcessor(schemas);
-    r.updateFile(mutFile);
+      // format openapi schemas
+      log.debug(`start: formatting schemas`);
+      mutFile = r.getFile();
+      const schemas = resolveSchemas(mutFile);
+      schemasProcessor(schemas);
+      r.updateFile(mutFile);
 
-    log.debug(`done formatting: ${fileWithoutRoot}`);
-    exportSpec(r, common, options.outFolder);
-  }
-  return {outFile: options.outFolder.absolutePath};
+      log.debug(`done formatting: ${fileWithoutRoot}`);
+      return r;
+    }),
+  );
+  return { common, formattedSpecs };
 }
 
 function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any }, common: string, outFolder: Folder) {
   const log = appLog.childLog(exportSpec);
-  log.info("start exporting formatted files");
   const file = File.of(r.refFile);
   if (common === "") {
     file.writeYml(r.getFile());
@@ -90,7 +103,7 @@ function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any 
   current = current.startsWith(path.sep) ? current.slice(1) : current;
   const c = Folder.resolve(outFolder.absolutePath).makeFile(current);
   c.writeYml(r.getFile());
-  log.info(`done: exporting ${c.absolutePath}`);
+  log.debug(`done: exporting ${c.absolutePath}`);
 }
 
 function findCommonPath(filePaths: Array<string>) {

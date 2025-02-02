@@ -5,6 +5,7 @@ export type ExampleSpec =
   | "pets-modular/pets-api.yml"
   | "pets-simple/pets-api.yml"
   | "pets-modular-complex/petstore-api.yml"
+  | "pets-modular-complex/bundled-petstore-api.yml"
   | "generic/api.yml"
   | "pets-recursive/pets-api.yml"
   | "usecases/extended-array-api.yml";

@@ -1,4 +1,4 @@
-import { BundleMock, bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
+import { OpenapiBundledMock, bundleOpenapi, createSpecProcessor, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { ZodGenOptions } from "./zod-schemas.js";
 import { ExampleSpec, resolveSpecPath } from "openapi-example-specs";
 import { generateZodSources } from "./zod-generator.js";
@@ -8,7 +8,7 @@ const options: () => ZodGenOptions = () => ({
   includeTsTypes: false,
 });
 describe("generateZod", () => {
-  const { withSchemas, createApi } = BundleMock.create();
+  const { withSchemas, createApi } = OpenapiBundledMock.create();
 
   test.each([
     "pets-simple/pets-api.yml",
@@ -42,7 +42,7 @@ describe("generateZod", () => {
             children: { type: "array", items: { $ref: "#/components/schemas/Node" } },
           },
         },
-      })
+      }),
     );
 
     const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
@@ -65,7 +65,7 @@ describe("generateZod", () => {
           type: "object",
           properties: { name: { type: "string" } },
         },
-      })
+      }),
     );
 
     const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
@@ -115,7 +115,7 @@ describe("generateZod", () => {
           oneOf: [{ $ref: "#/components/schemas/A" }, { $ref: "#/components/schemas/B" }],
           discriminator: { propertyName: "type", mapping: { A_TYPE: "#/components/schemas/A", B_TYPE: "#/components/schemas/B" } },
         },
-      })
+      }),
     );
     const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, { includeTsTypes: true });
 
@@ -203,7 +203,7 @@ describe("generateZod", () => {
             },
           ],
         },
-      })
+      }),
     );
     const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
 
@@ -288,7 +288,7 @@ describe("generateZod", () => {
             },
           ],
         },
-      })
+      }),
     );
     const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
 
@@ -379,7 +379,7 @@ describe("generateZod", () => {
             node: { $ref: "#/components/schemas/Node" },
           },
         },
-      })
+      }),
     );
     const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
 

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BundleMock, OpenApiBundled } from "@dasaplan/openapi-bundler";
+import { OpenapiBundledMock, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { generateEndpointDefinitions } from "./endpoint-generator.js";
 import { describe, expect, test } from "vitest";
 import { generateEndpointInterfacesAsText } from "./endpoint-interfaces.js";
 
 describe("generateEndpointDefinitions", () => {
-  const { createApi, withSchemas, withRoute } = BundleMock.create();
+  const { createApi, withSchemas, withRoute } = OpenapiBundledMock.create();
 
   test("enspoints", async () => {
     const openapi: OpenApiBundled = createApi(
@@ -85,7 +85,7 @@ describe("generateEndpointDefinitions", () => {
             },
           },
         },
-      })
+      }),
     );
 
     const endpoints = await generateEndpointInterfacesAsText(openapi, { apiName: "TestApi" });

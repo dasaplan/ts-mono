@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BundleMock, OpenApiBundled } from "@dasaplan/openapi-bundler";
+import { OpenapiBundledMock, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { generateEndpointDefinitions, generateEndpointDefinitionsFromBundled } from "./endpoint-generator.js";
 import { describe, expect, test } from "vitest";
 import { resolveSpecPath } from "openapi-example-specs";
 
 describe("generateEndpointDefinitions", () => {
-  const { createApi, withSchemas, withRoute } = BundleMock.create();
+  const { createApi, withSchemas, withRoute } = OpenapiBundledMock.create();
 
   test("integration", async () => {
     const spec = resolveSpecPath("pets-modular-complex/petstore-api.yml");
@@ -91,7 +91,7 @@ describe("generateEndpointDefinitions", () => {
             },
           },
         },
-      })
+      }),
     );
 
     const endpoints = await generateEndpointDefinitionsFromBundled(openapi, { outDir: "tmp/endpoints", apiName: "TestApi" });

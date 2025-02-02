@@ -4,13 +4,29 @@
 import swagger from "@apidevtools/swagger-parser";
 import { ApplicationError, File } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
-import { Oas3Schema } from "@redocly/openapi-core";
-import { Oas3Definition } from "@redocly/openapi-core/src/typings/openapi.js";
+import { Oas3Schema, Oas3Definition } from "@redocly/openapi-core";
+import { OpenApiBundled } from "@dasaplan/openapi-bundler";
 
 export interface AnySchema extends Oas3Schema, Partial<Oas3Definition> {}
+export type ResolvedSpec = Awaited<ReturnType<typeof resolveSpec>>;
 
 export async function resolveSpec(filePath: File) {
   const resolved = await swagger.resolve(filePath.absolutePath);
+  const refs = resolved.paths();
+  const mapped = refs.map((refFile) => {
+    const getFile = () => resolved.get(refFile);
+    const updateFile = (obj: object) => resolved.set(refFile, obj);
+    const schemas = resolveSchemas(getFile());
+    return { refFile, schemas, getFile, updateFile };
+  });
+
+  appLog.childLog(resolveSpec).info("done");
+
+  return mapped;
+}
+
+export async function resolveOaDocument(doc: OpenApiBundled) {
+  const resolved = await swagger.resolve(doc as never);
   const refs = resolved.paths();
   const mapped = refs.map((refFile) => {
     const getFile = () => resolved.get(refFile);
