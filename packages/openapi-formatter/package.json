@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-formatter",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Opinionated formatter for Openapi (Swagger)",
   "keywords": [
     "openapi",

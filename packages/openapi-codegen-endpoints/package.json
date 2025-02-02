@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-codegen-endpoints",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Openapi framework agnostic endpoint generator",
   "keywords": [
     "openapi",

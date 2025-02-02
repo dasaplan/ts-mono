@@ -1,5 +1,13 @@
 # @dasaplan/openapi-codegen-endpoints
 
+## 0.0.13
+
+### Patch Changes
+
+- improve formatter
+- Updated dependencies
+  - @dasaplan/openapi-bundler@0.0.21
+
 ## 0.0.12
 
 ### Patch Changes
