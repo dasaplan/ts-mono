@@ -1,5 +1,11 @@
 # @dasaplan/openapi-bundler
 
+## 0.0.23
+
+### Patch Changes
+
+- fix allOf merge
+
 ## 0.0.22
 
 ### Patch Changes
