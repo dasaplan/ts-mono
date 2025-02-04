@@ -7,7 +7,7 @@ import { _, ApplicationError } from "@dasaplan/ts-sdk";
 import { cleanObj, SchemaResolverContext, WithOptionalRef } from "../../resolver/index.js";
 import { isRef } from "@redocly/openapi-core";
 import { appLog } from "../../logger.js";
-import { mergeSubSchemas } from "./merge-all-of.js";
+import { tryMergeSchemas } from "./merge-all-of.js";
 
 export type XOmitConfig = {
   required?: Array<string> | boolean;
@@ -38,7 +38,7 @@ export function xOmitDeep(bundled: OpenApiBundled) {
 function doOmitDeep({ schema, id }: { id: string; schema: any }, ctx: OmitCtx) {
   if (_.isEmpty(schema.allOf)) {
     // resolve x-omit in schema: after mergeAllOf it could be the case that there is no allOf anymore
-    const omitted = applyOmit({ id, schema, merged: schema }, ctx);
+    const omitted = applyOmit({ id, merged: schema }, ctx);
     delete (omitted as any)["x-omit"];
     Object.assign(cleanObj(schema), omitted);
     return;
@@ -47,15 +47,37 @@ function doOmitDeep({ schema, id }: { id: string; schema: any }, ctx: OmitCtx) {
   // resolve x-omit in allOf array
   const subSchemas: Array<oas30.ReferenceObject | oas30.SchemaObject> = schema.allOf ?? [];
   const resolvedSchemas = _.cloneDeep(resolveSubSchemas(_.cloneDeep(subSchemas), ctx));
+  resolvedSchemas.reverse();
+
+  // we need to incrementally merge schemas and apply x-omit because we have cases where we use x-omit to remove incompatible subschemas.
+  // e.g. merging A and B only works if we omit A.a
+  //  => A{a: {type: object}, b: {type: number}}, B{a: {type: array}}
+  //  => B{a: {type: array}, b: {type: number}}
+  let merged: oas30.SchemaObject | undefined = undefined;
+  while (resolvedSchemas.length > 0) {
+    const next = resolvedSchemas.pop();
+    if (_.isNil(merged) && _.isDefined(next)) {
+      merged = next.resolved;
+      continue;
+    }
+    if (_.isNil(merged) || _.isNil(next)) {
+      continue;
+    }
+
+    if (_.isNil(next.resolved["x-omit"])) {
+      merged = tryMergeSchemas([merged, next.resolved]);
+      continue;
+    }
+
+    merged = applyOmit({ id, merged: { ...merged, ...next.resolved } }, ctx);
+  }
 
   // merge an omit everything
-  const merged = mergeSubSchemas(resolvedSchemas, ctx)?.resolved;
-  const omitted = applyOmit({ id, schema, merged }, ctx);
-  delete (omitted as any)["x-omit"];
-  Object.assign(cleanObj(schema), omitted);
+  delete (merged as any)["x-omit"];
+  Object.assign(cleanObj(schema), merged);
 }
 
-function applyOmit<T>(args: { id: string; schema: any; merged: WithOptionalRef<oas30.SchemaObject> }, ctx: OmitCtx) {
+function applyOmit<T>(args: { id: string; merged: WithOptionalRef<oas30.SchemaObject> }, ctx: OmitCtx) {
   const log = appLog.childLog(applyOmit);
 
   const merged: oas30.SchemaObject = args.merged;
@@ -74,8 +96,8 @@ function applyOmit<T>(args: { id: string; schema: any; merged: WithOptionalRef<o
     if (merged.required?.length === omitted.required) {
       log.warn(
         `Nothing to omit. The required array of schema.id ${args.id} does not include any defined values to omit. required(omit): ${requiredToRemove?.join(
-          ","
-        )}  `
+          ",",
+        )}  `,
       );
     }
   }
@@ -103,8 +125,8 @@ function applyOmit<T>(args: { id: string; schema: any; merged: WithOptionalRef<o
         if (!isRef(val)) {
           throw ApplicationError.create(
             `You tried to deeply omit a property from "${args.id}".${key}. Deeply omit expects a reference to an object but ${key} is ${JSON.stringify(
-              val
-            )}. The omit config was: ${JSON.stringify(omitConfig)}`
+              val,
+            )}. The omit config was: ${JSON.stringify(omitConfig)}`,
           );
         }
         // nested omit => recurse !could endless loop...failure case? / iterative?
@@ -114,7 +136,7 @@ function applyOmit<T>(args: { id: string; schema: any; merged: WithOptionalRef<o
         // recursion!
         ApplicationError.assert(
           ctx.maxRecursionDepths > 0,
-          `reached maximum recursion depths for deep omit. The omit config was: ${JSON.stringify(omitConfig)}`
+          `reached maximum recursion depths for deep omit. The omit config was: ${JSON.stringify(omitConfig)}`,
         );
         doOmitDeep({ id: val.$ref, schema: { ...resolved, "x-omit": resolved } }, ctx);
         return { ...acc, [key]: resolved };
@@ -127,19 +149,22 @@ function applyOmit<T>(args: { id: string; schema: any; merged: WithOptionalRef<o
   // omit all other fields
   const configWithoutPropsRequired = _.omit(omitConfig, "properties", "required");
 
-  return Object.entries(omitted).reduce((acc, [key, val]) => {
-    const toRemove = configWithoutPropsRequired[key as keyof typeof configWithoutPropsRequired];
-    if (_.isDefined(toRemove) && toRemove) {
-      // filter out entry to remove
-      return acc;
-    }
-    return { ...acc, [key]: val };
-  }, _.pick(omitted, "properties", "required"));
+  return Object.entries(omitted).reduce(
+    (acc, [key, val]) => {
+      const toRemove = configWithoutPropsRequired[key as keyof typeof configWithoutPropsRequired];
+      if (_.isDefined(toRemove) && toRemove) {
+        // filter out entry to remove
+        return acc;
+      }
+      return { ...acc, [key]: val };
+    },
+    _.pick(omitted, "properties", "required"),
+  );
 }
 
 function resolveSubSchemas(
   subSchemas: Array<oas30.ReferenceObject | oas30.SchemaObject>,
-  ctx: SchemaResolverContext
+  ctx: SchemaResolverContext,
 ): Array<{
   pointer: string | undefined;
   resolved: oas30.SchemaObject & { $ref?: string };
@@ -174,7 +199,7 @@ function resolveRefNode(data: { $ref: string } | unknown, ctx: SchemaResolverCon
 function findSchemaObjectsWithXOmit(bundled: OpenApiBundled) {
   const resolver = SchemaResolverContext.create(bundled);
   const collected = resolver.schemas.filter(
-    (s) => _.isDefined(s.schema["x-omit"]) || s.schema.allOf?.some((e) => (isRef(e) ? false : _.isDefined(e["x-omit"])))
+    (s) => _.isDefined(s.schema["x-omit"]) || s.schema.allOf?.some((e) => (isRef(e) ? false : _.isDefined(e["x-omit"]))),
   );
   return { collected, ctx: resolver };
 }

@@ -106,7 +106,7 @@ function doMerge({ schema, id }: { id: string; schema: any }, ctx: SchemaResolve
 
 function resolveSubSchemas(
   subSchemas: Array<oas30.ReferenceObject | oas30.SchemaObject>,
-  ctx: SchemaResolverContext
+  ctx: SchemaResolverContext,
 ): Array<{
   pointer: string | undefined;
   resolved: oas30.SchemaObject & { $ref?: string };
@@ -125,15 +125,10 @@ function resolveSubSchemas(
   }));
 }
 
-function getJsonSchemaMergeAllOff<T extends oas30.SchemaObject>(
-  subschemas: Array<{
-    pointer: string | undefined;
-    resolved: T;
-  }>
-): T {
+export function tryMergeSchemas<T extends oas30.SchemaObject>(schemas: T[]) {
   try {
     return jsonSchemaMergeAllOff<oas30.SchemaObject & { "x-omit"?: XOmitConfig }>(
-      { allOf: subschemas.map((s) => s.resolved) },
+      { allOf: schemas },
       {
         resolvers: {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -162,11 +157,21 @@ function getJsonSchemaMergeAllOff<T extends oas30.SchemaObject>(
             return jsonSchemaMergeAllOff.options.resolvers.title(values, path, mergeSchemas, options);
           },
         },
-      }
+      },
     ) as T;
   } catch (e: unknown) {
     throw ApplicationError.create("failed merging allOf sub schemas").chainUnknown(e);
   }
+}
+
+function getJsonSchemaMergeAllOff<T extends oas30.SchemaObject>(
+  subschemas: Array<{
+    pointer: string | undefined;
+    resolved: T;
+  }>,
+): T {
+  const schemas = subschemas.map((s) => s.resolved);
+  return tryMergeSchemas(schemas);
 }
 
 export function mergeSubSchemas(
@@ -174,7 +179,7 @@ export function mergeSubSchemas(
     pointer: string | undefined;
     resolved: oas30.SchemaObject;
   }>,
-  ctx: SchemaResolverContext
+  ctx: SchemaResolverContext,
 ) {
   const subschemas = _resolvedSchemas.map((d) => ({
     pointer: d.pointer,

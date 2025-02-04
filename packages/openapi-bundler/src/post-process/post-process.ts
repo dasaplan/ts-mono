@@ -17,10 +17,10 @@ type ProcessorOptions = MergeAllOfOptions;
 export function createSpecProcessor(options: PostProcessingOptions = defaultPostProcessingOptions()) {
   const processors: Array<(spec: OpenApiBundled, options: ProcessorOptions | undefined) => OpenApiBundled> = [];
 
-  if (options.mergeAllOf) processors.push(mergeAllOf);
-  if (options.ensureDiscriminatorValues) processors.push(ensureDiscriminatorValues);
   if (options.xOmit) processors.push(xOmitDeep);
   if (options.xPick) processors.push(xPick);
+  if (options.mergeAllOf) processors.push(mergeAllOf);
+  if (options.ensureDiscriminatorValues) processors.push(ensureDiscriminatorValues);
 
   if (processors.length < 1) {
     return undefined;
