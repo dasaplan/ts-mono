@@ -1,5 +1,11 @@
 # @dasaplan/openapi-bundler
 
+## 0.0.24
+
+### Patch Changes
+
+- process schema properties
+
 ## 0.0.23
 
 ### Patch Changes

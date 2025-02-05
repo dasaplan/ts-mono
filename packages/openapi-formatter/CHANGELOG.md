@@ -1,5 +1,12 @@
 # @dasaplan/openapi-formatter
 
+## 0.0.15
+
+### Patch Changes
+
+- Updated dependencies
+  - @dasaplan/openapi-bundler@0.0.24
+
 ## 0.0.14
 
 ### Patch Changes
