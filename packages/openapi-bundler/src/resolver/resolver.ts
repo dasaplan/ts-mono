@@ -11,13 +11,13 @@ type WithoutRef<T extends oas30.ReferenceObject | OaComponent> = Exclude<T, oas3
 export interface Resolver {
   root: OpenApiBundled;
   resolveRefOptional<T extends oas30.ReferenceObject | OaComponent>(data: T | undefined): WithOptionalRef<T> | undefined;
-  resolveRef<T extends oas30.ReferenceObject | OaComponent>(
+  resolveRef<T extends oas30.ReferenceObject | OaComponent = oas30.SchemaObject | OaComponent>(
     data: T,
-    params?: { deleteRef: boolean }
+    params?: { deleteRef: boolean },
   ): typeof params extends { deletedRef: true } ? WithoutRef<T> : WithOptionalRef<T>;
   resolveRefImmutable<T extends oas30.ReferenceObject | OaComponent>(
     data: T | { $ref: string },
-    params?: { deleteRef: boolean }
+    params?: { deleteRef: boolean },
   ): typeof params extends { deletedRef: true } ? WithoutRef<T> : WithOptionalRef<T>;
 }
 
@@ -45,7 +45,7 @@ export module Resolver {
       },
       resolveRef<T extends oas30.ReferenceObject | OaComponent>(
         data: { $ref: string } | unknown,
-        params?: { deleteRef: boolean }
+        params?: { deleteRef: boolean },
       ): typeof params extends { deletedRef: true } ? WithoutRef<T> : WithOptionalRef<T> {
         if (!isRef(data)) {
           return data as WithOptionalRef<T>;
@@ -64,7 +64,7 @@ export module Resolver {
       },
       resolveRefImmutable<T extends oas30.ReferenceObject | OaComponent>(
         _data: T | { $ref: string } | unknown,
-        params?: { deleteRef: boolean }
+        params?: { deleteRef: boolean },
       ): typeof params extends { deletedRef: true } ? WithoutRef<T> : WithOptionalRef<T> {
         const data = _.cloneDeep(_data);
         if (!isRef(data)) {

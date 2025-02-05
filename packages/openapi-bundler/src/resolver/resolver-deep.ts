@@ -3,11 +3,9 @@ import { oas30 } from "openapi3-ts";
 import { OpenApiBundled } from "../bundle.js";
 import { Resolver } from "./resolver.js";
 import { SchemaGraph } from "../transpiler/circular-schmeas.js";
+import _ from "lodash";
 
-export function cleanObj<T extends Record<string, any>>(
-  obj: T,
-  except: Array<keyof T> = []
-) {
+export function cleanObj<T extends Record<string, any>>(obj: T, except: Array<keyof T> = []) {
   Object.getOwnPropertyNames(obj).forEach((prop) => {
     if (except.includes(prop)) {
       return;
@@ -33,10 +31,14 @@ export module SchemaResolverContext {
     return {
       resolver,
       graph,
-      schemas: graph.allNodeIds.map((id) => ({
-        id,
-        schema: resolver.resolveRef({ $ref: id }),
-      })),
+      schemas: graph.allNodeIds.flatMap((id) => {
+        const schema: oas30.SchemaObject = resolver.resolveRef({ $ref: id } as oas30.SchemaObject | oas30.ReferenceObject);
+        if (_.isEmpty(schema.properties)) {
+          return [{ id, schema }];
+        }
+        const propSchemas = Object.entries(schema.properties).map(([key, value]) => ({ id: `${id}.${key}`, schema: value as oas30.SchemaObject }));
+        return [{ id, schema }, ...propSchemas];
+      }),
     };
   }
 }

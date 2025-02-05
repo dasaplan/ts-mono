@@ -2,9 +2,11 @@
 import { OpenApiBundled } from "../bundle.js";
 import { Schema } from "./transpile-schema.js";
 import { oas30 } from "openapi3-ts";
-import { _ } from "@dasaplan/ts-sdk";
+import { _, JsonPointer } from "@dasaplan/ts-sdk";
 import { OaComponent, Resolver } from "../resolver/index.js";
 import { WithOptionalRef } from "../resolver/resolver.js";
+import jsonpath, { nodes } from "jsonpath";
+import JSONPointer from "jsonpointer";
 
 interface Node {
   id: string;
@@ -91,6 +93,25 @@ export module SchemaGraph {
   }
 }
 
+function parseSchemaComponents(resolver: Resolver, context: Context) {
+  Object.entries(resolver.root.components?.schemas ?? {}).forEach(([key, cmp]) => {
+    const ref = `#/components/schemas/${key}`;
+    const schema = { ...(cmp as oas30.SchemaObject), $ref: ref, "::ref": ref };
+    findCircles(schema, undefined, context);
+  });
+}
+
+function parseInlineSchemas(resolver: Resolver, context: Context) {
+  const parsedInlineSchemas = jsonpath
+    .nodes(resolver.root, `$..schema`)
+    .filter((n) => _.isNil(n.value?.$ref))
+    .map((n) => ({ id: `/${JsonPointer.pathToJsonPath(n.path.slice(1).map((n) => n.toString()))}`, schema: n }));
+  parsedInlineSchemas.forEach((r) => {
+    const schema = { ...(r.schema as oas30.SchemaObject), $ref: r.id, "::ref": r.id };
+    findCircles(schema, undefined, context);
+  });
+}
+
 export function createSchemaGraph(resolver: Resolver) {
   const context: Context = {
     resolver,
@@ -100,18 +121,18 @@ export function createSchemaGraph(resolver: Resolver) {
     path: [],
   };
 
-  Object.entries(resolver.root.components?.schemas ?? {}).forEach(([key, cmp]) => {
-    const ref = `#/components/schemas/${key}`;
-    const schema = { ...(cmp as oas30.SchemaObject), $ref: ref, "::ref": ref };
-    findCircles(schema, undefined, context);
-  });
+  parseSchemaComponents(resolver, context);
+  parseInlineSchemas(resolver, context);
 
   return {
     get edges() {
-      return Array.from(context.nodes.values()).reduce((acc, curr) => {
-        acc.push(...Array.from(curr.children).map((c) => [curr.id, c]));
-        return acc;
-      }, <string[][]>[]);
+      return Array.from(context.nodes.values()).reduce(
+        (acc, curr) => {
+          acc.push(...Array.from(curr.children).map((c) => [curr.id, c]));
+          return acc;
+        },
+        <string[][]>[],
+      );
     },
     get nodes() {
       return context.nodes;
