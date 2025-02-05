@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { formatOaSpec } from "./format.js";
+import { formatOpenapi } from "./format.js";
 import jsyml from "js-yaml";
 import { OpenapiBundledMock } from "@dasaplan/openapi-bundler";
 
@@ -25,7 +25,7 @@ describe("format", () => {
       }),
     );
 
-    const fmt = await formatOaSpec(api as never, {
+    const fmt = await formatOpenapi(api as never, {
       deleteExamples: false,
       fixDescription: false,
       fixTitles: false,
@@ -103,7 +103,7 @@ describe("format", () => {
       }),
     );
 
-    const fmt = await formatOaSpec(api as never, {
+    const fmt = await formatOpenapi(api as never, {
       deleteExamples: true,
       fixDescription: false,
       fixTitles: false,

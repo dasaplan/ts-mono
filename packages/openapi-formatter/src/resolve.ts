@@ -25,7 +25,7 @@ export async function resolveSpec(filePath: File) {
   return mapped;
 }
 
-export async function resolveOaDocument(doc: OpenApiBundled) {
+export async function resolveOpenapi(doc: OpenApiBundled) {
   const resolved = await swagger.resolve(doc as never);
   const refs = resolved.paths();
   const mapped = refs.map((refFile) => {

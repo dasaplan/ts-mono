@@ -3,7 +3,7 @@
 
 import oafmt, { OpenAPISortOptions } from "openapi-format";
 import { File, _, ApplicationError, Folder } from "@dasaplan/ts-sdk";
-import { AnySchema, Parsed, ResolvedSpec, resolveOaDocument, resolveSchemas, resolveSpec } from "./resolve.js";
+import { AnySchema, Parsed, ResolvedSpec, resolveOpenapi, resolveSchemas, resolveSpec } from "./resolve.js";
 import * as path from "node:path";
 import { createSpecProcessor } from "./post-process/index.js";
 import { appLog } from "./logger.js";
@@ -37,6 +37,7 @@ export interface FormatterOptions extends PostProcessingOptions {
   sortSpec?: boolean;
 }
 
+/*** Format an Openapi specification. If the spec contains external references, they will be resolved and formatted. */
 export async function formatSpec(filePath: File, options: FormatterOptions): Promise<{ outFile: string }> {
   const log = appLog.childLog(formatSpec);
   const resolved = await resolveSpec(filePath);
@@ -45,8 +46,9 @@ export async function formatSpec(filePath: File, options: FormatterOptions): Pro
   return { outFile: options.outFolder.absolutePath };
 }
 
-export async function formatOaSpec(spec: OpenApiBundled, options: Omit<FormatterOptions, "outFolder">) {
-  const resolved = await resolveOaDocument(spec);
+/*** Format an Openapi object. If the objects contains external references, they will be resolved and formatted. */
+export async function formatOpenapi(spec: oas30.OpenAPIObject, options: Omit<FormatterOptions, "outFolder">): Promise<Array<oas30.OpenAPIObject>> {
+  const resolved = await resolveOpenapi(spec);
   const { common, formattedSpecs } = await formatResolvedSpec(resolved, options);
   return formattedSpecs.map((r) => r.getFile());
 }
