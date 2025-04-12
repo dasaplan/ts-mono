@@ -1,6 +1,6 @@
 import { _ } from "./lodash-extended.js";
 
-export module Union {
+export namespace Union {
   export type Handler<I, R> = (e: I) => R;
   export type MatchObj<T extends string, R> = {
     [K in T as K]: Handler<Extract<T, K>, R>;
@@ -10,9 +10,7 @@ export module Union {
     return _.curryRight(match<T, R>)(s);
   }
 
-  export function partialMatcher<T extends string, R>(
-    s: Partial<MatchObj<T, R>>
-  ) {
+  export function partialMatcher<T extends string, R>(s: Partial<MatchObj<T, R>>) {
     return _.curryRight(matchPartial<T, R>)(s);
   }
 
@@ -23,10 +21,7 @@ export module Union {
     };
   }
   /** All handler must return the same type*/
-  export function match<T extends string, R>(
-    enumValue: T,
-    handler: MatchObj<T, R>
-  ): R {
+  export function match<T extends string, R>(enumValue: T, handler: MatchObj<T, R>): R {
     if (enumValue in handler) {
       return handler[enumValue](enumValue as never);
     }
@@ -34,10 +29,7 @@ export module Union {
   }
 
   /** All handler must return the same type*/
-  export function matchPartial<T extends string, R>(
-    enumValue: T,
-    handler: Partial<MatchObj<T, R>>
-  ): R | undefined {
+  export function matchPartial<T extends string, R>(enumValue: T, handler: Partial<MatchObj<T, R>>): R | undefined {
     if (enumValue in handler) {
       return handler[enumValue]?.(enumValue as never);
     }

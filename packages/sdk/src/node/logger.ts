@@ -3,7 +3,7 @@
 
 import { ILogObj, Logger } from "tslog";
 
-export module AppLogger {
+export namespace AppLogger {
   export const logLevels = {
     silly: 0,
     trace: 1,
@@ -39,7 +39,7 @@ export module AppLogger {
         return doCreate(
           _log.getSubLogger({
             name: typeof n === "string" ? n : n.name,
-          })
+          }),
         );
       },
       setLogLevel(level: number | keyof typeof logLevels) {

@@ -2,7 +2,7 @@ export function getZodCommon() {
   return `
 import { z } from "zod";
 
-export module ZodUnionMatch {
+export namespace ZodUnionMatch {
   // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
   export type Matcher = Record<string, z.ZodSchema>;
 

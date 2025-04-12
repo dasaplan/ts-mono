@@ -2,7 +2,7 @@ import { OpenApiBundled } from "../../bundle.js";
 import { Resolver } from "../../resolver/index.js";
 import { ApplicationError } from "@dasaplan/ts-sdk";
 
-export module OpenapiApiDoc {
+export namespace OpenapiApiDoc {
   type ApiDoc = OpenApiBundled;
 
   export function accessor(bundled: ApiDoc) {

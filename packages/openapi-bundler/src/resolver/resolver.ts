@@ -21,7 +21,7 @@ export interface Resolver {
   ): typeof params extends { deletedRef: true } ? WithoutRef<T> : WithOptionalRef<T>;
 }
 
-export module Resolver {
+export namespace Resolver {
   export function create(bundled: OpenApiBundled): Resolver {
     return {
       root: bundled,

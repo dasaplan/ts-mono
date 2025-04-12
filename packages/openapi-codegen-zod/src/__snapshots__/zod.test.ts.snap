@@ -4,10 +4,10 @@ exports[`generateZod > circular schema > circular 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 
-export module Schemas {
+export namespace Schemas {
     export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Node)).optional() }));
 
-    export module Types {
+    export namespace Types {
         export type Node = z.infer<typeof Schemas.Node>;
     }
 
@@ -19,7 +19,7 @@ exports[`generateZod > generates generic/api.yml > generic/api 1`] = `
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 
-export module Schemas {
+export namespace Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
@@ -30,7 +30,7 @@ export module Schemas {
     export const Pets = z.array(Pet).max(100);
     export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() }));
 
-    export module Types {
+    export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
         export type GenericPet = z.infer<typeof Schemas.GenericPet>;
         export type Dog = z.infer<typeof Schemas.Dog>;
@@ -43,7 +43,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const Cat = z.union([Seam, ShortHair]);
         export const Pet = z.union([Cat, Dog, GenericPet]);
     }
@@ -56,14 +56,14 @@ exports[`generateZod > generates pets-modular/pets-api.yml > pets-modular/pets-a
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 
-export module Schemas {
+export namespace Schemas {
     export const PetBase = z.object({ type: z.string(), name: z.string().optional() });
     export const DogEnum = z.enum(['DOG_A', 'DOG_B']).or(z.string().brand("UNKNOWN"));
     export const Dog = PetBase.merge(z.object({ fluffy: z.boolean().optional(), breed: DogEnum.optional(), type: z.literal('DOG') }));
     export const Cat = PetBase.merge(z.object({ breed: z.enum(['CAT_A', 'CAT_B']).or(z.string().brand("UNKNOWN")).optional(), type: z.literal('CAT') }));
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() });
 
-    export module Types {
+    export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
         export type DogEnum = z.infer<typeof Schemas.DogEnum>;
         export type Dog = z.infer<typeof Schemas.Dog>;
@@ -72,7 +72,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const Pet = z.union([Cat, Dog]);
     }
 
@@ -84,7 +84,7 @@ exports[`generateZod > generates pets-modular-complex/petstore-api.yml > pets-mo
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 
-export module Schemas {
+export namespace Schemas {
     export const FluffLevel = z.enum(['A', 'B', 'C']).or(z.string().brand("UNKNOWN"));
     export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
     export const FluffyTeddy = z.object({ fluffLevel: FluffLevel.optional(), id: z.string(), price: z.string(), kind: z.literal('TEDDY'), targetGroup: z.string().optional() });
@@ -100,7 +100,7 @@ export module Schemas {
     export const HttpErrorCode = z.number().int();
     export const Error = z.object({ code: HttpErrorCode.optional(), message: z.string(), titledSchema: SchemaTitled.optional() });
 
-    export module Types {
+    export namespace Types {
         export type FluffLevel = z.infer<typeof Schemas.FluffLevel>;
         export type SchemasToy = z.infer<typeof Schemas.SchemasToy>;
         export type FluffyTeddy = z.infer<typeof Schemas.FluffyTeddy>;
@@ -118,7 +118,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const PetToy = z.union([Ball, FluffyTeddy]);
     }
 
@@ -130,14 +130,14 @@ exports[`generateZod > generates pets-recursive/pets-api.yml > pets-recursive/pe
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 
-export module Schemas {
+export namespace Schemas {
     export const PetBase = z.object({ type: z.string() });
     export const Dog: z.ZodTypeAny = z.lazy(() => PetBase.merge(z.object({ friends: Pets.optional(), type: z.literal('DOG') })));
     export const Cat: z.ZodTypeAny = z.lazy(() => PetBase.merge(z.object({ enemies: Pets.optional(), type: z.literal('CAT') })));
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'CAT': Cat, 'DOG': Dog, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() });
     export const Pets: z.ZodTypeAny = z.lazy(() => z.object({ pets: z.array(Pet).max(100).optional() }));
 
-    export module Types {
+    export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
         export type Dog = z.infer<typeof Schemas.Dog>;
         export type Cat = z.infer<typeof Schemas.Cat>;
@@ -146,7 +146,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const Pet = z.union([Cat, Dog]);
     }
 
@@ -158,14 +158,14 @@ exports[`generateZod > generates pets-simple/pets-api.yml > pets-simple/pets-api
 "import { z } from 'zod'
 import * as zc from './zod-common.js'
 
-export module Schemas {
+export namespace Schemas {
     export const PetBase = z.object({ id: z.number().int(), type: z.string() });
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
     export const Cat = PetBase.merge(z.object({ color: z.string(), type: z.literal('CAT') }));
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() });
     export const Pets = z.array(Pet).max(100);
 
-    export module Types {
+    export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
         export type Dog = z.infer<typeof Schemas.Dog>;
         export type Cat = z.infer<typeof Schemas.Cat>;
@@ -174,7 +174,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const Pet = z.union([Cat, Dog]);
     }
 

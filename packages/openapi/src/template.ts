@@ -3,7 +3,7 @@ import path from "path";
 import { Folder } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
 
-export module TemplateDir {
+export namespace TemplateDir {
   function isInit() {
     const exists = Folder.cwd("templates").readAllFilesAsString().length > 0;
     appLog.log.info("templates exists:", exists);

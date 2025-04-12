@@ -50,31 +50,21 @@
   },
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",
-    "@dasaplan/ts-sdk": "workspace:0.0.2",
-    "@rtk-query/codegen-openapi": "^1.2.0",
-    "@ts-morph/common": "^0.22.0",
-    "commander": "^11.1.0",
+    "@dasaplan/ts-sdk": "workspace:*",
+    "@rtk-query/codegen-openapi": "^2.0.0",
+    "@ts-morph/common": "^0.26.1",
+    "commander": "^13.1.0",
     "pascal-case": "^4.0.0",
-    "ts-morph": "^21.0.1"
+    "ts-morph": "^25.0.1"
   },
   "devDependencies": {
-    "@reduxjs/toolkit": "^2.2.6",
-    "@types/express": "^4.17.21",
+    "@reduxjs/toolkit": "^2.6.1",
+    "@types/express": "^5.0.1",
     "@types/pascal-case": "^1.1.2",
-    "@typescript-eslint/eslint-plugin": "^6.17.0",
-    "clean-package": "^2.2.0",
-    "eslint": "^8.0.1",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
-    "eslint-plugin-promise": "^6.0.0",
-    "express": "^4.19.2",
-    "npm-run-all": "*",
+    "express": "^5.1.0",
     "openapi-example-specs": "workspace:*",
-    "openapi3-ts": "^4.2.1",
-    "sort-package-json": "^2.10.0",
-    "tsconfig": "workspace:0.0.0",
-    "type-fest": "*",
-    "typescript": "^5.5.3"
+    "openapi3-ts": "^4.4.0",
+    "tsconfig": "workspace:0.0.0"
   },
   "peerDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0"
