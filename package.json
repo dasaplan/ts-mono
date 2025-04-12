@@ -43,6 +43,7 @@
     "prettier": "3.5.3",
     "rimraf": "^6.0.1",
     "semantic-release": "^24.2.3",
+    "semantic-release-monorepo": "^8.0.2",
     "sort-package-json": "^3.0.0",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.15",
