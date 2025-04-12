@@ -1,5 +1,17 @@
 # @dasaplan/openapi-codegen-zod
 
+## 1.2.0
+
+### Minor Changes
+
+- Generated changeset from CI
+
+### Patch Changes
+
+- Updated dependencies
+  - @dasaplan/ts-sdk@0.1.0
+  - @dasaplan/openapi-bundler@1.1.0
+
 ## 1.1.0
 
 ### Minor Changes

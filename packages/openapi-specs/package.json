@@ -2,7 +2,7 @@
   "name": "openapi-example-specs",
   "private": true,
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "exports": {
     ".": {
       "import": "./dist/index.js",

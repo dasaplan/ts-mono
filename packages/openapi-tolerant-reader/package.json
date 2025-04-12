@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-tolerant-reader",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Openapi solutions to support tolerant reader.",
   "keywords": [
     "openapi",
