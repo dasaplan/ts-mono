@@ -1,5 +1,16 @@
 # @dasaplan/openapi
 
+## 0.0.29
+
+### Patch Changes
+
+- Generated changeset from CI
+- Updated dependencies
+  - @dasaplan/openapi-codegen-zod@1.1.0
+  - @dasaplan/openapi-bundler@1.0.1
+  - @dasaplan/openapi-codegen-endpoints@1.0.1
+  - @dasaplan/ts-sdk@0.0.3
+
 ## 0.0.28
 
 ### Patch Changes
