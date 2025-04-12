@@ -26,8 +26,8 @@ jobs:
         with:
           run_install: false
 
-      - name: Setup npmrc
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+#      - name: Setup npmrc
+#        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
       - name: setup pnpm config
         run: pnpm config set store-dir $PNPM_CACHE_FOLDER
@@ -39,11 +39,17 @@ jobs:
         run: pnpm ci:build:only
 
       # Run changesets versioning
-      - name: create and publish versions
-        uses: changesets/action@v1
-        with:
-          commit: "chore: update versions"
-          title: "chore: update versions"
-          publish: pnpm ci:publish
+#      - name: create and publish versions
+#        uses: changesets/action@v1
+#        with:
+#          commit: "chore: update versions"
+#          title: "chore: update versions"
+#          publish: pnpm ci:publish
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
