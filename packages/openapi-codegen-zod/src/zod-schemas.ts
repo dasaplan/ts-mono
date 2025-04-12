@@ -22,7 +22,7 @@ export function createConstantDeclaration(c: Schema, options: ZodGenOptions) {
   const isDiscriminated = c.kind === "UNION" && _.isDefined(c.discriminator);
 
   if (options.includeTsTypes && (isDiscriminated || isEnum)) {
-    // todo: fix type inference for unknown values
+    // todo: type inference for unknown values needed.
     return `${declaration} = ${value} as z.ZodType<${IDENTIFIER_API}.${name}>;`;
   }
   if (isLazy && options.includeTsTypes) {
