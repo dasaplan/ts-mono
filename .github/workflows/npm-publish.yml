@@ -38,6 +38,9 @@ jobs:
       - name: Build
         run: pnpm ci:build:only
 
+      - name: Create Changeset
+        run: pnpm ci:changeset
+
       # Run changesets versioning
       - name: create and publish versions
         uses: changesets/action@v1
