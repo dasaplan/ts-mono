@@ -1,5 +1,10 @@
 import { _ } from "./lodash-extended.js";
 
+/** Go to utility for nodejs Error Handling.
+ * - includes convenient methods for assertion or throwing
+ * - error parser because in js anything can be thrown
+ * - error chaining for easier working with module boundaries
+ *  */
 export class ApplicationError extends Error {
   public static readonly NAME = "ApplicationError";
 
@@ -20,27 +25,19 @@ export class ApplicationError extends Error {
   }
 
   chain(error: Error | ApplicationError): ApplicationError {
-    return new ApplicationError(
-      `${this.message}\n ::causedBy ${createOutMessageOfUnknownError(error)}`
-    );
+    return new ApplicationError(`${this.message}\n ::causedBy ${createOutMessageOfUnknownError(error)}`);
   }
 
   static assert<T>(
     condition: T extends () => infer R ? R : T,
-    message: string
-  ): asserts condition is T extends () => infer R
-    ? NonNullable<R>
-    : NonNullable<T> {
+    message: string,
+  ): asserts condition is T extends () => infer R ? NonNullable<R> : NonNullable<T> {
     const result = typeof condition === "function" ? condition() : condition;
     if (_.isNil(result)) {
-      throw ApplicationError.create(
-        "assertion failed. expected assert condition to be a defined value."
-      ).chain(ApplicationError.create(message));
+      throw ApplicationError.create("assertion failed. expected assert condition to be a defined value.").chain(ApplicationError.create(message));
     }
     if (typeof result === "boolean" && !result) {
-      throw ApplicationError.create(
-        "assertion failed. expected assert condition to be true"
-      ).chain(ApplicationError.create(message));
+      throw ApplicationError.create("assertion failed. expected assert condition to be true").chain(ApplicationError.create(message));
     }
   }
 
@@ -66,11 +63,8 @@ export class ApplicationError extends Error {
 }
 
 function parseError(
-  error: unknown
-):
-  | { type: typeof ApplicationError.NAME; error: ApplicationError }
-  | { type: "ERROR"; error: Error }
-  | { type: "UNKNOWN_ERROR"; error: string } {
+  error: unknown,
+): { type: typeof ApplicationError.NAME; error: ApplicationError } | { type: "ERROR"; error: Error } | { type: "UNKNOWN_ERROR"; error: string } {
   if (error instanceof ApplicationError) {
     return { type: ApplicationError.NAME, error: error };
   }
@@ -88,13 +82,7 @@ function parseError(
 
 function isLikelyError(error: unknown): error is Error {
   const cast = error as Error;
-  return (
-    _.isDefined(cast) &&
-    _.isDefined(cast.stack) &&
-    _.isDefined(cast.message) &&
-    typeof cast.stack === "string" &&
-    typeof cast.message === "string"
-  );
+  return _.isDefined(cast) && _.isDefined(cast.stack) && _.isDefined(cast.message);
 }
 
 function createOutMessageOfUnknownError(error: Error | ApplicationError) {
