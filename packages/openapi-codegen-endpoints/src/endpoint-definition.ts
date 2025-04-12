@@ -15,7 +15,7 @@ export interface EndpointDefinition<
   request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
   type PathSegment = `${string}`;
 
   type PathParam = `{:${string}}`;

@@ -139,7 +139,7 @@ function fixSchemaTitles(spec: AnySchema): AnySchema {
   return spec;
 }
 
-export module OaSchemaObject {
+export namespace OaSchemaObject {
   export function findMember(member: keyof AnySchema, schema: AnySchema) {
     if (schema[member]) {
       return schema[member];

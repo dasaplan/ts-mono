@@ -74,11 +74,11 @@ describe("generateZod", () => {
         "import { z } from 'zod'
         import * as zc from './zod-common.js'
         
-        export module Schemas {
+        export namespace Schemas {
             export const SomeEntity = z.object({ name: z.string().optional() });
             export const Node = z.object({ id: z.string().optional(), refEntity: SomeEntity.optional(), refEntity2: SomeEntity.optional() });
         
-            export module Types {
+            export namespace Types {
                 export type SomeEntity = z.infer<typeof Schemas.SomeEntity>;
                 export type Node = z.infer<typeof Schemas.Node>;
             }
@@ -124,14 +124,14 @@ describe("generateZod", () => {
       import * as zc from './zod-common.js'
       import * as api from './api.js'
 
-      export module Schemas {
+      export namespace Schemas {
           export const B = z.object({ id: z.string().optional(), type: z.literal('B_TYPE') });
           export const A = z.object({ id: z.string().optional(), type: z.enum(['A_TYPE', 'AA_TYPE']) });
           export const MultiUnion = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, 'B_TYPE': B, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.MultiUnion>;
           export const Union = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, 'AA_TYPE': A, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Union>;
           export const SingleUnion = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.SingleUnion>;
 
-          export module Types {
+          export namespace Types {
               export type B = z.infer<typeof Schemas.B>;
               export type A = z.infer<typeof Schemas.A>;
               export type MultiUnion = z.infer<typeof Schemas.MultiUnion>;
@@ -140,7 +140,7 @@ describe("generateZod", () => {
           }
 
 
-          export module Unions {
+          export namespace Unions {
               export const MultiUnion = z.union([A, B]);
           }
 
@@ -211,14 +211,14 @@ describe("generateZod", () => {
       "import { z } from 'zod'
       import * as zc from './zod-common.js'
 
-      export module Schemas {
+      export namespace Schemas {
           export const Base = z.object({ type: z.string().optional() });
           export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('B') })));
           export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('A') })));
           export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, 'Node': Node, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }));
           export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.array(Child).optional() }));
 
-          export module Types {
+          export namespace Types {
               export type Base = z.infer<typeof Schemas.Base>;
               export type B = z.infer<typeof Schemas.B>;
               export type A = z.infer<typeof Schemas.A>;
@@ -227,7 +227,7 @@ describe("generateZod", () => {
           }
 
 
-          export module Unions {
+          export namespace Unions {
               export const Child = z.lazy(() => z.union([A, B, Node]));
           }
 
@@ -296,14 +296,14 @@ describe("generateZod", () => {
       "import { z } from 'zod'
       import * as zc from './zod-common.js'
 
-      export module Schemas {
+      export namespace Schemas {
           export const Base = z.object({ type: z.string().optional() });
           export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('B') })));
           export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('A') })));
           export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, 'Node': Node, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }));
           export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
 
-          export module Types {
+          export namespace Types {
               export type Base = z.infer<typeof Schemas.Base>;
               export type B = z.infer<typeof Schemas.B>;
               export type A = z.infer<typeof Schemas.A>;
@@ -312,7 +312,7 @@ describe("generateZod", () => {
           }
 
 
-          export module Unions {
+          export namespace Unions {
               export const Child = z.lazy(() => z.union([A, B, Node]));
           }
 
@@ -387,7 +387,7 @@ describe("generateZod", () => {
       "import { z } from 'zod'
       import * as zc from './zod-common.js'
 
-      export module Schemas {
+      export namespace Schemas {
           export const Base = z.object({ type: z.string().optional() });
           export const B: z.ZodTypeAny = Base.merge(z.object({ children: z.lazy(() => z.array(Rec)).optional(), type: z.literal('B') }));
           export const Rec: z.ZodTypeAny = z.lazy(() => z.object({ a: A.optional(), b: B.optional(), child: Child.optional(), node: Node.optional() }));
@@ -395,7 +395,7 @@ describe("generateZod", () => {
           export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }));
           export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
 
-          export module Types {
+          export namespace Types {
               export type Base = z.infer<typeof Schemas.Base>;
               export type B = z.infer<typeof Schemas.B>;
               export type Rec = z.infer<typeof Schemas.Rec>;
@@ -405,7 +405,7 @@ describe("generateZod", () => {
           }
 
 
-          export module Unions {
+          export namespace Unions {
               export const Child = z.lazy(() => z.union([A, B]));
           }
 

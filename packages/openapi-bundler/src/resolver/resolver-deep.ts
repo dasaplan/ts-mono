@@ -23,7 +23,7 @@ export interface SchemaResolverContext {
   schemas: Array<{ id: string; schema: oas30.SchemaObject }>;
 }
 
-export module SchemaResolverContext {
+export namespace SchemaResolverContext {
   export function create(bundled: OpenApiBundled): SchemaResolverContext {
     const resolver = Resolver.create(bundled);
     const graph = SchemaGraph.createFromBundled(bundled);

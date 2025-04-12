@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export module ZodDiscriminatedUnion {
+export namespace ZodDiscriminatedUnion {
   export type Handler<I> = z.Schema<I>;
   export type MatchObj<T extends object, Discriminator extends keyof T> = Discriminator extends string
     ? {
@@ -28,14 +28,16 @@ export module ZodDiscriminatedUnion {
 
   export function match<T extends object, D extends keyof T>(union: T, matcher: MatchObj<T, D>, discriminator: D): T {
     const handlerKey = union[discriminator] as keyof typeof matcher;
-    return handlerKey in matcher ? (matcher[handlerKey] as z.Schema).parse(union) : matcher.onDefault.parse(union);
+    return handlerKey in matcher ? (matcher[handlerKey] as z.Schema).parse(union) : (matcher.onDefault.parse(union) as T);
   }
   export function matchSafe<T extends object, D extends keyof T>(
     union: T,
     matcher: MatchObj<T, D>,
-    discriminator: D
+    discriminator: D,
   ): z.SafeParseSuccess<T> | z.SafeParseError<z.ZodError> {
     const handlerKey = union?.[discriminator] as keyof typeof matcher;
-    return handlerKey in matcher ? (matcher?.[handlerKey] as z.Schema)?.safeParse(union) : matcher.onDefault.safeParse(union);
+    return handlerKey in matcher
+      ? (matcher?.[handlerKey] as z.Schema)?.safeParse(union)
+      : (matcher.onDefault.safeParse(union) as z.SafeParseSuccess<T> | z.SafeParseError<z.ZodError>);
   }
 }

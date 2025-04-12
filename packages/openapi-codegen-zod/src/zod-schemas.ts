@@ -53,7 +53,7 @@ export function createTypeDeclaration(c: Schema, options: ZodGenOptions) {
 
 export function createModule(name: string, members: string[], options: ZodGenOptions) {
   return `
-export module ${name} {
+export namespace ${name} {
     ${members.join("\n")}
 }
   `;
@@ -133,7 +133,7 @@ function processSchema(c: Schema | Schema.DiscriminatorProperty, options: ZodGen
   });
 }
 
-module Factory {
+namespace Factory {
   const valueConstraints = [
     "maximum",
     "exclusiveMaximum",

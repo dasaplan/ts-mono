@@ -83,7 +83,7 @@ function findCircles(child: WithOptionalRef<oas30.SchemaObject> | oas30.Referenc
 }
 
 export type SchemaGraph = ReturnType<(typeof SchemaGraph)["createFromBundled"]>;
-export module SchemaGraph {
+export namespace SchemaGraph {
   export function createFromBundled(bundled: OpenApiBundled) {
     const resolver = Resolver.create(_.cloneDeep(bundled));
     return createSchemaGraph(resolver);

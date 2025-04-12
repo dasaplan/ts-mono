@@ -1,6 +1,6 @@
 import { ApplicationError, Folder, Imports } from "@dasaplan/ts-sdk";
 
-export module Templates {
+export namespace Templates {
   export function folder() {
     const libPath = Imports.resolve("@dasaplan/openapi-codegen-endpoints");
     const lib = Folder.of(libPath).cd("templates");

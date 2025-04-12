@@ -6,7 +6,7 @@ import { stringifyYaml } from "@redocly/openapi-core";
 import { _ } from "../ts/index.js";
 
 export type File = ReturnType<typeof File.of>;
-export module File {
+export namespace File {
   export function isFilePath(filePath: string | undefined): filePath is string {
     if (_.isNil(filePath)) return false;
     return /\.\w+$/u.test(filePath);
@@ -68,7 +68,7 @@ export module File {
 }
 
 export type Folder = ReturnType<typeof Folder.of>;
-export module Folder {
+export namespace Folder {
   export function temp() {
     return resolve(process.cwd(), "tmp");
   }

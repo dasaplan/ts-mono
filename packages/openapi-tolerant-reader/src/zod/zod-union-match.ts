@@ -1,12 +1,12 @@
 import { z } from "zod";
 
-export module ZodUnionMatch {
+export namespace ZodUnionMatch {
   // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
   export type Matcher = Record<string, z.ZodSchema>;
 
   export type Schemas<T extends Matcher> = T[keyof T];
-    export type Discriminator<T extends Matcher> = RecDiscriminator<Schemas<T>>;
-    export type RecDiscriminator<T extends z.ZodSchema> = T extends z.ZodUnion<infer Options> ? RecDiscriminator<Options[number]> : keyof z.infer<T>;
+  export type Discriminator<T extends Matcher> = RecDiscriminator<Schemas<T>>;
+  export type RecDiscriminator<T extends z.ZodSchema> = T extends z.ZodUnion<infer Options> ? RecDiscriminator<Options[number]> : keyof z.infer<T>;
 
   export function matcher<T extends Matcher>(discriminator: Discriminator<T>, matcher: T): Schemas<T> {
     return z
@@ -42,7 +42,7 @@ export module ZodUnionMatch {
   export function matchSafe<T extends Matcher>(
     union: z.infer<Schemas<T>>,
     matcher: T,
-    discriminator: Discriminator<T>
+    discriminator: Discriminator<T>,
   ): z.SafeParseSuccess<Schemas<T>> | z.SafeParseError<z.ZodError> {
     const handlerKey = union?.[discriminator] as keyof typeof matcher;
     return handlerKey in matcher ? (matcher?.[handlerKey] as z.Schema)?.safeParse(union) : matcher.onDefault.safeParse(union);

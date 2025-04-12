@@ -72,7 +72,7 @@ export function resolveSchemas(obj: unknown, ctx: { basePath: Array<string> } = 
   return refs;
 }
 
-export module InferOa {
+export namespace InferOa {
   export function inferPath(obj: unknown, path: Array<string>): { kind: "UNKNOWN" | "SCHEMA" | "COMPONENT"; value: unknown } {
     const pathStr = path.join(".");
     if (pathStr.endsWith(".schema")) {

@@ -1,11 +1,8 @@
 import { spawn as spwn } from "child_process";
 
-export module CommandLine {
+export namespace CommandLine {
   /** https://stackoverflow.com/a/72863312/18155601 */
-  export function spawn(
-    cmd: string,
-    args: ReadonlyArray<string>
-  ): Promise<string> {
+  export function spawn(cmd: string, args: ReadonlyArray<string>): Promise<string> {
     return new Promise((resolve, reject) => {
       const cp = spwn(cmd, args, { shell: true });
       const error: string[] = [];
