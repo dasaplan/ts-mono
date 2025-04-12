@@ -33,7 +33,7 @@ export async function generateZodSources(parsed: OpenApiBundled, filePath: strin
   return sourceSchema;
 }
 
-/** Generate zod schemas In-Memory from the parse model */
+/** Generate zod schemas from the parse model (In-Memory)*/
 export function generateZodSchemasFromParseModel(schemas: Array<Schema>, options: ZodGenOptions) {
   const components = schemas.filter((s) => s.component.kind === "COMPONENT");
   // we want to generate all components
