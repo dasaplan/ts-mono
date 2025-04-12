@@ -17,14 +17,13 @@
     "lint": "echo not implemented",
     "clean": "rimraf dist"
   },
-  "dependencies": {},
   "peerDependencies": {
     "@redocly/openapi-core": "^1.6.0",
     "lodash": "^4.17.21",
     "tslog": "^4.9.2"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.5",
+    "@types/lodash": "^4.17.16",
     "tsconfig": "workspace:*"
   }
 }

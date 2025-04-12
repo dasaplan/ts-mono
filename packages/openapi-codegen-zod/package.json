@@ -50,17 +50,17 @@
   },
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",
-    "@dasaplan/ts-sdk": "workspace:0.0.2",
-    "@ts-morph/common": "^0.22.0",
-    "commander": "^11.1.0",
+    "@dasaplan/ts-sdk": "workspace:*",
+    "@ts-morph/common": "^0.26.1",
+    "commander": "^13.1.0",
     "jsonpointer": "^5.0.1",
     "pascal-case": "^4.0.0",
-    "ts-morph": "^21.0.1"
+    "ts-morph": "^25.0.1"
   },
   "devDependencies": {
     "@types/pascal-case": "^1.1.2",
     "openapi-example-specs": "workspace:*",
-    "sort-package-json": "^2.10.0",
+    "sort-package-json": "^3.0.0",
     "tsconfig": "workspace:0.0.0"
   },
   "peerDependencies": {

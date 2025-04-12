@@ -45,12 +45,12 @@
     "@apidevtools/swagger-parser": "^10.1.1",
     "@dasaplan/openapi-bundler": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:*",
-    "commander": "^11.1.0",
+    "commander": "^13.1.0",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "openapi-format": "^1.25.0",
-    "openapi3-ts": "^4.3.3",
-    "tslog": "^4.9.2"
+    "openapi-format": "^1.25.2",
+    "openapi3-ts": "^4.4.0",
+    "tslog": "^4.9.3"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",

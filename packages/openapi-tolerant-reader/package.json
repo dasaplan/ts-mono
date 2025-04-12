@@ -42,11 +42,9 @@
     "lint": "eslint \"./src/*.ts\" index.ts",
     "lint:fix": "eslint \"./src/*.ts\" index.ts --fix"
   },
-  "dependencies": {},
   "devDependencies": {
     "tsconfig": "workspace:0.0.0"
   },
-  "peerDependencies": {},
   "clean-package": {
     "remove": [
       "scripts",
