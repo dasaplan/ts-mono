@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-codegen-zod",
-  "version": "0.0.16",
+  "version": "1.0.0",
   "description": "Openapi zod generator as tolerant reader",
   "keywords": [
     "openapi",
