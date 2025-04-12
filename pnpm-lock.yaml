@@ -12,14 +12,23 @@ importers:
         specifier: ^2.27.5
         version: 2.27.5
       '@redocly/openapi-core':
-        specifier: ^1.18.0q
-        version: 1.18.0
+        specifier: ^1.18.0
+        version: 1.27.2
+      '@types/lodash':
+        specifier: ^4.14.202
+        version: 4.17.5
       '@types/node':
         specifier: ^20.10.4
         version: 20.10.4
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.17.0
+        version: 6.17.0(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)(typescript@5.5.3)
       '@typescript-eslint/parser':
         specifier: ^6.20.0
         version: 6.20.0(eslint@8.55.0)(typescript@5.5.3)
+      axios:
+        specifier: ^1.6.5
+        version: 1.6.5
       clean-package:
         specifier: ^2.2.0
         version: 2.2.0
@@ -35,9 +44,18 @@ importers:
       eslint-config-prettier:
         specifier: ^10.0.1
         version: 10.0.1(eslint@8.55.0)
+      eslint-plugin-import:
+        specifier: ^2.25.2
+        version: 2.29.1(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)
+      eslint-plugin-n:
+        specifier: '^15.0.0 || ^16.0.0 '
+        version: 16.4.0(eslint@8.55.0)
       eslint-plugin-prettier:
         specifier: ^5.2.3
         version: 5.2.3(eslint-config-prettier@10.0.1(eslint@8.55.0))(eslint@8.55.0)(prettier@3.4.2)
+      eslint-plugin-promise:
+        specifier: ^6.0.0
+        version: 6.1.1(eslint@8.55.0)
       execa:
         specifier: ^8.0.1
         version: 8.0.1
@@ -62,6 +80,9 @@ importers:
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.10.4)(typescript@5.5.3)
+      tsc-alias:
+        specifier: ^1.8.8
+        version: 1.8.10
       tsup:
         specifier: ^8.1.0
         version: 8.1.0(postcss@8.4.39)(ts-node@10.9.2(@types/node@20.10.4)(typescript@5.5.3))(typescript@5.5.3)
@@ -138,66 +159,27 @@ importers:
       '@types/json-schema-merge-allof':
         specifier: ^0.6.5
         version: 0.6.5
-      '@types/lodash':
-        specifier: ^4.14.202
-        version: 4.17.5
       '@types/pascal-case':
         specifier: ^1.1.2
         version: 1.1.2
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^6.17.0
-        version: 6.17.0(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)(typescript@5.5.3)
-      axios:
-        specifier: ^1.6.5
-        version: 1.6.5
-      clean-package:
-        specifier: ^2.2.0
-        version: 2.2.0
-      eslint:
-        specifier: ^8.0.1
-        version: 8.55.0
-      eslint-plugin-import:
-        specifier: ^2.25.2
-        version: 2.29.1(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)
-      eslint-plugin-n:
-        specifier: '^15.0.0 || ^16.0.0 '
-        version: 16.4.0(eslint@8.55.0)
-      eslint-plugin-promise:
-        specifier: ^6.0.0
-        version: 6.1.1(eslint@8.55.0)
       express:
         specifier: ^4.19.2
         version: 4.19.2
-      npm-run-all:
-        specifier: '*'
-        version: 4.1.5
       openapi-example-specs:
         specifier: workspace:*
         version: link:../openapi-specs
       openapi3-ts:
         specifier: ^4.2.1
         version: 4.3.3
-      sort-package-json:
-        specifier: ^2.10.0
-        version: 2.10.0
-      tsc-alias:
-        specifier: ^1.8.8
-        version: 1.8.10
       tsconfig:
         specifier: workspace:0.0.0
         version: link:../tsconfig
-      type-fest:
-        specifier: '*'
-        version: 4.9.0
-      typescript:
-        specifier: ^5.5.3
-        version: 5.5.3
 
   packages/openapi-bundler:
     dependencies:
       '@redocly/openapi-core':
         specifier: ^1.6.0
-        version: 1.6.0
+        version: 1.27.2
       camelcase:
         specifier: ^8.0.0
         version: 8.0.0
@@ -235,18 +217,12 @@ importers:
       '@types/jsonpath':
         specifier: ^0.2.4
         version: 0.2.4
-      '@types/lodash':
-        specifier: ^4.17.5
-        version: 4.17.5
       openapi-example-specs:
         specifier: workspace:*
         version: link:../openapi-specs
       tsconfig:
         specifier: workspace:0.0.0
         version: link:../tsconfig
-      typescript:
-        specifier: ^5.5.3
-        version: 5.5.3
 
   packages/openapi-codegen-endpoints:
     dependencies:
@@ -284,48 +260,18 @@ importers:
       '@types/pascal-case':
         specifier: ^1.1.2
         version: 1.1.2
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^6.17.0
-        version: 6.17.0(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)(typescript@5.5.3)
-      clean-package:
-        specifier: ^2.2.0
-        version: 2.2.0
-      eslint:
-        specifier: ^8.0.1
-        version: 8.55.0
-      eslint-plugin-import:
-        specifier: ^2.25.2
-        version: 2.29.1(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)
-      eslint-plugin-n:
-        specifier: '^15.0.0 || ^16.0.0 '
-        version: 16.4.0(eslint@8.55.0)
-      eslint-plugin-promise:
-        specifier: ^6.0.0
-        version: 6.1.1(eslint@8.55.0)
       express:
         specifier: ^4.19.2
         version: 4.19.2
-      npm-run-all:
-        specifier: '*'
-        version: 4.1.5
       openapi-example-specs:
         specifier: workspace:*
         version: link:../openapi-specs
       openapi3-ts:
         specifier: ^4.2.1
         version: 4.3.3
-      sort-package-json:
-        specifier: ^2.10.0
-        version: 2.10.0
       tsconfig:
         specifier: workspace:0.0.0
         version: link:../tsconfig
-      type-fest:
-        specifier: '*'
-        version: 4.9.0
-      typescript:
-        specifier: ^5.5.3
-        version: 5.5.3
 
   packages/openapi-codegen-zod:
     dependencies:
@@ -357,45 +303,15 @@ importers:
       '@types/pascal-case':
         specifier: ^1.1.2
         version: 1.1.2
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^6.17.0
-        version: 6.17.0(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)(typescript@5.5.3)
-      clean-package:
-        specifier: ^2.2.0
-        version: 2.2.0
-      eslint:
-        specifier: ^8.0.1
-        version: 8.55.0
-      eslint-plugin-import:
-        specifier: ^2.25.2
-        version: 2.29.1(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)
-      eslint-plugin-n:
-        specifier: '^15.0.0 || ^16.0.0 '
-        version: 16.4.0(eslint@8.55.0)
-      eslint-plugin-promise:
-        specifier: ^6.0.0
-        version: 6.1.1(eslint@8.55.0)
-      npm-run-all:
-        specifier: '*'
-        version: 4.1.5
       openapi-example-specs:
         specifier: workspace:*
         version: link:../openapi-specs
-      openapi3-ts:
-        specifier: ^4.2.1
-        version: 4.3.3
       sort-package-json:
         specifier: ^2.10.0
         version: 2.10.0
       tsconfig:
         specifier: workspace:0.0.0
         version: link:../tsconfig
-      type-fest:
-        specifier: '*'
-        version: 4.9.0
-      typescript:
-        specifier: ^5.5.3
-        version: 5.5.3
 
   packages/openapi-formatter:
     dependencies:
@@ -433,18 +349,12 @@ importers:
       '@types/js-yaml':
         specifier: ^4.0.9
         version: 4.0.9
-      '@types/lodash':
-        specifier: ^4.17.5
-        version: 4.17.5
       openapi-example-specs:
         specifier: workspace:*
         version: link:../openapi-specs
       tsconfig:
         specifier: workspace:0.0.0
         version: link:../tsconfig
-      typescript:
-        specifier: ^5.5.3
-        version: 5.5.3
 
   packages/openapi-specs:
     dependencies:
@@ -458,42 +368,15 @@ importers:
 
   packages/openapi-tolerant-reader:
     devDependencies:
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^6.17.0
-        version: 6.17.0(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)(typescript@5.5.3)
-      clean-package:
-        specifier: ^2.2.0
-        version: 2.2.0
-      eslint:
-        specifier: ^8.0.1
-        version: 8.55.0
-      eslint-plugin-import:
-        specifier: ^2.25.2
-        version: 2.29.1(@typescript-eslint/parser@6.20.0(eslint@8.55.0)(typescript@5.5.3))(eslint@8.55.0)
-      eslint-plugin-n:
-        specifier: '^15.0.0 || ^16.0.0 '
-        version: 16.4.0(eslint@8.55.0)
-      eslint-plugin-promise:
-        specifier: ^6.0.0
-        version: 6.1.1(eslint@8.55.0)
-      npm-run-all:
-        specifier: '*'
-        version: 4.1.5
-      sort-package-json:
-        specifier: ^2.10.0
-        version: 2.10.0
       tsconfig:
         specifier: workspace:0.0.0
         version: link:../tsconfig
-      typescript:
-        specifier: ^5.5.3
-        version: 5.5.3
 
   packages/sdk:
     dependencies:
       '@redocly/openapi-core':
         specifier: ^1.6.0
-        version: 1.6.0
+        version: 1.27.2
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1045,10 +928,6 @@ packages:
     resolution: {integrity: sha512-qVrDc27DHpeO2NRCMeRdb4299nijKQE3BY0wrA+WUHlOLScorIi/y7JzammLk22IaTvjR9Mv9aTAdjE1aUwJnA==}
     engines: {node: '>=14.19.0', npm: '>=7.0.0'}
 
-  '@redocly/openapi-core@1.6.0':
-    resolution: {integrity: sha512-oao6Aey4peLKfagzWGb6N7OBI6CoDWEP4ka/XjrUNZw+UoKVVg3hVBXW4Vr3CJ2O8j6wEa2i+Lbb92VQQsoxwg==}
-    engines: {node: '>=14.19.0', npm: '>=7.0.0'}
-
   '@reduxjs/toolkit@2.2.6':
     resolution: {integrity: sha512-kH0r495c5z1t0g796eDQAkYbEQ3a1OLYN9o8jQQVZyKyw367pfRGS+qZLkHYvFHiUUdafpoSlQ2QYObIApjPWA==}
     peerDependencies:
@@ -1221,9 +1100,6 @@ packages:
 
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
-
-  '@types/node@14.18.63':
-    resolution: {integrity: sha512-fAtCfv4jJg+ExtXhvCkCqUKZ+4ok/JQk01qDKhL5BDDoS3AxKXhV5/MAVUZyQnSEd2GT92fkgZl0pz0Q0AzcIQ==}
 
   '@types/node@20.10.4':
     resolution: {integrity: sha512-D08YG6rr8X90YB56tSIuBaddy/UXAA9RKJoFvrsnogAum/0pmjkgi4+2nx96A330FmioegBWmEYQ+syqCFaveg==}
@@ -3057,6 +2933,7 @@ packages:
 
   lodash.isequal@4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+    deprecated: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
 
   lodash.isnil@4.0.0:
     resolution: {integrity: sha512-up2Mzq3545mwVnMhTDMdfoG1OurpA/s5t88JmQX809eH3C8491iu2sfKhTfhQtKY78oPNhiaHJUpT/dUDAAtng==}
@@ -5640,21 +5517,6 @@ snapshots:
       - encoding
       - supports-color
 
-  '@redocly/openapi-core@1.6.0':
-    dependencies:
-      '@redocly/ajv': 8.11.0
-      '@types/node': 14.18.63
-      colorette: 1.4.0
-      js-levenshtein: 1.1.6
-      js-yaml: 4.1.0
-      lodash.isequal: 4.5.0
-      minimatch: 5.1.6
-      node-fetch: 2.7.0
-      pluralize: 8.0.0
-      yaml-ast-parser: 0.0.43
-    transitivePeerDependencies:
-      - encoding
-
   '@reduxjs/toolkit@2.2.6(react@18.2.0)':
     dependencies:
       immer: 10.1.1
@@ -5806,8 +5668,6 @@ snapshots:
   '@types/minimist@1.2.5': {}
 
   '@types/node@12.20.55': {}
-
-  '@types/node@14.18.63': {}
 
   '@types/node@20.10.4':
     dependencies:
@@ -7394,7 +7254,7 @@ snapshots:
     dependencies:
       foreground-child: 3.1.1
       jackspeak: 2.3.6
-      minimatch: 9.0.3
+      minimatch: 9.0.4
       minipass: 7.0.4
       path-scurry: 1.10.1
 

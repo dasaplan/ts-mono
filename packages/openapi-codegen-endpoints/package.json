@@ -61,20 +61,10 @@
     "@reduxjs/toolkit": "^2.2.6",
     "@types/express": "^4.17.21",
     "@types/pascal-case": "^1.1.2",
-    "@typescript-eslint/eslint-plugin": "^6.17.0",
-    "clean-package": "^2.2.0",
-    "eslint": "^8.0.1",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
-    "eslint-plugin-promise": "^6.0.0",
     "express": "^4.19.2",
-    "npm-run-all": "*",
     "openapi-example-specs": "workspace:*",
     "openapi3-ts": "^4.2.1",
-    "sort-package-json": "^2.10.0",
-    "tsconfig": "workspace:0.0.0",
-    "type-fest": "*",
-    "typescript": "^5.5.3"
+    "tsconfig": "workspace:0.0.0"
   },
   "peerDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0"

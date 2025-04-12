@@ -55,10 +55,8 @@
     "@dasaplan/ts-sdk": "workspace:*",
     "@types/json-schema-merge-allof": "^0.6.5",
     "@types/jsonpath": "^0.2.4",
-    "@types/lodash": "^4.17.5",
     "openapi-example-specs": "workspace:*",
-    "tsconfig": "workspace:0.0.0",
-    "typescript": "^5.5.3"
+    "tsconfig": "workspace:0.0.0"
   },
   "peerDependencies": {
     "@redocly/openapi-core": "^1.6.0"
