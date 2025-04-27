@@ -127,9 +127,9 @@ describe("generateZod", () => {
       export module Schemas {
           export const B = z.object({ id: z.string().optional(), type: z.literal('B_TYPE') });
           export const A = z.object({ id: z.string().optional(), type: z.enum(['A_TYPE', 'AA_TYPE']) });
-          export const MultiUnion = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, 'B_TYPE': B, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.MultiUnion>;
-          export const Union = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, 'AA_TYPE': A, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Union>;
-          export const SingleUnion = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.SingleUnion>;
+          export const MultiUnion = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, 'B_TYPE': B, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).loose() }) as z.ZodType<api.MultiUnion>;
+          export const Union = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, 'AA_TYPE': A, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).loose() }) as z.ZodType<api.Union>;
+          export const SingleUnion = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).loose() }) as z.ZodType<api.SingleUnion>;
 
           export module Types {
               export type B = z.infer<typeof Schemas.B>;
@@ -215,7 +215,7 @@ describe("generateZod", () => {
           export const Base = z.object({ type: z.string().optional() });
           export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('B') })));
           export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('A') })));
-          export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, 'Node': Node, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }));
+          export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, 'Node': Node, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).loose() }));
           export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.array(Child).optional() }));
 
           export module Types {
@@ -300,7 +300,7 @@ describe("generateZod", () => {
           export const Base = z.object({ type: z.string().optional() });
           export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('B') })));
           export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('A') })));
-          export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, 'Node': Node, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }));
+          export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, 'Node': Node, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).loose() }));
           export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
 
           export module Types {
@@ -392,7 +392,7 @@ describe("generateZod", () => {
           export const B: z.ZodTypeAny = Base.merge(z.object({ children: z.lazy(() => z.array(Rec)).optional(), type: z.literal('B') }));
           export const Rec: z.ZodTypeAny = z.lazy(() => z.object({ a: A.optional(), b: B.optional(), child: Child.optional(), node: Node.optional() }));
           export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ children: z.lazy(() => z.array(Rec)).optional(), type: z.literal('A') })));
-          export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }));
+          export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).loose() }));
           export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
 
           export module Types {

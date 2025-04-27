@@ -4,11 +4,11 @@ import { z } from "zod";
 
 export module ZodUnionMatch {
   // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
-  export type Matcher = Record<string, z.ZodSchema>;
+  export type Matcher = Record<string, z.ZodType>;
 
   export type Schemas<T extends Matcher> = T[keyof T];
   export type Discriminator<T extends Matcher> = RecDiscriminator<Schemas<T>>;
-  export type RecDiscriminator<T extends z.ZodSchema> = T extends z.ZodUnion<infer Options> ? RecDiscriminator<Options[number]> : keyof z.infer<T>;
+  export type RecDiscriminator<T extends z.ZodType> = T extends z.ZodUnion<infer Options> ? RecDiscriminator<Options[number]> : keyof z.infer<T>;
 
   export function matcher<T extends Matcher>(discriminator: Discriminator<T>, matcher: T): Schemas<T> {
     return z
