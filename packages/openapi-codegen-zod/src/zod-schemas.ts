@@ -190,7 +190,7 @@ module Factory {
 
   export function createObject(properties: string[], parent: string | undefined, options: ZodGenOptions): string {
     const obj = `z.object(${createObjectTs(properties, options)})`;
-    return _.isDefined(parent) ? `${parent}.merge(${obj})` : obj;
+    return _.isDefined(parent) ? `${parent}.extend(${obj})` : obj;
   }
 
   export function createObjectTs(properties: string[], options: ZodGenOptions): string {

@@ -69,7 +69,11 @@ function createTsMorphSrcFile(tsFilePath: string, source: string, project: Proje
   });
   sourceFile.formatText({
     indentSwitchCase: true,
-    indentStyle: ts.IndentStyle.Smart,
+    indentStyle: ts.IndentStyle.Block,
+    indentSize: 2,
+    newLineCharacter: "\n",
+    convertTabsToSpaces: true,
+    trimTrailingWhitespace: true,
     indentMultiLineObjectLiteralBeginningOnBlankLine: true,
   });
   sourceFile.saveSync();
