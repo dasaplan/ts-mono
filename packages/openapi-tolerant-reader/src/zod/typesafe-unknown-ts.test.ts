@@ -66,11 +66,19 @@ describe("zod test", () => {
     const b: Enum = MyEnum.parse("Value4");
 
     switch (b) {
-      case "Value1": {
-        throw new Error("test failed 2");
-      }
       case "Value2": {
         throw new Error("test failed 2");
+      }
+      case "Value3": {
+        throw new Error('Not implemented yet: "Value3" case');
+      }
+      case "Value1": {
+        throw new Error('Not implemented yet: "Value1" case');
+      }
+      default: {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const check: UNKNOWN = b;
+        expect(true).toBe(true);
       }
     }
     const result = MyEnum.safeParse(2);
@@ -88,19 +96,18 @@ describe("zod test", () => {
           .transform((e) => e as string & {})
           .refine((value) => typeof value !== "string", {
             message: "expected value to be of type string",
-          })
+          }),
       );
 
     const result = MyEnum.safeParse(2);
     expect(result.success).toBeFalsy();
   });
-  test("enum to value without annotation", () => {
+  test("enum to value without opaque annotation", () => {
     const MyEnum0 = z.enum(["Value1", "Value2", "Value3"]);
     // eslint-disable-next-line @typescript-eslint/ban-types
     const MyEnum = MyEnum0.or(z.string().transform((e) => e as string & {}));
 
     type Enum = z.infer<typeof MyEnum>;
-    type Enum0 = z.infer<typeof MyEnum0>;
 
     const a: Enum = MyEnum.parse("Value1");
     switch (a) {
@@ -113,7 +120,8 @@ describe("zod test", () => {
       }
       default: {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const check: never = a as Exclude<Enum0, typeof a>;
+        // @ts-expect-error Value 3 is missing
+        const check: never = a;
         throw new Error("test failed 2");
       }
     }
