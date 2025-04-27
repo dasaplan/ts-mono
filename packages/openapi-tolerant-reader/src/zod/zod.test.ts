@@ -11,7 +11,7 @@ type UNKNOWN = string & { readonly [tag]: "UNKNOWN" };
 test("zod discriminated union", () => {
   const A = z.object({ type: z.literal("A") });
   const B = z.object({ type: z.literal("B") });
-  const Unknown = z.object({ type: z.string().transform((d) => d as UNKNOWN) }).passthrough();
+  const Unknown = z.object({ type: z.string().transform((d) => d as UNKNOWN) }).loose();
   const Union = z.union([A, B, Unknown]);
 
   function match2(union: z.infer<typeof Union>, matcher: { A: typeof A; B: typeof B; onDefault: typeof Unknown }, discriminator: keyof z.infer<typeof Union>) {
@@ -19,7 +19,7 @@ test("zod discriminated union", () => {
     return handlerKey in matcher ? matcher[handlerKey].parse(union) : matcher.onDefault.parse(union);
   }
   type IUnion = { type: "A" } | { type: "B" } | { type: UNKNOWN };
-  const matcher: ZodDiscriminatedUnion.MatchObj<z.infer<typeof Union>, "type"> = { A, B, onDefault: Unknown };
+  const matcher: ZodDiscriminatedUnion.Matcher<z.infer<typeof Union>, "type"> = { A, B, onDefault: Unknown };
   const a: IUnion = ZodDiscriminatedUnion.match({ type: "B" } as z.infer<typeof Union>, matcher, "type");
   expect(ZodDiscriminatedUnion.match({ type: "A" }, matcher, "type")).toEqual({ type: "A" });
   expect(ZodDiscriminatedUnion.match({ type: "B" }, matcher, "type")).toEqual({ type: "B" });
@@ -46,7 +46,7 @@ test("union errors", () => {
         type: "G" as UNKNOWN,
         n: 2,
       },
-    })
+    }),
   ).toEqual({ a: "", b: { type: "G", n: 2 } });
 });
 test("union", () => {
