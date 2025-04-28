@@ -218,11 +218,8 @@ export const Pet = z.discriminatedUnion([Cat, Dog, UnknownPet]);
 export const Pets = z.array(Pet);
 ```
 
-If we run our tests now, we will see an exception.
-
-```{=latex}
-\textcolor{red}{Error: Invalid discriminated union option at index "2"}
-```
+If we run our tests now, we will see an exception:
+<span style="color: red; ">Error: Invalid discriminated union option at index "2"</span>
 
 Zod (v3, v4) expects a constant literal value for the discriminator property. However, we don't know the unknown. We only know that it could be any string value except the values, we already know "Cat" or "Dog".
 
