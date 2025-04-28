@@ -10,8 +10,8 @@ describe("zod test", () => {
   test("switch 1", () => {
     type union = { type: "A"; a: number } | { type: "B"; b: number } | { type: UNKNOWN_VARIANT };
     const union = z
-      .discriminatedUnion("type", [z.object({ type: z.literal("A"), a: z.number() }), z.object({ type: z.literal("B"), b: z.number() })])
-      .or(z.object({ type: z.string().transform((d) => d as UNKNOWN_VARIANT) }));
+      .discriminatedUnion("type", [z.interface({ type: z.literal("A"), a: z.number() }), z.interface({ type: z.literal("B"), b: z.number() })])
+      .or(z.interface({ type: z.string().transform((d) => d as UNKNOWN_VARIANT) }));
 
     const a: union = union.parse({ type: "A", a: 1 });
     switch (a.type) {
@@ -27,10 +27,10 @@ describe("zod test", () => {
   });
 
   test("merge allOf discriminator when subschema defines a more concrete value than parent", () => {
-    const Parent = z.object({ type: z.string() });
-    const A = z.object({ type: z.literal("A"), a: z.string() });
+    const Parent = z.interface({ type: z.string() });
+    const A = z.interface({ type: z.literal("A"), a: z.string() });
 
-    const MergedA = Parent.merge(A);
+    const MergedA = Parent.extend(A);
     // @ts-expect-error prop 'a' is missing
     const m: z.infer<typeof MergedA> = { type: "A" };
 
@@ -132,6 +132,13 @@ describe("zod test", () => {
       }
       case "Value2": {
         throw new Error("test failed 2");
+      }
+      case "Value3": {
+        throw new Error("test failed3");
+      }
+      default: {
+        expect(true).toBe(true);
+        break;
       }
     }
     const result = MyEnum.safeParse(2);
