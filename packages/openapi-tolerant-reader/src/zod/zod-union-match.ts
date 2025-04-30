@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export module ZodUnionMatch {
-  export type Discriminatory = string;
-  export type Matcher = Record<Discriminatory, z.ZodType>;
+  export type DiscriminatorValue = string;
+  export type Matcher = Record<DiscriminatorValue, z.ZodType>;
 
   /** get schemas from matcher */
   export type Schemas<T extends Matcher> = T[keyof T];

@@ -76,20 +76,17 @@ namespace MVP {
     const UnknownPet = PetBase.extend(z.interface({ type: z.string() }));
 
     const PetMatcher = { Cat: Cat, Dog: Dog, onDefault: UnknownPet } as const;
-    type TPetMatcher = typeof PetMatcher;
+    const Pet = CreateTolerantPetSchema("type", PetMatcher);
 
-    export function zodTolerantUnion(discriminator: "type", matcher: TPetMatcher) {
+    type TPetMatcher = typeof PetMatcher;
+    export function CreateTolerantPetSchema(discriminator: "type", matcher: TPetMatcher) {
       return z.custom((val) => {
         if (typeof val !== "object" || val === null) {
           // invalid payload
           return false;
         }
-        if (!(discriminator in val) || val[discriminator] !== "string") {
+        if (!(discriminator in val) || typeof val[discriminator] !== "string") {
           // invalid payload, invalid discriminator
-          return false;
-        }
-        if (!(discriminator in matcher)) {
-          // programming error, invalid arguments
           return false;
         }
         const discriminatorValue = val[discriminator];
@@ -98,6 +95,90 @@ namespace MVP {
         return parsed.success ? parsed.data : false;
       });
     }
+
+    test("matcher error messages", () => {
+      // success false
+      expect(Pet.safeParse({ id: "string", type: "Cat", name: 2 }).error, "name must be ot type string").toMatchInlineSnapshot(`
+        ZodError {
+          "issues": [
+            {
+              "code": "invalid_type",
+              "expected": "string",
+              "message": "Invalid input: expected string, received number",
+              "path": [
+                "name",
+              ],
+            },
+          ],
+        }
+      `);
+      expect(Pet.safeParse({ type: "Cat", toy: { name: 1 } }).error, "name must be ot type string").toMatchInlineSnapshot(`
+        ZodError {
+          "issues": [
+            {
+              "code": "invalid_type",
+              "expected": "string",
+              "message": "Invalid input: expected string, received undefined",
+              "path": [
+                "id",
+              ],
+            },
+          ],
+        }
+      `);
+      expect(Pet.safeParse({ id: "1", type: "Cat" }).error, "name must be ot type string").toMatchInlineSnapshot(`undefined`);
+      expect(Pet.safeParse(undefined).error, "name must be ot type string").toMatchInlineSnapshot(`
+        ZodError {
+          "issues": [
+            {
+              "code": "invalid_type",
+              "expected": "object",
+              "message": "expected value to be an object but received undefined",
+              "path": [],
+            },
+          ],
+        }
+      `);
+      expect(Pet.safeParse({ id: "string", type: "Unknown", name: 2, a: 1 }).error, "name must be ot type string").toMatchInlineSnapshot(`
+        ZodError {
+          "issues": [
+            {
+              "code": "invalid_type",
+              "expected": "string",
+              "message": "Invalid input: expected string, received number",
+              "path": [
+                "name",
+              ],
+            },
+          ],
+        }
+      `);
+    });
+
+    test("tolerant union schema", () => {
+      expect(Pet.safeParse({ id: "string", type: "Cat", name: 2 }).error, "name must be ot type string").toMatchInlineSnapshot(`
+        ZodError {
+          "issues": [
+            {
+              "code": "custom",
+              "message": "Invalid input",
+              "path": [],
+            },
+          ],
+        }
+      `);
+      // success true
+      expect(Pet.safeParse({ id: "string", type: "Cat" }).success, "must parse valid Cat").toEqual(true);
+      expect(Pet.safeParse({ id: "string", type: "Dog" }).success, "must parse valid Dog").toEqual(true);
+      expect(Pet.safeParse({ id: "string", type: "Cat", name: "foo" }).success, "mast parse valid Cat with optional field").toEqual(true);
+      expect(Pet.safeParse({ id: "string", type: "Cat", name: "foo", bar: 2 }).success, "mast parse valid Cat with additional field").toEqual(true);
+      // success false
+      expect(Pet.safeParse({ id: "string", type: "Cat", name: 2 }).success, "name must be ot type string").toEqual(false);
+      expect(Pet.safeParse({ id: "string", type: "Cat", name: 2 }).success, "name must be ot type string").toEqual(false);
+      // unknown values
+      expect(Pet.safeParse({ id: "string", type: "Unknown", name: "foo", a: 1 }).success, "must parse unknown values for type").toEqual(true);
+      expect(Pet.safeParse({ id: "string", type: "Unknown", name: 2, a: 1 }).success, "name must be ot type string").toEqual(false);
+    });
 
     test("throws error for invalid Cat type", () => {
       const Pet2 = Cat.or(UnknownPet);
