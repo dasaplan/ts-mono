@@ -24,7 +24,7 @@ If you are regularly parsing API responses with Zod, you may jump directly into 
 
 You will find a lot of code examples, but they are intended to be read along the text.
 
-Please note that the focus of this article is on explaining the problem. 
+Please note that the focus of this article is on explaining the problem.
 My solution to the problem is this library with customized ZodTypes and handler functions which are straightforward to generate with codegen tool for Zod schemas.
 
 There you go, you already know the solution after maybe reading a single paragraph! If you like to better understand it, I hope this article will help you with that.
@@ -263,9 +263,9 @@ If `.safeParse` or try-catch `.parse` run into an error state, we only have acce
 
 Having this information, there are a lot of workarounds we can come up with.  
 
-- We could post process the response data and handle the error path.
-- We could process only parts of the response like parse each array element with **Pet**.
-- We could ditch Zod and just use plain JavaScript for parsing.
+* We could post process the response data and handle the error path.
+* We could process only parts of the response like parse each array element with **Pet**.
+* We could ditch Zod and just use plain JavaScript for parsing.
 
 Every workaround I can think of has all the same issues. They do not scale.
 
@@ -434,7 +434,6 @@ const catTypeTest: PetDto['type'] = "Cat";
 
  If we intersect `string & {}` or `string & Record<string,never>` we will still see all variations of the union.
 
-
 ### Making an evolutionary stable switch-case statement
 
 What if the code and type evolve? What if the API changes and there is a new pet type Bird, we want to handle?
@@ -466,7 +465,7 @@ function transformPet(pet:PetDto): Pet {
 ```
 
 No compiler errors. The default case already handled the new petType "Bird".
-We can introduce a typecheck with `unknownPetType: never`. This will yield a type error if we are missing explicitly handling a value. 
+We can introduce a typecheck with `unknownPetType: never`. This will yield a type error if we are missing explicitly handling a value.
 
 ```typescript
 interface PetDto {
@@ -495,37 +494,44 @@ function transformPet(pet:PetDto): Pet {
 }
 ```
 
-We need to explicitly define a type check in the default case to get informed by the compiler that we are missing a case for the value **Bird**. 
+We need to explicitly define a type check in the default case to get informed by the compiler that we are missing a case for the value **Bird**.
 
 ## A Solution: Tolerant Discriminated Union Schema
+
 At this point, we should have a good understanding of the problem space around **type-safe parsing the unknown with Zod**. We talked about three concrete problems our solution should take into account. Let's make a quick recap and extract our requirements from it.
 
 ### Problem Recap
-In **"Problem 1: The Unknown Pet"** we looked into parsing a discriminated union where we do not know the provided value for the discriminator at compile time. 
+
+In **"Problem 1: The Unknown Pet"** we looked into parsing a discriminated union where we do not know the provided value for the discriminator at compile time.
 Hence, speaking in TypeScript, our solution should be able to handle the following union type for a given concrete discriminator property.
+
 ```typescript
 type UnknownPet = { type: string & {}; [additional: string]: unknown };
 type Pet = UnknownPet | { type: "Cat" } | { type: "Dog" };
 ```
 
-Tinkering around to solve Problem 1, we ran into **"Problem 2: The Scaling Issue""**. 
-We noted that we need to be able to integrate a tolerant parsing alternative for discriminated unions into code generation tooling. 
+Tinkering around to solve Problem 1, we ran into **"Problem 2: The Scaling Issue""**.
+We noted that we need to be able to integrate a tolerant parsing alternative for discriminated unions into code generation tooling.
 
 Since we already have Zod for our parsing library, and we can generate schemas:
-```The solution must integrate nicely with Zod schemas.``` 
+```The solution must integrate nicely with Zod schemas.```
 
 Finally, we looked at **"Problem 3: Type-Safe Handling the Unknown**" where we talked about exhaustive switch-statements, the impact of the **default case** on the evolutionary stability of our code, and the type inference of a union with string.
-```typescript 
+
+```typescript
 type PetType_a = "Cat" | "Dog" | string
       // ?^ string
 type PetType_b = "Cat" | "Dog" | string & {}
       // ?^ "Cat" | "Dog" | string & {}
 ```  
+
 So our solution should ensure that we are ```still able to discriminate against unions```. We also need a sustainable way to ```explicitly handle the default cases while getting compiler errors if new known unhandled cases are added later```.
 
 ### Creating A Custom Zod Schema
-In Zod we can utilize ```z.custom()``` to create our own discriminated union schema. 
+
+In Zod we can utilize ```z.custom()``` to create our own discriminated union schema.
 Let's remind ourselves how `discriminatedUnion` in Zod (v3) is defined.
+
 ```typescript
 const PetSchema = z.discriminatedUnion("type", [Cat, Dog, UnkonwnPet]);
 // parse data
@@ -533,14 +539,16 @@ const cat = PetSchema.parse({ type: "Cat"})
 const dog = PetSchema.parse({ type: "Dog"})
 const unknownPet = PetSchema.parse({ type: "Bird"})
 ```
+
 For the schema definition, Zod takes the discriminator-property and the union schemas.
 When we parse data, we provide for the discriminator-property the respective discriminator-values.
-Internally, Zod will map the discriminator-values to the respective schemas we provided in the schema definition. 
+Internally, Zod will map the discriminator-values to the respective schemas we provided in the schema definition.
 
 So, to create a discriminated union, we know that we need to incorporate static information regarding discriminator-property, discriminator-values, schemas, and a mapping between discriminator-values and schemas.
 
 The recipe to a tolerant Zod schema should look like this
-```
+
+```text
 - Input:
   - discriminator property e.g. "type"
   - discriminator values e.g. "Cat", "Pet", string
@@ -551,14 +559,17 @@ The recipe to a tolerant Zod schema should look like this
 ```
 
 As we can see, there are some redundancies. We can simplify the input information, because in the mapping we already have discriminator-values and schemas
-```
+
+```text
 - Input:
   - discriminator property e.g. "type"
   - mapping e.g. {"Cat": Cat, "Pet": Pet, "unknownValue": UnknownPet}
 - Output:
   - ZodSchema
 ```
+
 How would a function signature look like for this specification?
+
 ```typescript
 const mapping = { "Cat": Cat, "Dog": Dog, onDefault: UnknownPet } as const;
 function createTolerantSchema(discriminator: "type", mapping: typeof mapping): z.ZodCustom {
@@ -566,20 +577,23 @@ function createTolerantSchema(discriminator: "type", mapping: typeof mapping): z
   return z.custom();
 };
 ```
+
 There you go, easy-peasy. A tolerant discriminated union... okay, let's implement it.
 
 In the implementation we need to do just a few things:
-- Find discriminator property in parse value
-- Use discriminator value to get the respective schema from the map
-- Use respective schema to parse the value 
-- Assert various error cases
-  - Error: expected value to be defined
-  - Error: expected value to be of type object
-  - Error: expected discriminator property to be defined in value
-  - Error: expected discriminator property to be of type string in value
-  - Error: zod schema validation error
 
-Let's implement the todos for the Pet example. Later we can think about a more generic solution. 
+* Find discriminator property in parse value
+* Use discriminator value to get the respective schema from the map
+* Use respective schema to parse the value
+* Assert various error cases
+  * Error: expected value to be defined
+  * Error: expected value to be of type object
+  * Error: expected discriminator property to be defined in value
+  * Error: expected discriminator property to be of type string in value
+  * Error: zod schema validation error
+
+Let's implement the todos for the Pet example. Later we can think about a more generic solution.
+
 ```typescript
 const PetBase = z.interface({id: z.string(), name: z.string().optional()});
 const Cat = PetBase.extend(z.interface({type: z.literal("Cat")}));
@@ -611,6 +625,7 @@ export function createTolerantPetSchema(discriminator: "type", matcher: TPetMatc
 
 All right, this looks not too bad. The function returns a `z.custom()`, on parse, we return either the `parsed data` or `false`. In case of `false` Zod will yield a generic custom error message.
 If we run some tests, we see this works just as we would expect. However, if we look at the error message, we will not be able to infer what was wrong.
+
 ```typescript
 test("tolerant union schema", () => {
   // success true
@@ -638,11 +653,12 @@ test("tolerant union schema", () => {
 
 ```
 
-With `z.custom()` we only can define a single error message but we don't have access to our validation cases. 
+With `z.custom()` we only can define a single error message but we don't have access to our validation cases.
 In Zod v3 we could utilize `.superRefine` in order to yield validation context specific error issues.
 
 In Zod v4 `.superRefine` got deprecated. AFAIK, the next best thing where we have access to the context is `.transform`.
 If we rewrite the previous function with transform and concrete error messages, the function will look like this.
+
 ```typescript
 export function createTolerantPetSchema(discriminator: "type", matcher: TPetMatcher): z.ZodCustom {
   return z.custom().transform((val, ctx) => {
@@ -678,6 +694,7 @@ export function createTolerantPetSchema(discriminator: "type", matcher: TPetMatc
 ```
 
 Now the error messages will be more specific like this.
+
 ```typescript
 test("error message", ()=> {
   expect(Pet.safeParse({ id: "string", type: "Cat", name: 2 }).error, "name must be ot type string").toMatchInlineSnapshot(`
@@ -698,19 +715,21 @@ test("error message", ()=> {
 ```
 
 ### Bonus: Generic Tolerant Zod union
-Before we implemented a `createTolerantPetSchema` function. Now we like to use this function for any kind of union.
-Fortunately, the function body already is generic. All details within the function only depend on the arguments of the function `discriminator` and `mapping`. 
 
+Before we implemented a `createTolerantPetSchema` function. Now we like to use this function for any kind of union.
+Fortunately, the function body already is generic. All details within the function only depend on the arguments of the function `discriminator` and `mapping`.
 
 So only the signature needs to become generic, which involves a little bit of type programming.
 A schema or `ZodType` can be a regular schema or a union `ZodUnion`, which in turn has also a set of `ZodType`.
 
 We will need two generic type utilities:
-- Matcher: Record, where we match discriminator values to a schema. 
-- Schemas: A type utility to extract all schemas from the Matcher
-- Discriminator: A type utility which extracts possible discriminator properties recursively from the Schemas in the Matcher. 
 
-If we implement those, it should look like this with some small limitation. The implementation for `Discriminator<T>` will yield all keys of all schemas, which is good enough for us. We will need to cast the return type to the schemas provided in the Matcher which will yield a union of schemas. 
+* Matcher: Record, where we match discriminator values to a schema.
+* Schemas: A type utility to extract all schemas from the Matcher
+* Discriminator: A type utility which extracts possible discriminator properties recursively from the Schemas in the Matcher.
+
+If we implement those, it should look like this with some small limitation. The implementation for `Discriminator<T>` will yield all keys of all schemas, which is good enough for us. We will need to cast the return type to the schemas provided in the Matcher which will yield a union of schemas.
+
 ```typescript
 export type DiscriminatorValue = string;
 export type Matcher = Record<DiscriminatorValue, z.ZodType>;
@@ -733,16 +752,16 @@ export function createTolerantSchema<T extends Matcher>(discriminator: Discrimin
       });
       return val;
     }
-    if (!(discriminator in val) || typeof val[discriminator] !== "string") {
+    const discriminatorValue = typeof discriminator === "string" && discriminator in val? discriminator[discriminator] : undefined;
+    if (typeof discriminatorValue !== "string") {
       // invalid payload, invalid
       ctx.issues.push({
         input: val,
         code: "custom",
-        message: `required discriminator '${discriminator}' of type string is missing in value. value.keys: ${Object.keys(val)?.join(", ") ?? "none"}`,
+        message: `required discriminator '${JSON.stringify(discriminator)}' of type string is missing in value. value.keys: ${Object.keys(val)?.join(", ") ?? "none"}`,
       });
       return val;
     }
-    const discriminatorValue = val[discriminator];
     const schema = discriminatorValue in matcher ? matcher[discriminatorValue as keyof TPetMatcher] : matcher["onDefault"];
     const parsed = schema.safeParse(val);
     if (!parsed.success) {
@@ -754,7 +773,8 @@ export function createTolerantSchema<T extends Matcher>(discriminator: Discrimin
 }
 ```
 
-With this function, we should now be able to create as many tolerant discriminated unions as we like. 
+With this function, we should now be able to create as many tolerant discriminated unions as we like.
+
 ```typescript
 const Pet = createTolerantSchema("type", {Cat: Cat, Dog: Dog, onDefault: UnknownPet});
 
@@ -766,10 +786,11 @@ const Car = createTolerantSchema("kind", {Sport: SportCar, Coupe: CoupeCar, onDe
 
 ### Solving the evolution problem
 
-With our custom tolerant discriminated union we have typesafe parse results. However, if we want to process the union in an exhaustive switch case, then we will be forced to handle a default case. 
-We will need to introduce "type checks" to get compile errors for unknown handled cases. 
+With our custom tolerant discriminated union we have typesafe parse results. However, if we want to process the union in an exhaustive switch case, then we will be forced to handle a default case.
+We will need to introduce "type checks" to get compile errors for unknown handled cases.
 
 This should be good enough. But with code generation, we can actually provide an implementation for a switch case analogous to our zod function. In this example, the code generator inlined the discriminator property
+
 ```typescript
 export type Pet = ({ type: "CAT" } & Cat) | ({ type: "DOG" } & Dog) | { type: UNKNOWN_ENUM_VARIANT; [prop: string]: unknown };
 

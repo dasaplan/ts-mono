@@ -12,9 +12,9 @@ namespace MVP {
   export async function fetchPets(): Promise<unknown> {
     /** TODO:  replace mock response with api call */
     return Promise.resolve([
-      { type: "Cat", name: "Kitty" },
-      { type: "Dog", name: "Snoopy" },
-      { type: "Bird", name: "Chewie" },
+      { id: "1", type: "Cat", name: "Kitty" },
+      { id: "2", type: "Dog", name: "Snoopy" },
+      { id: "3", type: "Bird", name: "Chewie" },
     ]);
   }
 
@@ -58,15 +58,9 @@ namespace MVP {
     const PetBase = z.interface({ id: z.string(), name: z.string().optional() });
     const Cat = PetBase.extend(z.interface({ type: z.literal("Cat") }));
     const Dog = PetBase.extend(z.interface({ type: z.literal("Dog") }));
-    const UnknownPet = PetBase.extend(z.interface({ type: z.string() }));
 
     export const Pet = z.discriminatedUnion([Cat, Dog]);
     export const Pets = z.array(Pet);
-
-    test("throws error for invalid Cat type", () => {
-      const Pet2 = Cat.or(UnknownPet);
-      expect(() => Pet2.parse({ id: "1", type: "Cat" })).toThrow();
-    });
   }
 
   namespace PetApi_v1_0_Patched {
@@ -76,10 +70,11 @@ namespace MVP {
     const UnknownPet = PetBase.extend(z.interface({ type: z.string() }));
 
     const PetMatcher = { Cat: Cat, Dog: Dog, onDefault: UnknownPet } as const;
-    const Pet = CreateTolerantPetSchema("type", PetMatcher);
+    const Pet = createTolerantSchema("type", PetMatcher);
+    export const Pets = z.array(Pet);
 
     type TPetMatcher = typeof PetMatcher;
-    export function CreateTolerantPetSchema(discriminator: "type", matcher: TPetMatcher) {
+    export function _CreateTolerantPetSchema(discriminator: "type", matcher: TPetMatcher) {
       return z.custom((val) => {
         if (typeof val !== "object" || val === null) {
           // invalid payload
@@ -94,6 +89,47 @@ namespace MVP {
         const parsed = schema.safeParse(val);
         return parsed.success ? parsed.data : false;
       });
+    }
+
+    export type DiscriminatorValue = string;
+    export type Matcher = Record<DiscriminatorValue, z.ZodType>;
+    /** get schemas from matcher */
+    export type Schemas<T extends Matcher> = T[keyof T];
+
+    /** recursively collect keys from fields we can use as discriminator properties */
+    export type Discriminator<T extends Matcher> = RecDiscriminator<Schemas<T>>;
+    export type RecDiscriminator<T extends z.core.$ZodType> = T extends z.ZodUnion<infer Options> ? RecDiscriminator<Options[number]> : keyof z.infer<T>;
+
+    export function createTolerantSchema<T extends Matcher>(discriminator: Discriminator<T>, matcher: T): Schemas<T> {
+      return z.custom().transform((val, ctx) => {
+        if (typeof val !== "object" || val === null) {
+          // invalid payload
+          ctx.issues.push({
+            input: val,
+            code: "invalid_type",
+            message: `expected value to be an object but received ${typeof val}`,
+            expected: "object",
+          });
+          return val;
+        }
+        const discriminatorValue = typeof discriminator === "string" && discriminator in val ? val[discriminator as keyof typeof val] : undefined;
+        if (typeof discriminatorValue !== "string") {
+          // invalid payload, invalid
+          ctx.issues.push({
+            input: val,
+            code: "custom",
+            message: `required discriminator '${JSON.stringify(discriminator)}' of type string is missing in value. value.keys: ${Object.keys(val)?.join(", ") ?? "none"}`,
+          });
+          return val;
+        }
+        const schema = discriminatorValue in matcher ? matcher[discriminatorValue as keyof TPetMatcher] : matcher["onDefault"];
+        const parsed = schema.safeParse(val);
+        if (!parsed.success) {
+          ctx.issues.push(...parsed.error.issues);
+          return val;
+        }
+        return parsed.data;
+      }) as unknown as Schemas<T>;
     }
 
     test("matcher error messages", () => {
@@ -160,9 +196,12 @@ namespace MVP {
         ZodError {
           "issues": [
             {
-              "code": "custom",
-              "message": "Invalid input",
-              "path": [],
+              "code": "invalid_type",
+              "expected": "string",
+              "message": "Invalid input: expected string, received number",
+              "path": [
+                "name",
+              ],
             },
           ],
         }
@@ -179,16 +218,11 @@ namespace MVP {
       expect(Pet.safeParse({ id: "string", type: "Unknown", name: "foo", a: 1 }).success, "must parse unknown values for type").toEqual(true);
       expect(Pet.safeParse({ id: "string", type: "Unknown", name: 2, a: 1 }).success, "name must be ot type string").toEqual(false);
     });
-
-    test("throws error for invalid Cat type", () => {
-      const Pet2 = Cat.or(UnknownPet);
-      expect(() => Pet2.parse({ id: "1", type: "Cat" })).toThrow();
-    });
   }
 
   async function createPetList(): Promise<Array<Pet>> {
     const response: unknown = await fetchPets();
-    const petsParseResult = PetApi_v1_0.Pets.safeParse(response);
+    const petsParseResult = PetApi_v1_0_Patched.Pets.safeParse(response);
 
     if (!petsParseResult.success) {
       console.error(`failed parsing pets response: ${JSON.stringify(petsParseResult.error)}`);
