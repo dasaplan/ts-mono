@@ -19,15 +19,10 @@
 <!-- TOC -->
 # How to typesafe parse the unknown with Zod
 
-We will start off with a simple but descriptive example to motivate the issue with parsing the unknown when fetching data over the internet.
-If you are regularly parsing API responses with Zod, you may jump directly into the problems.
+This article addresses the challenges of parsing unknown data from APIs using Zod, focusing on type-safe handling and scalable solutions.
 
-You will find a lot of code examples, but they are intended to be read along the text.
-
-Please note that the focus of this article is on explaining the problem.
-My solution to the problem is this library with customized ZodTypes and handler functions which are straightforward to generate with codegen tool for Zod schemas.
-
-There you go, you already know the solution after maybe reading a single paragraph! If you like to better understand it, I hope this article will help you with that.
+You will find a lot of code examples which are intended to be read along the text.
+However, you may jump directly into the last section where the article provides a summary of the key issues.
 
 ## Example: Animal shelter pet list
 
@@ -57,40 +52,22 @@ The shelter API is pretty large, but we are provided with an example JSON respon
 ### Getting started with the implementation
 
 Let's get started by implementing the MVP logic.
+The MVP implementation fetches mock data, transforms it into a Pet model, and renders it.
 
-For starters, we **(a)** mock the server response of our animal shelter server and **(b)** define the desired Pet type we can use for rendering the page. Since we have an example response, we also can already **(c)** provide a transformation from the response data to our internal Pet model.
+Here's the key transformation logic:
 
 ```typescript
 
 namespace MVP {
-  /** (a) fetch data from server */
-  export async function fetchPets(): Promise<unknown> {
-    /** TODO:  replace mock response with api call */
-    return Promise.resolve([
-      { type: "Cat", name: "Kitty" },
-      { type: "Dog", name: "Snoopy" },
-      { type: "Bird", name: "Chewie" },
-    ]);
-  }
-
-  /** (b) Our model for the animal shelter list */
   type Pet = { id: string; name?: string; icon: "😺" | "🐶" | "❓" };
 
-  /** (c) transform server data into our model */
   async function createPetList(): Promise<Array<Pet>> {
-    // TODO: parse pets response to avoid any
     const pets: any = await fetchPets();
     return pets.map((pet: any) => {
       switch (pet.type) {
-        case "Cat": {
-          return { name: pet.name, icon: "😺" };
-        }
-        case "Dog": {
-          return { name: pet.name, icon: "🐶" };
-        }
-        default: {
-          return { name: pet.name, icon: "❓" };
-        }
+        case "Cat": { return { name: pet.name, icon: "😺" }; }
+        case "Dog": { return { name: pet.name, icon: "🐶" }; }
+        default   : { return { name: pet.name, icon: "❓" }; }
       }
     });
   }
@@ -102,16 +79,12 @@ Let's test the implementation to see if we are on track. Therefore, we implement
 
 ```typescript
 namespace MVP {
-  /* ... previous example code ...  */
-
-  /** create the web page */
   function renderPage(pets: Array<Pet>): string {
     const header = "<h1>Animal Shelter Pets</h1>";
     const petList = pets.map((p) => `<h2> ${p.icon}: ${p.name ?? ""} </h2>`);
     return `<div class="page">\n\t${header}\n\t${petList.join("\n\t")} \n </div>`;
   }
 
-  /** main */
   export async function displayPets(): Promise<string> {
     const petsWithicons = await createPetList();
     return renderPage(petsWithicons);
@@ -145,11 +118,9 @@ We decide that parsing the response will be our next task. We will use Zod as ou
 
 ### Parsing the response from the Animal Shelter's Rest API
 
-The Animal Shelters API is pretty large. We plan to later generate the Schemas from the Openapi specification. However, for this iteration we write a minimal version of the schemas by hand. Later the written schemas should match the generated ones.
+The Animal Shelters API is pretty large. We plan to later generate the Schemas from the Openapi specification. However, for this iteration we write a minimal version of the schemas by hand.
 
 We skimmed through the API and can infer that **Pet** is a **oneOf**-schema with a **discriminator** of the property "**type**". This means most fields depend on the pet.type. In the API only a Cat e.g., has a field "**mood**". Yet all pets have a field "**id**", "**name**" and "**type**".
-
-For this example we will write the schemas as they would be generated and reduce the set of fields for our needs.
 
 ```typescript
   // TODO: generate API schemas from Openapi specification
@@ -170,92 +141,59 @@ For this example we will write the schemas as they would be generated and reduce
       console.error(`failed parsing pets response: ${JSON.stringify(petsParseResult.error)}`);
       return [];
     }
-
-    const pets = petsParseResult.data;
-    return pets.map((pet) => {
-      switch (pet.type) {
-        case "Cat": {
-          return { id: pet.id, name: pet.name, icon: "😺" };
-        }
-        case "Dog": {
-          return { id: pet.id, name: pet.name, icon: "🐶" };
-        }
-        default: {
-          // TODO: we only have Dog or Cat as schemas. We are missing an unknown type!?
-          const unknownPet = pet as any;
-          return { id: unknownPet.id, name: unknownPet.name, icon: "❓" };
-        }
-      }
-    });
+    return petsParseResult.data.map(mapToPetModel)
   }
 ```
 
 Our first take on the zod schema **Pet** and **createPetList** has an issue. When we ran our test, we get the following nasty error:
 
-```
+```text
 failed parsing pets response: {"issues":[{"expected":"string","code":"invalid_type","path":[0,"id"],"message":"Invalid input: expected string, received undefined"},{"expected":"string","code":"invalid_type","path":[1,"id"],"message":"Invalid input: expected string, received undefined"},{"code":"invalid_union","errors":[],"note":"No matching discriminator","path":[2],"message":"Invalid input"}]}
-
 ```
 
-We forgot to define a schema for the value  `{ "type": "Bird", "name": "Chewie" }` schema. Zod tried every possible union option without a match. Every try yields an issue. So, add a Bird schema and call it a day?
+We forgot to define a schema for the value  `{ "type": "Bird", "name": "Chewie" }`. Zod tried every possible union option without a match. Every try yields an issue. So, add a Bird schema and call it a day?
 
 There is a deeper problem here. We know that "Bird" is just an example for any kind of pet. It could be also "Hamster" but we actually don't know. We also don't know if all possible values are documented in the API. At any time, any value could be provided.
 
-However, for us, it would be good enough to only parse **Cat** or **Dog** and put any other kind of animal in an "**unknown**" state. It is really no big deal for us if there is a different Pet because we handle it in our business logic with a default case which yields an item with the "❓"-icon.
+However, for us, it would be good enough to only parse **Cat** or **Dog** and put any other kind of animal in an "**unknown**" state. It is really no big deal for us if there is a different Pet because we handle it in our business logic with a default case.
+If we don't know the Pet, we will default to the "❓"-icon:
 
-So, why not just extend the discriminatedUnion with a generic schema? Since all Pets seem to have an **id** and a **name**, we could maybe expect any other string for the **type**, hence an unknown value?
+```typescript
+function mapToPetModel(dto: {id: string, name?: string, type: string }): Pet {
+    switch (pet.type) {
+      case "Cat": { return { id: pet.id, name: pet.name, icon: "😺" }; }
+      case "Dog": { return { id: pet.id, name: pet.name, icon: "🐶" }; }
+      default: { 
+         const unknownPet = pet as any; 
+         console.warn(`unknown pet type: ${pet.type}`);
+         return { id: unknownPet.id, name: unknownPet.name, icon: "❓" };
+      }
+    }
+}
+```
+
+So, why not just extend the discriminatedUnion with a generic schema o? Since all Pets seem to have an **id** and a **name**, we could maybe expect any other string for the **type**, hence an unknown value?
 
 ---
 
 ## Problem 1: The Unknown Pet
 
-We like to have a generic schema with an unknown literal value for **type**. To do so, we create **UnknownPet** and extend the **discriminatedUnion** accordingly.
-
-### Fix Attempt 1: discriminatedUnion([ Cat, Dog, UnknownPet])
-
-```typescript
-const PetBase = z.interface({ id: z.string(), name: z.string().optional() });
-const Cat = PetBase.extend(z.interface({ type: z.literal("Cat") }));
-const Dog = PetBase.extend(z.interface({ type: z.literal("Dog") }));
-const UnknownPet = PetBase.extend(z.interface({ type: z.string() }));
-
-export const Pet = z.discriminatedUnion([Cat, Dog, UnknownPet]);
-export const Pets = z.array(Pet);
-```
-
-If we run our tests now, we will see an exception:
-<span style="color: red; ">Error: Invalid discriminated union option at index "2"</span>
-
-Zod (v3, v4) expects a constant literal value for the discriminator property. However, we don't know the unknown. We only know that it could be any string value except the values, we already know "Cat" or "Dog".
-
-### Fix Attempt 2: Union - Cat.or(Dog).or(UnknownPet)
-
-Well, extending discriminatedUnion with UnknownPet did not work. How about using **.or()**?
+We like to have a generic schema with an unknown literal value for **type** but we are limited with Zod.
+If we create a schema **UnknownPet** and extend the **discriminatedUnion** accordingly, we will receive an runtime error.
+Besides discriminatedUnions we could utilize `.union` or just `.or`. However, doing so, we will loose validations for our concrete schemas.
 
 ```typescript
-export const Pet = z.discriminatedUnion([Cat, Dog]).or(UnknownPet);
+const Cat = z.interface({ mood:    z.string(), type: z.literal("Cat") });
+const Dog = z.interface({ toyName: z.string(), type: z.literal("Dog") });
+const UnknownPet = z.interface({ type: z.string() };
+
+const Pet = z.discriminatedUnion([Cat, Dog, UnknownPet]);
+   // ?^ `Error: Invalid discriminated union option at index "2"` 
+
+const PetOrUnkown = z.discriminatedUnion([Cat, Dog]).or(UnknownPet);
+const Cat = PetOrUnkown.parse( {type: "Cat"})
+   // ?^ { type: "Cat "} ❌ mood is missing
 ```
-
-This seems to work, but we actually do not have any validation anymore.
-Let's simplify a bit and only look at **Cat** or **UnknownPet**.
-
-```typescript
-const PetBase = z.interface({ id: z.string()});
-const Cat = PetBase.extend(z.interface({ type: z.literal("Cat"), mood: z.string() }));
-const UnknownPet = PetBase.extend(z.interface({ type: z.string() }));
-
-export const CatOrUnknown = Cat.or(UnknownPet);
-
-test("throws error for invalid Cat type", () => {
-    expect(() => CatOrUnknown.parse({id: "1", type: "Cat"})).toThrow()
-    // ^ AssertionError: expected [Function] to throw an error
-});
-
-```
-
-We expect CatOrUnknown.parse to throw, but it doesn't. The test reveals that we can omit the required field **mood** for the Cat type.
-
-### Fix Attempt 3: Working around zod schemas
 
 Instead of parsing an unknown type, why not just handle the "invalid union" Exception?
 
@@ -267,16 +205,13 @@ Having this information, there are a lot of workarounds we can come up with.
 * We could process only parts of the response like parse each array element with **Pet**.
 * We could ditch Zod and just use plain JavaScript for parsing.
 
-Every workaround I can think of has all the same issues. They do not scale.
+Every workaround we can think of has all the same issues. They do not scale.
 
 ## Problem 2: The Scaling Issue
 
-What do we mean if we speak of scaling in the context of parsing API payload?
+Scaling issues arise when manually writing schemas for APIs with numerous fields and deeply nested polymorphic values. It just becomes more and more impractical with the siye of the APIs.
 
-If we have to manually write our schemas, the effort it takes to integrate with an API increases by two factors: **number of fields** and **nesting depth of polymorphic values**.
-
-This means, in the following example we will need to handle manually deeply nested **discriminatedUnion** e.g., for `Cat.needs.features` or nested **enums** like `Cat.mood` or
-`Cat.needs.features.favorites`.
+This means, in the following example we will need to handle manually deeply nested **discriminatedUnion** e.g., for `Cat.needs.features` or nested **enums** like `Cat.mood` or `Cat.needs.features.favorites`.
 
 ```typescript
 const Dog = z.interface({ id: z.string(), type: z.literal("Dog")});
@@ -305,7 +240,6 @@ const Cat = PetBase.extend(
     })
 );
 
-// unknown discriminator value? 
 export const Pet = z.discriminatedUnion([Cat, Dog]);
 
 ```
@@ -630,8 +564,8 @@ If we run some tests, we see this works just as we would expect. However, if we 
 test("tolerant union schema", () => {
   // success true
   expect(Pet.safeParse({ id: "string", type: "Cat" }).success, "must parse valid Cat").toEqual(true);
-  expect(Pet.safeParse({ id: "string", type: "Cat", name: "foo" }).success, "mast parse valid Cat with optional field").toEqual(true);
-  expect(Pet.safeParse({ id: "string", type: "Cat", name: "foo", bar: 2 }).success, "mast parse valid Cat with additional field").toEqual(true);
+  expect(Pet.safeParse({ id: "string", type: "Cat", name: "foo" }).success, "must parse valid Cat with optional field").toEqual(true);
+  expect(Pet.safeParse({ id: "string", type: "Cat", name: "foo", bar: 2 }).success, "must parse valid Cat with additional field").toEqual(true);
   // success false
   expect(Pet.safeParse({ id: "string", type: "Cat", name: 2 }).success, "name must be ot type string").toEqual(false);
   // unknown values
