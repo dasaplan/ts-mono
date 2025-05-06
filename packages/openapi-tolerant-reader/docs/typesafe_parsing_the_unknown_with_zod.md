@@ -130,7 +130,7 @@ We extend `createPetList` by parsing the response with the Zod schema **Pets**. 
 Running the code against the example data reveals an issue. Our error handling gets some work because we forgot to define a schema for the JSON value `{ "id": "3", "type2: "Bird", "name": "Chewie" }`.
 
 ```text
-Error: failed parsing pets response: {"issues":[{"code":"invalid_union","errors":[],"note":"No matching discriminator","path":[2],"message":"Invalid input"}]}
+❌ Error: failed parsing pets response: {"issues":[{"code":"invalid_union","errors":[],"note":"No matching discriminator","path":[2],"message":"Invalid input"}]}
 ```
 
 So, add a **Bird schema** and call it a day? There is a deeper problem here. We know that `"Bird"` is just an example for any kind of pet. It could be also `"Hamster"` but we actually don't know. We also don't know if all possible values are documented in the API. We can be certain that at any time, any value could be provided.
@@ -156,7 +156,7 @@ const Dog = z.interface({ type: z.literal("Dog") });
 const UnknownPet = z.interface({ type: z.string() });
 
 const Pet = z.discriminatedUnion([Cat, Dog, UnknownPet]);
-   // ?^ `Error: Invalid discriminated union option at index "2"` 
+   // ?^ ❌`Error: Invalid discriminated union option at index "2"` 
 
 const PetOrUnkown = z.discriminatedUnion([Cat, Dog]).or(UnknownPet);
 const cat_or = PetOrUnkown.parse( {type: "Cat"})
@@ -213,142 +213,79 @@ To scale well, we need to be able to generate code or schemas which allow us to 
 
 ## Problem 3: Type-Safe Handling the Unknown
 
-In TypeScript, we embrace correctness. We embrace evolutionary stability. We are happy when we encounter compile errors when something changes over time. And we are sad when we have to rely on runtime errors. We love exhaustive switch cases.
+In TypeScript, we embrace correctness and evolutionary stability. We are happy when we encounter compile errors when something changes over time. And we are sad when we have to rely on runtime errors. We love exhaustive switch cases.
 
 A *switch case* is **exhaustive** if all possible values of a type are *explicitly* handled. An **enum** or a **constant set** of values yields a case for every statically known value. A **string** as a type holds *infinite* values. We handle *infinity* with a **default** case.
 
-Let's take a look at our previous example **mapToPetModel**. The interesting part is the default case because it will only be executed for **unknown** values for **pet.type**.  
-
+Let's take a look at our previous example **mapToPetModel**. The interesting part is the default case because it will only execute for **unknown** values for **pet.type**.  
 The switch case is exhaustive. Is it **typesafe**? Is it **evolutionary stable**?
 
 ### Making a type-safe switch-case statement
 
-If we create a switch-case on a union type and define a case for every known value, we won't get any compiler errors. TypeScript will not complain because every statically known value is handled.
+If we create a switch-case on a union type and define a case for every known value, we won't get any compiler errors. TypeScript will not complain because every statically known value is handled. What we are missing, however, is the possibility that the union type is incomplete.
 
-What we are missing is the possibility that the union type is incomplete.
-
-Let's take a look at this more simplified example with **transformPet**, where we only have a single required PetDto.
-
-// TODO::
 ```typescript
-interface PetDto {
-    name?: string;
-    type: 'Cat' | 'Dog'
-}; 
-
-function transformPet(pet:PetDto): Pet {
-    switch (pet.type) {
-        case "Cat": { return { name: pet.name, icon: "😺" }; }
-        case "Dog": { return { name: pet.name, icon: "🐶" }; }
-    }
+interface PetDto { /*...*/
+  type: 'Cat' | 'Dog'
+  // ^? ❌ incomplete set - missing unknown
 }
+
+function mapToPetModel(dto: PetDto): Pet {
+  switch (pet.type) {
+    // ^? ❌ exhaustive without default
+    case "Cat": { /*..*/ }
+    case "Dog": { /*..*/ }
+  }
+}
+
 ```
 
-This compiles just fine, but we know the union PetDto.type is incomplete. To make it typesafe, we need to describe **unknown values**.
+This compiles just fine, but we rather like to have a compiler error since we now `type` may be any string. Hence, to make it typesafe, we need to describe **unknown values**. But there is a catch. We can't just extend the union with `string`.
+
+If we extend the union **'Cat' | 'Dog'** with **string**, TypeScript will only see **string**.
+Thus, we lose type information. 
+
+Though, there is a little intersection trick for keeping type inference in place and enforce handling with a default case. If we intersect `string & {}` or `string & Record<string,never>` we will still see all variations of the union.
 
 ```typescript
 type PetDto = {
-    name?: string;
-    type?: 'Cat' | 'Dog' | string
+    // type?: 'Cat' | 'Dog' | string <? ❌ TS infers string
+    type: 'Cat' | 'Dog' | string & {}
+      // ^? ✅ TS infers 'Cat' | 'Dog' | string
 }; 
 
-// test type inference
-const catTypeTest: PetDto['type'] = "Cat" as const;
-      // ?^ string | undefined
-
 function transformPet(pet:PetDto): Pet {
-// ?^ TS2366: Function lacks ending return statement and return type does not include undefine
+// ✅ ?^ Error TS2366: Function lacks ending return statement...
     switch (pet.type) {
-        case "Cat": {
-            return { name: pet.name, icon: "😺" };
-        }
-        case "Dog": {
-            return { name: pet.name, icon: "🐶" };
-        }
+        case "Cat": { /* ... */}
+        case "Dog": { /* ... */}
     }
 }
 ```
-
-If we extend the union with **'Cat' | 'Dog'** with **string**, TypeScript will only see **string**.
-Thus, we lose type information. However, we have a compiler error for **transformPet** because we are missing the **default case**.
-
-There is a little intersection trick for keeping type inference in place.
-
-```typescript
-
-type PetDto = {
-    name?: string;
-    type?: 'Cat' | 'Dog' | string & {}
-}; 
-
-// test type inference
-const catTypeTest: PetDto['type'] = "Cat";
-      // ?^ 'Cat' | 'Dog' | string & {}
-```
-
- If we intersect `string & {}` or `string & Record<string,never>` we will still see all variations of the union.
 
 ### Making an evolutionary stable switch-case statement
 
-What if the code and type evolve? What if the API changes and there is a new pet type Bird, we want to handle?
+What if the code and type evolve? What if the API changes and there is a new pet type Bird, we need to handle?
 
-If we have a default case in place, we won't get any compiler error. Let's see.
+If we have a default case in place, we won't get any compiler error if we are not handling Bird. The default case already handles any new **type** including petType **"Bird"**.
 
+But we can fix that. To do so, we need to explicitly define a type check with `unknownPetType: never = pet.type` in the default case. This will yield a compiler error because we are missing explicitly handling a value **Bird** which is a *string* and not *never*. 
 ```typescript
-interface PetDto {
-     id?: string;
-     name?: string;
-     type?: 'Cat' | 'Dog' | 'Bird'
-}; 
+interface PetDto {  type: 'Cat' | 'Dog' | 'Bird' }; 
 
 function transformPet(pet:PetDto): Pet {
     switch (pet.type) {
-        case "Cat": {
-            return { name: pet.name, icon: "😺" };
-        }
-        case "Dog": {
-            return { name: pet.name, icon: "🐶" };
-        }
+        case "Cat": {  /*..*/ }
+        case "Dog": { /*..*/ }
         default: {
-          const unknownPet = pet as any;
-          console.warn(`unknown pet type: ${pet.type}`);
-          return { id: unknownPet.id, name: unknownPet.name, icon: "❓" };
-        }
-    }
-}
-```
-
-No compiler errors. The default case already handled the new petType "Bird".
-We can introduce a typecheck with `unknownPetType: never`. This will yield a type error if we are missing explicitly handling a value.
-
-```typescript
-interface PetDto {
-     id?: string;
-     name?: string;
-     type?: 'Cat' | 'Dog' | 'Bird'
-}; 
-
-function transformPet(pet:PetDto): Pet {
-    switch (pet.type) {
-        case "Cat": {
-            return { name: pet.name, icon: "😺" };
-        }
-        case "Dog": {
-            return { name: pet.name, icon: "🐶" };
-        }
-        default: {
-          // keep unused: typecheck will yield compile error for unhandled pet.type
+          // keep unused for compiler error
           const _unknownPetType: never = pet.type
-              // ?^ TS2322: Type string is not assignable to type never
-          const unknownPet = pet as any;
-          console.warn(`unknown pet type: ${_unknownPetType}`);
-          return { id: unknownPet.id, name: unknownPet.name, icon: "❓" };
+          // ✅ ?^ Error TS2322: Type string is not assignable to type never
+          /*.handle default */
         }
     }
 }
 ```
-
-We need to explicitly define a type check in the default case to get informed by the compiler that we are missing a case for the value **Bird**.
 
 ## A Solution: Tolerant Discriminated Union Schema
 
