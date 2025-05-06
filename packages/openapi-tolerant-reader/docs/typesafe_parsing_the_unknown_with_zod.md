@@ -16,7 +16,7 @@
 <!-- TOC -->
 # How to typesafe parse the unknown with Zod
 
-This article addresses the challenges of parsing unknown data from APIs using Zod, focusing on type-safe handling and scalable solutions.
+This article addresses the challenges of parsing unknown data from APIs using Zod, focusing on type-safe handling and scalable solutions. At least this is how the AI summarized its essence.
 
 You will find a lot of code examples which are intended to be read along the text.
 However, you may jump directly into the last section where we provide a summary of the key issues.
@@ -59,7 +59,7 @@ namespace MVP {
   async function createPetList(): Promise<Array<Pet>> {
     const response: unknown = await fetchPets();
     return response.map(mapToPetModel)
-                // ^? Error: response is of type unknown
+                // ❌ ^? Error: response is of type unknown
   }
   
   function mapToPetModel(dto: PetDto): Pet {
