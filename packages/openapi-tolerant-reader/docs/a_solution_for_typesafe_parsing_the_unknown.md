@@ -103,10 +103,10 @@ In the implementation we need to do just a few things:
 Let's implement a solution explicitly for the Pet example. Later we can think about a more generic solution.
 
 ```typescript
-const PetBase = z.interface({id: z.string(), name: z.string().optional()});
-const Cat = PetBase.extend(z.interface({type: z.literal("Cat")}));
-const Dog = PetBase.extend(z.interface({type: z.literal("Dog")}));
-const UnknownPet = PetBase.extend(z.interface({type: z.string().transform((val) => val as string & {})}).loose());
+const PetBase = z.object({id: z.string(), name: z.string().optional()});
+const Cat = PetBase.extend(z.object({type: z.literal("Cat")}));
+const Dog = PetBase.extend(z.object({type: z.literal("Dog")}));
+const UnknownPet = PetBase.extend(z.object({type: z.string().transform((val) => val as string & {})}).loose());
 
 const PetMatcher = {Cat: Cat, Dog: Dog, onDefault: UnknownPet} as const;
 const Pet = createTolerantPetSchema("type", PetMatcher);

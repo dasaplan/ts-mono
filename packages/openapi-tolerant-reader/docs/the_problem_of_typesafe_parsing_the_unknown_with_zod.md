@@ -98,9 +98,9 @@ Our codegenerator would translate a `oneOf` with `discriminator` into a Zod `dis
 ```typescript
   // TODO: generate API schemas from Openapi specification
   namespace PetApi_v1_0 {
-    const PetBase = z.interface({ id: z.string(), name: z.string().optional() });
-    const Cat = PetBase.extend(z.interface({ type: z.literal("Cat"), mood: z.string()}));
-    const Dog = PetBase.extend(z.interface({ type: z.literal("Dog") }));
+    const PetBase = z.object({ id: z.string(), name: z.string().optional() });
+    const Cat = PetBase.extend(z.object({ type: z.literal("Cat"), mood: z.string()}));
+    const Dog = PetBase.extend(z.object({ type: z.literal("Dog") }));
 
     export const Pet = z.discriminatedUnion([Cat, Dog]);
     export const Pets = z.array(Pet);
@@ -145,9 +145,9 @@ Besides discriminatedUnions may utilize `.union` or just `.or`. However, doing s
 For parsing `{ type: "Cat"}` we would expect a validation error because of a missing required field `mood`. Yet, because the union schema includes a generic option, we won't get an error.
 
 ```typescript
-const Cat = z.interface({ type: z.literal("Cat"), mood: z.string() });
-const Dog = z.interface({ type: z.literal("Dog") });
-const UnknownPet = z.interface({ type: z.string() });
+const Cat = z.object({ type: z.literal("Cat"), mood: z.string() });
+const Dog = z.object({ type: z.literal("Dog") });
+const UnknownPet = z.object({ type: z.string() });
 
 const Pet = z.discriminatedUnion([Cat, Dog, UnknownPet]);
    // ?^ ❌`Error: Invalid discriminated union option at index "2"` 
@@ -171,21 +171,21 @@ Scaling issues arise when manually writing schemas for APIs with many fields and
 This means, in the following example we would need to handle manually deeply nested **discriminatedUnion** like for `Cat.needs.features` or nested **enums** like `Cat.mood` or `Cat.needs.features.favorites`.
 
 ```typescript
-const Dog = z.interface({/**/})
-const Cat = z.interface({
+const Dog = z.object({/**/})
+const Cat = z.object({
         type: z.literal("Cat"),
         // ❌ unknown enum value
         mood: z.enum(["angry", "hungry"]),
-        needs: z.array(z.interface({
+        needs: z.array(z.object({
             // ❌ unknown discriminator value    
             features: z.discriminatedUnion( 
                 [
-                  z.interface({
+                  z.object({
                     type: 'BREAKING_STUFF', 
                     //  ❌ unknown enum value                               
                     favorites: z.enum(["CABLE", "COUCH"]) 
                   }),
-                  z.interface({type: 'EATING', likesHunting: z.boolean()})
+                  z.object({type: 'EATING', likesHunting: z.boolean()})
                 ]
             )
         }))
