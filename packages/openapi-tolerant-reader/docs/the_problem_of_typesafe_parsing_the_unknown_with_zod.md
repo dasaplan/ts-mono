@@ -140,7 +140,7 @@ So, why not just extend the discriminatedUnion with a generic schema? Maybe we c
 
 We like to have a generic schema with an unknown literal value for **type** but here we are limited with Zod.
 If we create a schema **UnknownPet** and extend the **discriminatedUnion** accordingly, we will receive a runtime error.
-Besides discriminatedUnions may utilize `.union` or just `.or`. However, doing so, we will lose validation for our concrete schemas Cat and Dog.
+Besides discriminatedUnions we may utilize `.union` or just `.or`. However, doing so, we will lose validation for our concrete schemas Cat and Dog.
 
 For parsing `{ type: "Cat"}` we would expect a validation error because of a missing required field `mood`. Yet, because the union schema includes a generic option, we won't get an error.
 
@@ -233,7 +233,7 @@ function mapToPetModel(dto: PetDto): Pet {
 
 ```
 
-This compiles just fine, but we rather like to have a compiler error since we now `type` may be any string. Hence, to make it typesafe, we need to describe **unknown values**. But there is a catch. We can't just extend the union with `string`.
+This compiles just fine, but we rather like to have a compiler error since we know `type` may be any string. Hence, to make it typesafe, we need to describe **unknown values**. But there is a catch. We can't just extend the union with `string`.
 
 If we extend the union **'Cat' | 'Dog'** with **string**, TypeScript will only see **string**.
 Thus, we lose type information. 
