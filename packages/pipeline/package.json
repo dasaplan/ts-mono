@@ -1,0 +1,32 @@
+{
+  "name": "@dasaplan/pipeline",
+  "description": "Pipeline scripts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "build:bndl": "tsup --entry index.ts --format cjs,esm --dts --sourcemap --splitting --onSuccess \"tsc --emitDeclarationOnly --declaration\"",
+    "test": "echo test",
+    "lint": "echo not implemented",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@dasaplan/ts-sdk": "workspace:*"
+  },
+  "peerDependencies": {
+    "@redocly/openapi-core": "^1.6.0",
+    "lodash": "^4.17.21",
+    "tslog": "^4.9.2"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.5",
+    "tsconfig": "workspace:*"
+  }
+}
