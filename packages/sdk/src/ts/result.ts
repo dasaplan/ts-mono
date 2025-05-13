@@ -78,11 +78,15 @@ export namespace Result {
       // to update the function, we depend on the errValue - should be good enough
       ctx.noopErr = () => err<ErrVal>(errResult.errValue, ctx);
     }
+
+    /** READ **/
     errResult.getOrThrow = () => {
       throw ApplicationError.create("[unsafe] can't get okValue from Err!").chainUnknown(_errVal);
     };
+    errResult.getOrThrowAsync = () => {
+      throw ApplicationError.create("[unsafe] can't get okValue from Err!").chainUnknown(_errVal);
+    };
     errResult.getOr = (a) => a;
-    errResult.mapErr = <$NextVal>(fn: FnMapErr<$NextVal, ErrVal>) => err<$NextVal>(fn(_errVal), ctx);
     errResult.resolved = () => {
       if (isPromise(_errVal)) {
         return new Promise((resolve, reject) => {
@@ -94,10 +98,16 @@ export namespace Result {
       }
       return Promise.resolve(errResult) as Promise<Result<never, Awaited<ErrVal>>>;
     };
-    /* no ops */
+
+    /** WRITE **/
+    errResult.mapErr = <$NextVal>(fn: FnMapErr<$NextVal, ErrVal>) => err<$NextVal>(fn(_errVal), ctx);
+
+    /** no ops **/
     const noop = (ctx?.noopErr ?? (() => err(_errVal, ctx))) as () => Result<never, ErrVal>;
     errResult.mapOk = noop;
+    errResult.mapOkAsync = noop;
     errResult.andThen = noop;
+
     return errResult as Pick<
       Result<never, ErrVal>,
       "getOrThrow" | "isOk" | "mapOk" | "andThen" | "mapErr" | "getOr" | "resolved" | "mapOkAsync" | "getOrThrowAsync"
@@ -134,13 +144,12 @@ export namespace Result {
     okResult.mapOkAsync = <$NextOk>(fn: (a: Awaited<OkVal>) => Promise<$NextOk>) => {
       return tryCatch(() => awaitOk<OkVal, Promise<OkVal>, Promise<$NextOk>>(fn)(okResult.okValue as Promise<OkVal>), ctx) as Result<Promise<$NextOk>, never>;
     };
-
     okResult.andThen = <$NextVal, $NextErr>(fn: FnFlatMapOk<$NextVal, OkVal, $NextErr, never>) => {
       const newResult = fn(okResult.okValue);
       return newResult.isOk ? ok<$NextVal>(newResult.okValue, ctx) : (err<$NextErr>(newResult.errValue, ctx) as Result<never, $NextErr>);
     };
 
-    /* no ops */
+    /** no ops **/
     const noop = (ctx?.noopErr ?? (() => ok(_okVal, ctx))) as () => Result<OkVal, never>;
     okResult.mapErr = noop;
     return okResult as Pick<
