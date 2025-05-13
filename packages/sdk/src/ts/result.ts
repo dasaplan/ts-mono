@@ -42,11 +42,24 @@ interface $Err<ErrVal> {
 }
 
 export namespace Result {
+  /** mutable api. mutates the context, so it can be reused for the next call*/
+  export const mut = {
+    tryCatch<OkVal, ErrVal = unknown>(fn: () => OkVal): Result<OkVal, ErrVal> {
+      return tryCatch(fn, {});
+    },
+    ok<OkVal>(_okVal: OkVal): Result<OkVal, never> {
+      return ok<OkVal>(_okVal, {});
+    },
+    err<ErrVal>(_errVal: ErrVal): Result<never, ErrVal> {
+      return err<ErrVal>(_errVal, {});
+    },
+  } as const;
+
   function isPromise(val: unknown): val is Promise<unknown> {
     return Promise.resolve(val) === val;
   }
 
-  export function tryCatch<OkVal, ErrVal = unknown>(fn: () => OkVal, ctx: $Context = {}): Result<OkVal, ErrVal> {
+  export function tryCatch<OkVal, ErrVal = unknown>(fn: () => OkVal, ctx?: $Context): Result<OkVal, ErrVal> {
     try {
       return ok<OkVal>(fn(), ctx);
     } catch (e) {

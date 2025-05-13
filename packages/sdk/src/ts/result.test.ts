@@ -13,6 +13,28 @@ describe("result", () => {
     b.getOr(1);
   });
 
+  test("mutable api ", () => {
+    const parseInt = (a: string): number => Number.parseInt(a);
+    const add2 = (a: number): number => a + 2;
+
+    const a = Result.mut.tryCatch(() => "1").mapOk(parseInt);
+
+    expect(a.getOrThrow()).toEqual(1);
+    expect(a.mapOk(add2).getOrThrow()).toEqual(3);
+    expect(a.getOrThrow()).toBe(3);
+  });
+
+  test("immutable api ", () => {
+    const parseInt = (a: string): number => Number.parseInt(a);
+    const add2 = (a: number): number => a + 2;
+
+    const a = Result.tryCatch(() => "1").mapOk(parseInt);
+
+    expect(a.getOrThrow()).toEqual(1);
+    expect(a.mapOk(add2).getOrThrow()).toEqual(3);
+    expect(a.getOrThrow()).toBe(1);
+  });
+
   test("getOrThrow", () => {
     const a: Result<string, "bar"> = maybeErrorBar("throw")();
     expect(() => a.getOrThrow()).throws("bar");

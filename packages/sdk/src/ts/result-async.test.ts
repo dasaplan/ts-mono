@@ -35,6 +35,20 @@ describe("result async", () => {
     expect(a.mapOkAsync(published).getOrThrowAsync() instanceof Promise).toBe(true);
     expect(await a.mapOkAsync(published).getOrThrowAsync()).toBe("pub-saved-1");
   });
+
+  test("mutable api async", async () => {
+    const a = Result.mut.tryCatch(fetchOne).mapOkAsync(save);
+    expect(await a.getOrThrowAsync()).toBe("saved-1");
+    expect(await a.mapOkAsync(published).getOrThrowAsync()).toEqual("pub-saved-1");
+    expect(await a.getOrThrowAsync()).toBe("pub-saved-1");
+  });
+
+  test("immutable api async", async () => {
+    const a = Result.tryCatch(fetchOne).mapOkAsync(save);
+    expect(await a.getOrThrowAsync()).toBe("saved-1");
+    expect(await a.mapOkAsync(published).getOrThrowAsync()).toEqual("pub-saved-1");
+    expect(await a.getOrThrowAsync()).toBe("saved-1");
+  });
 });
 
 async function fetchOne() {
