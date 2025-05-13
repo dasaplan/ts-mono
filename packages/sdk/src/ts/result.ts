@@ -6,8 +6,10 @@ export type $Result<OkVal, ErrVal> = Ok<OkVal> | Err<ErrVal>;
 
 export type ResultApi<Ok, Err> = {
   getOrThrow(): Ok;
+  getOrThrowAsync(): Promise<Ok>;
   getOr(orValue: Ok): Ok;
   mapOk: <$NextOk>(ok: FnMapOk<$NextOk, Ok>) => Result<$NextOk, Err>;
+  mapOkAsync: <$NextOk>(ok: (a: Awaited<Ok>) => Promise<$NextOk>) => Result<Promise<$NextOk>, Err>;
   mapErr: <$NextErr>(ok: FnMapErr<$NextErr, Err>) => Result<Ok, $NextErr>;
   andThen: <$NextOk, $NextErr>(ok: FnFlatMapOk<$NextOk, Ok, $NextErr, Err>) => Result<$NextOk, $NextErr | Err>;
   resolved: () => Promise<Result<Awaited<Ok>, Awaited<Err>>>;
@@ -83,7 +85,11 @@ export namespace Result {
     const noop = (ctx?.noopErr ?? (() => err(_errVal, ctx))) as () => Result<never, ErrVal>;
     errResult.mapOk = noop;
     errResult.andThen = noop;
-    return errResult as Pick<Result<never, ErrVal>, "getOrThrow" | "isOk" | "mapOk" | "andThen" | "mapErr" | "getOr" | "resolved"> & Err<ErrVal>;
+    return errResult as Pick<
+      Result<never, ErrVal>,
+      "getOrThrow" | "isOk" | "mapOk" | "andThen" | "mapErr" | "getOr" | "resolved" | "mapOkAsync" | "getOrThrowAsync"
+    > &
+      Err<ErrVal>;
   }
 
   export function ok<OkVal>(_okVal: OkVal, ctx?: $Context): Result<OkVal, never> {
@@ -93,10 +99,11 @@ export namespace Result {
       // to update the function, we depend on the errValue - should be good enough
       ctx.noopOk = () => ok<OkVal>(okResult.okValue, ctx);
     }
+
+    /** READ **/
     okResult.getOrThrow = () => okResult.okValue;
     okResult.getOr = () => okResult.okValue;
-    okResult.mapOk = <$NextVal>(fn: FnMapOk<$NextVal, OkVal>) => tryCatch<$NextVal, never>(() => fn(okResult.okValue));
-    okResult.andThen = <$NextVal, $NextErr>(fn: FnFlatMapOk<$NextVal, OkVal, $NextErr, never>) => fn(okResult.okValue);
+    okResult.getOrThrowAsync = () => (isPromise(okResult.okValue) ? okResult.okValue : Promise.resolve(okResult.okValue)) as Promise<OkVal>;
     okResult.resolved = () => {
       if (isPromise(_okVal)) {
         return new Promise((resolve, reject) => {
@@ -108,10 +115,26 @@ export namespace Result {
       }
       return Promise.resolve(okResult) as Promise<Result<Awaited<OkVal>, never>>;
     };
+
+    /** WRITE **/
+    okResult.mapOk = <$NextVal>(fn: FnMapOk<$NextVal, OkVal>) => tryCatch<$NextVal, never>(() => fn(okResult.okValue), ctx);
+    okResult.mapOkAsync = <$NextOk>(fn: (a: Awaited<OkVal>) => Promise<$NextOk>) => {
+      return tryCatch(() => awaitOk<OkVal, Promise<OkVal>, Promise<$NextOk>>(fn)(okResult.okValue as Promise<OkVal>), ctx) as Result<Promise<$NextOk>, never>;
+    };
+
+    okResult.andThen = <$NextVal, $NextErr>(fn: FnFlatMapOk<$NextVal, OkVal, $NextErr, never>) => {
+      const newResult = fn(okResult.okValue);
+      return newResult.isOk ? ok<$NextVal>(newResult.okValue, ctx) : (err<$NextErr>(newResult.errValue, ctx) as Result<never, $NextErr>);
+    };
+
     /* no ops */
     const noop = (ctx?.noopErr ?? (() => ok(_okVal, ctx))) as () => Result<OkVal, never>;
     okResult.mapErr = noop;
-    return okResult as Pick<Result<OkVal, never>, "getOrThrow" | "isOk" | "mapOk" | "andThen" | "mapErr" | "getOr" | "resolved"> & Ok<OkVal>;
+    return okResult as Pick<
+      Result<OkVal, never>,
+      "getOrThrow" | "isOk" | "mapOk" | "andThen" | "mapErr" | "getOr" | "resolved" | "mapOkAsync" | "getOrThrowAsync"
+    > &
+      Ok<OkVal>;
   }
 
   function makeOk<T>(val: T, ctx?: $Context): $Ok<T> {
