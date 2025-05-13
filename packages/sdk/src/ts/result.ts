@@ -8,6 +8,7 @@ export type ResultApi<Ok, Err> = {
   getOrThrow(): Ok;
   getOrThrowAsync(): Promise<Ok>;
   getOr(orValue: Ok): Ok;
+  getOrAsync(orValue: Promise<Ok>): Promise<Ok>;
   mapOk: <$NextOk>(ok: FnMapOk<$NextOk, Ok>) => Result<$NextOk, Err>;
   mapOkAsync: <$NextOk>(ok: (a: Awaited<Ok>) => Promise<$NextOk>) => Result<Promise<$NextOk>, Err>;
   mapErr: <$NextErr>(ok: FnMapErr<$NextErr, Err>) => Result<Ok, $NextErr>;
@@ -55,8 +56,8 @@ export namespace Result {
     },
   } as const;
 
-  function isPromise(val: unknown): val is Promise<unknown> {
-    return Promise.resolve(val) === val;
+  function isPromise<T = unknown>(val: unknown): val is Promise<T> {
+    return typeof val === "object" && val !== null && Promise.resolve(val) === val;
   }
 
   export function tryCatch<OkVal, ErrVal = unknown>(fn: () => OkVal, ctx?: $Context): Result<OkVal, ErrVal> {
@@ -86,7 +87,8 @@ export namespace Result {
     errResult.getOrThrowAsync = () => {
       throw ApplicationError.create("[unsafe] can't get okValue from Err!").chainUnknown(_errVal);
     };
-    errResult.getOr = (a) => a;
+    errResult.getOr = <OrValue>(a: OrValue) => a;
+    errResult.getOrAsync = <OrValue extends Promise<unknown>>(a: OrValue) => a;
     errResult.resolved = () => {
       if (isPromise(_errVal)) {
         return new Promise((resolve, reject) => {
@@ -110,7 +112,7 @@ export namespace Result {
 
     return errResult as Pick<
       Result<never, ErrVal>,
-      "getOrThrow" | "isOk" | "mapOk" | "andThen" | "mapErr" | "getOr" | "resolved" | "mapOkAsync" | "getOrThrowAsync"
+      "getOrThrow" | "isOk" | "mapOk" | "andThen" | "mapErr" | "getOr" | "resolved" | "mapOkAsync" | "getOrThrowAsync" | "getOrAsync"
     > &
       Err<ErrVal>;
   }
@@ -126,7 +128,8 @@ export namespace Result {
     /** READ **/
     okResult.getOrThrow = () => okResult.okValue;
     okResult.getOr = () => okResult.okValue;
-    okResult.getOrThrowAsync = () => (isPromise(okResult.okValue) ? okResult.okValue : Promise.resolve(okResult.okValue)) as Promise<OkVal>;
+    okResult.getOrAsync = () => (isPromise<OkVal>(okResult.okValue) ? okResult.okValue : Promise.resolve(okResult.okValue));
+    okResult.getOrThrowAsync = () => (isPromise<OkVal>(okResult.okValue) ? okResult.okValue : Promise.resolve(okResult.okValue));
     okResult.resolved = () => {
       if (isPromise(_okVal)) {
         return new Promise((resolve, reject) => {
@@ -154,7 +157,7 @@ export namespace Result {
     okResult.mapErr = noop;
     return okResult as Pick<
       Result<OkVal, never>,
-      "getOrThrow" | "isOk" | "mapOk" | "andThen" | "mapErr" | "getOr" | "resolved" | "mapOkAsync" | "getOrThrowAsync"
+      "getOrThrow" | "isOk" | "mapOk" | "andThen" | "mapErr" | "getOr" | "resolved" | "mapOkAsync" | "getOrThrowAsync" | "getOrAsync"
     > &
       Ok<OkVal>;
   }
