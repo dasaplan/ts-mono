@@ -11,6 +11,20 @@ describe("result async", () => {
     expect(b.getOrThrow()).toEqual("1");
   });
 
+  test("getOrAsync", async () => {
+    const a = Result.tryCatch(fetchOne);
+    expect(a.getOr(Promise.resolve("foo")) instanceof Promise).toBe(true);
+    expect(await a.getOr(Promise.resolve("bar"))).toEqual("1");
+
+    const b = Result.tryCatch(fetchAndReject("foo"));
+    expect(await b.getOr(Promise.resolve("bar"))).toEqual("bar");
+  });
+
+  test("getOrAsync promise reject", async () => {
+    const b = Result.tryCatch(fetchAndReject("foo"));
+    expect(await b.getOr(Promise.resolve("bar"))).toEqual("bar");
+  });
+
   test("async map", async () => {
     const a = Result.tryCatch(fetchOne).mapOk(awaitOk(save));
 
@@ -32,27 +46,31 @@ describe("result async", () => {
 
     expect(a.getOrThrow()).toEqual("saved-1");
 
-    expect(a.mapOkAsync(published).getOrThrowAsync() instanceof Promise).toBe(true);
-    expect(await a.mapOkAsync(published).getOrThrowAsync()).toBe("pub-saved-1");
+    expect(a.mapOkAsync(published).getOrThrow() instanceof Promise).toBe(true);
+    expect(await a.mapOkAsync(published).getOrThrow()).toBe("pub-saved-1");
   });
 
   test("mutable api async", async () => {
     const a = Result.mut.tryCatch(fetchOne).mapOkAsync(save);
-    expect(await a.getOrThrowAsync()).toBe("saved-1");
-    expect(await a.mapOkAsync(published).getOrThrowAsync()).toEqual("pub-saved-1");
-    expect(await a.getOrThrowAsync()).toBe("pub-saved-1");
+    expect(await a.getOrThrow()).toBe("saved-1");
+    expect(await a.mapOkAsync(published).getOrThrow()).toEqual("pub-saved-1");
+    expect(await a.getOrThrow()).toBe("pub-saved-1");
   });
 
   test("immutable api async", async () => {
     const a = Result.tryCatch(fetchOne).mapOkAsync(save);
-    expect(await a.getOrThrowAsync()).toBe("saved-1");
-    expect(await a.mapOkAsync(published).getOrThrowAsync()).toEqual("pub-saved-1");
-    expect(await a.getOrThrowAsync()).toBe("saved-1");
+    expect(await a.getOrThrow()).toBe("saved-1");
+    expect(await a.mapOkAsync(published).getOrThrow()).toEqual("pub-saved-1");
+    expect(await a.getOrThrow()).toBe("saved-1");
   });
 });
 
 async function fetchOne() {
   return Promise.resolve("1");
+}
+
+function fetchAndReject(a: string): () => Promise<string> {
+  return () => Promise.reject(a);
 }
 
 function awaitOk<E, T extends Promise<E>, R>(fn: (i: Awaited<T>) => R): (a: T) => Promise<R> {
