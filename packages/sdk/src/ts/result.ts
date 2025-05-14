@@ -111,6 +111,8 @@ export namespace Result {
     errResult.mapOk = noop;
     errResult.mapOkAsync = noop;
     errResult.andThen = noop;
+    errResult.onOk = noop;
+    errResult.onOkAsync = noop;
 
     return errResult as Pick<
       Result<never, ErrVal>,
