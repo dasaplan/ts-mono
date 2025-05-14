@@ -26,7 +26,7 @@ describe("result async", () => {
   });
 
   test("onOkAsync", async () => {
-    const b = Result.ok(fetchOne()).mapOkAsync((a) => Promise.resolve(Number.parseInt(a)));
+    const b = Result.ok(fetchOne()).mapOkAsync((a) => Number.parseInt(a));
     const obj = { foo: 1 };
     b.onOkAsync((a) => {
       obj.foo += a;
@@ -36,7 +36,7 @@ describe("result async", () => {
     expect(obj.foo).toEqual(2);
 
     const res = await b
-      .mapOkAsync((a) => Promise.resolve(a + 1))
+      .mapOkAsync((a) => a + 1)
       .onOkAsync((a) => {
         obj.foo += a;
       })

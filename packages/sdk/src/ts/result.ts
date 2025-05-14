@@ -10,7 +10,7 @@ export type ResultApi<Ok, Err> = {
   mapOk: <$NextOk>(ok: FnMapOk<$NextOk, Ok>) => Result<$NextOk, Err>;
   onOk: (ok: (a: Ok) => void) => Result<Ok, Err>;
   onOkAsync: (ok: (a: Awaited<Ok>) => void | Promise<void>) => Result<Ok, Err>;
-  mapOkAsync: <$NextOk>(ok: (a: Awaited<Ok>) => Promise<$NextOk>) => Result<Promise<$NextOk>, Err>;
+  mapOkAsync: <$NextOk>(ok: (a: Awaited<Ok>) => Promise<$NextOk> | $NextOk) => Result<Promise<$NextOk>, Err>;
   mapErr: <$NextErr>(ok: FnMapErr<$NextErr, Err>) => Result<Ok, $NextErr>;
   andThen: <$NextOk, $NextErr>(ok: FnFlatMapOk<$NextOk, Ok, $NextErr, Err>) => Result<$NextOk, $NextErr | Err>;
   resolved: () => Promise<Result<Awaited<Ok>, Awaited<Err>>>;
@@ -171,8 +171,11 @@ export namespace Result {
 
     /** WRITE **/
     okResult.mapOk = <$NextVal>(fn: FnMapOk<$NextVal, OkVal>) => tryCatch<$NextVal, never>(() => fn(okResult.okValue), ctx);
-    okResult.mapOkAsync = <$NextOk>(fn: (a: Awaited<OkVal>) => Promise<$NextOk>) => {
-      return tryCatch(() => awaitOk<OkVal, Promise<OkVal>, Promise<$NextOk>>(fn)(okResult.okValue as Promise<OkVal>), ctx) as Result<Promise<$NextOk>, never>;
+    okResult.mapOkAsync = <$NextOk>(fn: (a: Awaited<OkVal>) => Promise<$NextOk> | $NextOk) => {
+      return tryCatch(() => awaitOk<OkVal, Promise<OkVal>, Promise<$NextOk> | $NextOk>(fn)(okResult.okValue as Promise<OkVal>), ctx) as Result<
+        Promise<$NextOk>,
+        never
+      >;
     };
     okResult.andThen = <$NextVal, $NextErr>(fn: FnFlatMapOk<$NextVal, OkVal, $NextErr, never>) => {
       const newResult = fn(okResult.okValue);
