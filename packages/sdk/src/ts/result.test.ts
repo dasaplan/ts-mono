@@ -24,6 +24,13 @@ describe("result", () => {
     expect(a.getOrThrow()).toBe(3);
   });
 
+  test("onOk(", async () => {
+    const b = Result.ok("foo");
+    const obj = { foo: 1 };
+    b.onOk(() => (obj.foo += 1));
+    expect(obj.foo).toEqual(2);
+  });
+
   test("immutable api ", () => {
     const parseInt = (a: string): number => Number.parseInt(a);
     const add2 = (a: number): number => a + 2;

@@ -25,6 +25,26 @@ describe("result async", () => {
     expect(await b.getOr(Promise.resolve("bar"))).toEqual("bar");
   });
 
+  test("onOkAsync", async () => {
+    const b = Result.ok(fetchOne()).mapOkAsync((a) => Promise.resolve(Number.parseInt(a)));
+    const obj = { foo: 1 };
+    b.onOkAsync((a) => {
+      obj.foo += a;
+    });
+    expect(obj.foo).toEqual(1);
+    await b.resolved();
+    expect(obj.foo).toEqual(2);
+
+    const res = await b
+      .mapOkAsync((a) => Promise.resolve(a + 1))
+      .onOkAsync((a) => {
+        obj.foo += a;
+      })
+      .getOrThrow();
+    expect(obj.foo).toEqual(4);
+    expect(res).toEqual(2);
+  });
+
   test("async map", async () => {
     const a = Result.tryCatch(fetchOne).mapOk(awaitOk(save));
 
