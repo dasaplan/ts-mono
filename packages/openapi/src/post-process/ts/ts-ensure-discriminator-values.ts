@@ -14,7 +14,7 @@ export function tsEnsureDiscriminatorValues(api: SourceFile) {
 function recursivelyEnsureDiscriminatorValues(
   currentFoundUnion: FindUnionResult,
   interfaces: KindToNodeMappings[SyntaxKind.InterfaceDeclaration][],
-  allFoundUnions: FindUnionResult[]
+  allFoundUnions: FindUnionResult[],
 ) {
   const {
     discriminator,
@@ -26,7 +26,7 @@ function recursivelyEnsureDiscriminatorValues(
     const unionName = node.getNameNode().getText();
     if (_.isNil(_subTypes) || _.isNil(mappingValues) || _subTypes.length !== mappingValues?.length) {
       throw `Error: Expected discriminated union ${unionName} to have mappings for all subtypes but found: subTypes: ${JSON.stringify(
-        _subTypes
+        _subTypes,
       )}, mappings: ${JSON.stringify(mappingValues)}`;
     }
     const mappingValue = mappingValues[idx];
@@ -48,7 +48,7 @@ function recursivelyEnsureDiscriminatorValues(
             },
           },
           interfaces,
-          allFoundUnions
+          allFoundUnions,
         );
       }
     }
@@ -64,7 +64,7 @@ function recursivelyEnsureDiscriminatorValues(
       declaredSubType.addProperty({
         name: propertyName!,
         kind: StructureKind.PropertySignature,
-        type: `'${mappingValue}'` ?? "string",
+        type: mappingValue ? `'${mappingValue}'` : "string",
       });
       return;
     }
@@ -78,7 +78,7 @@ function recursivelyEnsureDiscriminatorValues(
     else if (propertyValue.isLiteral() && propertyValue.getLiteralValue() !== mappingValue) {
       discriminatorProperty.setType(`'${propertyValue.getLiteralValue()}' | '${mappingValue}'`);
       appLog.log.debug(
-        `fixed missing discriminator value on subtype ${declaredSubType.getName()}.${propertyName} - extending ${propertyValue.getText()} with ${mappingValue}`
+        `fixed missing discriminator value on subtype ${declaredSubType.getName()}.${propertyName} - extending ${propertyValue.getText()} with ${mappingValue}`,
       );
     }
     // add allowed discriminator to union value if not present

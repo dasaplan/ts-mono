@@ -13,7 +13,7 @@ test("zod discriminated union", () => {
   const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal("DOG") }));
   const ShortHair = z.object({ color: z.string(), catType: z.literal("SHORT"), angryLevel: z.string().optional(), type: z.literal("CAT") });
   const Seam = PetBase.merge(
-    z.object({ color: z.string(), catType: z.literal("SEAM"), angryLevel: z.string().regex(/\w+/).optional(), type: z.literal("CAT") })
+    z.object({ color: z.string(), catType: z.literal("SEAM"), angryLevel: z.string().regex(/\w+/).optional(), type: z.literal("CAT") }),
   );
 
   const Cat = ZodUnionMatch.matcher("catType", {

@@ -102,7 +102,7 @@ Our codegenerator would translate a `oneOf` with `discriminator` into a Zod `dis
     const Cat = PetBase.extend(z.object({ type: z.literal("Cat"), mood: z.string()}));
     const Dog = PetBase.extend(z.object({ type: z.literal("Dog") }));
 
-    export const Pet = z.discriminatedUnion([Cat, Dog]);
+    export const Pet = z.discriminatedUnion("type", [Cat, Dog]);
     export const Pets = z.array(Pet);
   }
 ```
@@ -149,10 +149,10 @@ const Cat = z.object({ type: z.literal("Cat"), mood: z.string() });
 const Dog = z.object({ type: z.literal("Dog") });
 const UnknownPet = z.object({ type: z.string() });
 
-const Pet = z.discriminatedUnion([Cat, Dog, UnknownPet]);
+const Pet = z.discriminatedUnion("type", [Cat, Dog, UnknownPet]);
    // ?^ ❌`Error: Invalid discriminated union option at index "2"` 
 
-const PetOrUnkown = z.discriminatedUnion([Cat, Dog]).or(UnknownPet);
+const PetOrUnkown = z.discriminatedUnion("type", [Cat, Dog]).or(UnknownPet);
 const cat_or = PetOrUnkown.parse( {type: "Cat"})
    // ?^ { type: "Cat "} ❌ mood is missing
 
@@ -178,7 +178,8 @@ const Cat = z.object({
         mood: z.enum(["angry", "hungry"]),
         needs: z.array(z.object({
             // ❌ unknown discriminator value    
-            features: z.discriminatedUnion( 
+            features: z.discriminatedUnion(
+                "type",
                 [
                   z.object({
                     type: 'BREAKING_STUFF', 
@@ -192,7 +193,7 @@ const Cat = z.object({
     })
 );
 // ❌ unknown discriminator value    
-export const Pet = z.discriminatedUnion([Cat, Dog]);
+export const Pet = z.discriminatedUnion("type", [Cat, Dog]);
 ```
 
 Applying any workaround on that kind of schema takes significant more effort as for the simple example. Now let us imagine an API with over 500 fields and a significant depth.

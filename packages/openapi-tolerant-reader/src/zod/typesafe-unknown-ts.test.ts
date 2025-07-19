@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars,no-inner-declarations,@typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unused-vars,@typescript-eslint/switch-exhaustiveness-check */
+// noinspection JSUnusedLocalSymbols
+
 import { z } from "zod";
-import { Opaque } from "type-fest";
 import { describe, test, expect } from "vitest";
 
 declare const tag: unique symbol;
@@ -14,13 +15,13 @@ describe("zod test", () => {
       .or(z.object({ type: z.string().transform((d) => d as UNKNOWN_VARIANT) }));
 
     const a: union = union.parse({ type: "A", a: 1 });
+    // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
     switch (a.type) {
       case "A":
         break;
       default: {
         // @ts-expect-error "B" is missing
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const check: UNKNOWN = a.type;
+        const _check: UNKNOWN_VARIANT = a.type;
         throw new Error("test failed 2");
       }
     }
@@ -39,7 +40,6 @@ describe("zod test", () => {
   });
 
   test("enum to value with opaque annotation", () => {
-    // eslint-disable-next-line @typescript-eslint/ban-types
     type UNKNOWN = string & z.BRAND<"UNKNOWN">;
     const MyEnum = z.enum(["Value1", "Value2", "Value3"]).or(z.string().brand("UNKNOWN"));
 
@@ -58,8 +58,7 @@ describe("zod test", () => {
         throw new Error("test failed 2");
       }
       default: {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const check: UNKNOWN = a;
+        const _check: UNKNOWN = a;
         throw new Error("test failed 2");
       }
     }
@@ -78,25 +77,20 @@ describe("zod test", () => {
   });
 
   test("invalid enum with unknown schema handling", () => {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    const MyEnum = z
-      .enum(["Value1", "Value2", "Value3"])
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      .or(
-        z
-          .string()
-          .transform((e) => e as string & {})
-          .refine((value) => typeof value !== "string", {
-            message: "expected value to be of type string",
-          })
-      );
+    const MyEnum = z.enum(["Value1", "Value2", "Value3"]).or(
+      z
+        .string()
+        .transform((e) => e as string & {})
+        .refine((value) => typeof value !== "string", {
+          message: "expected value to be of type string",
+        }),
+    );
 
     const result = MyEnum.safeParse(2);
     expect(result.success).toBeFalsy();
   });
   test("enum to value without annotation", () => {
     const MyEnum0 = z.enum(["Value1", "Value2", "Value3"]);
-    // eslint-disable-next-line @typescript-eslint/ban-types
     const MyEnum = MyEnum0.or(z.string().transform((e) => e as string & {}));
 
     type Enum = z.infer<typeof MyEnum>;
@@ -112,8 +106,7 @@ describe("zod test", () => {
         throw new Error("test failed 2");
       }
       default: {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const check: never = a as Exclude<Enum0, typeof a>;
+        const _check: never = a as Exclude<Enum0, typeof a>;
         throw new Error("test failed 2");
       }
     }
@@ -131,7 +124,6 @@ describe("zod test", () => {
   });
 
   test("enum to value without default", () => {
-    // eslint-disable-next-line @typescript-eslint/ban-types
     const MyEnum: z.ZodType<"Value1" | "Value2" | (string & {})> = z.enum(["Value1", "Value2"]).or(z.string());
 
     type Enum = z.infer<typeof MyEnum>;

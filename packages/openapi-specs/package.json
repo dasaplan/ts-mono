@@ -5,13 +5,14 @@
   "version": "0.0.1",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./specs/*": "./specs/*"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "openapitools:ts-axios": "openapi-generator-cli generate -g typescript-axios -i specs/generic/api.yml -o out"
   },
   "files": [
     "specs"
@@ -20,6 +21,7 @@
     "@dasaplan/ts-sdk": "workspace:*"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "@openapitools/openapi-generator-cli": "^2.21.3"
   }
 }

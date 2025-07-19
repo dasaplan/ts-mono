@@ -3,7 +3,7 @@
 
 import oafmt, { OpenAPISortOptions } from "openapi-format";
 import { File, _, ApplicationError, Folder } from "@dasaplan/ts-sdk";
-import { AnySchema, Parsed, ResolvedSpec, resolveOpenapi, resolveSchemas, resolveSpec } from "./resolve.js";
+import { AnySchema, InferOa, Parsed, ResolvedSpec, resolveOpenapi, resolveSchemas, resolveSpec } from "./resolve.js";
 import * as path from "node:path";
 import { createSpecProcessor } from "./post-process/index.js";
 import { appLog } from "./logger.js";
@@ -50,7 +50,7 @@ export async function formatSpec(filePath: File, options: FormatterOptions): Pro
 export async function formatOpenapi(spec: oas30.OpenAPIObject, options: Omit<FormatterOptions, "outFolder">): Promise<Array<oas30.OpenAPIObject>> {
   const resolved = await resolveOpenapi(spec);
   const { common, formattedSpecs } = await formatResolvedSpec(resolved, options);
-  return formattedSpecs.map((r) => r.getFile());
+  return formattedSpecs.map((r) => r.getFile() as unknown as oas30.OpenAPIObject);
 }
 
 async function formatResolvedSpec(resolved: ResolvedSpec, options: Omit<FormatterOptions, "outFolder">) {
@@ -64,7 +64,10 @@ async function formatResolvedSpec(resolved: ResolvedSpec, options: Omit<Formatte
 
       // format openapi document
       let mutFile = r.getFile();
-      if ("openapi" in r.getFile()) {
+      if (!InferOa.isObj(mutFile)) {
+        return r;
+      }
+      if ("openapi" in mutFile) {
         log.debug(`start: formatting document`);
         const processed = documentProcessor(mutFile);
         r.updateFile(processed);

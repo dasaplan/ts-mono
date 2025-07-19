@@ -5,7 +5,7 @@ exports[`generateEndpointDefinitions > enspoints 1`] = `
   "export interface EndpointDefinition<
     DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
     DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
-    Params extends EndpointDefinition.Parameters | undefined
+    Params extends EndpointDefinition.Parameters | undefined,
 > {
     path: EndpointDefinition.Path;
     /** operation id */
@@ -63,7 +63,7 @@ export namespace EndpointDefinition {
   "export interface EndpointDefinition<
     DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
     DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
-    Params extends EndpointDefinition.Parameters | undefined
+    Params extends EndpointDefinition.Parameters | undefined,
 > {
     path: EndpointDefinition.Path;
     /** operation id */
@@ -166,7 +166,7 @@ exports[`generateEndpointDefinitions > integration > pets-modular-complex/petsto
   "export interface EndpointDefinition<
     DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
     DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
-    Params extends EndpointDefinition.Parameters | undefined
+    Params extends EndpointDefinition.Parameters | undefined,
 > {
     path: EndpointDefinition.Path;
     /** operation id */
@@ -224,7 +224,7 @@ export namespace EndpointDefinition {
   "export interface EndpointDefinition<
     DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
     DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
-    Params extends EndpointDefinition.Parameters | undefined
+    Params extends EndpointDefinition.Parameters | undefined,
 > {
     path: EndpointDefinition.Path;
     /** operation id */

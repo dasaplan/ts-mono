@@ -1,6 +1,5 @@
 import { Command } from "commander";
 import { EndpointDefinitionGeneratorOptions, generateEndpointDefinitions } from "./endpoint-generator.js";
-import { generateRtkQueryDsp } from "./client/rtk-query-dsp.js";
 import { _ } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
 
@@ -33,27 +32,6 @@ export function createCommandGenerateEndpoints(program: Command) {
         });
       },
     );
-}
-
-export function createCommandGenerateEndpointsRtkQuery(program: Command) {
-  program
-    .command("generate-rtk-query")
-    .description("Generate Openapi Endpoint interfaces for rtk query")
-    .argument("<openapi-spec>", "Relative filepath from the current cwd to the OpenApi root document file")
-    .option("-o, --out [out]", "Target directory for the generated files", "out")
-    .option("--typeSuffix [typeSuffix]", "Suffix appended to the schema name.")
-    .option("--apiName [apiName]", "Name of the Api used to generate names for files or modules")
-    .option("--typeNamespace [typeNamespace]", "Namespace used to index type module imports.")
-    .option("--typeModuleName [typeModuleName]", "Module name for importing types.")
-    .action(async (spec: string, options: { out: string; typeSuffix: string; apiName: string; typeNamespace: string; typeModuleName: string }) => {
-      const tsApiTypesModule = parseApiTypesModule(options);
-      await generateRtkQueryDsp(spec, {
-        outDir: options.out,
-        typeSuffix: options.typeSuffix,
-        apiName: options.apiName,
-        tsApiTypesModule: tsApiTypesModule,
-      });
-    });
 }
 
 function parseApiTypesModule(options: { typeNamespace?: string; typeModuleName?: string }): EndpointDefinitionGeneratorOptions["tsApiTypesModule"] {

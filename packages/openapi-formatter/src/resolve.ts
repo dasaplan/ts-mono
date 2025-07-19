@@ -8,14 +8,22 @@ import { Oas3Schema, Oas3Definition } from "@redocly/openapi-core";
 import { OpenApiBundled } from "@dasaplan/openapi-bundler";
 
 export interface AnySchema extends Oas3Schema, Partial<Oas3Definition> {}
-export type ResolvedSpec = Awaited<ReturnType<typeof resolveSpec>>;
 
-export async function resolveSpec(filePath: File) {
+type ReturnOfResolve = Awaited<ReturnType<typeof swagger.resolve>>;
+export type ReturnOfGetFile = ReturnType<ReturnOfResolve["get"]>;
+export type ResolvedSpec = Array<{
+  refFile: string;
+  schemas: Parsed[];
+  getFile: () => ReturnOfGetFile;
+  updateFile: (obj: ReturnOfGetFile | AnySchema | object) => void;
+}>;
+
+export async function resolveSpec(filePath: File): Promise<ResolvedSpec> {
   const resolved = await swagger.resolve(filePath.absolutePath);
   const refs = resolved.paths();
   const mapped = refs.map((refFile) => {
     const getFile = () => resolved.get(refFile);
-    const updateFile = (obj: object) => resolved.set(refFile, obj);
+    const updateFile = (obj: ReturnOfGetFile | AnySchema) => resolved.set(refFile, obj as ReturnOfGetFile);
     const schemas = resolveSchemas(getFile());
     return { refFile, schemas, getFile, updateFile };
   });
@@ -25,12 +33,12 @@ export async function resolveSpec(filePath: File) {
   return mapped;
 }
 
-export async function resolveOpenapi(doc: OpenApiBundled) {
+export async function resolveOpenapi(doc: OpenApiBundled): Promise<ResolvedSpec> {
   const resolved = await swagger.resolve(doc as never);
   const refs = resolved.paths();
   const mapped = refs.map((refFile) => {
     const getFile = () => resolved.get(refFile);
-    const updateFile = (obj: object) => resolved.set(refFile, obj);
+    const updateFile = (obj: ReturnOfGetFile | AnySchema) => resolved.set(refFile, obj as ReturnOfGetFile);
     const schemas = resolveSchemas(getFile());
     return { refFile, schemas, getFile, updateFile };
   });
@@ -46,7 +54,6 @@ export interface Parsed {
 }
 
 export function resolveSchemas(obj: unknown, ctx: { basePath: Array<string> } = { basePath: [] }) {
-  const log = appLog.childLog(resolveSchemas);
   if (!InferOa.isObj(obj)) {
     return []; // Base case: not an object
   }

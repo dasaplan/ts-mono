@@ -452,6 +452,9 @@ importers:
         specifier: workspace:*
         version: link:../sdk
     devDependencies:
+      '@openapitools/openapi-generator-cli':
+        specifier: ^2.21.3
+        version: 2.21.3
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
