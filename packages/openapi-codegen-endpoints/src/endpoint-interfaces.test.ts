@@ -91,7 +91,7 @@ describe("generateEndpointDefinitions", () => {
     const endpoints = await generateEndpointInterfacesAsText(openapi, { apiName: "TestApi" });
 
     expect(endpoints).toMatchInlineSnapshot(`
-      "export module TestApi {
+      "export namespace TestApi {
                       export type Path = "/pets/{:petId}" | "/pets"
                       export interface OperationToPath {
                           getPet: "/pets/{:petId}";

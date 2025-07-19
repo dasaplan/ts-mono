@@ -42,22 +42,22 @@
     "test:update": "vitest -u"
   },
   "dependencies": {
-    "@apidevtools/swagger-parser": "^10.1.1",
+    "@apidevtools/swagger-parser": "^12.0.0",
     "@dasaplan/openapi-bundler": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:*",
-    "commander": "^11.1.0",
+    "commander": "^14.0.0",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "openapi-format": "^1.25.0",
-    "openapi3-ts": "^4.3.3",
-    "tslog": "^4.9.2"
+    "openapi-format": "^1.27.2",
+    "openapi3-ts": "^4.5.0",
+    "tslog": "^4.9.3"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
-    "@types/lodash": "^4.17.5",
+    "@types/lodash": "^4.17.20",
     "openapi-example-specs": "workspace:*",
-    "tsconfig": "workspace:0.0.0",
-    "typescript": "^5.5.3"
+    "tsconfig": "workspace:*",
+    "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "@redocly/openapi-core": "^1.6.0"

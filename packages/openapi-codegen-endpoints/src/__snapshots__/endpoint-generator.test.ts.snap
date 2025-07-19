@@ -16,7 +16,7 @@ exports[`generateEndpointDefinitions > enspoints 1`] = `
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -74,7 +74,7 @@ export module EndpointDefinition {
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -119,7 +119,7 @@ export module EndpointDefinition {
 }
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
-export module TestApiEndpoints {
+export namespace TestApiEndpoints {
     export type Path = "/pets/{:petId}" | "/pets"
     export interface OperationToPath {
         getPet: "/pets/{:petId}";
@@ -177,7 +177,7 @@ exports[`generateEndpointDefinitions > integration > pets-modular-complex/petsto
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -235,7 +235,7 @@ export module EndpointDefinition {
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -280,7 +280,7 @@ export module EndpointDefinition {
 }
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
-export module TestApiEndpoints {
+export namespace TestApiEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
     export interface OperationToPath {
         listPets: "/pets";

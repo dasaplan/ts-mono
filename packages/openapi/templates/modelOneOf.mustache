@@ -18,7 +18,7 @@ plain oneOf
 }}{{^discriminator}}{{#oneOf}}{{{.}}}{{^-last}} | {{/-last}}{{/oneOf}}{{/discriminator}} | { {{discriminator.propertyName}}: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
 {{#discriminator}}
-export module {{classname}} {
+export namespace {{classname}} {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends {{classname}}, R> = {
         [K in T as K['{{discriminator.propertyName}}']]: Handler<Extract<T, { type: K['{{discriminator.propertyName}}'] }>, R>

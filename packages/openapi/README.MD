@@ -202,7 +202,7 @@ type Pet = | { type: 'CAT' } & Cat
            | { type: UNKNOWN_ENUM_VARIANT, [prop: string]: unknown }
 
 /** Utilities to work with the discriminated union Pet (will be generated for every discriminated or simple union) */  
-export module Pet {
+export namespace Pet {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends Pet, R> = { [K in T as K["type"]]: Handler<Extract<T, { type: K["type"] }>, R> } & { onDefault: Handler<unknown, R> };
     

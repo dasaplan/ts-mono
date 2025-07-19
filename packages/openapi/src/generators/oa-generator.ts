@@ -1,7 +1,7 @@
 import { appLog } from "../logger.js";
 import { _, ApplicationError, CommandLine } from "@dasaplan/ts-sdk";
 
-export module OaGenerator {
+export namespace OaGenerator {
   const logger = appLog.childLogger("OaGenerator");
 
   /** User Input must be sanitized from the caller*/
@@ -30,10 +30,10 @@ export module OaGenerator {
 }
 
 export type OaGeneratorOptions = OaGeneratorOptions.CLIParams;
-export module OaGeneratorOptions {
+export namespace OaGeneratorOptions {
   export function create<ConcreteGeneratorOptions extends object>(
     options: OaGeneratorOptions,
-    concreteGeneratorOptions: ConcreteGeneratorOptions
+    concreteGeneratorOptions: ConcreteGeneratorOptions,
   ): ReadonlyArray<string> {
     const generatorOptions = Object.entries(concreteGeneratorOptions)
       .map(([key, value]) => `${key}=${value}`)

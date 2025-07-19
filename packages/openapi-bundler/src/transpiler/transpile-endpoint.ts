@@ -14,7 +14,7 @@ export interface Endpoint {
   responses: Array<ResponseObj>;
 }
 
-export module Endpoint {
+export namespace Endpoint {
   export interface Parameter {
     name: string;
     description?: string;
@@ -27,7 +27,7 @@ export module Endpoint {
 export interface TranspileEndpointCtx extends TranspileContext {
   schema(name: string, oaSchema: oas30.SchemaObject | oas30.ReferenceObject): Schema;
 }
-export module TranspileEndpointCtx {
+export namespace TranspileEndpointCtx {
   export function create(resolver: TranspileContext): TranspileEndpointCtx {
     return {
       ...resolver,
@@ -37,7 +37,7 @@ export module TranspileEndpointCtx {
     };
   }
 }
-export module Endpoint {
+export namespace Endpoint {
   export function transpileAll(ctx: TranspileEndpointCtx): Array<Endpoint> {
     return Object.entries(ctx.resolver.root.paths).flatMap(([path, pathItem]) => {
       const pathItemResolved = ctx.resolver.resolveRef(pathItem);

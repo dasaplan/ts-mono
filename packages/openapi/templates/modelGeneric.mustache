@@ -36,7 +36,7 @@ export const {{enumName}} = {
 {{/allowableValues}}
 } as const;
 
-export module {{enumName}}s {
+export namespace {{enumName}}s {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends {{enumName}}, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;

@@ -1,4 +1,4 @@
-export module JsonPointer {
+export namespace JsonPointer {
   export function pathToJsonPath(pathSegments: Array<string>) {
     return pathSegments.map(encodeSegmentToJsonPath).join("/");
   }

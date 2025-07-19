@@ -186,7 +186,7 @@ function recSortAlphabetically(mutableDoc: AnySchema | undefined): AnySchema | u
   return mutableDoc;
 }
 
-export module OpenapiFormatImport {
+export namespace OpenapiFormatImport {
   export function sortByAlphabet(obj: object) {
     const entries = Object.entries(obj);
     // Sort the entries alphabetically

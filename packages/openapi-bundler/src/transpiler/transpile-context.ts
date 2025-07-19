@@ -17,7 +17,7 @@ export interface TranspileContext {
 }
 
 /** Resolving the oa spec just involves parsing and traversing openapi specified elements and components */
-export module TranspileContext {
+export namespace TranspileContext {
   export function create(bundled: OpenApiBundled): TranspileContext {
     const graph = SchemaGraph.createFromBundled(bundled);
     const resolver = Resolver.create(bundled);

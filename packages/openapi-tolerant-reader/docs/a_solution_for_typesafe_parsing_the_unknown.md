@@ -226,7 +226,7 @@ Please note that in this example we make use of generics and inline the discrimi
 ```typescript
 export type Pet = ({ type: "CAT" } & Cat) | ({ type: "DOG" } & Dog) | { type: UNKNOWN_ENUM_VARIANT; [prop: string]: unknown };
 
-export module Pet {
+export namespace Pet {
   type Handler<I, R> = (e: I) => R;
   type MatchObj<T extends Pet, R> = {
     [K in T as K["type"]]: Handler<Extract<T, { type: K["type"] }>, R>;

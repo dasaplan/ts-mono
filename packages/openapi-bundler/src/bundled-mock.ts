@@ -2,7 +2,7 @@ import { OpenApiBundled } from "./bundle.js";
 import { oas30 } from "openapi3-ts";
 import { XOmitConfig } from "./post-process/processors/x-omit-deep.js";
 
-export module OpenapiBundledMock {
+export namespace OpenapiBundledMock {
   export function create() {
     return {
       createApi,

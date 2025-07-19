@@ -39,7 +39,7 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 */
 export type Cat = { catType: 'SEAM' } & Seam | { catType: 'SHORT' } & ShortHair | { catType: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
-export module Cat {
+export namespace Cat {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends Cat, R> = {
         [K in T as K['catType']]: Handler<Extract<T, { type: K['catType'] }>, R>
@@ -98,7 +98,7 @@ export const CatBaseCatType = {
     SHORT: 'SHORT'
 } as const;
 
-export module CatBaseCatTypes {
+export namespace CatBaseCatTypes {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends CatBaseCatType, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
@@ -173,7 +173,7 @@ export interface GenericPet extends PetBase {
 */
 export type Pet = { type: 'BIRD' } & GenericPet | { type: 'CAT' } & Cat | { type: 'DOG' } & Dog | { type: 'HAMSTER' } & GenericPet | { type: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
-export module Pet {
+export namespace Pet {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends Pet, R> = {
         [K in T as K['type']]: Handler<Extract<T, { type: K['type'] }>, R>
@@ -1014,7 +1014,7 @@ export interface EndpointDefinition<
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -1079,7 +1079,7 @@ export * from "./zod.js";
 export * from "./SomeTitleEndpoints.js";
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
-export module SomeTitleEndpoints {
+export namespace SomeTitleEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
     export interface OperationToPath {
         listPets: "/pets";
@@ -1110,7 +1110,7 @@ export module SomeTitleEndpoints {
   "
 import { z } from "zod";
 
-export module ZodUnionMatch {
+export namespace ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
     export type Matcher = Record<string, z.ZodSchema>;
 
@@ -1162,7 +1162,7 @@ export module ZodUnionMatch {
 import * as zc from './zod-common.js'
 import * as api from './api.js'
 
-export module Schemas {
+export namespace Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
@@ -1173,7 +1173,7 @@ export module Schemas {
     export const Pets = z.array(Pet).max(100);
     export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() }));
 
-    export module Types {
+    export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
         export type GenericPet = z.infer<typeof Schemas.GenericPet>;
         export type Dog = z.infer<typeof Schemas.Dog>;
@@ -1186,7 +1186,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const Cat = z.union([Seam, ShortHair]);
         export const Pet = z.union([Cat, Dog, GenericPet]);
     }
@@ -1235,7 +1235,7 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 */
 export type Cat = { catType: 'SEAM' } & Seam | { catType: 'SHORT' } & ShortHair | { catType: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
-export module Cat {
+export namespace Cat {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends Cat, R> = {
         [K in T as K['catType']]: Handler<Extract<T, { type: K['catType'] }>, R>
@@ -1294,7 +1294,7 @@ export const CatBaseCatType = {
     SHORT: 'SHORT'
 } as const;
 
-export module CatBaseCatTypes {
+export namespace CatBaseCatTypes {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends CatBaseCatType, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
@@ -1369,7 +1369,7 @@ export interface GenericPet extends PetBase {
 */
 export type Pet = { type: 'BIRD' } & GenericPet | { type: 'CAT' } & Cat | { type: 'DOG' } & Dog | { type: 'HAMSTER' } & GenericPet | { type: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
-export module Pet {
+export namespace Pet {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends Pet, R> = {
         [K in T as K['type']]: Handler<Extract<T, { type: K['type'] }>, R>
@@ -2210,7 +2210,7 @@ export interface EndpointDefinition<
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -2275,7 +2275,7 @@ export * from "./zod.js";
 export * from "./SomeTitleEndpoints.js";
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
-export module SomeTitleEndpoints {
+export namespace SomeTitleEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
     export interface OperationToPath {
         listPets: "/pets";
@@ -2306,7 +2306,7 @@ export module SomeTitleEndpoints {
   "
 import { z } from "zod";
 
-export module ZodUnionMatch {
+export namespace ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
     export type Matcher = Record<string, z.ZodSchema>;
 
@@ -2358,7 +2358,7 @@ export module ZodUnionMatch {
 import * as zc from './zod-common.js'
 import * as api from './api.js'
 
-export module Schemas {
+export namespace Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
@@ -2369,7 +2369,7 @@ export module Schemas {
     export const Pets = z.array(Pet).max(100);
     export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() }));
 
-    export module Types {
+    export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
         export type GenericPet = z.infer<typeof Schemas.GenericPet>;
         export type Dog = z.infer<typeof Schemas.Dog>;
@@ -2382,7 +2382,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const Cat = z.union([Seam, ShortHair]);
         export const Pet = z.union([Cat, Dog, GenericPet]);
     }
@@ -2447,7 +2447,7 @@ export const CatBreed = {
     B: 'CAT_B'
 } as const;
 
-export module CatBreeds {
+export namespace CatBreeds {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends CatBreed, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
@@ -2524,7 +2524,7 @@ export type DogEnum = typeof DogEnum[keyof typeof DogEnum]  | UNKNOWN_ENUM_VARIA
 */
 export type Pet = { type: 'CAT' } & Cat | { type: 'DOG' } & Dog | { type: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
-export module Pet {
+export namespace Pet {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends Pet, R> = {
         [K in T as K['type']]: Handler<Extract<T, { type: K['type'] }>, R>
@@ -3049,7 +3049,7 @@ export interface EndpointDefinition<
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -3114,7 +3114,7 @@ export * from "./zod.js";
 export * from "./MyServiceEndpoints.js";
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
-export module MyServiceEndpoints {
+export namespace MyServiceEndpoints {
     export type Path = "/v1/pets"
     export interface OperationToPath {
         getPets: "/v1/pets";
@@ -3210,7 +3210,7 @@ components:
   "
 import { z } from "zod";
 
-export module ZodUnionMatch {
+export namespace ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
     export type Matcher = Record<string, z.ZodSchema>;
 
@@ -3262,14 +3262,14 @@ export module ZodUnionMatch {
 import * as zc from './zod-common.js'
 import * as api from './api.js'
 
-export module Schemas {
+export namespace Schemas {
     export const PetBase = z.object({ type: z.string(), name: z.string().optional() });
     export const DogEnum = z.enum(['DOG_A', 'DOG_B']).or(z.string().brand("UNKNOWN")) as z.ZodType<api.DogEnum>;
     export const Dog = PetBase.merge(z.object({ fluffy: z.boolean().optional(), breed: DogEnum.optional(), type: z.literal('DOG') }));
     export const Cat = PetBase.merge(z.object({ breed: z.enum(['CAT_A', 'CAT_B']).or(z.string().brand("UNKNOWN")).optional(), type: z.literal('CAT') }));
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
 
-    export module Types {
+    export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
         export type DogEnum = z.infer<typeof Schemas.DogEnum>;
         export type Dog = z.infer<typeof Schemas.Dog>;
@@ -3278,7 +3278,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const Pet = z.union([Cat, Dog]);
     }
 
@@ -3456,7 +3456,7 @@ export const ComponentsSchemasToySomeEnum = {
     BAR: 'BAR'
 } as const;
 
-export module ComponentsSchemasToySomeEnums {
+export namespace ComponentsSchemasToySomeEnums {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends ComponentsSchemasToySomeEnum, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
@@ -3618,7 +3618,7 @@ export interface Pet {
 */
 export type PetToy = { kind: 'BALL' } & Ball | { kind: 'TEDDY' } & FluffyTeddy | { kind: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
-export module PetToy {
+export namespace PetToy {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends PetToy, R> = {
         [K in T as K['kind']]: Handler<Extract<T, { type: K['kind'] }>, R>
@@ -3728,7 +3728,7 @@ export const SchemasToySomeEnum = {
     BAR: 'BAR'
 } as const;
 
-export module SchemasToySomeEnums {
+export namespace SchemasToySomeEnums {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends SchemasToySomeEnum, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
@@ -4446,7 +4446,7 @@ export interface EndpointDefinition<
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -4806,7 +4806,7 @@ components:
             $ref: '#/components/schemas/Error'
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
-export module SwaggerPetstoreEndpoints {
+export namespace SwaggerPetstoreEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
     export interface OperationToPath {
         listPets: "/pets";
@@ -4859,7 +4859,7 @@ export module SwaggerPetstoreEndpoints {
   "
 import { z } from "zod";
 
-export module ZodUnionMatch {
+export namespace ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
     export type Matcher = Record<string, z.ZodSchema>;
 
@@ -4911,7 +4911,7 @@ export module ZodUnionMatch {
 import * as zc from './zod-common.js'
 import * as api from './api.js'
 
-export module Schemas {
+export namespace Schemas {
     export const FluffLevel = z.enum(['A', 'B', 'C']).or(z.string().brand("UNKNOWN")) as z.ZodType<api.FluffLevel>;
     export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
     export const FluffyTeddy = z.object({ fluffLevel: FluffLevel.optional(), id: z.string(), price: z.string(), kind: z.literal('TEDDY'), targetGroup: z.string().optional() });
@@ -4927,7 +4927,7 @@ export module Schemas {
     export const HttpErrorCode = z.number().int();
     export const Error = z.object({ code: HttpErrorCode.optional(), message: z.string(), titledSchema: SchemaTitled.optional() });
 
-    export module Types {
+    export namespace Types {
         export type FluffLevel = z.infer<typeof Schemas.FluffLevel>;
         export type SchemasToy = z.infer<typeof Schemas.SchemasToy>;
         export type FluffyTeddy = z.infer<typeof Schemas.FluffyTeddy>;
@@ -4945,7 +4945,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const PetToy = z.union([Ball, FluffyTeddy]);
     }
 
@@ -5033,7 +5033,7 @@ export interface Dog extends PetBase {
 */
 export type Pet = { type: 'CAT' } & Cat | { type: 'DOG' } & Dog | { type: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
-export module Pet {
+export namespace Pet {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends Pet, R> = {
         [K in T as K['type']]: Handler<Extract<T, { type: K['type'] }>, R>
@@ -5566,7 +5566,7 @@ export interface EndpointDefinition<
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -5707,7 +5707,7 @@ components:
             - type
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
-export module SwaggerPetstoreEndpoints {
+export namespace SwaggerPetstoreEndpoints {
     export type Path = "/pets"
     export interface OperationToPath {
         listPets: "/pets";
@@ -5727,7 +5727,7 @@ export module SwaggerPetstoreEndpoints {
   "
 import { z } from "zod";
 
-export module ZodUnionMatch {
+export namespace ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
     export type Matcher = Record<string, z.ZodSchema>;
 
@@ -5779,14 +5779,14 @@ export module ZodUnionMatch {
 import * as zc from './zod-common.js'
 import * as api from './api.js'
 
-export module Schemas {
+export namespace Schemas {
     export const PetBase = z.object({ type: z.string() });
     export const Dog: z.ZodType<api.Dog> = z.lazy(() => PetBase.merge(z.object({ friends: Pets.optional(), type: z.literal('DOG') })));
     export const Cat: z.ZodType<api.Cat> = z.lazy(() => PetBase.merge(z.object({ enemies: Pets.optional(), type: z.literal('CAT') })));
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'CAT': Cat, 'DOG': Dog, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets: z.ZodType<api.Pets> = z.lazy(() => z.object({ pets: z.array(Pet).max(100).optional() }));
 
-    export module Types {
+    export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
         export type Dog = z.infer<typeof Schemas.Dog>;
         export type Cat = z.infer<typeof Schemas.Cat>;
@@ -5795,7 +5795,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const Pet = z.union([Cat, Dog]);
     }
 
@@ -5883,7 +5883,7 @@ export interface Dog extends PetBase {
 */
 export type Pet = { type: 'CAT' } & Cat | { type: 'DOG' } & Dog | { type: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
-export module Pet {
+export namespace Pet {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends Pet, R> = {
         [K in T as K['type']]: Handler<Extract<T, { type: K['type'] }>, R>
@@ -6408,7 +6408,7 @@ export interface EndpointDefinition<
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -6548,7 +6548,7 @@ components:
         $ref: '#/components/schemas/Pet'
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
-export module SomeTitleEndpoints {
+export namespace SomeTitleEndpoints {
     export type Path = "/pets"
     export interface OperationToPath {
         listPets: "/pets";
@@ -6568,7 +6568,7 @@ export module SomeTitleEndpoints {
   "
 import { z } from "zod";
 
-export module ZodUnionMatch {
+export namespace ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
     export type Matcher = Record<string, z.ZodSchema>;
 
@@ -6620,14 +6620,14 @@ export module ZodUnionMatch {
 import * as zc from './zod-common.js'
 import * as api from './api.js'
 
-export module Schemas {
+export namespace Schemas {
     export const PetBase = z.object({ id: z.number().int(), type: z.string() });
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
     export const Cat = PetBase.merge(z.object({ color: z.string(), type: z.literal('CAT') }));
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets = z.array(Pet).max(100);
 
-    export module Types {
+    export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
         export type Dog = z.infer<typeof Schemas.Dog>;
         export type Cat = z.infer<typeof Schemas.Cat>;
@@ -6636,7 +6636,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const Pet = z.union([Cat, Dog]);
     }
 
@@ -6694,7 +6694,7 @@ export const CatBreed = {
     B: 'CAT_B'
 } as const;
 
-export module CatBreeds {
+export namespace CatBreeds {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends CatBreed, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
@@ -7268,7 +7268,7 @@ export interface EndpointDefinition<
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -7378,7 +7378,7 @@ components:
             $ref: '#/components/schemas/Dog'
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
-export module ExtendedArrayItemsEndpoints {
+export namespace ExtendedArrayItemsEndpoints {
     export type Path = "/v1/pets"
     export interface OperationToPath {
         getPets: "/v1/pets";
@@ -7418,7 +7418,7 @@ export * from "./ExtendedArrayItemsEndpoints.js";
   "
 import { z } from "zod";
 
-export module ZodUnionMatch {
+export namespace ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
     export type Matcher = Record<string, z.ZodSchema>;
 
@@ -7470,14 +7470,14 @@ export module ZodUnionMatch {
 import * as zc from './zod-common.js'
 import * as api from './api.js'
 
-export module Schemas {
+export namespace Schemas {
     export const PetBase = z.object({ type: z.string(), name: z.string().optional() });
     export const DogEnum = z.enum(['DOG_A', 'DOG_B']).or(z.string().brand("UNKNOWN")) as z.ZodType<api.DogEnum>;
     export const Dog = PetBase.merge(z.object({ fluffy: z.boolean().optional(), breed: DogEnum.optional() }));
     export const Cat = PetBase.merge(z.object({ breed: z.enum(['CAT_A', 'CAT_B']).or(z.string().brand("UNKNOWN")).optional() }));
     export const PetInfo = z.object({ cats: z.array(Cat).optional(), dogs: z.array(Dog).optional() });
 
-    export module Types {
+    export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
         export type DogEnum = z.infer<typeof Schemas.DogEnum>;
         export type Dog = z.infer<typeof Schemas.Dog>;
@@ -7529,7 +7529,7 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 */
 export type Cat = { catType: 'SEAM' } & Seam | { catType: 'SHORT' } & ShortHair | { catType: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
-export module Cat {
+export namespace Cat {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends Cat, R> = {
         [K in T as K['catType']]: Handler<Extract<T, { type: K['catType'] }>, R>
@@ -7588,7 +7588,7 @@ export const CatBaseCatType = {
     SHORT: 'SHORT'
 } as const;
 
-export module CatBaseCatTypes {
+export namespace CatBaseCatTypes {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends CatBaseCatType, R> = {
         [K in T as K]: Handler<Extract<T, K>, R>;
@@ -7663,7 +7663,7 @@ export interface GenericPet extends PetBase {
 */
 export type Pet = { type: 'BIRD' } & GenericPet | { type: 'CAT' } & Cat | { type: 'DOG' } & Dog | { type: 'HAMSTER' } & GenericPet | { type: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
 
-export module Pet {
+export namespace Pet {
     type Handler<I, R> = (e: I) => R;
     type MatchObj<T extends Pet, R> = {
         [K in T as K['type']]: Handler<Extract<T, { type: K['type'] }>, R>
@@ -8504,7 +8504,7 @@ export interface EndpointDefinition<
     request?: EndpointDefinition.Request<DeserializedRequest>;
 }
 
-export module EndpointDefinition {
+export namespace EndpointDefinition {
     type PathSegment = \`\${string}\`;
 
     type PathParam = \`{:\${string}}\`;
@@ -8569,7 +8569,7 @@ export * from "./zod.js";
 export * from "./SomeTitleEndpoints.js";
 ",
   "import { EndpointDefinition } from './EndpointDefinition'
-export module SomeTitleEndpoints {
+export namespace SomeTitleEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
     export interface OperationToPath {
         listPets: "/pets";
@@ -8600,7 +8600,7 @@ export module SomeTitleEndpoints {
   "
 import { z } from "zod";
 
-export module ZodUnionMatch {
+export namespace ZodUnionMatch {
     // export type UNKNOWN = string & z.BRAND<"UNKNOWN">;
     export type Matcher = Record<string, z.ZodSchema>;
 
@@ -8652,7 +8652,7 @@ export module ZodUnionMatch {
 import * as zc from './zod-common.js'
 import * as api from './api.js'
 
-export module Schemas {
+export namespace Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
@@ -8663,7 +8663,7 @@ export module Schemas {
     export const Pets = z.array(Pet).max(100);
     export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() }));
 
-    export module Types {
+    export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
         export type GenericPet = z.infer<typeof Schemas.GenericPet>;
         export type Dog = z.infer<typeof Schemas.Dog>;
@@ -8676,7 +8676,7 @@ export module Schemas {
     }
 
 
-    export module Unions {
+    export namespace Unions {
         export const Cat = z.union([Seam, ShortHair]);
         export const Pet = z.union([Cat, Dog, GenericPet]);
     }
