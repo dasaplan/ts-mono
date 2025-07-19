@@ -1,0 +1,9 @@
+- Always include the current workspace package as scope 
+- Always use the following format for commit messages:
+  - use semantic commit messages
+  - Use the format: `type(scope): description`
+  - Do not end with a period
+  - Examples:
+    - `feat(api): add user authentication`
+    - `fix(ui): correct button alignment`
+    - `chore(deps): update dependency versions`
