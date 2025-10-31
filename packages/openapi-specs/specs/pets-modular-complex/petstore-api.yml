@@ -6,6 +6,9 @@ info:
     name: MIT
 servers:
   - url: http://petstore.swagger.io/v1
+tags:
+  - name: pets
+  - name: internal
 paths:
   /pets:
     $ref: './routes/pets.yml'

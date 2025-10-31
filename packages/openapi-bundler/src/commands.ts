@@ -1,7 +1,22 @@
 import { Command } from "commander";
 import { appLog } from "./logger.js";
-import { bundleOpenapi } from "./bundle.js";
+import { bundleOpenapi, RedoclyDecorators } from "./bundle.js";
 import { createSpecProcessor } from "./post-process/index.js";
+
+function parseFilterOption(value: string, prev: undefined | { type: string; values: Array<string> }) {
+  switch (value) {
+    case "tags":
+      return { type: value, values: [] };
+    case "operationId":
+      return { type: value, values: [] };
+  }
+
+  if (!prev) {
+    throw new Error("Invalid arguments provided for --filter - ensure usage e.g. --filter tags value1 value2");
+  }
+
+  return { type: prev.type, values: [...prev.values, value] };
+}
 
 export function createCommandBundle(program: Command) {
   program
@@ -14,6 +29,8 @@ export function createCommandBundle(program: Command) {
     .option("--disableEnsureDiscriminatorValues", "If set, discriminator values won't be ensured on every subType", false)
     .option("--disableXOmit", "If set, x-omit keyword won't be processed", false)
     .option("--disableXPick", "If set, x-pick keyword won't be processed", false)
+    .option("--filterIn <field> <values...>", "filter-in by 'tag' or 'operationId' followed by one or more values", parseFilterOption)
+    .option("--filterOut <field> <values...>", "filter-out by 'tag' or 'operationId' followed by one or more values", parseFilterOption)
     .action(
       async (
         spec: string,
@@ -25,10 +42,24 @@ export function createCommandBundle(program: Command) {
           disableXPick: boolean;
           forceMergeAllOf: boolean;
           verbose: boolean;
+          filterIn?: { type: "tags" | "operationId"; values: Array<string> };
+          filterOut?: { type: "tags" | "operationId"; values: Array<string> };
         },
       ) => {
         if (options.verbose) {
           appLog.setLogLevel("debug");
+        }
+
+        const filter: RedoclyDecorators | undefined = options.filterIn || options.filterOut ? {} : undefined;
+        if (filter && options.filterIn) {
+          filter["filter-in"] = { property: options.filterIn.type, value: options.filterIn.values, matchStrategy: "any" };
+        }
+        if (filter && options.filterOut) {
+          filter["filter-out"] = { property: options.filterOut.type, value: options.filterOut.values, matchStrategy: "any" };
+        }
+
+        if (filter) {
+          appLog.log.info(`provided fiter: ${JSON.stringify(filter)}`);
         }
 
         const postProcessor = createSpecProcessor({
@@ -39,7 +70,7 @@ export function createCommandBundle(program: Command) {
           processorOptions: { forceMerge: options.forceMergeAllOf },
         });
 
-        const result = await withPerformance(() => bundleOpenapi(spec, { postProcessor, outFile: options.outputFile }));
+        const result = await withPerformance(() => bundleOpenapi(spec, { postProcessor, outFile: options.outputFile, filter }));
         appLog.log.info(`finished bundling in ${(result.duration / 1000).toFixed(3)} s`, { outFile: result.ret.outFile });
       },
     );

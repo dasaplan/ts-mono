@@ -5,11 +5,23 @@ import { appLog } from "./logger.js";
 import { createSpecProcessor } from "./post-process/index.js";
 import { PostProcessingOptions } from "./post-process/post-process.js";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface OpenApiBundled extends oas30.OpenAPIObject {}
+
+interface RedoclyFilterConfig {
+  property: "tags" | "operationId" | string;
+  value: Array<string>;
+  matchStrategy: "any" | "all";
+}
+export type RedoclyDecorators = {
+  "filter-in"?: RedoclyFilterConfig;
+  "filter-out"?: RedoclyFilterConfig;
+};
 
 interface BundleOption extends PostProcessingOptions {
   postProcessor: (bundled: OpenApiBundled) => OpenApiBundled;
   outFile: string;
+  filter?: RedoclyDecorators;
 }
 
 export async function bundleOpenapi(_pathToApi: string, params?: Partial<BundleOption>) {
@@ -29,6 +41,9 @@ export async function bundleParseOpenapi(_pathToApi: string, params?: Partial<Om
   const inputFile = File.of(_pathToApi);
 
   appLog.childLog(bundleOpenapi).info("start bundle: ", inputFile.absolutePath);
+
+  const bundleResults = await parseOpenapi(inputFile.absolutePath, { decorators: params?.filter });
+
   const postProcessor =
     params?.postProcessor ??
     createSpecProcessor({
@@ -37,7 +52,7 @@ export async function bundleParseOpenapi(_pathToApi: string, params?: Partial<Om
       xOmit: params?.xOmit,
       xPick: params?.xPick,
     });
-  const bundleResults = await parseOpenapi(inputFile.absolutePath);
+
   const parsed: OpenApiBundled = _.isNil(postProcessor) ? bundleResults.bundle.parsed : postProcessor(bundleResults.bundle.parsed);
   // todo: CatBase in generic does not get cleaned up...
   const cleanedParsed: OpenApiBundled = _.isNil(postProcessor) ? parsed : (await doBundle(bundleResults.bundle.source, parsed)).bundle.parsed;
@@ -49,8 +64,13 @@ export async function bundleParseOpenapi(_pathToApi: string, params?: Partial<Om
   return cleanedParsed;
 }
 
-export async function parseOpenapi(pathToApi: string) {
-  const config = await createConfig({});
+export async function parseOpenapi(pathToApi: string, userConfig?: { decorators?: RedoclyDecorators }) {
+  appLog.childLog(parseOpenapi).info("-- with decorators");
+
+  const config = await createConfig({
+    decorators: userConfig?.decorators,
+  });
+
   return bundle({
     ref: pathToApi,
     config,

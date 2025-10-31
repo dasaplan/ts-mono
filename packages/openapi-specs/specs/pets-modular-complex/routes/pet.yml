@@ -3,6 +3,7 @@ get:
   operationId: showPetById
   tags:
     - pets
+    - internal
   parameters:
     - $ref: '../components/parameter.yml#/components/parameters/PathPetId'
   responses:

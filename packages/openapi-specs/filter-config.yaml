@@ -1,0 +1,7 @@
+apis:
+  filterout:
+    root: specs/pets-modular-complex/petstore-api.yml
+    decorators:
+      filter-out:
+        property: tags
+        value: internal
