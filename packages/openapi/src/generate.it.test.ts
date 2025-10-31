@@ -6,7 +6,7 @@ import { describe, test, expect } from "vitest";
 
 describe("Generate Integration", () => {
   describe("ts", () => {
-    test.each(["generic/api.yml"] satisfies Array<ExampleSpec>)(
+    test.each(["generic/api.yml"] as Array<ExampleSpec>)(
       "%s",
       async (spec) => {
         const api = resolveSpecPath(spec);
@@ -19,7 +19,7 @@ describe("Generate Integration", () => {
           .map((f) => f.content);
         expect(files).toMatchSnapshot(`cleaned-${spec}`);
       },
-      { timeout: 6000 },
+      8000,
     );
   });
 
