@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-formatter@0.0.15...@dasaplan/openapi-formatter@0.2.0) (2025-11-01)
+
+
+### Features
+
+* **bundler:** support endpoint filter by tag and operationId ([d59557c](https://github.com/dasaplan/ts-mono/commit/d59557cd682f6961c79f26e43a67a304cd40235d))
+
+
+
+
+
 # [0.1.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-formatter@0.0.15...@dasaplan/openapi-formatter@0.1.0) (2025-11-01)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.0.28...@dasaplan/openapi@0.2.0) (2025-11-01)
+
+
+### Features
+
+* **all:** update deps ([5322060](https://github.com/dasaplan/ts-mono/commit/5322060b4a676104d94bbced86d4e843628b9aba))
+* **bundler:** support endpoint filter by tag and operationId ([d59557c](https://github.com/dasaplan/ts-mono/commit/d59557cd682f6961c79f26e43a67a304cd40235d))
+
+
+
+
+
 # [0.1.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.0.28...@dasaplan/openapi@0.1.0) (2025-11-01)
 
 
