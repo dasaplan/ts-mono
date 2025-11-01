@@ -1,3 +1,64 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# 0.1.0 (2025-11-01)
+
+
+### Bug Fixes
+
+* ignore unions with less than 2 elements ([92cfffe](https://github.com/dasaplan/ts-mono/commit/92cfffed57527f79a87d43d9ee3b096b35e61400))
+* linter ([d49e1d0](https://github.com/dasaplan/ts-mono/commit/d49e1d07510c78134fc734418dc913743fbdb27b))
+* missing inheritance after merge all of for generic api ([65d9c1d](https://github.com/dasaplan/ts-mono/commit/65d9c1dd4c64c1d4c7674e31958a5db2745eaca4))
+* optional discriminator properties and single union instances ([c9e2c5c](https://github.com/dasaplan/ts-mono/commit/c9e2c5cc213d55bb254c0f620fe56059e5c3a7e5))
+* **transpiler, zod:** property name should not change when it references a schema entity with different name ([29b28f8](https://github.com/dasaplan/ts-mono/commit/29b28f88118bc2c99e2d7ea7666408cd5d991515))
+* ts-axios suffix ([17653af](https://github.com/dasaplan/ts-mono/commit/17653afaf7985e3bcd13a0a91577b1dc0e979d70))
+
+
+### Features
+
+* **all:** update deps ([5322060](https://github.com/dasaplan/ts-mono/commit/5322060b4a676104d94bbced86d4e843628b9aba))
+* **bundler:** support endpoint filter by tag and operationId ([d59557c](https://github.com/dasaplan/ts-mono/commit/d59557cd682f6961c79f26e43a67a304cd40235d))
+* endpoints with generic or explicit types ([2d04bb5](https://github.com/dasaplan/ts-mono/commit/2d04bb5d49a6e2d5a5613e62aa5c0b24937f84cd))
+* export endpoints in index ([175a194](https://github.com/dasaplan/ts-mono/commit/175a194f8d213893bd1dce31d4e404c4d46270d0))
+* **formatter:** delete examples ([e5069d2](https://github.com/dasaplan/ts-mono/commit/e5069d23dd59accf9f6092f5caf793cda882b77b))
+* generate endpoint definition ([909f5c6](https://github.com/dasaplan/ts-mono/commit/909f5c69cc9c2d3462787b3a5c3cf7255fa16134))
+* generate endpoints ([488964e](https://github.com/dasaplan/ts-mono/commit/488964e0ed0dbc3ca0ec9d7e9e54262d7767d7db))
+* rtk-query endpoints ([736625a](https://github.com/dasaplan/ts-mono/commit/736625adea1098d94b7fba970443142ebdc0f0ce))
+* rtk-query endpoints ([8ea830e](https://github.com/dasaplan/ts-mono/commit/8ea830e7e3a843ed6c3ad1f0db8e9e4a5059636e))
+* suffix model names ([58bd9cf](https://github.com/dasaplan/ts-mono/commit/58bd9cf978cc38989b3a6ac26133ee300f5e41c6))
+* x-omit ([a620f7a](https://github.com/dasaplan/ts-mono/commit/a620f7ac2c9b0c587af4a631bb9eefb9de0794dc))
+* xPick ([70419a0](https://github.com/dasaplan/ts-mono/commit/70419a00c7a0057c81343432aae66e2cc1675ea9))
+
+
+
+## 0.0.5 (2024-07-16)
+
+
+### Bug Fixes
+
+* copy templates folder from node modules ([7acaaac](https://github.com/dasaplan/ts-mono/commit/7acaaac95c56ae5c841b87ff09be44ddcadac763))
+* openapi-example as devDeps ([ce0a2a4](https://github.com/dasaplan/ts-mono/commit/ce0a2a4cb778806abb1198724a606429a15908ea))
+* repo url ([b93a2b4](https://github.com/dasaplan/ts-mono/commit/b93a2b47ca59e1de1fca210634d4750b8b0075ef))
+* toposort array items correctly when root schema is of type array ([677eef0](https://github.com/dasaplan/ts-mono/commit/677eef07d28dfc85eb88c55358a8e3b99d6f6fef))
+* toposort array items correctly when the elements are allOf objects ([c999d34](https://github.com/dasaplan/ts-mono/commit/c999d3415617169833354622d85ec58976ceabd7))
+
+
+### Features
+
+* added packages ([fa6203c](https://github.com/dasaplan/ts-mono/commit/fa6203c3af7695b7710242aa9f8ca14567a27a7f))
+* documentation ([da98d77](https://github.com/dasaplan/ts-mono/commit/da98d7706b227f9302c2baaa19649ee2081e1287))
+* handle dangling properties for schema with allOf ([a473fa7](https://github.com/dasaplan/ts-mono/commit/a473fa77db929d9ebfebddb511b09bdc8a168e45))
+* introduce application error ([99fdf2b](https://github.com/dasaplan/ts-mono/commit/99fdf2b71520916489c1bbb81242d8c4cab9799d))
+* openapi-bundler ([71d5750](https://github.com/dasaplan/ts-mono/commit/71d575005a6b9d8966fc18be3e23ab0c86efcd49))
+* openapi-bundler ([3e24f1e](https://github.com/dasaplan/ts-mono/commit/3e24f1e8bceddeeeeecefde6f4aaed638d5a0d6c))
+* provide codegen templates on client cwd ([201d5ce](https://github.com/dasaplan/ts-mono/commit/201d5ce4aad0e955c75034bb9bb52e16d45180d9))
+
+
+
+
+
 # @dasaplan/openapi
 
 ## 0.0.28

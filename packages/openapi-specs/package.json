@@ -2,7 +2,7 @@
   "name": "openapi-example-specs",
   "private": true,
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -24,8 +24,8 @@
     "@dasaplan/ts-sdk": "workspace:*"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*",
+    "@openapitools/openapi-generator-cli": "^2.21.3",
     "@redocly/cli": "^2.10.0",
-    "@openapitools/openapi-generator-cli": "^2.21.3"
+    "tsconfig": "workspace:*"
   }
 }
