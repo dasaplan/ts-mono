@@ -1,0 +1,64 @@
+name: Publish Snapshot to NPM
+
+on:
+  push:
+
+jobs:
+  publish-snapshot:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+          standalone: 'true'
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Git config
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: setup pnpm config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm ci:build:only
+
+      - name: Create snapshot version and publish
+        run: |
+          # Get current timestamp for snapshot version
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          
+          echo "Create snapshot versions for all packages"
+          pnpm exec lerna version prerelease \
+            --preid snapshot.$(date +%Y%m%d%H%M%S) \
+            --no-git-tag-version \
+            --no-push \
+            --yes \
+            --no-changelog
+          
+          echo "Commit changes temporarily (so lerna publish won’t fail)"
+          git add .
+          git commit -m "chore: snapshot release $TIMESTAMP [skip ci]" || echo "No changes to commit"
+              
+          echo "Publish packages with snapshot tag"
+          pnpm exec lerna publish from-package --dist-tag snapshot --yes --no-git-tag-version --no-push --registry="https://registry.npmjs.org/"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
