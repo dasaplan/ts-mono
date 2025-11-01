@@ -40,7 +40,7 @@ export async function generateTypescriptAxios(openapiSpec: string, out: string, 
       enumPropertyNaming: "original",
       enumNameSuffix: "",
       paramNaming: "original",
-    }
+    },
   );
 
   const apiFile = outDir.makeFile("api.ts");

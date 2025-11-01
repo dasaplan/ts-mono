@@ -19,7 +19,7 @@ export async function generateJava(openapiSpec: string, out: string) {
       "--input-spec": sanitizedInput.specPath,
       "--output": sanitizedInput.outDirPath,
     },
-    { enumUnknownDefaultCase: true }
+    { enumUnknownDefaultCase: true },
   );
 
   return sanitizedInput.outDirPath;

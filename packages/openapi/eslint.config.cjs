@@ -1,46 +1,40 @@
-const {
-    defineConfig,
-} = require("eslint/config");
+const { defineConfig } = require("eslint/config");
 
 const tsParser = require("@typescript-eslint/parser");
 const globals = require("globals");
 const js = require("@eslint/js");
 
-const {
-    FlatCompat,
-} = require("@eslint/eslintrc");
+const { FlatCompat } = require("@eslint/eslintrc");
 
 const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
 });
 
-module.exports = defineConfig([{
+module.exports = defineConfig([
+  {
     languageOptions: {
-        parser: tsParser,
+      parser: tsParser,
 
-        globals: {
-            ...globals.browser,
-        },
+      globals: {
+        ...globals.browser,
+      },
 
-        ecmaVersion: "latest",
-        sourceType: "module",
+      ecmaVersion: "latest",
+      sourceType: "module",
 
-        parserOptions: {
-            project: "./tsconfig.json",
-        },
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
     },
 
-    extends: compat.extends(
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:prettier/recommended",
-    ),
+    extends: compat.extends("eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"),
 
     rules: {
-        "@typescript-eslint/switch-exhaustiveness-check": "error",
-        "no-inner-declarations": "off",
-        "@typescript-eslint/no-namespace": "off",
+      "@typescript-eslint/switch-exhaustiveness-check": "error",
+      "no-inner-declarations": "off",
+      "@typescript-eslint/no-namespace": "off",
     },
-}]);
+  },
+]);

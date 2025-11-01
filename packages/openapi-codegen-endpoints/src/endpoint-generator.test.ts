@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { OpenapiBundledMock, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { generateEndpointDefinitions, generateEndpointDefinitionsFromBundled } from "./endpoint-generator.js";
 import { describe, expect, test } from "vitest";

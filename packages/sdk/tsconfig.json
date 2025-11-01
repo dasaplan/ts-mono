@@ -3,8 +3,9 @@
   "compilerOptions": {
     "outDir": "dist",
     "esModuleInterop": true,
-    "declaration": true
+    "declaration": true,
+    "sourceMap": true
   },
   "exclude": ["node_modules"],
-  "include": ["index.ts"]
+  "include": ["index.ts", "src"]
 }

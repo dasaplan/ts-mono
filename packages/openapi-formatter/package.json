@@ -38,26 +38,28 @@
     "pack": "pnpm pack",
     "postpack": "clean-package restore",
     "rup": "tsup-node --dts",
-    "test": "echo vitest",
+    "test": "vitest",
+    "test:it": "vitest --project integration-test",
+    "test:unit": "vitest --project unit-test",
     "test:update": "vitest -u"
   },
   "dependencies": {
-    "@apidevtools/swagger-parser": "^12.0.0",
+    "@apidevtools/swagger-parser": "^12.1.0",
     "@dasaplan/openapi-bundler": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:*",
-    "commander": "^14.0.0",
+    "commander": "^14.0.2",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "openapi-format": "^1.27.2",
+    "openapi-format": "^1.29.0",
     "openapi3-ts": "^4.5.0",
-    "tslog": "^4.9.3"
+    "tslog": "^4.10.2"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/lodash": "^4.17.20",
     "openapi-example-specs": "workspace:*",
     "tsconfig": "workspace:*",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "@redocly/openapi-core": "^1.6.0"

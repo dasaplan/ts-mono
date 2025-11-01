@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Endpoint, OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
 import { _, ApplicationError } from "@dasaplan/ts-sdk";
 

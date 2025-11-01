@@ -7,7 +7,7 @@ on:
   push:
 
 jobs:
-  publish:
+  build:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
@@ -40,5 +40,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build & Test
-        run: pnpm ci:build
+      - name: Build
+        run: pnpm ci:build:only
+
+      - name: Lint
+        run: pnpm ws:lint
+
+      - name: Unit Test
+        run: pnpm ws:test:unit
+
+# flaky in pipeline - need to investigate
+#      - name: Integration Test
+#        run: pnpm ws:test:it

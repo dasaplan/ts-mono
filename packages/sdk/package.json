@@ -4,8 +4,9 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./index.ts",
+      "import": "./index.ts",
+      "default": "./dist/index.js"
     }
   },
   "version": "0.2.0",

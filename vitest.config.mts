@@ -23,6 +23,8 @@ export default defineConfig({
         test: {
           exclude: [...configDefaults.exclude, "out", "dist", "node_modules"],
           include: ["**/*.it.test.{ts,js}"],
+          maxWorkers: 1,
+          maxConcurrency: 1,
           // it is recommended to define a name when using inline configs
           name: "integration-test",
         },

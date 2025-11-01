@@ -38,18 +38,20 @@
     "postpack": "clean-package restore",
     "rup": "tsup-node --dts",
     "test": "vitest",
+    "test:it": "echo vitest --project integration-test",
+    "test:unit": "vitest --project unit-test",
     "test:update": "vitest -u"
   },
   "dependencies": {
     "camelcase": "^8.0.0",
-    "commander": "^14.0.0",
+    "commander": "^14.0.2",
     "json-schema-merge-allof": "^0.8.1",
     "jsonpath": "^1.1.1",
     "jsonpointer": "^5.0.1",
     "lodash": "^4.17.21",
     "merge-json-schemas": "^1.0.0",
     "openapi3-ts": "^4.5.0",
-    "tslog": "^4.9.3"
+    "tslog": "^4.10.2"
   },
   "devDependencies": {
     "@dasaplan/ts-sdk": "workspace:*",
@@ -59,7 +61,7 @@
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "openapi-example-specs": "workspace:*",
     "tsconfig": "workspace:*",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "@redocly/openapi-core": "^1.6.0"

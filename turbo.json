@@ -21,6 +21,12 @@
     "test:it:update": {
       "inputs": [ "src/**/*.ts" ]
     },
+    "test:it": {
+      "inputs": [ "src/**/*.ts" ]
+    },
+    "test:unit": {
+      "inputs": [ "src/**/*.ts" ]
+    },
     "test:update": {
       "inputs": [ "src/**/*.ts.snap" ]
     },

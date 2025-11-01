@@ -24,7 +24,7 @@
     "@dasaplan/ts-sdk": "workspace:*"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.21.3",
+    "@openapitools/openapi-generator-cli": "^2.25.0",
     "@redocly/cli": "^2.10.0",
     "tsconfig": "workspace:*"
   }

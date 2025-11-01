@@ -2,6 +2,7 @@
 import path from "node:path";
 import process from "node:process";
 import fs from "node:fs";
+import fsAsync from "node:fs/promises";
 import { stringifyYaml } from "@redocly/openapi-core";
 import { _ } from "../ts/index.js";
 
@@ -9,7 +10,7 @@ export type File = ReturnType<typeof File.of>;
 export namespace File {
   export function isFilePath(filePath: string | undefined): filePath is string {
     if (_.isNil(filePath)) return false;
-    return /\.\w+$/u.test(filePath);
+    return /\.[\p{L}\p{N}_-]+$/u.test(filePath);
   }
 
   export function resolve(...segments: string[]) {
@@ -17,7 +18,8 @@ export namespace File {
   }
 
   export function of(filePath: string, nameWithExt?: string) {
-    const fileName = isFilePath(filePath) ? path.basename(filePath) : nameWithExt;
+    const p = path;
+    const fileName = isFilePath(filePath) ? p.basename(filePath) : nameWithExt;
     if (_.isNil(fileName)) {
       throw `Error: Expected file path to include fileName or a default but was given: path:${filePath}, nameWithExt: ${nameWithExt}`;
     }
@@ -111,6 +113,9 @@ export namespace Folder {
         this.create();
         return File.of(this.makeFilePath(fileName)).writeYml(content);
       },
+      filePath(file: string) {
+        return path.isAbsolute(file) ? file : path.resolve(_folder, file);
+      },
       makeFilePath(file: string) {
         this.create();
         return path.isAbsolute(file) ? file : path.resolve(_folder, file);
@@ -122,6 +127,22 @@ export namespace Folder {
       delete(...files: string[]) {
         files.map((f) => this.makeFilePath(f)).forEach((f) => this.deleteFileOrDirectory(f));
         return this;
+      },
+      lsFiles() {
+        return fs
+          .readdirSync(_folder)
+          .map((f) => this.filePath(f))
+          .filter(isFile);
+      },
+      async readAllFilesAsStringAsync(): Promise<Array<{ src: string; content: string }>> {
+        const files = await fsAsync.readdir(_folder);
+        const _files = files.map(this.makeFilePath.bind(this)).filter(isFile);
+        return Promise.all(
+          _files.map(async (f) => {
+            const content = await fsAsync.readFile(f, "utf-8");
+            return { src: f, content };
+          }),
+        );
       },
       readAllFilesAsString(): Array<{ src: string; content: string }> {
         return fs

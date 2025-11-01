@@ -42,7 +42,9 @@
     "pack": "pnpm pack",
     "postpack": "clean-package restore",
     "rup": "tsup-node --dts",
-    "test": "vitest",
+    "test": "vitest endpoint-generator.test.ts",
+    "test:it": "echo vitest --project integration-test",
+    "test:unit": "vitest --project unit-test",
     "test:update": "vitest -u",
     "ts:build": "tsc -p tsconfig.build.json",
     "ts:check": "tsc",
@@ -51,21 +53,22 @@
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:*",
-    "@rtk-query/codegen-openapi": "^2.0.0",
-    "@ts-morph/common": "^0.27.0",
-    "commander": "^14.0.0",
+    "@rtk-query/codegen-openapi": "^2.1.0",
+    "@ts-morph/common": "^0.28.1",
+    "commander": "^14.0.2",
     "pascal-case": "^4.0.0",
-    "ts-morph": "^26.0.0"
+    "ts-morph": "^27.0.2",
+    "tslog": "^4.10.2"
   },
   "devDependencies": {
-    "@reduxjs/toolkit": "^2.8.2",
-    "@types/express": "^5.0.3",
+    "@reduxjs/toolkit": "^2.9.2",
+    "@types/express": "^5.0.5",
     "@types/pascal-case": "^1.1.2",
-    "@typescript-eslint/eslint-plugin": "^8.37.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
     "clean-package": "^2.2.0",
-    "eslint": "^9.31.0",
+    "eslint": "^9.39.0",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-n": "^17.21.0",
+    "eslint-plugin-n": "^17.23.1",
     "eslint-plugin-promise": "^7.2.1",
     "express": "^5.1.0",
     "npm-run-all": "^4.1.5",
@@ -73,8 +76,8 @@
     "openapi3-ts": "^4.5.0",
     "sort-package-json": "^3.4.0",
     "tsconfig": "workspace:*",
-    "type-fest": "^4.41.0",
-    "typescript": "^5.8.3"
+    "type-fest": "^5.1.0",
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0"

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { appLog } from "./logger.js";
 import { bundleParseOpenapi, OpenApiBundled } from "@dasaplan/openapi-bundler";
 import { _, Folder, File } from "@dasaplan/ts-sdk";
