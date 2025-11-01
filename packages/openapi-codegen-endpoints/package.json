@@ -33,20 +33,20 @@
     "CHANGELOG.md"
   ],
   "scripts": {
+    "build": "run-s rup cp:templates",
+    "clean": "rimraf dist out tmp",
+    "cp:templates": "copyfiles -u 1 \"templates/**/*\" dist/templates",
+    "lint": "eslint \"./src/*.ts\" index.ts endpoint-cli.ts",
+    "lint:fix": "eslint \"./src/*.ts\" index.ts endpoint-cli.ts --fix",
     "prepack": "sort-package-json --quiet && clean-package",
     "pack": "pnpm pack",
     "postpack": "clean-package restore",
-    "build": "run-s rup cp:templates",
     "rup": "tsup-node --dts",
-    "ts:build": "tsc -p tsconfig.build.json",
-    "ts:check": "tsc",
-    "ts:check:generated": "tsc -p tsconfig.generated.json",
-    "cp:templates": "copyfiles -u 1 \"templates/**/*\" dist/templates",
     "test": "vitest",
     "test:update": "vitest -u",
-    "clean": "rimraf dist out tmp",
-    "lint": "eslint \"./src/*.ts\" index.ts endpoint-cli.ts",
-    "lint:fix": "eslint \"./src/*.ts\" index.ts endpoint-cli.ts --fix"
+    "ts:build": "tsc -p tsconfig.build.json",
+    "ts:check": "tsc",
+    "ts:check:generated": "tsc -p tsconfig.generated.json"
   },
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",

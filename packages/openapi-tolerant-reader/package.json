@@ -29,18 +29,18 @@
     "CHANGELOG.md"
   ],
   "scripts": {
+    "build": "run-s rup",
+    "clean": "rimraf dist out tmp",
+    "lint": "eslint \"./src/*.ts\" index.ts",
+    "lint:fix": "eslint \"./src/*.ts\" index.ts --fix",
     "prepack": "sort-package-json --quiet && clean-package",
     "pack": "pnpm pack",
     "postpack": "clean-package restore",
-    "build": "run-s rup",
     "rup": "tsup-node --dts",
-    "ts:build": "tsc -p tsconfig.build.json",
-    "ts:check": "tsc",
     "test": "vitest",
     "test:update": "vitest -u",
-    "clean": "rimraf dist out tmp",
-    "lint": "eslint \"./src/*.ts\" index.ts",
-    "lint:fix": "eslint \"./src/*.ts\" index.ts --fix"
+    "ts:build": "tsc -p tsconfig.build.json",
+    "ts:check": "tsc"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.37.0",

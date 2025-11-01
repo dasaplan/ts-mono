@@ -51,8 +51,18 @@ jobs:
       # Run Lerna versioning and publishing
       - name: Version and publish packages
         run: |
-          pnpm exec lerna version --conventional-commits --yes
-          pnpm exec lerna publish from-git --yes
+          # Version the packages
+          pnpm exec lerna version --conventional-commits --yes --no-push
+          
+          # Pack and publish each package
+          pnpm -r pack
+          lerna publish from-package --yes --no-verify-access
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push changes
+        run: |
+          git push --follow-tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -5,11 +5,15 @@
   "command": {
     "version": {
       "conventionalCommits": true,
-      "message": "chore(release): publish"
+      "message": "chore(release): publish",
+      "ignoreChanges": ["**/*.md"]
     },
     "publish": {
       "conventionalCommits": true,
-      "message": "chore(release): publish"
+      "message": "chore(release): publish",
+      "verifyAccess": false,
+      "skipScripts": true,
+      "ignoreScripts": true
     }
   }
 }
