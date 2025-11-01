@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-bundler",
-  "version": "0.0.24",
+  "version": "1.0.1",
   "description": "Opinionated bundler/merger for Openapi (Swagger)",
   "keywords": [
     "openapi",
