@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-bundler",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Opinionated bundler/merger for Openapi (Swagger)",
   "keywords": [
     "openapi",
@@ -52,11 +52,11 @@
     "tslog": "^4.9.3"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@dasaplan/ts-sdk": "workspace:*",
     "@types/json-schema-merge-allof": "^0.6.5",
     "@types/jsonpath": "^0.2.4",
     "@types/lodash": "^4.17.20",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
     "openapi-example-specs": "workspace:*",
     "tsconfig": "workspace:*",
     "typescript": "^5.8.3"

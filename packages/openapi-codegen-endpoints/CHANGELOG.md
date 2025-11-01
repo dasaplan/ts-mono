@@ -1,3 +1,19 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [1.1.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-codegen-endpoints@0.0.16...@dasaplan/openapi-codegen-endpoints@1.1.0) (2025-11-01)
+
+
+### Features
+
+* **bundler:** support endpoint filter by tag and operationId ([d59557c](https://github.com/dasaplan/ts-mono/commit/d59557cd682f6961c79f26e43a67a304cd40235d))
+
+
+
+
+
 # @dasaplan/openapi-codegen-endpoints
 
 ## 0.0.16
