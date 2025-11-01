@@ -21,6 +21,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.0",
     "@eslint/eslintrc": "^3.3.1",
+    "conventional-changelog-conventionalcommits": "^7.0.2",
     "globals": "^16.4.0",
     "npm-check-updates": "^19.1.2",
     "@changesets/cli": "^2.29.7",
