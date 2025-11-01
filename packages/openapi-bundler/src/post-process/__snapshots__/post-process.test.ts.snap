@@ -1929,6 +1929,7 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
         "summary": "List all pets",
         "tags": [
           "pets",
+          "internal",
         ],
       },
       "post": {
@@ -1982,6 +1983,7 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
         "summary": "Info for a specific pet",
         "tags": [
           "pets",
+          "internal",
         ],
       },
       "patch": {
@@ -2025,6 +2027,14 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
   "servers": [
     {
       "url": "http://petstore.swagger.io/v1",
+    },
+  ],
+  "tags": [
+    {
+      "name": "pets",
+    },
+    {
+      "name": "internal",
     },
   ],
 }
@@ -2459,6 +2469,7 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
         "summary": "List all pets",
         "tags": [
           "pets",
+          "internal",
         ],
       },
       "post": {
@@ -2512,6 +2523,7 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
         "summary": "Info for a specific pet",
         "tags": [
           "pets",
+          "internal",
         ],
       },
       "patch": {
@@ -2555,6 +2567,14 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
   "servers": [
     {
       "url": "http://petstore.swagger.io/v1",
+    },
+  ],
+  "tags": [
+    {
+      "name": "pets",
+    },
+    {
+      "name": "internal",
     },
   ],
 }
@@ -2897,6 +2917,7 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
         "summary": "List all pets",
         "tags": [
           "pets",
+          "internal",
         ],
       },
       "post": {
@@ -2950,6 +2971,7 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
         "summary": "Info for a specific pet",
         "tags": [
           "pets",
+          "internal",
         ],
       },
       "patch": {
@@ -2993,6 +3015,14 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
   "servers": [
     {
       "url": "http://petstore.swagger.io/v1",
+    },
+  ],
+  "tags": [
+    {
+      "name": "pets",
+    },
+    {
+      "name": "internal",
     },
   ],
 }
@@ -3423,6 +3453,7 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
         "summary": "List all pets",
         "tags": [
           "pets",
+          "internal",
         ],
       },
       "post": {
@@ -3476,6 +3507,7 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
         "summary": "Info for a specific pet",
         "tags": [
           "pets",
+          "internal",
         ],
       },
       "patch": {
@@ -3519,6 +3551,14 @@ exports[`post process > spec > ensureDiscriminatorValues > pets-modular-complex/
   "servers": [
     {
       "url": "http://petstore.swagger.io/v1",
+    },
+  ],
+  "tags": [
+    {
+      "name": "pets",
+    },
+    {
+      "name": "internal",
     },
   ],
 }

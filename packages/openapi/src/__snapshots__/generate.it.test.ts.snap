@@ -2574,6 +2574,183 @@ export type SchemasToySomeEnum = typeof SchemasToySomeEnum[keyof typeof SchemasT
 
 
 /**
+ * InternalApi - axios parameter creator
+ * @export
+ */
+export const InternalApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary List all pets
+         * @param {string} petId The id of the pet to retrieve
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPets: async (petId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'petId' is not null or undefined
+            assertParamExists('listPets', 'petId', petId)
+            const localVarPath = \`/pets\`
+                .replace(\`{\${"petId"}}\`, encodeURIComponent(String(petId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Info for a specific pet
+         * @param {string} petId The id of the pet to retrieve
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        showPetById: async (petId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'petId' is not null or undefined
+            assertParamExists('showPetById', 'petId', petId)
+            const localVarPath = \`/pets/{petId}\`
+                .replace(\`{\${"petId"}}\`, encodeURIComponent(String(petId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * InternalApi - functional programming interface
+ * @export
+ */
+export const InternalApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = InternalApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary List all pets
+         * @param {string} petId The id of the pet to retrieve
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listPets(petId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Pet>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listPets(petId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['InternalApi.listPets']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Info for a specific pet
+         * @param {string} petId The id of the pet to retrieve
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async showPetById(petId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.showPetById(petId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['InternalApi.showPetById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * InternalApi - factory interface
+ * @export
+ */
+export const InternalApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = InternalApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary List all pets
+         * @param {string} petId The id of the pet to retrieve
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPets(petId: string, options?: any): AxiosPromise<Array<Pet>> {
+            return localVarFp.listPets(petId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Info for a specific pet
+         * @param {string} petId The id of the pet to retrieve
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        showPetById(petId: string, options?: any): AxiosPromise<Pet> {
+            return localVarFp.showPetById(petId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * InternalApi - object-oriented interface
+ * @export
+ * @class InternalApi
+ * @extends {BaseAPI}
+ */
+export class InternalApi extends BaseAPI {
+    /**
+     * 
+     * @summary List all pets
+     * @param {string} petId The id of the pet to retrieve
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InternalApi
+     */
+    public listPets(petId: string, options?: RawAxiosRequestConfig) {
+        return InternalApiFp(this.configuration).listPets(petId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Info for a specific pet
+     * @param {string} petId The id of the pet to retrieve
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InternalApi
+     */
+    public showPetById(petId: string, options?: RawAxiosRequestConfig) {
+        return InternalApiFp(this.configuration).showPetById(petId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * PetsApi - axios parameter creator
  * @export
  */
@@ -3336,6 +3513,9 @@ info:
     name: MIT
 servers:
   - url: http://petstore.swagger.io/v1
+tags:
+  - name: pets
+  - name: internal
 paths:
   /pets:
     get:
@@ -3343,6 +3523,7 @@ paths:
       operationId: listPets
       tags:
         - pets
+        - internal
       parameters:
         - $ref: '#/components/parameters/PathPetId'
       responses:
@@ -3380,6 +3561,7 @@ paths:
       operationId: showPetById
       tags:
         - pets
+        - internal
       parameters:
         - $ref: '#/components/parameters/PathPetId'
       responses:

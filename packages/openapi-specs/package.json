@@ -26,7 +26,6 @@
   "devDependencies": {
     "tsconfig": "workspace:*",
     "@redocly/cli": "^2.10.0",
-    "@dasaplan/openapi-bundler": "workspace:*",
     "@openapitools/openapi-generator-cli": "^2.21.3"
   }
 }

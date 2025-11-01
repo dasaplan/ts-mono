@@ -19,6 +19,9 @@
     "ci:publish": "pnpm publish -r --no-git-checks"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@eslint/eslintrc": "^3.3.1",
+    "globals": "^16.4.0",
     "npm-check-updates": "^19.1.2",
     "@changesets/cli": "^2.29.7",
     "@redocly/openapi-core": "^2.10.0",
