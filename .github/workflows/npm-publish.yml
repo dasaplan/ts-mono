@@ -56,7 +56,7 @@ jobs:
           
           # Pack and publish each package
           pnpm -r pack
-          lerna publish from-package --yes --no-verify-access
+          lerna publish from-package --yes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
