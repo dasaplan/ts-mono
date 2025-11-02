@@ -47,7 +47,7 @@ jobs:
       - name: Version and publish packages
         run: |
           # Version the packages
-          lerna version --conventional-commits --yes --no-push
+          lerna version --conventional-commits --yes
           
           # Pack and publish each package
           lerna publish from-package --yes
