@@ -9,9 +9,7 @@
     },
     "publish": {
       "conventionalCommits": true,
-      "message": "chore(release): publish",
-      "skipScripts": true,
-      "ignoreScripts": true
+      "message": "chore(release): publish"
     }
   }
 }

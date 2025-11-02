@@ -47,10 +47,9 @@ jobs:
       - name: Version and publish packages
         run: |
           # Version the packages
-          pnpm exec lerna version --conventional-commits --yes --no-push
+          lerna version --conventional-commits --yes --no-push
           
           # Pack and publish each package
-          pnpm -r pack
           lerna publish from-package --yes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
