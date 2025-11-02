@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { formatOpenapi } from "./format.js";
+import { findCommonPath, formatOpenapi } from "./format.js";
 import jsyml from "js-yaml";
 import { OpenapiBundledMock } from "@dasaplan/openapi-bundler";
 
@@ -220,5 +220,17 @@ describe("format", () => {
               $ref: './file.yml#/Test'
       "
     `);
+  });
+
+  test("findCommonPath", () => {
+    const files = [
+      "/home/runner/work/ts-mono/ts-mono/packages/openapi-specs/specs/pets-modular-complex/petstore-api.yml",
+      "/home/runner/work/ts-mono/ts-mono/packages/openapi-specs/specs/pets-modular-complex/routes/pets.yml",
+      "/home/runner/work/ts-mono/ts-mono/packages/openapi-specs/specs/pets-modular-complex/routes/pet.yml",
+    ];
+
+    const common = findCommonPath(files);
+
+    expect(common).toEqual("/home/runner/work/ts-mono/ts-mono/packages/openapi-specs/specs/pets-modular-complex");
   });
 });

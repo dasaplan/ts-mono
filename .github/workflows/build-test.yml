@@ -49,6 +49,5 @@ jobs:
       - name: Unit Test
         run: pnpm ws:test:unit
 
-# flaky in pipeline - need to investigate
-#      - name: Integration Test
-#        run: pnpm ws:test:it
+      - name: Integration Test
+        run: pnpm ws:test:it

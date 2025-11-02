@@ -2,7 +2,7 @@
 // noinspection JSUnusedLocalSymbols
 
 import swagger from "@apidevtools/swagger-parser";
-import { ApplicationError, File } from "@dasaplan/ts-sdk";
+import { _, ApplicationError, File } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
 import { Oas3Schema, Oas3Definition } from "@redocly/openapi-core";
 import { OpenApiBundled } from "@dasaplan/openapi-bundler";
@@ -19,7 +19,8 @@ export type ResolvedSpec = Array<{
 }>;
 
 export async function resolveSpec(filePath: File): Promise<ResolvedSpec> {
-  const resolved = await swagger.resolve(filePath.absolutePath);
+  const _resolved = await swagger.resolve(filePath.absolutePath);
+  const resolved = _.cloneDeep(_resolved);
   const refs = resolved.paths();
   const mapped = refs.map((refFile) => {
     const getFile = () => resolved.get(refFile);

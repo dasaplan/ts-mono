@@ -1,5 +1,84 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Generator: ts-axios > generate generateTypescriptAxios > bundled-ts-axios-pets-modular/pets-api.yml 1`] = `
+"openapi: 3.0.3
+info:
+  title: My service
+  description: My service
+  version: 1.0.0
+servers:
+  - url: https://
+paths:
+  /v1/pets:
+    get:
+      summary: Get pets
+      operationId: getPets
+      responses:
+        '200':
+          description: Ok response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+components:
+  schemas:
+    PetBase:
+      type: object
+      discriminator:
+        propertyName: type
+      required:
+        - type
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+    DogEnum:
+      type: string
+      enum:
+        - DOG_A
+        - DOG_B
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            fluffy:
+              type: boolean
+            breed:
+              $ref: '#/components/schemas/DogEnum'
+            type:
+              type: string
+              x-const: DOG
+              example: DOG
+          required:
+            - type
+    Cat:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            breed:
+              type: string
+              enum:
+                - CAT_A
+                - CAT_B
+            type:
+              type: string
+              x-const: CAT
+              example: CAT
+          required:
+            - type
+    Pet:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+      discriminator:
+        propertyName: type
+        mapping:
+          DOG: '#/components/schemas/Dog'
+          CAT: '#/components/schemas/Cat'
+"
+`;
+
 exports[`Generator: ts-axios > generate generateTypescriptAxios > generate-ts-pets-modular/pets-api.yml-.gitignore 1`] = `
 "wwwroot/*.js
 node_modules
@@ -124,85 +203,6 @@ interface ServerMap {
  */
 export const operationServerMap: ServerMap = {
 }
-"
-`;
-
-exports[`Generator: ts-axios > generate generateTypescriptAxios > generate-ts-pets-modular/pets-api.yml-bundled.yml 1`] = `
-"openapi: 3.0.3
-info:
-  title: My service
-  description: My service
-  version: 1.0.0
-servers:
-  - url: https://
-paths:
-  /v1/pets:
-    get:
-      summary: Get pets
-      operationId: getPets
-      responses:
-        '200':
-          description: Ok response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-components:
-  schemas:
-    PetBase:
-      type: object
-      discriminator:
-        propertyName: type
-      required:
-        - type
-      properties:
-        type:
-          type: string
-        name:
-          type: string
-    DogEnum:
-      type: string
-      enum:
-        - DOG_A
-        - DOG_B
-    Dog:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            fluffy:
-              type: boolean
-            breed:
-              $ref: '#/components/schemas/DogEnum'
-            type:
-              type: string
-              x-const: DOG
-              example: DOG
-          required:
-            - type
-    Cat:
-      allOf:
-        - $ref: '#/components/schemas/PetBase'
-        - properties:
-            breed:
-              type: string
-              enum:
-                - CAT_A
-                - CAT_B
-            type:
-              type: string
-              x-const: CAT
-              example: CAT
-          required:
-            - type
-    Pet:
-      oneOf:
-        - $ref: '#/components/schemas/Cat'
-        - $ref: '#/components/schemas/Dog'
-      discriminator:
-        propertyName: type
-        mapping:
-          DOG: '#/components/schemas/Dog'
-          CAT: '#/components/schemas/Cat'
 "
 `;
 
@@ -559,5 +559,84 @@ exports[`Generator: ts-axios > generate generateTypescriptAxios > generate-ts-pe
 export * from "./api.js";
 export * from "./configuration.js";
 
+"
+`;
+
+exports[`Generator: ts-axios > generate generateTypescriptAxios > generate-ts-pets-modular/pets-api.yml-pets-modular-pets-api-ts-bundled.yml 1`] = `
+"openapi: 3.0.3
+info:
+  title: My service
+  description: My service
+  version: 1.0.0
+servers:
+  - url: https://
+paths:
+  /v1/pets:
+    get:
+      summary: Get pets
+      operationId: getPets
+      responses:
+        '200':
+          description: Ok response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+components:
+  schemas:
+    PetBase:
+      type: object
+      discriminator:
+        propertyName: type
+      required:
+        - type
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+    DogEnum:
+      type: string
+      enum:
+        - DOG_A
+        - DOG_B
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            fluffy:
+              type: boolean
+            breed:
+              $ref: '#/components/schemas/DogEnum'
+            type:
+              type: string
+              x-const: DOG
+              example: DOG
+          required:
+            - type
+    Cat:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            breed:
+              type: string
+              enum:
+                - CAT_A
+                - CAT_B
+            type:
+              type: string
+              x-const: CAT
+              example: CAT
+          required:
+            - type
+    Pet:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+      discriminator:
+        propertyName: type
+        mapping:
+          DOG: '#/components/schemas/Dog'
+          CAT: '#/components/schemas/Cat'
 "
 `;

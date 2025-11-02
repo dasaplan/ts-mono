@@ -124,6 +124,12 @@ export namespace Folder {
         this.create();
         return File.of(this.makeFilePath(file));
       },
+      deleteSelf() {
+        if (this.exists()) {
+          fs.rmSync(_folder, { recursive: true, force: true });
+        }
+        return this;
+      },
       delete(...files: string[]) {
         files.map((f) => this.makeFilePath(f)).forEach((f) => this.deleteFileOrDirectory(f));
         return this;

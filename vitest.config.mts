@@ -23,6 +23,8 @@ export default defineConfig({
         test: {
           exclude: [...configDefaults.exclude, "out", "dist", "node_modules"],
           include: ["**/*.it.test.{ts,js}"],
+          // we heavily use the filesystem and spawn child process for the java openapi generator
+          // at least one integration test gets flaky when using concurrent / parallel tests
           maxWorkers: 1,
           maxConcurrency: 1,
           // it is recommended to define a name when using inline configs

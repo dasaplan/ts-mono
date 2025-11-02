@@ -22,7 +22,8 @@
       "inputs": [ "src/**/*.ts" ]
     },
     "test:it": {
-      "inputs": [ "src/**/*.ts" ]
+      "inputs": [ "src/**/*.ts" ],
+      "cache": false
     },
     "test:unit": {
       "inputs": [ "src/**/*.ts" ]

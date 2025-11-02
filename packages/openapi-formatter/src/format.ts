@@ -42,6 +42,7 @@ export async function formatSpec(filePath: File, options: FormatterOptions): Pro
   const log = appLog.childLog(formatSpec);
   const resolved = await resolveSpec(filePath);
   const { common, formattedSpecs } = await formatResolvedSpec(resolved, options);
+  log.debug(`exporting '${formattedSpecs.length}' specs with common path: ${common} `);
   formattedSpecs.forEach((r) => exportSpec(r, common, options.outFolder));
   return { outFile: options.outFolder.absolutePath };
 }
@@ -96,11 +97,17 @@ async function formatResolvedSpec(resolved: ResolvedSpec, options: Omit<Formatte
   return { common, formattedSpecs };
 }
 
-function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any }, common: string, outFolder: Folder) {
+function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any }, _common: string, outFolder: Folder) {
   const log = appLog.childLog(exportSpec);
   const file = File.of(r.refFile);
+  // we may want to keep nesting when exporting to output folder
+  //  e.g. out:     a/b/out
+  //       file:    a/b/c/d.yml
+  //       export:  a/b/out/c/d.yml
+  const common = _common === "" ? findCommonPath([outFolder.absolutePath, file.absolutePath]) : _common;
   if (common === "") {
     file.writeYml(r.getFile());
+    log.debug(`done: exporting without common path  ${file.absolutePath}`);
     return;
   }
   const commonPath = path.resolve(common);
@@ -108,10 +115,10 @@ function exportSpec(r: { refFile: string; schemas: Parsed[]; getFile: () => any 
   current = current.startsWith(path.sep) ? current.slice(1) : current;
   const c = Folder.resolve(outFolder.absolutePath).makeFile(current);
   c.writeYml(r.getFile());
-  log.debug(`done: exporting ${c.absolutePath}`);
+  log.debug(`done: exporting with common ${c.absolutePath}`);
 }
 
-function findCommonPath(filePaths: Array<string>) {
+export function findCommonPath(filePaths: Array<string>) {
   if (filePaths.length === 1) {
     // if we only have one file, the common path is the parent where the file lives in
     return Folder.of(filePaths[0]).absolutePath;
@@ -119,8 +126,15 @@ function findCommonPath(filePaths: Array<string>) {
   let commonPath = "";
   const [first, ...rest] = filePaths;
   const segments = first.split("/");
+
+  // we need to handle root / on unix
+  if (first.startsWith("/") && segments[0] === "") {
+    segments[0] = "/";
+  }
+
   for (const segment of segments) {
-    const next = commonPath === "" ? segment : `${commonPath}/${segment}`;
+    // handle first assignment and unix root
+    const next = commonPath === "" ? segment : commonPath === "/" ? `/${segment}` : `${commonPath}/${segment}`;
     const isCommon = rest.every((f) => f.startsWith(next));
     if (isCommon) {
       commonPath = next;

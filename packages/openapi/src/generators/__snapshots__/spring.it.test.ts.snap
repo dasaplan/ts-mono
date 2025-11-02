@@ -1,5 +1,84 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Generator > generate java > bundled-java-pets-modular/pets-api.yml 1`] = `
+"openapi: 3.0.3
+info:
+  title: My service
+  description: My service
+  version: 1.0.0
+servers:
+  - url: https://
+paths:
+  /v1/pets:
+    get:
+      summary: Get pets
+      operationId: getPets
+      responses:
+        '200':
+          description: Ok response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+components:
+  schemas:
+    PetBase:
+      type: object
+      discriminator:
+        propertyName: type
+      required:
+        - type
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+    DogEnum:
+      type: string
+      enum:
+        - DOG_A
+        - DOG_B
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            fluffy:
+              type: boolean
+            breed:
+              $ref: '#/components/schemas/DogEnum'
+            type:
+              type: string
+              x-const: DOG
+              example: DOG
+          required:
+            - type
+    Cat:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - properties:
+            breed:
+              type: string
+              enum:
+                - CAT_A
+                - CAT_B
+            type:
+              type: string
+              x-const: CAT
+              example: CAT
+          required:
+            - type
+    Pet:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+      discriminator:
+        propertyName: type
+        mapping:
+          DOG: '#/components/schemas/Dog'
+          CAT: '#/components/schemas/Cat'
+"
+`;
+
 exports[`Generator > generate java > java-apis-pets-modular/pets-api.yml-ApiUtil.java 1`] = `
 "package org.openapitools.api;
 
