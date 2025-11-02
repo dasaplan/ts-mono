@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/ts-sdk",
-  "description": "Javascript runtime utilities including typescript types",
+  "description": "Internal use only! Breaking changes will often occur.",
   "type": "module",
   "exports": {
     ".": {
@@ -10,7 +10,6 @@
     }
   },
   "version": "0.2.3",
-  "private": true,
   "scripts": {
     "build": "tsc",
     "build:bndl": "tsup --entry index.ts --entry oa-cli.ts --format cjs,esm --dts --sourcemap --splitting --onSuccess \"tsc --emitDeclarationOnly --declaration\"",
