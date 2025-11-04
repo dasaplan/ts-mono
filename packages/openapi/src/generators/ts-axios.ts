@@ -6,6 +6,7 @@ import { OaGenerator } from "./oa-generator.js";
 export interface TsAxiosPublicGenOptions {
   generateZod?: boolean;
   modelSuffix?: string;
+  copyTemplates?: boolean;
 }
 
 export interface TsAxiosInternalOptions extends TsAxiosPublicGenOptions {
@@ -20,6 +21,9 @@ export async function generateTypescriptAxios(openapiSpec: string, out: string, 
 
   const zodEnabled = params?.generateZod ? "zodEnabled" : "zodDisabled";
   const templates = TemplateDir.getTmpDir();
+  if (params?.copyTemplates) {
+    TemplateDir.copyToCwd();
+  }
 
   const sanitizedInput = {
     specPath: File.of(openapiSpec).normalize().absolutePath,

@@ -30,6 +30,7 @@ export function createCommandGenerateTs(program: Command) {
     .option("-o, --output [output]", "Target directory for the generated files", "out")
     .option("--modelSuffix [modelSuffix]", "All model names are suffixed as provided")
     .option("--debug", "Enable debug logging")
+    .option("--templates", "If set, codegen templates will be copied into the current working directory for customization.", false)
     .action(async (spec: string, options: { output: string; modelSuffix: string; debug: boolean }) => {
       if (options.debug) {
         appLog.setLogLevel("debug");
