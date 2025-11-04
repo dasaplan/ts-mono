@@ -29,6 +29,7 @@ export function createCommandBundle(program: Command) {
     .option("--disableEnsureDiscriminatorValues", "If set, discriminator values won't be ensured on every subType", false)
     .option("--disableXOmit", "If set, x-omit keyword won't be processed", false)
     .option("--disableXPick", "If set, x-pick keyword won't be processed", false)
+    .option("--debug", "Enable debug logging", false)
     .option("--filterIn <field> <values...>", "filter-in by 'tag' or 'operationId' followed by one or more values", parseFilterOption)
     .option("--filterOut <field> <values...>", "filter-out by 'tag' or 'operationId' followed by one or more values", parseFilterOption)
     .action(
@@ -41,12 +42,12 @@ export function createCommandBundle(program: Command) {
           disableXOmit: boolean;
           disableXPick: boolean;
           forceMergeAllOf: boolean;
-          verbose: boolean;
+          debug: boolean;
           filterIn?: { type: "tags" | "operationId"; values: Array<string> };
           filterOut?: { type: "tags" | "operationId"; values: Array<string> };
         },
       ) => {
-        if (options.verbose) {
+        if (options.debug) {
           appLog.setLogLevel("debug");
         }
 

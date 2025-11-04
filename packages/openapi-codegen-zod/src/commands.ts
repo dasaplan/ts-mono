@@ -10,8 +10,9 @@ export function createCommandGenerateZod(program: Command) {
     .argument("<openapi-spec>", "Relative filepath from the current cwd to the OpenApi root document file")
     .option("-o, --output [output]", "Target directory for the generated files", "out")
     .option("-t, --temp [temp]", "Temporary directory which can be deleted", "out")
-    .action(async (spec: string, options: { output: string; verbose: string }) => {
-      if (options.verbose) {
+    .option("--debug", "Enable debug logging", false)
+    .action(async (spec: string, options: { output: string; debug: string }) => {
+      if (options.debug) {
         appLog.setLogLevel("debug");
       }
       const parsed = await bundleParseOpenapi(spec, {

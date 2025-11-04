@@ -2,11 +2,11 @@ import { appLog } from "../logger.js";
 import { _, ApplicationError, CommandLine } from "@dasaplan/ts-sdk";
 
 export namespace OaGenerator {
-  const logger = appLog.childLogger("OaGenerator");
+  const logger = () => appLog.childLogger("OaGenerator");
 
   /** User Input must be sanitized from the caller*/
   export async function generate<ConcreteGenerator extends object>(options: OaGeneratorOptions, concreteGeneratorOptions: ConcreteGenerator) {
-    const log = logger.childLog(generate);
+    const log = logger().childLog(generate);
     log.info(`start generate with options:`, JSON.stringify(options));
 
     const cliParams = OaGeneratorOptions.create(options, concreteGeneratorOptions);
@@ -16,7 +16,7 @@ export namespace OaGenerator {
   }
 
   async function tryExec(command: string, args: ReadonlyArray<string>) {
-    const log = logger.childLog(tryExec);
+    const log = logger().childLog(tryExec);
 
     try {
       log.info(`start: ${command}, args: ${args.join(", ")}`);

@@ -14,12 +14,13 @@ export function createCommandGenerateEndpoints(program: Command) {
     .option("--apiName [apiName]", "Name of the Api used to generate names for files or modules")
     .option("--typeNamespace [typeNamespace]", "Namespace used to index type module imports.")
     .option("--typeModuleName [typeModuleName]", "Module name for importing types.")
+    .option("--debug", "Enable debug logging", false)
     .action(
       async (
         spec: string,
-        options: { verbose: boolean; out: string; templates: string; typeSuffix: string; apiName: string; typeNamespace: string; typeModuleName: string },
+        options: { debug: boolean; out: string; templates: string; typeSuffix: string; apiName: string; typeNamespace: string; typeModuleName: string },
       ) => {
-        if (options.verbose) {
+        if (options.debug) {
           appLog.setLogLevel("debug");
         }
         const tsApiTypesModule = parseApiTypesModule(options);
