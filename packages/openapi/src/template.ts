@@ -5,7 +5,11 @@ import { appLog } from "./logger.js";
 
 export namespace TemplateDir {
   function isInit() {
-    const exists = Folder.cwd("templates").readAllFilesAsString().length > 0;
+    const tempDir = Folder.cwd("templates");
+    if (!tempDir.exists()) {
+      return false;
+    }
+    const exists = tempDir.lsFiles().length > 0;
     appLog.log.info("templates exists:", exists);
     return exists;
   }
