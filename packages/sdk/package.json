@@ -9,7 +9,7 @@
       "default": "./dist/index.js"
     }
   },
-  "version": "0.2.3",
+  "version": "0.3.0",
   "scripts": {
     "build": "tsc",
     "build:bndl": "tsup --entry index.ts --entry oa-cli.ts --format cjs,esm --dts --sourcemap --splitting --onSuccess \"tsc --emitDeclarationOnly --declaration\"",
