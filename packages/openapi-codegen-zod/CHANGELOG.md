@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-codegen-zod@1.3.4...@dasaplan/openapi-codegen-zod@1.4.0) (2025-11-05)
+
+
+### Features
+
+* added debug flag in cli ([2bc9e3f](https://github.com/dasaplan/ts-mono/commit/2bc9e3ff741e2af852235e9f88998817b25f0441))
+
+
+
+
+
 ## [1.3.4](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-codegen-zod@1.3.1...@dasaplan/openapi-codegen-zod@1.3.4) (2025-11-02)
 
 **Note:** Version bump only for package @dasaplan/openapi-codegen-zod

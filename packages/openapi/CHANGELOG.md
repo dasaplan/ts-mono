@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.2.4...@dasaplan/openapi@0.3.0) (2025-11-05)
+
+
+### Bug Fixes
+
+* **openapi:** fix for when templates dir is not found ([12dc39e](https://github.com/dasaplan/ts-mono/commit/12dc39e7ae267456a4961b8b9c102a0a9a4c5f60))
+
+
+### Features
+
+* added debug flag in cli ([2bc9e3f](https://github.com/dasaplan/ts-mono/commit/2bc9e3ff741e2af852235e9f88998817b25f0441))
+* added templates flat to only copy templates if desired ([4a20f9f](https://github.com/dasaplan/ts-mono/commit/4a20f9f2d3bf1708ffb63fc666322b4ee2892b25))
+
+
+
+
+
 ## [0.2.4](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.2.1...@dasaplan/openapi@0.2.4) (2025-11-02)
 
 **Note:** Version bump only for package @dasaplan/openapi

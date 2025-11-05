@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/ts-sdk@0.2.3...@dasaplan/ts-sdk@0.4.0) (2025-11-05)
+
+
+### Features
+
+* **sdk:** release ([6525b11](https://github.com/dasaplan/ts-mono/commit/6525b11c1b8461750d028e1e9473f564048af3ac))
+
+
+
+
+
 ## [0.2.3](https://github.com/dasaplan/ts-mono/compare/@dasaplan/ts-sdk@0.2.1...@dasaplan/ts-sdk@0.2.3) (2025-11-02)
 
 **Note:** Version bump only for package @dasaplan/ts-sdk
