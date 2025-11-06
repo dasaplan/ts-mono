@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-codegen-endpoints@1.3.1...@dasaplan/openapi-codegen-endpoints@1.3.2) (2025-11-06)
+
+
+### Bug Fixes
+
+* **endpoints:** fix handling optional path params ([eab3d85](https://github.com/dasaplan/ts-mono/commit/eab3d856ccd03f24689f41c3f27ab97ef558f987))
+* **endpoints:** fixed handling multiple params in interfaces and generic types ([b7fd702](https://github.com/dasaplan/ts-mono/commit/b7fd702203d1ce4f30ba92ca872ebb6957ad2017))
+
+
+
+
+
 ## [1.3.1](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-codegen-endpoints@1.3.0...@dasaplan/openapi-codegen-endpoints@1.3.1) (2025-11-06)
 
 

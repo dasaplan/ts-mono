@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.2](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.3.1...@dasaplan/openapi@0.3.2) (2025-11-06)
+
+
+### Bug Fixes
+
+* **endpoints:** fix handling optional path params ([eab3d85](https://github.com/dasaplan/ts-mono/commit/eab3d856ccd03f24689f41c3f27ab97ef558f987))
+* **ts-axios:** fix cli argument --templates ([830eaea](https://github.com/dasaplan/ts-mono/commit/830eaeae73d33313f47a2df5059550b420015bed))
+* **ts-axios:** fix generating union without discriminator ([6ab460f](https://github.com/dasaplan/ts-mono/commit/6ab460f57b62e1369de3ad49bb9a9487a4e5e2ce))
+
+
+
+
+
 ## [0.3.1](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.3.0...@dasaplan/openapi@0.3.1) (2025-11-06)
 
 **Note:** Version bump only for package @dasaplan/openapi
