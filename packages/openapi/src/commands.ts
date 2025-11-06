@@ -31,11 +31,11 @@ export function createCommandGenerateTs(program: Command) {
     .option("--modelSuffix [modelSuffix]", "All model names are suffixed as provided")
     .option("--debug", "Enable debug logging")
     .option("--templates", "If set, codegen templates will be copied into the current working directory for customization.", false)
-    .action(async (spec: string, options: { output: string; modelSuffix: string; debug: boolean }) => {
+    .action(async (spec: string, options: { output: string; modelSuffix: string; debug: boolean; templates: boolean }) => {
       if (options.debug) {
         appLog.setLogLevel("debug");
       }
-      await generateTsAxios(spec, options.output, { generateZod: false, modelSuffix: options.modelSuffix });
+      await generateTsAxios(spec, options.output, { generateZod: false, modelSuffix: options.modelSuffix, copyTemplates: options.templates });
       appLog.log.info(`finished generate`);
     });
 }
