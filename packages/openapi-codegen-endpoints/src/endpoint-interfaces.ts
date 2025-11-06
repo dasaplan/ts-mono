@@ -26,10 +26,10 @@ export function createTypeImport(params: EndpointDefinitionGeneratorOptions) {
     ? `import * as ${params.tsApiTypesModule.namespace} from '${params.tsApiTypesModule.moduleName}'`
     : "";
 }
+
 function generateEndpointWithGenericTypes(e: Endpoint, params: EndpointInterfaceGeneratorOptions) {
   const { path, name, request, parameters, response, operation } = generateEndpointInterface(e, params);
-  const schemas = [...Object.values(response), request]
-    .filter(_.isDefined)
+  const schemas = _.uniq([...Object.values(response), request].filter(_.isDefined))
     .map((t) => `${t.replace("[]", "")} extends EndpointDefinition.DtoTypes`)
     .join(", ");
   return `export interface ${pascalCase(name)}<${schemas}> extends EndpointDefinition<
@@ -58,6 +58,7 @@ function generateEndpointWithTypes(e: Endpoint, params: EndpointInterfaceGenerat
     }
     `;
 }
+
 export async function generateEndpointInterfacesAsText(bundled: OpenApiBundled, params: EndpointInterfaceGeneratorOptions) {
   try {
     const endpoints = Transpiler.of(bundled).endpoints();
@@ -78,13 +79,39 @@ export async function generateEndpointInterfacesAsText(bundled: OpenApiBundled, 
   }
 }
 
+function withRequired(isRequired: boolean | undefined) {
+  return {
+    do: (strValue: string | undefined) => {
+      if (_.isNil(isRequired) || !isRequired) {
+        return strValue;
+      }
+      if (_.isNil(strValue)) {
+        return strValue;
+      }
+      return `${strValue} | undefined`;
+    },
+  };
+}
+
 export function generateEndpointInterface<T extends Endpoint = Endpoint>(endpoint: T, params: EndpointInterfaceGeneratorOptions) {
   const groupedParams = _.groupBy(endpoint.parameters ?? [], (it) => it.type) as GroupedParams;
   const parameters = {
-    path: groupedParams?.["path"]?.reduce((acc, curr) => ({ [curr.name]: generatePayloadType(curr.schema, params) }), {}),
-    query: groupedParams?.["query"]?.reduce((acc, curr) => ({ [curr.name]: generatePayloadType(curr.schema, params) }), {}),
-    header: groupedParams?.["header"]?.reduce((acc, curr) => ({ [curr.name]: generatePayloadType(curr.schema, params) }), {}),
-    cookie: groupedParams?.["cookie"]?.reduce((acc, curr) => ({ [curr.name]: generatePayloadType(curr.schema, params) }), {}),
+    path: groupedParams?.["path"]?.reduce(
+      (acc, curr) => ({ ...acc, [curr.name]: withRequired(curr.isRequired).do(generatePayloadType(curr.schema, params)) }),
+      {},
+    ),
+    query: groupedParams?.["query"]?.reduce(
+      (acc, curr) => ({ ...acc, [curr.name]: withRequired(curr.isRequired).do(generatePayloadType(curr.schema, params)) }),
+      {},
+    ),
+    header: groupedParams?.["header"]?.reduce(
+      (acc, curr) => ({ ...acc, [curr.name]: withRequired(curr.isRequired).do(generatePayloadType(curr.schema, params)) }),
+      {},
+    ),
+    cookie: groupedParams?.["cookie"]?.reduce(
+      (acc, curr) => ({ ...acc, [curr.name]: withRequired(curr.isRequired).do(generatePayloadType(curr.schema, params)) }),
+      {},
+    ),
   } satisfies EndpointDefinition.Parameters;
 
   const request = generatePayloadType(endpoint?.requestBody?.schema, params);
@@ -93,6 +120,7 @@ export function generateEndpointInterface<T extends Endpoint = Endpoint>(endpoin
     .filter((r) => _.isDefined(r.status))
     .reduce(
       (acc, curr) => ({
+        ...acc,
         [curr.status!]: generatePayloadType(curr.schema, params),
       }),
       {},
