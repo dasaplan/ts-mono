@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.7](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-formatter@0.2.6...@dasaplan/openapi-formatter@0.2.7) (2025-11-06)
+
+**Note:** Version bump only for package @dasaplan/openapi-formatter
+
+
+
+
+
 ## [0.2.6](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-formatter@0.2.5...@dasaplan/openapi-formatter@0.2.6) (2025-11-05)
 
 **Note:** Version bump only for package @dasaplan/openapi-formatter

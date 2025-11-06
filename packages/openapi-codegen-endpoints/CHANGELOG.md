@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-codegen-endpoints@1.3.0...@dasaplan/openapi-codegen-endpoints@1.3.1) (2025-11-06)
+
+
+### Bug Fixes
+
+* **bundler:** fix when global path parameters were ignored when parsing operation parameters ([69ce04a](https://github.com/dasaplan/ts-mono/commit/69ce04abe54862a3d1b36902d0f14014f1131ed3))
+
+
+
+
+
 # [1.3.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-codegen-endpoints@1.2.4...@dasaplan/openapi-codegen-endpoints@1.3.0) (2025-11-05)
 
 
