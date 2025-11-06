@@ -21,12 +21,14 @@ export namespace Endpoint {
     type: "path" | "query" | "cookie" | "header";
     /** @default type: string */
     schema: Schema;
+    isRequired: boolean;
   }
 }
 
 export interface TranspileEndpointCtx extends TranspileContext {
   schema(name: string, oaSchema: oas30.SchemaObject | oas30.ReferenceObject): Schema;
 }
+
 export namespace TranspileEndpointCtx {
   export function create(resolver: TranspileContext): TranspileEndpointCtx {
     return {
@@ -42,9 +44,16 @@ export namespace Endpoint {
     return Object.entries(ctx.resolver.root.paths).flatMap(([path, pathItem]) => {
       const pathItemResolved = ctx.resolver.resolveRef(pathItem);
       if (_.isNil(pathItemResolved)) return [];
+
+      // resolve glob params upfront, so we do not need to resolve them on every route operation
+      const globalParameters = pathItemResolved["parameters"];
+      const parsedGlobalParameters = _.isDefined(globalParameters) ? parseParameters(globalParameters, ctx) : undefined;
+
       return (["get", "put", "post", "delete", "patch"] as const)
         .flatMap((operationName) => (_.isDefined(pathItemResolved[operationName]) ? [{ ...pathItemResolved[operationName], method: operationName }] : []))
         .map(({ description, parameters, requestBody, operationId, responses, deprecated, method }) => {
+          const parsedOpParameters = parseParameters(parameters, ctx);
+          const mergedParameters = mergeParameters(parsedGlobalParameters, parsedOpParameters);
           return {
             alias: operationId ?? "UNKNOWN_REQUIRED_ENDPOINT_NAME",
             deprecated: deprecated ?? false,
@@ -53,7 +62,7 @@ export namespace Endpoint {
             method,
             responses: parseResponseBodies(responses, ctx),
             requestBody: parseRequestBody(requestBody, ctx),
-            parameters: parseParameters(parameters, ctx),
+            parameters: mergedParameters,
           };
         });
     });
@@ -75,12 +84,16 @@ type RawContentFormat =
       format: MemeType;
     }
   | { type: "UNKNOWN"; format: string };
+
 interface Content {
   format?: "json" | "form-data" | "form-url" | "binary" | "text";
   schema?: Schema;
   rawFormat: RawContentFormat;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface RequestBody extends Content {}
+
 interface ResponseObj extends Content {
   status?: number;
   description?: string;
@@ -97,6 +110,7 @@ function parseParameters(parameters: Array<oas30.ParameterObject | oas30.Referen
           schema: ctx.schema(`${resolved.name}Schema`, resolved.schema),
           name: resolved.name,
           description: resolved.description,
+          isRequired: resolved.required ?? false,
         },
       ];
     }) ?? []
@@ -162,6 +176,7 @@ function parseContentType(mediaType: string): RawContentFormat {
   }
   return { type: "KNOWN", format };
 }
+
 function mapFormat(_format: MemeType): RequestBody["format"] {
   switch (_format) {
     case "text/html":
@@ -176,4 +191,27 @@ function mapFormat(_format: MemeType): RequestBody["format"] {
     case "application/octet-stream":
       return "binary";
   }
+}
+
+/**
+ * Merges global (path-level) and operation-level parameters.
+ * Operation-level parameters override global parameters based on name and location (in).
+ */
+function mergeParameters(
+  globalParams: Array<Endpoint.Parameter> | undefined,
+  operationParams: Array<Endpoint.Parameter> | undefined,
+): Array<Endpoint.Parameter> | undefined {
+  if (_.isNil(globalParams) && _.isNil(operationParams)) return undefined;
+  if (_.isNil(globalParams)) return operationParams;
+  if (_.isNil(operationParams)) return globalParams;
+
+  // Filter global parameters, excluding those that are overridden by operation parameters
+  const filteredGlobalParams = globalParams.filter((globalResolved) => {
+    // Check if this global parameter is overridden by any operation parameter
+    const isOverridden = operationParams.some((opParam) => opParam.name === globalResolved.name && opParam.type === globalResolved.type);
+    return !isOverridden;
+  });
+
+  // Combine filtered global parameters with operation parameters
+  return [...filteredGlobalParams, ...operationParams];
 }

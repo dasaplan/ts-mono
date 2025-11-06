@@ -2,6 +2,11 @@
   "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "noEmit": true,
+    "composite": true
   },
+  "references": [
+    { "path": "../sdk" },
+    { "path": "../openapi-bundler"}
+  ],
   "exclude": ["node_modules"]
 }
