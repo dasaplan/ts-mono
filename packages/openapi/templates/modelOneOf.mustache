@@ -15,7 +15,7 @@ discriminator only - fallback to not use the discriminator. Default model names 
 }}{{^mappedModels}}{{#oneOf}}{{{.}}}{{^-last}} | {{/-last}}{{/oneOf}}{{/mappedModels}}{{/discriminator}}{{!
 
 plain oneOf
-}}{{^discriminator}}{{#oneOf}}{{{.}}}{{^-last}} | {{/-last}}{{/oneOf}}{{/discriminator}} | { {{discriminator.propertyName}}: UNKNOWN_ENUM_VARIANT, [prop:string]:unknown};
+}}{{^discriminator}}{{#oneOf}}{{{.}}}{{^-last}} | {{/-last}}{{/oneOf}}{{/discriminator}}{{#discriminator}} | { {{#discriminator.propertyName}}{{discriminator.propertyName}}: UNKNOWN_ENUM_VARIANT, {{/discriminator.propertyName}}[prop:string]:unknown}{{/discriminator}};
 
 {{#discriminator}}
 export namespace {{classname}} {
@@ -45,6 +45,5 @@ export namespace {{classname}} {
         }
         return handler.onDefault?.(union);
     }
-{{/discriminator}}
-
 }
+{{/discriminator}}
