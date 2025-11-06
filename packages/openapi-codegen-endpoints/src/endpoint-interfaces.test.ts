@@ -102,7 +102,7 @@ describe("generateEndpointDefinitions", () => {
                       export interface GetPet<ResponseSchema extends EndpointDefinition.DtoTypes, ErrorSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
                       {"200": ResponseSchema,"401": ErrorSchema},
                       undefined,
-                      {"path": {"petId": string | undefined},"query": undefined,"header": undefined,"cookie": undefined}
+                      {"path": {"petId": string},"query": undefined,"header": undefined,"cookie": undefined}
                   > {
               name: "getPet";
               operation: "get";
@@ -112,7 +112,7 @@ describe("generateEndpointDefinitions", () => {
       export interface UpdatePet<ResponseSchema extends EndpointDefinition.DtoTypes, RequestSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
                       {"200": ResponseSchema},
                       RequestSchema,
-                      {"path": undefined,"query": {"secret": string | undefined},"header": undefined,"cookie": undefined}
+                      {"path": undefined,"query": {"secret": string},"header": undefined,"cookie": undefined}
                   > {
               name: "updatePet";
               operation: "put";
@@ -122,7 +122,7 @@ describe("generateEndpointDefinitions", () => {
       export interface CreatePet<RequestSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
                       {"200": undefined},
                       RequestSchema,
-                      {"path": undefined,"query": undefined,"header": {"other-secret": string | undefined},"cookie": {"secret": string | undefined,"foo": string}}
+                      {"path": undefined,"query": undefined,"header": {"other-secret": string},"cookie": {"secret": string,"foo": string | undefined}}
                   > {
               name: "createPet";
               operation: "post";

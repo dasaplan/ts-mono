@@ -1502,7 +1502,7 @@ export namespace SwaggerPetstoreEndpoints {
         path: "/pets/{petId}"
     }
 
-    export interface PatchPet<Pet extends EndpointDefinition.DtoTypes, Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+    export interface PatchPet<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
         { "200": Pet },
         Pet,
         { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }

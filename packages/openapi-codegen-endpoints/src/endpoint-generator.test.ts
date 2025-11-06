@@ -53,7 +53,13 @@ describe("generateEndpointDefinitions", () => {
           },
           put: {
             operationId: "updatePet",
-            parameters: [{ in: "query", name: "secret", required: true, schema: { type: "string" } }],
+            parameters: [
+              { in: "query", name: "secret", required: true, schema: { type: "string" } },
+              { in: "path", name: "secret", required: false, schema: { type: "string" } },
+              { in: "header", name: "secret", required: false, schema: { type: "string" } },
+              { in: "cookie", name: "secret", required: false, schema: { type: "string" } },
+              { in: "query", name: "secret2", required: false, schema: { type: "string" } },
+            ],
             requestBody: {
               content: {
                 "application/json": {

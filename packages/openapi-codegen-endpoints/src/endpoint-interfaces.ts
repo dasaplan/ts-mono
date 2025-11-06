@@ -82,13 +82,14 @@ export async function generateEndpointInterfacesAsText(bundled: OpenApiBundled, 
 function withRequired(isRequired: boolean | undefined) {
   return {
     do: (strValue: string | undefined) => {
-      if (_.isNil(isRequired) || !isRequired) {
-        return strValue;
-      }
       if (_.isNil(strValue)) {
         return strValue;
       }
-      return `${strValue} | undefined`;
+      if (_.isNil(isRequired) || !isRequired) {
+        return `${strValue} | undefined`;
+      }
+      // required
+      return strValue;
     },
   };
 }

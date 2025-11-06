@@ -129,7 +129,7 @@ export namespace TestApiEndpoints {
     export interface GetPet<ResponseSchema extends EndpointDefinition.DtoTypes, ErrorSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
         { "200": ResponseSchema, "401": ErrorSchema },
         undefined,
-        { "path": { "petId": string | undefined }, "query": undefined, "header": undefined, "cookie": undefined }
+        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
     > {
         name: "getPet";
         operation: "get";
@@ -139,7 +139,7 @@ export namespace TestApiEndpoints {
     export interface UpdatePet<ResponseSchema extends EndpointDefinition.DtoTypes, RequestSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
         { "200": ResponseSchema },
         RequestSchema,
-        { "path": undefined, "query": { "secret": string | undefined }, "header": undefined, "cookie": undefined }
+        { "path": { "secret": string | undefined }, "query": { "secret": string, "secret2": string | undefined }, "header": { "secret": string | undefined }, "cookie": { "secret": string | undefined } }
     > {
         name: "updatePet";
         operation: "put";
@@ -149,7 +149,7 @@ export namespace TestApiEndpoints {
     export interface CreatePet<RequestSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
         { "200": undefined },
         RequestSchema,
-        { "path": undefined, "query": undefined, "header": { "other-secret": string | undefined }, "cookie": { "secret": string | undefined } }
+        { "path": undefined, "query": undefined, "header": { "other-secret": string }, "cookie": { "secret": string } }
     > {
         name: "createPet";
         operation: "post";
@@ -291,7 +291,7 @@ export namespace TestApiEndpoints {
     export interface ListPets<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
         { "200": Pet[] },
         undefined,
-        { "path": { "petId": string | undefined }, "query": undefined, "header": undefined, "cookie": undefined }
+        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
     > {
         name: "listPets";
         operation: "get";
@@ -311,7 +311,7 @@ export namespace TestApiEndpoints {
     export interface ShowPetById<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
         { "200": Pet },
         undefined,
-        { "path": { "petId": string | undefined }, "query": undefined, "header": undefined, "cookie": undefined }
+        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
     > {
         name: "showPetById";
         operation: "get";
@@ -321,7 +321,7 @@ export namespace TestApiEndpoints {
     export interface PatchPet<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
         { "200": Pet },
         Pet,
-        { "path": { "petId": string | undefined }, "query": undefined, "header": undefined, "cookie": undefined }
+        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
     > {
         name: "patchPet";
         operation: "patch";
