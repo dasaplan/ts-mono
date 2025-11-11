@@ -6,18 +6,19 @@ import { Toposort } from "./toposort/toposort.js";
 import { _ } from "@dasaplan/ts-sdk";
 
 export namespace Transpiler {
+  export type Parameter = Endpoint.Parameter & { endpoint: Omit<Endpoint, "parameters" | "requestBody" | "responses"> };
   export function of(bundled: OpenApiBundled) {
     const transpiler = TranspileContext.create(_.cloneDeep(bundled));
     const endpointTranspiler = TranspileEndpointCtx.create(transpiler);
     return {
       ctx: transpiler,
-      endpoints() {
+      endpoints(): Array<Endpoint> {
         return transpiler.endpoints.length > 0 ? transpiler.endpoints : Endpoint.transpileAll(endpointTranspiler);
       },
-      schemas() {
+      schemas(): Array<Schema> {
         return transpiler.schemas.size > 0 ? Array.from(transpiler.schemas.values()) : (Schema.transpileAll(transpiler) ?? []);
       },
-      parameters(): Array<Endpoint.Parameter & { endpoint: Omit<Endpoint, "parameters" | "requestBody" | "responses"> }> {
+      parameters(): Array<Parameter> {
         return this.endpoints().flatMap(
           (endpoint) => endpoint.parameters?.map((p) => ({ ...p, endpoint: _.omit(endpoint, "parameters", "requestBody", "responses") })) ?? [],
         );
