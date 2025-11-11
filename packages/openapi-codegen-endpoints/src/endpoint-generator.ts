@@ -23,7 +23,7 @@ export async function generateEndpointDefinitionsFromBundled(bundled: OpenApiBun
   const endpoints = await generateEndpointInterfacesAsText(bundled, { ...params, apiName });
 
   const maybeTypeImport = createTypeImport(params);
-  const withImports = [maybeTypeImport, "import {EndpointDefinition} from './EndpointDefinition'", endpoints].filter((i) => !_.isEmpty(i)).join("\n");
+  const withImports = [maybeTypeImport, "import {EndpointDefinition} from './EndpointDefinition.js'", endpoints].filter((i) => !_.isEmpty(i)).join("\n");
 
   const out = Folder.of(params?.outDir ?? "out").create();
   const { project } = await generateTemplates({ ...params, outDir: out.absolutePath });

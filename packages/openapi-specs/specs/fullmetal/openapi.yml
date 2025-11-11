@@ -1,0 +1,723 @@
+openapi: 3.0.3
+info:
+  title: Inventory Management Test API
+  version: 1.0.0
+  description: Testapi
+servers:
+  - url: https://testserver
+    description: Default server
+security:
+  - bearerAuth
+tags:
+  - name: Inventory
+    description: Inventory Management
+  - name: Auth
+    description: Access Management
+  - name: Action
+    description: Actions
+  - name: Constants
+    description: Constants Management
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    GoldPriceRates:
+      type: object
+      required:
+        - g
+        - kg
+        - oz_tr
+      properties:
+        g:
+          type: number
+          description: Gold price per gram
+        kg:
+          type: number
+          description: Gold price per kilogram
+        oz_tr:
+          type: number
+          description: Gold price per troy ounce
+    ConstantBase:
+      type: object
+      required:
+        - version
+        - updatedAt
+        - ratesByWeight
+      properties:
+        version:
+          type: number
+          description: Version number of the constant
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        ratesByWeight:
+          $ref: '#/components/schemas/GoldPriceRates'
+    Constant:
+      type: object
+      required:
+        - version
+        - updatedAt
+        - ratesByWeight
+      properties:
+        history:
+          $ref: '#/components/schemas/ConstantBase'
+        version:
+          type: number
+          description: Version number of the constant
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        ratesByWeight:
+          $ref: '#/components/schemas/GoldPriceRates'
+    Constants:
+      type: object
+      required:
+        - goldPrices
+      properties:
+        goldPrices:
+          $ref: '#/components/schemas/Constant'
+    ChangeConstantBase:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          type: string
+      discriminator:
+        propertyName: event
+    WeightUnit:
+      type: string
+      enum:
+        - kg
+        - g
+        - oz_tr
+      description: Weight unit
+    GoldPriceUpdateDetails:
+      type: object
+      required:
+        - unit
+        - price
+      properties:
+        unit:
+          $ref: '#/components/schemas/WeightUnit'
+        price:
+          type: number
+          description: The price in the specified unit
+    ChangeConstantGlobal:
+      allOf:
+        - $ref: '#/components/schemas/ChangeConstantBase'
+        - required:
+            - details
+            - event
+          properties:
+            details:
+              $ref: '#/components/schemas/GoldPriceUpdateDetails'
+            event:
+              type: string
+              x-const: GLOBAL_UPDATE_GOLD_PRICE
+              example: GLOBAL_UPDATE_GOLD_PRICE
+    ChangeConstantUser:
+      allOf:
+        - $ref: '#/components/schemas/ChangeConstantBase'
+        - required:
+            - details
+            - inventoryId
+            - event
+          properties:
+            inventoryId:
+              type: string
+            details:
+              $ref: '#/components/schemas/GoldPriceUpdateDetails'
+            event:
+              type: string
+              x-const: UPDATE_GOLD_PRICE
+              example: UPDATE_GOLD_PRICE
+    ChangeConstant:
+      oneOf:
+        - $ref: '#/components/schemas/ChangeConstantGlobal'
+        - $ref: '#/components/schemas/ChangeConstantUser'
+      discriminator:
+        propertyName: event
+        mapping:
+          UPDATE_GOLD_PRICE: '#/components/schemas/ChangeConstantUser'
+          GLOBAL_UPDATE_GOLD_PRICE: '#/components/schemas/ChangeConstantGlobal'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+    ItemType:
+      type: string
+      enum:
+        - B
+        - El
+        - kA
+        - Ka
+        - KA
+        - KR
+        - Pa
+        - LIII
+        - ML
+        - R
+        - Phil
+        - BR
+    Weight:
+      type: object
+      required:
+        - unit
+        - value
+      properties:
+        unit:
+          $ref: '#/components/schemas/WeightUnit'
+        value:
+          type: number
+          description: Weight value
+    Product:
+      required:
+        - itemType
+        - productId
+        - weight
+      type: object
+      properties:
+        externalId:
+          type: string
+        itemType:
+          $ref: '#/components/schemas/ItemType'
+        weight:
+          $ref: '#/components/schemas/Weight'
+        productId:
+          type: string
+    InventoryItemStats:
+      type: object
+      required:
+        - totalSells
+        - totalPurchase
+      properties:
+        totalPurchase:
+          type: number
+        totalSells:
+          type: number
+    InventoryStockItem:
+      required:
+        - priceEuro
+        - productId
+        - purchaseDate
+        - quantity
+        - stockId
+      type: object
+      properties:
+        quantity:
+          type: number
+        priceEuro:
+          type: number
+        purchaseDate:
+          type: string
+          format: date-time
+        stockId:
+          type: string
+        productId:
+          type: string
+    InventoryStockHistory:
+      required:
+        - deltaRevenue
+        - event
+        - eventDate
+        - eventPrice
+        - priceEuro
+        - productId
+        - purchaseDate
+        - quantity
+        - stockId
+      type: object
+      properties:
+        eventDate:
+          type: string
+          format: date-time
+        eventPrice:
+          type: number
+        deltaRevenue:
+          type: number
+        event:
+          type: string
+          enum:
+            - GIFTED
+            - SOLD
+            - PURCHASED
+        quantity:
+          type: number
+        priceEuro:
+          type: number
+        purchaseDate:
+          type: string
+          format: date-time
+        stockId:
+          type: string
+        productId:
+          type: string
+    InventoryStock:
+      type: object
+      required:
+        - history
+        - inventory
+        - quantity
+      properties:
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryStockHistory'
+        inventory:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryStockItem'
+        quantity:
+          type: number
+    InventoryItem:
+      type: object
+      required:
+        - inventoryId
+        - quantity
+      properties:
+        inventoryId:
+          type: string
+        product:
+          $ref: '#/components/schemas/Product'
+        quantity:
+          type: number
+        invest:
+          type: number
+        stats:
+          $ref: '#/components/schemas/InventoryItemStats'
+        revenue:
+          type: number
+        stock:
+          $ref: '#/components/schemas/InventoryStock'
+    InventoryItemList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryItem'
+    PurchasedEventDetailBase:
+      type: object
+      properties:
+        kind:
+          type: string
+      discriminator:
+        propertyName: kind
+    PurchasedEventDetailItemSpecified:
+      allOf:
+        - $ref: '#/components/schemas/PurchasedEventDetailBase'
+        - required:
+            - itemType
+            - weight
+          properties:
+            kind:
+              type: string
+              default: SPECIFIED
+            itemType:
+              $ref: '#/components/schemas/ItemType'
+            weight:
+              $ref: '#/components/schemas/Weight'
+    PurchasedEventDetailItemProduct:
+      allOf:
+        - $ref: '#/components/schemas/PurchasedEventDetailBase'
+        - required:
+            - productId
+          properties:
+            kind:
+              type: string
+              default: PRODUCT_REF
+            productId:
+              type: string
+    PurchasedEventDetailItem:
+      oneOf:
+        - $ref: '#/components/schemas/PurchasedEventDetailItemSpecified'
+        - $ref: '#/components/schemas/PurchasedEventDetailItemProduct'
+    PurchasedEventDetail:
+      required:
+        - priceEuro
+        - quantity
+        - item
+      type: object
+      properties:
+        item:
+          $ref: '#/components/schemas/PurchasedEventDetailItem'
+        quantity:
+          type: number
+        priceEuro:
+          type: number
+        purchaseDate:
+          type: string
+          format: date-time
+    CreateItemDetails:
+      type: object
+      required:
+        - details
+      properties:
+        details:
+          $ref: '#/components/schemas/PurchasedEventDetail'
+    CreateItem:
+      type: object
+      required:
+        - details
+      properties:
+        details:
+          $ref: '#/components/schemas/CreateItemDetails'
+    UpdateItemRequestDetails:
+      type: object
+      required:
+        - productId
+        - stockId
+      properties:
+        quantity:
+          type: number
+        priceEuro:
+          type: number
+        purchaseDate:
+          type: string
+          format: date-time
+        stockId:
+          type: string
+        productId:
+          type: string
+    UpdateItemRequest:
+      type: object
+      required:
+        - event
+        - createdAt
+        - details
+      properties:
+        event:
+          type: string
+          enum:
+            - UPDATED
+        createdAt:
+          type: string
+          format: date-time
+        details:
+          $ref: '#/components/schemas/UpdateItemRequestDetails'
+    SuccessResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          enum:
+            - ok
+    ChangeItemDetails:
+      title: ChangeItemDetails
+      type: object
+      properties:
+        quantity:
+          type: number
+        priceEuro:
+          type: number
+        purchaseDate:
+          type: string
+          format: date-time
+    ChangeItemRequest:
+      type: object
+      required:
+        - createdAt
+        - event
+        - details
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        event:
+          type: string
+          enum:
+            - PURCHASED
+            - GIFTED
+            - SOLD
+        details:
+          $ref: '#/components/schemas/ChangeItemDetails'
+    InventorySummaryResponse:
+      type: object
+      required:
+        - message
+        - items
+      properties:
+        message:
+          type: string
+          enum:
+            - ok
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryItem'
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    LoginResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+    RegisterResponse:
+      type: object
+      required:
+        - token
+        - userId
+      properties:
+        token:
+          type: string
+        userId:
+          type: string
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+paths:
+  /constants:
+    get:
+      operationId: getConstants
+      tags:
+        - Constants
+      summary: Get constants
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Constants'
+    post:
+      tags:
+        - Constants
+      operationId: upsertConstant
+      summary: Update constants
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeConstant'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Constants'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /inventory:
+    get:
+      operationId: getInventories
+      tags:
+        - Inventory
+      summary: Get inventory items
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItemList'
+    post:
+      operationId: createInventoryItem
+      tags:
+        - Inventory
+      summary: Create inventory item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /inventory/{productId}:
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      operationId: updateInventoryItem
+      tags:
+        - Inventory
+      summary: Update inventory item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateItemRequest'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: changeInventoryItem
+      tags:
+        - Inventory
+      summary: Change inventory item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeItemRequest'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /inventory/summary:
+    get:
+      operationId: getInventorySummary
+      summary: Get inventory summary
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventorySummaryResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /login:
+    post:
+      operationId: login
+      tags:
+        - Auth
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '201':
+          description: Successfully logged in
+          headers:
+            Authorization:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /register:
+    post:
+      operationId: register
+      tags:
+        - Auth
+      summary: User registration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '201':
+          description: Successfully registered
+          headers:
+            Authorization:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: User already exists
+  /import/inventory:
+    post:
+      operationId: importInventory
+      tags:
+        - Action
+      summary: Import inventory data
+      responses:
+        '201':
+          description: Successfully imported
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /save/inventory:
+    post:
+      operationId: saveInventory
+      tags:
+        - Action
+      summary: Save inventory data
+      responses:
+        '201':
+          description: Successfully saved
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

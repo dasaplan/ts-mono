@@ -1,4 +1,4 @@
-/* eslint-disable no-inner-declarations,@typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // noinspection JSUnusedLocalSymbols
 
 import { oas30 } from "openapi3-ts";
@@ -314,8 +314,8 @@ export namespace Schema {
   }
 
   function transpileObjectProperties(schema: Schema.OaObject, ctx: TranspileContext): Array<Property> {
-    function isPropertyRequired(s: Schema) {
-      return schema.raw.required?.includes(s.getName()) ?? false;
+    function isPropertyRequired(propName: string) {
+      return schema.raw.required?.includes(propName) ?? false;
     }
     const withMemory = createWithMemory(schema.raw, ctx);
     return Object.entries(schema.raw.properties ?? {}).map(([propertyName, propertySchema]) => {
@@ -328,7 +328,7 @@ export namespace Schema {
         ownerId: schema.getName(),
         propertyName,
         propertyValue,
-        required: isPropertyRequired(propertyValue),
+        required: isPropertyRequired(propertyName),
       };
     });
   }

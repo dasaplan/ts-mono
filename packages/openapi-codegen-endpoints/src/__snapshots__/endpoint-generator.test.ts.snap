@@ -118,7 +118,7 @@ export namespace EndpointDefinition {
     };
 }
 ",
-  "import { EndpointDefinition } from './EndpointDefinition'
+  "import { EndpointDefinition } from './EndpointDefinition.js'
 export namespace TestApiEndpoints {
     export type Path = "/pets/{:petId}" | "/pets"
     export interface OperationToPath {
@@ -279,7 +279,7 @@ export namespace EndpointDefinition {
     };
 }
 ",
-  "import { EndpointDefinition } from './EndpointDefinition'
+  "import { EndpointDefinition } from './EndpointDefinition.js'
 export namespace TestApiEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
     export interface OperationToPath {

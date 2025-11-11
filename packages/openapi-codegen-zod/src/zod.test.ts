@@ -31,6 +31,21 @@ describe("generateZod", () => {
     expect(sourceFile.getFullText()).toMatchSnapshot(name);
   });
 
+  test("fullmetal", async () => {
+    const spec = "fullmetal/openapi.yml";
+    const api = resolveSpecPath(spec);
+    const { parsed } = await bundleOpenapi(api, {
+      postProcessor: createSpecProcessor({
+        mergeAllOf: true,
+        ensureDiscriminatorValues: true,
+        xOmit: true,
+      }),
+    });
+    const name = spec.replace(".yaml", "");
+    const { sourceFile } = await generateZodSources(parsed, `test/out/zod/${name}.ts`, options());
+
+    expect(sourceFile.getFullText()).toMatchSnapshot(name);
+  });
   test("circular schema", async () => {
     const openapi: OpenApiBundled = createApi(
       withSchemas({

@@ -8,6 +8,7 @@ export type ExampleSpec =
   | "pets-modular-complex/bundled-petstore-api.yml"
   | "generic/api.yml"
   | "pets-recursive/pets-api.yml"
+  | "fullmetal/openapi.yml"
   | "usecases/extended-array-api.yml";
 
 export function resolveSpecPath(spec: ExampleSpec) {

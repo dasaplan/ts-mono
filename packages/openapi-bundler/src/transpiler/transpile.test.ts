@@ -36,8 +36,22 @@ describe("transpiler", () => {
     const spec = Transpiler.of(parsed);
     const schemas = spec.schemas();
     expect(schemas).toMatchSnapshot("schemas");
-    expect(schemas).toMatchSnapshot("schemas");
   });
+
+  test("schemas fullmetal", async () => {
+    const specPath = resolveSpecPath("fullmetal/openapi.yml");
+    const { parsed } = await bundleOpenapi(specPath, {
+      outFile: Folder.cwd("tmp", "schemas").makeFile(File.of(specPath).name).absolutePath,
+      postProcessor: createSpecProcessor({
+        mergeAllOf: true,
+        ensureDiscriminatorValues: true,
+      }),
+    });
+    const spec = Transpiler.of(parsed);
+    const schemas = spec.schemas();
+    expect(schemas).toMatchSnapshot("fullmetal");
+  });
+
   test("transpile debug", async () => {
     const api = resolveSpecPath("generic/api.yml");
     const { parsed } = await bundleOpenapi(api, {

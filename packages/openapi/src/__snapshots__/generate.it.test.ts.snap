@@ -2221,7 +2221,7 @@ export namespace Schemas {
     export const Pets = z.array(Pet).max(100);
     export const SchemaTitled = z.object({ titledProp: z.string().optional() });
     export const HttpErrorCode = z.number().int();
-    export const Error = z.object({ code: HttpErrorCode.optional(), message: z.string(), titledSchema: SchemaTitled.optional() });
+    export const Error = z.object({ code: HttpErrorCode, message: z.string(), titledSchema: SchemaTitled.optional() });
 
     export namespace Types {
         export type FluffLevel = z.infer<typeof Schemas.FluffLevel>;
