@@ -11,6 +11,8 @@ export const IDENTIFIER_API = "api";
 
 export interface ZodGenOptions {
   includeTsTypes: boolean;
+  withUnknownEnum: boolean;
+  withUnknownUnion: boolean;
 }
 
 export function createConstantDeclaration(c: Schema, options: ZodGenOptions) {
@@ -202,6 +204,10 @@ namespace Factory {
     mappings: Array<{ discriminatorValue: string; entityRef: string }>,
     options: ZodGenOptions,
   ): string {
+    if (!options.withUnknownUnion) {
+      return `z.discriminatedUnion("${discriminatorProperty}", [${mappings.map((m) => m.entityRef).join(", ")}])`;
+    }
+
     const matchProperties = mappings.map((p) => createObjectProperty(p.discriminatorValue, p.entityRef, options));
     // add unknown schema
     matchProperties.push(`onDefault: z.object({ ${discriminatorProperty}: z.string().brand("UNKNOWN") }).passthrough()`);
@@ -235,11 +241,14 @@ namespace Factory {
   }
 
   export function createEnum(values: string[], options: ZodGenOptions): string {
+    const renderedEnum = `z.enum([${values.map(stringify).join(",")}])`;
+    if (!options.withUnknownEnum) {
+      return renderedEnum;
+    }
     function withUnknownVariant(value: string) {
       return `${value}.or(z.string().brand("UNKNOWN"))`;
     }
-
-    return withUnknownVariant(`z.enum([${values.map(stringify).join(",")}])`);
+    return withUnknownVariant(renderedEnum);
   }
 
   export function createArray(item: string, options: ZodGenOptions): string {

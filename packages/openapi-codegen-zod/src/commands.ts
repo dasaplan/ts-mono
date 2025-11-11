@@ -9,9 +9,10 @@ export function createCommandGenerateZod(program: Command) {
     .description("Generate Zod schemas")
     .argument("<openapi-spec>", "Relative filepath from the current cwd to the OpenApi root document file")
     .option("-o, --output [output]", "Target directory for the generated files", "out")
-    .option("-t, --temp [temp]", "Temporary directory which can be deleted", "out")
+    .option("--disableUnknownEnum", "If set, enums will be rendered without unknown values", false)
+    .option("--disableUnknownUnion", "If set, discriminated unions (oneOf) will be rendered without unknown values", false)
     .option("--debug", "Enable debug logging", false)
-    .action(async (spec: string, options: { output: string; debug: string }) => {
+    .action(async (spec: string, options: { output: string; debug: string; disableUnknownEnum: boolean; disableUnknownUnion: boolean }) => {
       if (options.debug) {
         appLog.setLogLevel("debug");
       }
@@ -20,6 +21,10 @@ export function createCommandGenerateZod(program: Command) {
         mergeAllOf: true,
         ensureDiscriminatorValues: true,
       });
-      await generateZodSchemas(parsed, options.output, { includeTsTypes: false });
+      await generateZodSchemas(parsed, options.output, {
+        includeTsTypes: false,
+        withUnknownEnum: !options.disableUnknownEnum,
+        withUnknownUnion: !options.disableUnknownUnion,
+      });
     });
 }

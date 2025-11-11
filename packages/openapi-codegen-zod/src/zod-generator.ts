@@ -19,6 +19,8 @@ export async function generateZodSchemas(openapiSpec: OpenApiBundled, outFile: s
 export async function generateZodSources(parsed: OpenApiBundled, filePath: string, params?: ZodGenOptions) {
   const options: ZodGenOptions = {
     includeTsTypes: true,
+    withUnknownEnum: true,
+    withUnknownUnion: true,
     ...(params ?? {}),
   };
   const schemas = Transpiler.of(parsed).schemasTopoSorted();

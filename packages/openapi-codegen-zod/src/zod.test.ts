@@ -6,6 +6,8 @@ import { describe, test, expect } from "vitest";
 
 const options: () => ZodGenOptions = () => ({
   includeTsTypes: false,
+  withUnknownUnion: true,
+  withUnknownEnum: true,
 });
 describe("generateZod", () => {
   const { withSchemas, createApi } = OpenapiBundledMock.create();
@@ -168,7 +170,7 @@ describe("generateZod", () => {
         },
       }),
     );
-    const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, { includeTsTypes: true });
+    const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, { ...options(), includeTsTypes: true });
 
     expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
       "import { z } from 'zod'
