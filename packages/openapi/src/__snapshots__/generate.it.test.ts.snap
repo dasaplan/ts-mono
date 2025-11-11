@@ -65,7 +65,7 @@ export namespace EndpointDefinition {
 `;
 
 exports[`Generate Integration > all > generic/api.yml > it-generate-all-SomeTitleEndpoints.ts-generic/api.yml 1`] = `
-"import { EndpointDefinition } from './EndpointDefinition'
+"import { EndpointDefinition } from './EndpointDefinition.js'
 export namespace SomeTitleEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
     export interface OperationToPath {
@@ -671,8 +671,8 @@ export namespace Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
-    export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
-    export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
+    export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT').default('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
+    export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM').default('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
     export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Cat>;
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets = z.array(Pet).max(100);
@@ -826,7 +826,7 @@ export namespace EndpointDefinition {
 `;
 
 exports[`Generate Integration > all > pets-modular/pets-api.yml > it-generate-all-MyServiceEndpoints.ts-pets-modular/pets-api.yml 1`] = `
-"import { EndpointDefinition } from './EndpointDefinition'
+"import { EndpointDefinition } from './EndpointDefinition.js'
 export namespace MyServiceEndpoints {
     export type Path = "/v1/pets"
     export interface OperationToPath {
@@ -1463,7 +1463,7 @@ export namespace EndpointDefinition {
 `;
 
 exports[`Generate Integration > all > pets-modular-complex/petstore-api.yml > it-generate-all-SwaggerPetstoreEndpoints.ts-pets-modular-complex/petstore-api.yml 1`] = `
-"import { EndpointDefinition } from './EndpointDefinition'
+"import { EndpointDefinition } from './EndpointDefinition.js'
 export namespace SwaggerPetstoreEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
     export interface OperationToPath {
@@ -2209,14 +2209,14 @@ import * as api from './api.js'
 
 export namespace Schemas {
     export const FluffLevel = z.enum(['A', 'B', 'C']).or(z.string().brand("UNKNOWN")) as z.ZodType<api.FluffLevel>;
-    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
-    export const FluffyTeddy = z.object({ fluffLevel: FluffLevel.optional(), id: z.string(), price: z.string(), kind: z.literal('TEDDY'), targetGroup: z.string().optional() });
-    export const Ball = z.object({ id: z.string(), price: z.string(), kind: z.literal('BALL'), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
+    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional().default('CHILDREN') });
+    export const FluffyTeddy = z.object({ fluffLevel: FluffLevel.optional(), id: z.string(), price: z.string(), kind: z.literal('TEDDY'), targetGroup: z.string().optional().default('CHILDREN') });
+    export const Ball = z.object({ id: z.string(), price: z.string(), kind: z.literal('BALL'), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional().default('CHILDREN') });
     export const PetToy = zc.ZodUnionMatch.matcher("kind", { 'BALL': Ball, 'TEDDY': FluffyTeddy, onDefault: z.object({ kind: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.PetToy>;
     export const TargetGroup = z.string();
     export const SchemaUntitled = z.object({ untitledProp: z.string().optional() });
     export const Color = z.object({ colorId: z.string().optional(), untitled: SchemaUntitled.optional(), untitledProp: z.string().optional() });
-    export const ComponentsSchemasToy = z.object({ name: z.string().optional(), color: Color.optional(), targetGroup: TargetGroup.optional(), relates: PetToy.optional(), subId: z.string().optional(), id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional() });
+    export const ComponentsSchemasToy = z.object({ name: z.string().optional(), color: Color.optional(), targetGroup: TargetGroup.optional().default('CHILDREN'), relates: PetToy.optional(), subId: z.string().optional(), id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional() });
     export const Pet = z.object({ id: z.number().int(), toy: ComponentsSchemasToy.optional(), leastFavToy: SchemasToy.optional(), favFluffLevel: FluffLevel.optional(), tag: z.string().optional(), name: z.string() });
     export const Pets = z.array(Pet).max(100);
     export const SchemaTitled = z.object({ titledProp: z.string().optional() });
@@ -2375,7 +2375,7 @@ export namespace EndpointDefinition {
 `;
 
 exports[`Generate Integration > all > pets-recursive/pets-api.yml > it-generate-all-SwaggerPetstoreEndpoints.ts-pets-recursive/pets-api.yml 1`] = `
-"import { EndpointDefinition } from './EndpointDefinition'
+"import { EndpointDefinition } from './EndpointDefinition.js'
 export namespace SwaggerPetstoreEndpoints {
     export type Path = "/pets"
     export interface OperationToPath {
@@ -3012,7 +3012,7 @@ export namespace EndpointDefinition {
 `;
 
 exports[`Generate Integration > all > pets-simple/pets-api.yml > it-generate-all-SomeTitleEndpoints.ts-pets-simple/pets-api.yml 1`] = `
-"import { EndpointDefinition } from './EndpointDefinition'
+"import { EndpointDefinition } from './EndpointDefinition.js'
 export namespace SomeTitleEndpoints {
     export type Path = "/pets"
     export interface OperationToPath {
@@ -3648,7 +3648,7 @@ export namespace EndpointDefinition {
 `;
 
 exports[`Generate Integration > all > usecases/extended-array-api.yml > it-generate-all-ExtendedArrayItemsEndpoints.ts-usecases/extended-array-api.yml 1`] = `
-"import { EndpointDefinition } from './EndpointDefinition'
+"import { EndpointDefinition } from './EndpointDefinition.js'
 export namespace ExtendedArrayItemsEndpoints {
     export type Path = "/v1/pets"
     export interface OperationToPath {
@@ -4269,7 +4269,7 @@ export namespace EndpointDefinition {
 `;
 
 exports[`Generate Integration > ts > generic/api.yml > it-generate-all-SomeTitleEndpoints.ts-generic/api.yml 1`] = `
-"import { EndpointDefinition } from './EndpointDefinition'
+"import { EndpointDefinition } from './EndpointDefinition.js'
 export namespace SomeTitleEndpoints {
     export type Path = "/pets" | "/pets/{petId}"
     export interface OperationToPath {
@@ -4875,8 +4875,8 @@ export namespace Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
-    export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
-    export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
+    export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT').default('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
+    export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM').default('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
     export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Cat>;
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets = z.array(Pet).max(100);
