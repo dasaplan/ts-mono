@@ -49,7 +49,56 @@ describe("transpiler", () => {
     });
     const spec = Transpiler.of(parsed);
     const schemas = spec.schemas();
+    const parameters = spec.parameters();
     expect(schemas).toMatchSnapshot("fullmetal");
+    expect(JSON.parse(JSON.stringify(parameters))).toMatchInlineSnapshot(`
+      [
+        {
+          "endpoint": {
+            "alias": "updateInventoryItem",
+            "deprecated": false,
+            "method": "put",
+            "path": "/inventory/{productId}",
+          },
+          "isRequired": true,
+          "name": "productId",
+          "schema": {
+            "component": {
+              "kind": "INLINE",
+              "name": "productIdSchema",
+            },
+            "kind": "PRIMITIVE",
+            "raw": {
+              "type": "string",
+            },
+            "type": "string",
+          },
+          "type": "path",
+        },
+        {
+          "endpoint": {
+            "alias": "changeInventoryItem",
+            "deprecated": false,
+            "method": "post",
+            "path": "/inventory/{productId}",
+          },
+          "isRequired": true,
+          "name": "productId",
+          "schema": {
+            "component": {
+              "kind": "INLINE",
+              "name": "productIdSchema",
+            },
+            "kind": "PRIMITIVE",
+            "raw": {
+              "type": "string",
+            },
+            "type": "string",
+          },
+          "type": "path",
+        },
+      ]
+    `);
   });
 
   test("transpile debug", async () => {

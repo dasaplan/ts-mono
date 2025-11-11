@@ -17,6 +17,7 @@ oazod generate-zod --help
 
 - ✅ generate schemas
   - 🔲 support paths params (path, header)
+  - 🔲 support value optionals ("foo": undefined | string) instead of key optionals ("foo"?: string)
   - ✅ support defaults for properties
 - ✅ generate 100 % compatible schemas with generated typescript types
 - 🔲 extended validation and parsing of data types and formats

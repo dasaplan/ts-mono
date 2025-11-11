@@ -17,6 +17,11 @@ export namespace Transpiler {
       schemas() {
         return transpiler.schemas.size > 0 ? Array.from(transpiler.schemas.values()) : (Schema.transpileAll(transpiler) ?? []);
       },
+      parameters(): Array<Endpoint.Parameter & { endpoint: Omit<Endpoint, "parameters" | "requestBody" | "responses"> }> {
+        return this.endpoints().flatMap(
+          (endpoint) => endpoint.parameters?.map((p) => ({ ...p, endpoint: _.omit(endpoint, "parameters", "requestBody", "responses") })) ?? [],
+        );
+      },
       schemasTopoSorted(): Array<Schema> {
         const schemas = this.schemas();
         return Toposort.sortSchemas(schemas);
