@@ -46,6 +46,7 @@ describe("generateZod", () => {
 
     expect(sourceFile.getFullText()).toMatchSnapshot(name);
   });
+
   test("circular schema", async () => {
     const openapi: OpenApiBundled = createApi(
       withSchemas({
@@ -63,6 +64,41 @@ describe("generateZod", () => {
     const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
 
     expect(sourceFile.getFullText()).toMatchSnapshot("circular");
+  });
+
+  test("default", async () => {
+    const openapi: OpenApiBundled = createApi(
+      withSchemas({
+        Node: {
+          type: "object",
+          required: ["id"],
+          properties: {
+            id: { type: "string" },
+            name: { type: "string", default: "foo" },
+            tel: { type: "number", default: 123456 },
+            isNice: { type: "boolean", default: false },
+            hobbies: { type: "string", enum: ["a", "b", "c"], default: "b" },
+          },
+        },
+      }),
+    );
+
+    const { sourceFile } = await generateZodSources(openapi, `test/out/zod/defaults.ts`, options());
+
+    expect(sourceFile.getFullText()).toMatchInlineSnapshot(`
+      "import { z } from 'zod'
+      import * as zc from './zod-common.js'
+
+      export namespace Schemas {
+          export const Node = z.object({ id: z.string(), name: z.string().optional().default('foo'), tel: z.number().optional().default(123456), isNice: z.boolean().optional().default(false), hobbies: z.enum(['a', 'b', 'c']).or(z.string().brand("UNKNOWN")).optional().default('b') });
+
+          export namespace Types {
+              export type Node = z.infer<typeof Schemas.Node>;
+          }
+
+      }
+      "
+    `);
   });
 
   test("property name does not change when entity is referenced", async () => {

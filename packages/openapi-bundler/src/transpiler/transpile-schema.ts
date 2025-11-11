@@ -84,6 +84,7 @@ export namespace Schema {
 
   interface EnumLike<T extends Primitive["type"] = Primitive["type"]> {
     enum: Array<EnumOf<T>>;
+    defaultValue: number | string | undefined;
   }
 
   export type Primitive = Primitive.PrimitiveAlphaNumeric | Primitive.PrimitiveBoolean;
@@ -92,13 +93,16 @@ export namespace Schema {
     export interface PrimitiveBase extends Base {
       type: Extract<oas30.SchemaObjectType, "string" | "number" | "integer" | "boolean">;
       kind: "PRIMITIVE";
+      defaultValue: string | number | boolean | undefined;
     }
     export interface PrimitiveAlphaNumeric extends PrimitiveBase {
       type: Extract<oas30.SchemaObjectType, "string" | "number" | "integer">;
       format: SchemaObjectFormat | undefined;
+      defaultValue: string | number | undefined;
     }
     export interface PrimitiveBoolean extends PrimitiveBase {
       type: Extract<oas30.SchemaObjectType, "boolean">;
+      defaultValue: boolean | undefined;
     }
   }
 
@@ -180,6 +184,7 @@ export namespace Schema {
       type: raw.type,
       enum: values,
       kind: "ENUM",
+      defaultValue: raw.default,
       format: raw.format,
       component,
       raw,
@@ -190,6 +195,7 @@ export namespace Schema {
     return createComponent({
       type: raw.type,
       kind: "PRIMITIVE",
+      defaultValue: raw.default,
       format: raw.format,
       component,
       raw,
@@ -269,6 +275,7 @@ export namespace Schema {
           kind: "DISCRIMINATOR",
           component,
           raw: { type: "string" },
+          defaultValue: undefined,
           type: "string",
           enum: [discriminatorValue],
         });

@@ -137,6 +137,7 @@ components:
               type: string
               x-const: UPDATE_GOLD_PRICE
               example: UPDATE_GOLD_PRICE
+              default: UPDATE_GOLD_PRICE
     ChangeConstant:
       oneOf:
         - $ref: '#/components/schemas/ChangeConstantGlobal'

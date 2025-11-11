@@ -106,8 +106,9 @@ function processSchema(c: Schema | Schema.DiscriminatorProperty, options: ZodGen
         const parent = _.isDefined(c.parent) ? processSubSchema(c.parent, options) : undefined;
         const properties = c.properties.map((property) => {
           const name = property.propertyName;
-          const value = Factory.withOptional(property.required, () => processSubSchema(property.propertyValue, options));
-          return Factory.createObjectProperty(name, value, options);
+          const withOptional = Factory.withOptional(property, () => processSubSchema(property.propertyValue, options));
+          const withDefault = Factory.withDefault(property, withOptional, options);
+          return Factory.createObjectProperty(name, withDefault, options);
         });
         return Factory.createObject(properties, parent, options);
       }
@@ -165,8 +166,31 @@ namespace Factory {
     return `${pascalCase(c.getName())}`;
   }
 
-  export function withOptional(required: boolean, fn: () => string): string {
-    return required ? fn() : `${fn()}.optional()`;
+  export function withOptional(property: Schema.Property, fn: () => string): string {
+    return property.required ? fn() : `${fn()}.optional()`;
+  }
+
+  export function withDefault<T>(_property: Schema.Property, value: string, options: ZodGenOptions): string {
+    const property = _property.propertyValue;
+    const hasDefault = property.kind === "PRIMITIVE" || property.kind === "ENUM" || property.kind === "DISCRIMINATOR";
+    if (!hasDefault) {
+      return value;
+    }
+
+    const defaultValue = property.defaultValue;
+    switch (typeof defaultValue) {
+      case "string":
+        return `${value}.default('${defaultValue}')`;
+      case "symbol":
+      case "number":
+      case "bigint":
+      case "boolean":
+        return `${value}.default(${defaultValue})`;
+      case "undefined":
+      case "object":
+      case "function":
+        return value;
+    }
   }
 
   export function createUnion(subSchemas: string[], options: ZodGenOptions): string {

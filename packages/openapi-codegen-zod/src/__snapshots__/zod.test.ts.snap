@@ -39,8 +39,8 @@ export namespace Schemas {
     export const UpdateItemRequestDetails = z.object({ quantity: z.number().optional(), priceEuro: z.number().optional(), purchaseDate: z.string().optional(), stockId: z.string(), productId: z.string() });
     export const UpdateItemRequest = z.object({ event: z.enum(['UPDATED']).or(z.string().brand("UNKNOWN")), createdAt: z.string(), details: UpdateItemRequestDetails });
     export const PurchasedEventDetailBase = z.object({ kind: z.string().optional() });
-    export const PurchasedEventDetailItemProduct = PurchasedEventDetailBase.merge(z.object({ kind: z.string().optional(), productId: z.string() }));
-    export const PurchasedEventDetailItemSpecified = PurchasedEventDetailBase.merge(z.object({ kind: z.string().optional(), itemType: ItemType, weight: Weight }));
+    export const PurchasedEventDetailItemProduct = PurchasedEventDetailBase.merge(z.object({ kind: z.string().optional().default('PRODUCT_REF'), productId: z.string() }));
+    export const PurchasedEventDetailItemSpecified = PurchasedEventDetailBase.merge(z.object({ kind: z.string().optional().default('SPECIFIED'), itemType: ItemType, weight: Weight }));
     export const PurchasedEventDetailItem = z.union([PurchasedEventDetailItemSpecified, PurchasedEventDetailItemProduct]);
     export const PurchasedEventDetail = z.object({ item: PurchasedEventDetailItem, quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string().optional() });
     export const CreateItemDetails = z.object({ details: PurchasedEventDetail });
@@ -49,7 +49,7 @@ export namespace Schemas {
     export const Error = z.object({ error: z.string().optional() });
     export const ChangeConstantBase = z.object({ event: z.string() });
     export const GoldPriceUpdateDetails = z.object({ unit: WeightUnit, price: z.number() });
-    export const ChangeConstantUser = ChangeConstantBase.merge(z.object({ inventoryId: z.string(), details: GoldPriceUpdateDetails, event: z.literal('UPDATE_GOLD_PRICE') }));
+    export const ChangeConstantUser = ChangeConstantBase.merge(z.object({ inventoryId: z.string(), details: GoldPriceUpdateDetails, event: z.literal('UPDATE_GOLD_PRICE').default('UPDATE_GOLD_PRICE') }));
     export const ChangeConstantGlobal = ChangeConstantBase.merge(z.object({ details: GoldPriceUpdateDetails, event: z.literal('GLOBAL_UPDATE_GOLD_PRICE') }));
     export const ChangeConstant = zc.ZodUnionMatch.matcher("event", { 'UPDATE_GOLD_PRICE': ChangeConstantUser, 'GLOBAL_UPDATE_GOLD_PRICE': ChangeConstantGlobal, onDefault: z.object({ event: z.string().brand("UNKNOWN") }).passthrough() });
     export const GoldPriceRates = z.object({ g: z.number(), kg: z.number(), oz_tr: z.number() });
@@ -114,8 +114,8 @@ export namespace Schemas {
     export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
     export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
-    export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
-    export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
+    export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT').default('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
+    export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM').default('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
     export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() });
     export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() });
     export const Pets = z.array(Pet).max(100);
@@ -177,14 +177,14 @@ import * as zc from './zod-common.js'
 
 export namespace Schemas {
     export const FluffLevel = z.enum(['A', 'B', 'C']).or(z.string().brand("UNKNOWN"));
-    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
-    export const FluffyTeddy = z.object({ fluffLevel: FluffLevel.optional(), id: z.string(), price: z.string(), kind: z.literal('TEDDY'), targetGroup: z.string().optional() });
-    export const Ball = z.object({ id: z.string(), price: z.string(), kind: z.literal('BALL'), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional() });
+    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional().default('CHILDREN') });
+    export const FluffyTeddy = z.object({ fluffLevel: FluffLevel.optional(), id: z.string(), price: z.string(), kind: z.literal('TEDDY'), targetGroup: z.string().optional().default('CHILDREN') });
+    export const Ball = z.object({ id: z.string(), price: z.string(), kind: z.literal('BALL'), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional().default('CHILDREN') });
     export const PetToy = zc.ZodUnionMatch.matcher("kind", { 'BALL': Ball, 'TEDDY': FluffyTeddy, onDefault: z.object({ kind: z.string().brand("UNKNOWN") }).passthrough() });
     export const TargetGroup = z.string();
     export const SchemaUntitled = z.object({ untitledProp: z.string().optional() });
     export const Color = z.object({ colorId: z.string().optional(), untitled: SchemaUntitled.optional(), untitledProp: z.string().optional() });
-    export const ComponentsSchemasToy = z.object({ name: z.string().optional(), color: Color.optional(), targetGroup: TargetGroup.optional(), relates: PetToy.optional(), subId: z.string().optional(), id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional() });
+    export const ComponentsSchemasToy = z.object({ name: z.string().optional(), color: Color.optional(), targetGroup: TargetGroup.optional().default('CHILDREN'), relates: PetToy.optional(), subId: z.string().optional(), id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional() });
     export const Pet = z.object({ id: z.number().int(), toy: ComponentsSchemasToy.optional(), leastFavToy: SchemasToy.optional(), favFluffLevel: FluffLevel.optional(), tag: z.string().optional(), name: z.string() });
     export const Pets = z.array(Pet).max(100);
     export const SchemaTitled = z.object({ titledProp: z.string().optional() });
