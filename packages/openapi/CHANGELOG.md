@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.3](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.3.2...@dasaplan/openapi@0.3.3) (2025-11-11)
+
+
+### Bug Fixes
+
+* fixed when properties referencing objects marked optional but where actually required in specs ([4264a9c](https://github.com/dasaplan/ts-mono/commit/4264a9c5f2b14c6c023b9932deb9770145d320d7))
+
+
+
+
+
 ## [0.3.2](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.3.1...@dasaplan/openapi@0.3.2) (2025-11-06)
 
 
