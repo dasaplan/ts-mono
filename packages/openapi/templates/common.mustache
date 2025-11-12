@@ -141,7 +141,7 @@ export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxi
 
 {{#zodEnabled}}
 import { z } from "zod";
-export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
+export type UNKNOWN_ENUM_VARIANT = `unknown:${string}`;
 {{/zodEnabled}}
 {{^zodEnabled}}
 // the symbol is unique for that instance - types won't be compatible when using different symbols across apis or libs

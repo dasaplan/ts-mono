@@ -54,7 +54,7 @@ export async function generateTsAxios(bundledFilePath: string, output: string, o
 }
 
 async function generateZod(parsed: OpenApiBundled, out: Folder) {
-  await generateZodSchemas(parsed, out.makeFile("zod.ts").absolutePath, { includeTsTypes: true });
+  await generateZodSchemas(parsed, out.makeFile("zod.ts").absolutePath, { includeTsTypes: true, withUnknownUnion: true, withUnknownEnum: true });
 }
 
 async function generateEndpoints(parsed: OpenApiBundled, out: Folder) {

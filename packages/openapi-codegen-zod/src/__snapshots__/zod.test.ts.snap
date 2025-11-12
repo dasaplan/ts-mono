@@ -24,20 +24,20 @@ export namespace Schemas {
     export const LoginResponse = z.object({ token: z.string() });
     export const LoginRequest = z.object({ username: z.string(), password: z.string() });
     export const InventoryStockItem = z.object({ quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string(), stockId: z.string(), productId: z.string() });
-    export const InventoryStockHistory = z.object({ eventDate: z.string(), eventPrice: z.number(), deltaRevenue: z.number(), event: z.enum(['GIFTED', 'SOLD', 'PURCHASED']).or(z.string().brand("UNKNOWN")), quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string(), stockId: z.string(), productId: z.string() });
+    export const InventoryStockHistory = z.object({ eventDate: z.string(), eventPrice: z.number(), deltaRevenue: z.number(), event: z.enum(['GIFTED', 'SOLD', 'PURCHASED']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string(), stockId: z.string(), productId: z.string() });
     export const InventoryStock = z.object({ history: z.array(InventoryStockHistory), inventory: z.array(InventoryStockItem), quantity: z.number() });
     export const InventoryItemStats = z.object({ totalPurchase: z.number(), totalSells: z.number() });
-    export const WeightUnit = z.enum(['kg', 'g', 'oz_tr']).or(z.string().brand("UNKNOWN"));
+    export const WeightUnit = z.enum(['kg', 'g', 'oz_tr']).or(z.string().transform((s) => \`unknown:\${s}\` as const));
     export const Weight = z.object({ unit: WeightUnit, value: z.number() });
-    export const ItemType = z.enum(['B', 'El', 'kA', 'Ka', 'KA', 'KR', 'Pa', 'LIII', 'ML', 'R', 'Phil', 'BR']).or(z.string().brand("UNKNOWN"));
+    export const ItemType = z.enum(['B', 'El', 'kA', 'Ka', 'KA', 'KR', 'Pa', 'LIII', 'ML', 'R', 'Phil', 'BR']).or(z.string().transform((s) => \`unknown:\${s}\` as const));
     export const Product = z.object({ externalId: z.string().optional(), itemType: ItemType, weight: Weight, productId: z.string() });
     export const InventoryItem = z.object({ inventoryId: z.string(), product: Product.optional(), quantity: z.number(), invest: z.number().optional(), stats: InventoryItemStats.optional(), revenue: z.number().optional(), stock: InventoryStock.optional() });
-    export const InventorySummaryResponse = z.object({ message: z.enum(['ok']).or(z.string().brand("UNKNOWN")), items: z.array(InventoryItem) });
+    export const InventorySummaryResponse = z.object({ message: z.enum(['ok']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), items: z.array(InventoryItem) });
     export const ChangeItemDetails = z.object({ quantity: z.number().optional(), priceEuro: z.number().optional(), purchaseDate: z.string().optional() });
-    export const ChangeItemRequest = z.object({ createdAt: z.string(), event: z.enum(['PURCHASED', 'GIFTED', 'SOLD']).or(z.string().brand("UNKNOWN")), details: ChangeItemDetails });
-    export const SuccessResponse = z.object({ message: z.enum(['ok']).or(z.string().brand("UNKNOWN")) });
+    export const ChangeItemRequest = z.object({ createdAt: z.string(), event: z.enum(['PURCHASED', 'GIFTED', 'SOLD']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), details: ChangeItemDetails });
+    export const SuccessResponse = z.object({ message: z.enum(['ok']).or(z.string().transform((s) => \`unknown:\${s}\` as const)) });
     export const UpdateItemRequestDetails = z.object({ quantity: z.number().optional(), priceEuro: z.number().optional(), purchaseDate: z.string().optional(), stockId: z.string(), productId: z.string() });
-    export const UpdateItemRequest = z.object({ event: z.enum(['UPDATED']).or(z.string().brand("UNKNOWN")), createdAt: z.string(), details: UpdateItemRequestDetails });
+    export const UpdateItemRequest = z.object({ event: z.enum(['UPDATED']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), createdAt: z.string(), details: UpdateItemRequestDetails });
     export const PurchasedEventDetailBase = z.object({ kind: z.string().optional() });
     export const PurchasedEventDetailItemProduct = PurchasedEventDetailBase.merge(z.object({ kind: z.string().optional().default('PRODUCT_REF'), productId: z.string() }));
     export const PurchasedEventDetailItemSpecified = PurchasedEventDetailBase.merge(z.object({ kind: z.string().optional().default('SPECIFIED'), itemType: ItemType, weight: Weight }));
@@ -49,13 +49,13 @@ export namespace Schemas {
     export const Error = z.object({ error: z.string().optional() });
     export const ChangeConstantBase = z.object({ event: z.string() });
     export const GoldPriceUpdateDetails = z.object({ unit: WeightUnit, price: z.number() });
-    export const ChangeConstantUser = ChangeConstantBase.merge(z.object({ inventoryId: z.string(), details: GoldPriceUpdateDetails, event: z.literal('UPDATE_GOLD_PRICE').default('UPDATE_GOLD_PRICE') }));
-    export const ChangeConstantGlobal = ChangeConstantBase.merge(z.object({ details: GoldPriceUpdateDetails, event: z.literal('GLOBAL_UPDATE_GOLD_PRICE') }));
-    export const ChangeConstant = zc.ZodUnionMatch.matcher("event", { 'UPDATE_GOLD_PRICE': ChangeConstantUser, 'GLOBAL_UPDATE_GOLD_PRICE': ChangeConstantGlobal, onDefault: z.object({ event: z.string().brand("UNKNOWN") }).passthrough() });
+    export const ChangeConstantUser = ChangeConstantBase.merge(z.object({ inventoryId: z.string(), details: GoldPriceUpdateDetails, event: z.literal('UPDATE_DOUGH_PRICE').default('UPDATE_DOUGH_PRICE') }));
+    export const ChangeConstantGlobal = ChangeConstantBase.merge(z.object({ details: GoldPriceUpdateDetails, event: z.literal('GLOBAL_UPDATE_DOUGH_PRICE') }));
+    export const ChangeConstant = zc.ZodUnionMatch.matcher("event", { 'UPDATE_DOUGH_PRICE': ChangeConstantUser, 'GLOBAL_UPDATE_DOUGH_PRICE': ChangeConstantGlobal, onDefault: z.object({ event: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() });
     export const GoldPriceRates = z.object({ g: z.number(), kg: z.number(), oz_tr: z.number() });
     export const ConstantBase = z.object({ version: z.number(), updatedAt: z.string(), ratesByWeight: GoldPriceRates });
     export const Constant = z.object({ history: ConstantBase.optional(), version: z.number(), updatedAt: z.string(), ratesByWeight: GoldPriceRates });
-    export const Constants = z.object({ goldPrices: Constant });
+    export const Constants = z.object({ doughPrices: Constant });
 
     export namespace Types {
         export type RegisterResponse = z.infer<typeof Schemas.RegisterResponse>;
@@ -116,10 +116,10 @@ export namespace Schemas {
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
     export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT').default('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
     export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM').default('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
-    export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() });
-    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() });
+    export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() });
+    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() });
     export const Pets = z.array(Pet).max(100);
-    export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() }));
+    export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional() }));
 
     export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
@@ -149,10 +149,10 @@ import * as zc from './zod-common.js'
 
 export namespace Schemas {
     export const PetBase = z.object({ type: z.string(), name: z.string().optional() });
-    export const DogEnum = z.enum(['DOG_A', 'DOG_B']).or(z.string().brand("UNKNOWN"));
+    export const DogEnum = z.enum(['DOG_A', 'DOG_B']).or(z.string().transform((s) => \`unknown:\${s}\` as const));
     export const Dog = PetBase.merge(z.object({ fluffy: z.boolean().optional(), breed: DogEnum.optional(), type: z.literal('DOG') }));
-    export const Cat = PetBase.merge(z.object({ breed: z.enum(['CAT_A', 'CAT_B']).or(z.string().brand("UNKNOWN")).optional(), type: z.literal('CAT') }));
-    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() });
+    export const Cat = PetBase.merge(z.object({ breed: z.enum(['CAT_A', 'CAT_B']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional(), type: z.literal('CAT') }));
+    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() });
 
     export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
@@ -176,15 +176,15 @@ exports[`generateZod > generates pets-modular-complex/petstore-api.yml > pets-mo
 import * as zc from './zod-common.js'
 
 export namespace Schemas {
-    export const FluffLevel = z.enum(['A', 'B', 'C']).or(z.string().brand("UNKNOWN"));
-    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional().default('CHILDREN') });
+    export const FluffLevel = z.enum(['A', 'B', 'C']).or(z.string().transform((s) => \`unknown:\${s}\` as const));
+    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional().default('CHILDREN') });
     export const FluffyTeddy = z.object({ fluffLevel: FluffLevel.optional(), id: z.string(), price: z.string(), kind: z.literal('TEDDY'), targetGroup: z.string().optional().default('CHILDREN') });
     export const Ball = z.object({ id: z.string(), price: z.string(), kind: z.literal('BALL'), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional().default('CHILDREN') });
-    export const PetToy = zc.ZodUnionMatch.matcher("kind", { 'BALL': Ball, 'TEDDY': FluffyTeddy, onDefault: z.object({ kind: z.string().brand("UNKNOWN") }).passthrough() });
+    export const PetToy = zc.ZodUnionMatch.matcher("kind", { 'BALL': Ball, 'TEDDY': FluffyTeddy, onDefault: z.object({ kind: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() });
     export const TargetGroup = z.string();
     export const SchemaUntitled = z.object({ untitledProp: z.string().optional() });
     export const Color = z.object({ colorId: z.string().optional(), untitled: SchemaUntitled.optional(), untitledProp: z.string().optional() });
-    export const ComponentsSchemasToy = z.object({ name: z.string().optional(), color: Color.optional(), targetGroup: TargetGroup.optional().default('CHILDREN'), relates: PetToy.optional(), subId: z.string().optional(), id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional() });
+    export const ComponentsSchemasToy = z.object({ name: z.string().optional(), color: Color.optional(), targetGroup: TargetGroup.optional().default('CHILDREN'), relates: PetToy.optional(), subId: z.string().optional(), id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional(), fluffLevel: FluffLevel.optional() });
     export const Pet = z.object({ id: z.number().int(), toy: ComponentsSchemasToy.optional(), leastFavToy: SchemasToy.optional(), favFluffLevel: FluffLevel.optional(), tag: z.string().optional(), name: z.string() });
     export const Pets = z.array(Pet).max(100);
     export const SchemaTitled = z.object({ titledProp: z.string().optional() });
@@ -225,7 +225,7 @@ export namespace Schemas {
     export const PetBase = z.object({ type: z.string() });
     export const Dog: z.ZodTypeAny = z.lazy(() => PetBase.merge(z.object({ friends: Pets.optional(), type: z.literal('DOG') })));
     export const Cat: z.ZodTypeAny = z.lazy(() => PetBase.merge(z.object({ enemies: Pets.optional(), type: z.literal('CAT') })));
-    export const Pet = zc.ZodUnionMatch.matcher("type", { 'CAT': Cat, 'DOG': Dog, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() });
+    export const Pet = zc.ZodUnionMatch.matcher("type", { 'CAT': Cat, 'DOG': Dog, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() });
     export const Pets: z.ZodTypeAny = z.lazy(() => z.object({ pets: z.array(Pet).max(100).optional() }));
 
     export namespace Types {
@@ -253,7 +253,7 @@ export namespace Schemas {
     export const PetBase = z.object({ id: z.number().int(), type: z.string() });
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
     export const Cat = PetBase.merge(z.object({ color: z.string(), type: z.literal('CAT') }));
-    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() });
+    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() });
     export const Pets = z.array(Pet).max(100);
 
     export namespace Types {

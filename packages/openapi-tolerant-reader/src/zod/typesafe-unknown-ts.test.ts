@@ -15,7 +15,6 @@ describe("zod test", () => {
       .or(z.object({ type: z.string().transform((d) => d as UNKNOWN_VARIANT) }));
 
     const a: union = union.parse({ type: "A", a: 1 });
-    // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
     switch (a.type) {
       case "A":
         break;
