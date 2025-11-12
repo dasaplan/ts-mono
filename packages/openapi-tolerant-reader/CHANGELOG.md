@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.5](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-tolerant-reader@0.2.4...@dasaplan/openapi-tolerant-reader@0.2.5) (2025-11-12)
+
+
+### Bug Fixes
+
+* unknown enum variant inference not working god enough when parsing with ZodUnionMatch ([e2e9298](https://github.com/dasaplan/ts-mono/commit/e2e92985e258e887069e9d656a728d1117add66a))
+
+
+
+
+
 ## [0.2.4](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-tolerant-reader@0.2.1...@dasaplan/openapi-tolerant-reader@0.2.4) (2025-11-02)
 
 **Note:** Version bump only for package @dasaplan/openapi-tolerant-reader

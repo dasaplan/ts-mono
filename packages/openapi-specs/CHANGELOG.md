@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1](https://github.com/dasaplan/ts-mono/compare/openapi-example-specs@0.4.0...openapi-example-specs@0.4.1) (2025-11-12)
+
+
+### Bug Fixes
+
+* unknown enum variant inference not working god enough when parsing with ZodUnionMatch ([e2e9298](https://github.com/dasaplan/ts-mono/commit/e2e92985e258e887069e9d656a728d1117add66a))
+
+
+
+
+
 # [0.4.0](https://github.com/dasaplan/ts-mono/compare/openapi-example-specs@0.3.2...openapi-example-specs@0.4.0) (2025-11-11)
 
 

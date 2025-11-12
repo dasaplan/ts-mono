@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-bundler@1.4.0...@dasaplan/openapi-bundler@1.5.0) (2025-11-12)
+
+
+### Bug Fixes
+
+* unknown enum variant inference not working god enough when parsing with ZodUnionMatch ([e2e9298](https://github.com/dasaplan/ts-mono/commit/e2e92985e258e887069e9d656a728d1117add66a))
+
+
+### Features
+
+* **transpiler:** support parameter schemas ([58d482c](https://github.com/dasaplan/ts-mono/commit/58d482ce88de58f5f45334765b90daf764f6360e))
+
+
+
+
+
 # [1.4.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-bundler@1.3.1...@dasaplan/openapi-bundler@1.4.0) (2025-11-11)
 
 

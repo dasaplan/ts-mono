@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-codegen-zod@1.5.0...@dasaplan/openapi-codegen-zod@1.6.0) (2025-11-12)
+
+
+### Bug Fixes
+
+* unknown enum variant inference not working god enough when parsing with ZodUnionMatch ([e2e9298](https://github.com/dasaplan/ts-mono/commit/e2e92985e258e887069e9d656a728d1117add66a))
+
+
+### Features
+
+* **zod:** parameterize unknown enums and unions as preparation for server side code generation ([c931d8e](https://github.com/dasaplan/ts-mono/commit/c931d8e9cba5a115dc3fb7f403e02467415b2d0d))
+
+
+
+
+
 # [1.5.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-codegen-zod@1.4.1...@dasaplan/openapi-codegen-zod@1.5.0) (2025-11-11)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.4](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.3.3...@dasaplan/openapi@0.3.4) (2025-11-12)
+
+
+### Bug Fixes
+
+* **generator:** fix cli params for model suffix ([e322bc5](https://github.com/dasaplan/ts-mono/commit/e322bc5f7e4ba93c4de6c9ab2ef978a200422181))
+* unknown enum variant inference not working god enough when parsing with ZodUnionMatch ([e2e9298](https://github.com/dasaplan/ts-mono/commit/e2e92985e258e887069e9d656a728d1117add66a))
+
+
+
+
+
 ## [0.3.3](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.3.2...@dasaplan/openapi@0.3.3) (2025-11-11)
 
 
