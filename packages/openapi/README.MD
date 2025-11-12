@@ -42,7 +42,7 @@ For actually generating code we need to install as `devDependencies` this packag
     ```
 
 ### customizing
-- The used templates for the standard generator will be output at `$cwd/templates` which can be extended as stated in the official doc https://openapi-generator.tech/docs/templating
+- The used templates for the standard generator can be output at `$cwd/templates` which can be extended as stated in the official doc https://openapi-generator.tech/docs/templating
 - When using custom / private maven registries see https://github.com/OpenAPITools/openapi-generator-cli?tab=readme-ov-file#using-custom--private-maven-registry
     ```json
     {
