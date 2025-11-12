@@ -16,7 +16,11 @@ export async function generateOpenapi(
 ) {
   try {
     const { bundledFilePath, parsed } = await bundle(specFilePath, { tempFolder: params?.tempFolder });
-    const { outDir } = await generateTsAxios(bundledFilePath, outputFile, { generateZod: true });
+    const { outDir } = await generateTsAxios(bundledFilePath, outputFile, {
+      generateZod: true,
+      modelSuffix: params?.modelSuffix,
+      copyTemplates: params?.copyTemplates,
+    });
 
     const out = Folder.of(outDir).create();
     await generateZod(parsed, out);
