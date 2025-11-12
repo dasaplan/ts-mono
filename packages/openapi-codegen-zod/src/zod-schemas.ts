@@ -210,7 +210,8 @@ namespace Factory {
 
     const matchProperties = mappings.map((p) => createObjectProperty(p.discriminatorValue, p.entityRef, options));
     // add unknown schema
-    matchProperties.push(`onDefault: z.object({ ${discriminatorProperty}: z.string().brand("UNKNOWN") }).passthrough()`);
+
+    matchProperties.push(`onDefault: z.object({ ${discriminatorProperty}: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough()`);
     return `zc.ZodUnionMatch.matcher("${discriminatorProperty}", ${createObjectTs(matchProperties, options)})`;
   }
 
@@ -246,7 +247,7 @@ namespace Factory {
       return renderedEnum;
     }
     function withUnknownVariant(value: string) {
-      return `${value}.or(z.string().brand("UNKNOWN"))`;
+      return `${value}.or(z.string().transform((s) => \`unknown:\${s}\` as const))`;
     }
     return withUnknownVariant(renderedEnum);
   }

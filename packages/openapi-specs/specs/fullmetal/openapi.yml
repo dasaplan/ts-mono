@@ -77,9 +77,9 @@ components:
     Constants:
       type: object
       required:
-        - goldPrices
+        - doughPrices
       properties:
-        goldPrices:
+        doughPrices:
           $ref: '#/components/schemas/Constant'
     ChangeConstantBase:
       type: object
@@ -119,8 +119,8 @@ components:
               $ref: '#/components/schemas/GoldPriceUpdateDetails'
             event:
               type: string
-              x-const: GLOBAL_UPDATE_GOLD_PRICE
-              example: GLOBAL_UPDATE_GOLD_PRICE
+              x-const: GLOBAL_UPDATE_DOUGH_PRICE
+              example: GLOBAL_UPDATE_DOUGH_PRICE
     ChangeConstantUser:
       allOf:
         - $ref: '#/components/schemas/ChangeConstantBase'
@@ -135,9 +135,9 @@ components:
               $ref: '#/components/schemas/GoldPriceUpdateDetails'
             event:
               type: string
-              x-const: UPDATE_GOLD_PRICE
-              example: UPDATE_GOLD_PRICE
-              default: UPDATE_GOLD_PRICE
+              x-const: UPDATE_DOUGH_PRICE
+              example: UPDATE_DOUGH_PRICE
+              default: UPDATE_DOUGH_PRICE
     ChangeConstant:
       oneOf:
         - $ref: '#/components/schemas/ChangeConstantGlobal'
@@ -145,8 +145,8 @@ components:
       discriminator:
         propertyName: event
         mapping:
-          UPDATE_GOLD_PRICE: '#/components/schemas/ChangeConstantUser'
-          GLOBAL_UPDATE_GOLD_PRICE: '#/components/schemas/ChangeConstantGlobal'
+          UPDATE_DOUGH_PRICE: '#/components/schemas/ChangeConstantUser'
+          GLOBAL_UPDATE_DOUGH_PRICE: '#/components/schemas/ChangeConstantGlobal'
     Error:
       type: object
       properties:

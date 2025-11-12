@@ -521,7 +521,7 @@ export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxi
 
 
 import { z } from "zod";
-export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
+export type UNKNOWN_ENUM_VARIANT = \`unknown:\${string}\`;
 "
 `;
 
@@ -673,10 +673,10 @@ export namespace Schemas {
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
     export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT').default('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
     export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM').default('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
-    export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Cat>;
-    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
+    export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.Cat>;
+    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets = z.array(Pet).max(100);
-    export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() }));
+    export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional() }));
 
     export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
@@ -1088,7 +1088,7 @@ export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxi
 
 
 import { z } from "zod";
-export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
+export type UNKNOWN_ENUM_VARIANT = \`unknown:\${string}\`;
 "
 `;
 
@@ -1315,10 +1315,10 @@ import * as api from './api.js'
 
 export namespace Schemas {
     export const PetBase = z.object({ type: z.string(), name: z.string().optional() });
-    export const DogEnum = z.enum(['DOG_A', 'DOG_B']).or(z.string().brand("UNKNOWN")) as z.ZodType<api.DogEnum>;
+    export const DogEnum = z.enum(['DOG_A', 'DOG_B']).or(z.string().transform((s) => \`unknown:\${s}\` as const)) as z.ZodType<api.DogEnum>;
     export const Dog = PetBase.merge(z.object({ fluffy: z.boolean().optional(), breed: DogEnum.optional(), type: z.literal('DOG') }));
-    export const Cat = PetBase.merge(z.object({ breed: z.enum(['CAT_A', 'CAT_B']).or(z.string().brand("UNKNOWN")).optional(), type: z.literal('CAT') }));
-    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
+    export const Cat = PetBase.merge(z.object({ breed: z.enum(['CAT_A', 'CAT_B']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional(), type: z.literal('CAT') }));
+    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.Pet>;
 
     export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;
@@ -1758,7 +1758,7 @@ export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxi
 
 
 import { z } from "zod";
-export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
+export type UNKNOWN_ENUM_VARIANT = \`unknown:\${string}\`;
 "
 `;
 
@@ -2208,15 +2208,15 @@ import * as zc from './zod-common.js'
 import * as api from './api.js'
 
 export namespace Schemas {
-    export const FluffLevel = z.enum(['A', 'B', 'C']).or(z.string().brand("UNKNOWN")) as z.ZodType<api.FluffLevel>;
-    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional().default('CHILDREN') });
+    export const FluffLevel = z.enum(['A', 'B', 'C']).or(z.string().transform((s) => \`unknown:\${s}\` as const)) as z.ZodType<api.FluffLevel>;
+    export const SchemasToy = z.object({ id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional(), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional().default('CHILDREN') });
     export const FluffyTeddy = z.object({ fluffLevel: FluffLevel.optional(), id: z.string(), price: z.string(), kind: z.literal('TEDDY'), targetGroup: z.string().optional().default('CHILDREN') });
     export const Ball = z.object({ id: z.string(), price: z.string(), kind: z.literal('BALL'), fluffLevel: FluffLevel.optional(), targetGroup: z.string().optional().default('CHILDREN') });
-    export const PetToy = zc.ZodUnionMatch.matcher("kind", { 'BALL': Ball, 'TEDDY': FluffyTeddy, onDefault: z.object({ kind: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.PetToy>;
+    export const PetToy = zc.ZodUnionMatch.matcher("kind", { 'BALL': Ball, 'TEDDY': FluffyTeddy, onDefault: z.object({ kind: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.PetToy>;
     export const TargetGroup = z.string();
     export const SchemaUntitled = z.object({ untitledProp: z.string().optional() });
     export const Color = z.object({ colorId: z.string().optional(), untitled: SchemaUntitled.optional(), untitledProp: z.string().optional() });
-    export const ComponentsSchemasToy = z.object({ name: z.string().optional(), color: Color.optional(), targetGroup: TargetGroup.optional().default('CHILDREN'), relates: PetToy.optional(), subId: z.string().optional(), id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().brand("UNKNOWN")).optional(), fluffLevel: FluffLevel.optional() });
+    export const ComponentsSchemasToy = z.object({ name: z.string().optional(), color: Color.optional(), targetGroup: TargetGroup.optional().default('CHILDREN'), relates: PetToy.optional(), subId: z.string().optional(), id: z.string(), price: z.string(), kind: z.string(), someEnum: z.enum(['FOO', 'BAR']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional(), fluffLevel: FluffLevel.optional() });
     export const Pet = z.object({ id: z.number().int(), toy: ComponentsSchemasToy.optional(), leastFavToy: SchemasToy.optional(), favFluffLevel: FluffLevel.optional(), tag: z.string().optional(), name: z.string() });
     export const Pets = z.array(Pet).max(100);
     export const SchemaTitled = z.object({ titledProp: z.string().optional() });
@@ -2637,7 +2637,7 @@ export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxi
 
 
 import { z } from "zod";
-export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
+export type UNKNOWN_ENUM_VARIANT = \`unknown:\${string}\`;
 "
 `;
 
@@ -2866,7 +2866,7 @@ export namespace Schemas {
     export const PetBase = z.object({ type: z.string() });
     export const Dog: z.ZodType<api.Dog> = z.lazy(() => PetBase.merge(z.object({ friends: Pets.optional(), type: z.literal('DOG') })));
     export const Cat: z.ZodType<api.Cat> = z.lazy(() => PetBase.merge(z.object({ enemies: Pets.optional(), type: z.literal('CAT') })));
-    export const Pet = zc.ZodUnionMatch.matcher("type", { 'CAT': Cat, 'DOG': Dog, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
+    export const Pet = zc.ZodUnionMatch.matcher("type", { 'CAT': Cat, 'DOG': Dog, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets: z.ZodType<api.Pets> = z.lazy(() => z.object({ pets: z.array(Pet).max(100).optional() }));
 
     export namespace Types {
@@ -3274,7 +3274,7 @@ export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxi
 
 
 import { z } from "zod";
-export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
+export type UNKNOWN_ENUM_VARIANT = \`unknown:\${string}\`;
 "
 `;
 
@@ -3502,7 +3502,7 @@ export namespace Schemas {
     export const PetBase = z.object({ id: z.number().int(), type: z.string() });
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
     export const Cat = PetBase.merge(z.object({ color: z.string(), type: z.literal('CAT') }));
-    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
+    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets = z.array(Pet).max(100);
 
     export namespace Types {
@@ -3910,7 +3910,7 @@ export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxi
 
 
 import { z } from "zod";
-export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
+export type UNKNOWN_ENUM_VARIANT = \`unknown:\${string}\`;
 "
 `;
 
@@ -4126,9 +4126,9 @@ import * as api from './api.js'
 
 export namespace Schemas {
     export const PetBase = z.object({ type: z.string(), name: z.string().optional() });
-    export const DogEnum = z.enum(['DOG_A', 'DOG_B']).or(z.string().brand("UNKNOWN")) as z.ZodType<api.DogEnum>;
+    export const DogEnum = z.enum(['DOG_A', 'DOG_B']).or(z.string().transform((s) => \`unknown:\${s}\` as const)) as z.ZodType<api.DogEnum>;
     export const Dog = PetBase.merge(z.object({ fluffy: z.boolean().optional(), breed: DogEnum.optional() }));
-    export const Cat = PetBase.merge(z.object({ breed: z.enum(['CAT_A', 'CAT_B']).or(z.string().brand("UNKNOWN")).optional() }));
+    export const Cat = PetBase.merge(z.object({ breed: z.enum(['CAT_A', 'CAT_B']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional() }));
     export const PetInfo = z.object({ cats: z.array(Cat).optional(), dogs: z.array(Dog).optional() });
 
     export namespace Types {
@@ -4725,7 +4725,7 @@ export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxi
 
 
 import { z } from "zod";
-export type UNKNOWN_ENUM_VARIANT = string & z.BRAND<"UNKNOWN">;
+export type UNKNOWN_ENUM_VARIANT = \`unknown:\${string}\`;
 "
 `;
 
@@ -4877,10 +4877,10 @@ export namespace Schemas {
     export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
     export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT').default('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
     export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM').default('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
-    export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Cat>;
-    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().brand("UNKNOWN") }).passthrough() }) as z.ZodType<api.Pet>;
+    export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.Cat>;
+    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.Pet>;
     export const Pets = z.array(Pet).max(100);
-    export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().brand("UNKNOWN")).optional() }));
+    export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional() }));
 
     export namespace Types {
         export type PetBase = z.infer<typeof Schemas.PetBase>;

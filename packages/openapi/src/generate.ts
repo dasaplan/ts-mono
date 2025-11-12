@@ -16,7 +16,11 @@ export async function generateOpenapi(
 ) {
   try {
     const { bundledFilePath, parsed } = await bundle(specFilePath, { tempFolder: params?.tempFolder });
-    const { outDir } = await generateTsAxios(bundledFilePath, outputFile, { generateZod: true });
+    const { outDir } = await generateTsAxios(bundledFilePath, outputFile, {
+      generateZod: true,
+      modelSuffix: params?.modelSuffix,
+      copyTemplates: params?.copyTemplates,
+    });
 
     const out = Folder.of(outDir).create();
     await generateZod(parsed, out);
@@ -54,7 +58,7 @@ export async function generateTsAxios(bundledFilePath: string, output: string, o
 }
 
 async function generateZod(parsed: OpenApiBundled, out: Folder) {
-  await generateZodSchemas(parsed, out.makeFile("zod.ts").absolutePath, { includeTsTypes: true });
+  await generateZodSchemas(parsed, out.makeFile("zod.ts").absolutePath, { includeTsTypes: true, withUnknownUnion: true, withUnknownEnum: true });
 }
 
 async function generateEndpoints(parsed: OpenApiBundled, out: Folder) {
