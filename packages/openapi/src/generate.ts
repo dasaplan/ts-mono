@@ -9,11 +9,9 @@ import { Project } from "ts-morph";
 export interface ExperimentalFeatures {
   experimental?: never;
 }
-export async function generateOpenapi(
-  specFilePath: string,
-  outputFile: string,
-  params?: { clearTemp: boolean; tempFolder?: string } & TsAxiosPublicGenOptions & ExperimentalFeatures,
-) {
+type GenParams = { clearTemp: boolean; tempFolder?: string } & TsAxiosPublicGenOptions & ExperimentalFeatures;
+
+export async function generateOpenapi(specFilePath: string, outputFile: string, params?: GenParams) {
   try {
     const { bundledFilePath, parsed } = await bundle(specFilePath, { tempFolder: params?.tempFolder });
     const { outDir } = await generateTsAxios(bundledFilePath, outputFile, {
@@ -23,7 +21,7 @@ export async function generateOpenapi(
     });
 
     const out = Folder.of(outDir).create();
-    await generateZod(parsed, out);
+    await generateZod(parsed, out, params);
     await generateEndpoints(parsed, out);
 
     // save spec where the code is generated
@@ -57,8 +55,13 @@ export async function generateTsAxios(bundledFilePath: string, output: string, o
   return { outDir };
 }
 
-async function generateZod(parsed: OpenApiBundled, out: Folder) {
-  await generateZodSchemas(parsed, out.makeFile("zod.ts").absolutePath, { includeTsTypes: true, withUnknownUnion: true, withUnknownEnum: true });
+async function generateZod(parsed: OpenApiBundled, out: Folder, params?: GenParams) {
+  await generateZodSchemas(parsed, out.makeFile("zod.ts").absolutePath, {
+    includeTsTypes: true,
+    withUnknownUnion: true,
+    withUnknownEnum: true,
+    tsTypeNameSuffix: params?.modelSuffix ?? "",
+  });
 }
 
 async function generateEndpoints(parsed: OpenApiBundled, out: Folder) {

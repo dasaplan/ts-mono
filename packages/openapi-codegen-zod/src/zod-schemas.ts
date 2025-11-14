@@ -10,13 +10,14 @@ import { Schema } from "@dasaplan/openapi-bundler";
 export const IDENTIFIER_API = "api";
 
 export interface ZodGenOptions {
+  tsTypeNameSuffix: string;
   includeTsTypes: boolean;
   withUnknownEnum: boolean;
   withUnknownUnion: boolean;
 }
 
 export function createConstantDeclaration(c: Schema, options: ZodGenOptions) {
-  const name = `${pascalCase(c.getName())}`;
+  const name = `${pascalCase(c.getName())}${options.tsTypeNameSuffix ?? ""}`;
   const declaration = `export const ${name}`;
   const value = processSchema(c, options);
   const isLazy = value.includes("z.lazy");

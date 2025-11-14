@@ -21,6 +21,7 @@ export async function generateZodSources(parsed: OpenApiBundled, filePath: strin
     includeTsTypes: true,
     withUnknownEnum: true,
     withUnknownUnion: true,
+    tsTypeNameSuffix: "",
     ...(params ?? {}),
   };
   const schemas = Transpiler.of(parsed).schemasTopoSorted();
