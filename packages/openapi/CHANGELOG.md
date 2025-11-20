@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.6](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.3.5...@dasaplan/openapi@0.3.6) (2025-11-20)
+
+
+### Bug Fixes
+
+* fixed missing suffix for ts type references in zod codegen ([f23a472](https://github.com/dasaplan/ts-mono/commit/f23a47201fc01af5569ba6ec534df65933fbab77))
+
+
+
+
+
 ## [0.3.5](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi@0.3.4...@dasaplan/openapi@0.3.5) (2025-11-20)
 
 
