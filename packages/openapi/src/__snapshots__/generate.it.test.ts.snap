@@ -4204,6 +4204,767 @@ export namespace ZodUnionMatch {
 "
 `;
 
+exports[`Generate Integration > generates with suffix > it-generate-all-EndpointDefinition.d.ts-generic/api.yml 1`] = `
+"/**
+ * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling
+ * */
+export interface EndpointDefinition<
+    DeserializedResponse extends EndpointDefinition.DeserializedResponsesObject,
+    DeserializedRequest extends EndpointDefinition.DeserializedRequestObject,
+    Params extends EndpointDefinition.Parameters | undefined,
+> {
+    path: EndpointDefinition.Path;
+    /** operation id */
+    name: string;
+    operation: EndpointDefinition.Operation;
+    parameters?: Params;
+    response: EndpointDefinition.Response<DeserializedResponse>;
+    request?: EndpointDefinition.Request<DeserializedRequest>;
+}
+
+export namespace EndpointDefinition {
+    type PathSegment = \`\${string}\`;
+
+    type PathParam = \`{:\${string}}\`;
+
+    /** @example '/pets', '/pets/{:petId}' , '/pets/{:petId}/inner-resources' */
+    export type Path = \`/\${PathSegment}\` | \`/\${PathSegment}/\${PathSegment | PathParam}\`;
+
+    export type DtoTypes = object | string | number | undefined;
+
+    export type DeserializedResponsesObject = { [status: number]: DtoTypes };
+
+    export type Operation = "get" | "post" | "put" | "delete" | "patch";
+
+    export type Parameters = {
+        path?: { [name: string]: DtoTypes };
+        query?: { [name: string]: DtoTypes };
+        header?: { [headerKey: string]: DtoTypes };
+        cookie?: { [cookieKey: string]: DtoTypes };
+    };
+    export type DeserializedRequestObject = DtoTypes;
+
+    export interface Request<DeserializedRequest = DeserializedRequestObject> {
+        /** meta information */
+        format?: string;
+        /** deserialize payload */
+        payload: DeserializedRequest;
+        /** transform dto to model object */
+        transform?: <Model, Dto extends DeserializedRequest>(payload: Dto) => Model | undefined;
+        deserialize?: (payload: string | number | undefined) => DeserializedRequest;
+    }
+
+    export type Response<DeserializedResponse = DeserializedResponsesObject> = {
+        [status in keyof DeserializedResponse]: {
+            /** meta information */
+            format?: string;
+            /** deserialize payload */
+            payload: DeserializedResponse[status];
+            /** transform model object to dto */
+            transform?: <Model>(model: Model) => DeserializedResponse[status];
+        };
+    };
+}
+"
+`;
+
+exports[`Generate Integration > generates with suffix > it-generate-all-SomeTitleEndpoints.ts-generic/api.yml 1`] = `
+"import { EndpointDefinition } from './EndpointDefinition.js'
+export namespace SomeTitleEndpoints {
+    export type Path = "/pets" | "/pets/{petId}"
+    export interface OperationToPath {
+        listPets: "/pets";
+        getPet: "/pets/{petId}";
+    }
+    export interface ListPets<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pet[] },
+        undefined,
+        { "path": undefined, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "listPets";
+        operation: "get";
+        path: "/pets"
+    }
+
+    export interface GetPet<Pet extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
+        { "200": Pet },
+        undefined,
+        { "path": { "petId": string }, "query": undefined, "header": undefined, "cookie": undefined }
+    > {
+        name: "getPet";
+        operation: "get";
+        path: "/pets/{petId}"
+    }
+
+}
+"
+`;
+
+exports[`Generate Integration > generates with suffix > it-generate-all-api.yml-generic/api.yml 1`] = `
+"openapi: 3.0.3
+info:
+  version: 1.0.1
+  title: some title
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      operationId: listPets
+      responses:
+        '200':
+          description: A paged array of pets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pets'
+  /pets/{petId}:
+    get:
+      summary: Get a Pet
+      operationId: getPet
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A paged array of pets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+components:
+  schemas:
+    PetBase:
+      title: PetBase
+      type: object
+      required:
+        - id
+        - name
+        - type
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          exclusiveMaximum: true
+          format: int64
+        type:
+          type: string
+      discriminator:
+        propertyName: type
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - required:
+            - bark
+            - type
+          properties:
+            bark:
+              type: string
+            type:
+              type: string
+              x-const: DOG
+              example: DOG
+    CatBase:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - title: CatBase
+          required:
+            - color
+          discriminator:
+            propertyName: catType
+          properties:
+            color:
+              type: string
+            catType:
+              type: string
+              enum:
+                - SEAM
+                - SHORT
+              title: CatType
+    Seam:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - title: Seam
+          description: |
+            this is 
+            a multiline
+            description
+          required:
+            - color
+            - catType
+            - type
+          discriminator:
+            propertyName: catType
+          properties:
+            catType:
+              type: string
+              default: SEAM
+              maxLength: 3
+              minLength: 1
+              title: CatType
+              x-const: SEAM
+              example: SEAM
+            angryLevel:
+              type: string
+              pattern: \\w+
+            color:
+              type: string
+            type: &ref_0
+              type: string
+              x-const: CAT
+              example: CAT
+    ShortHair:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - title: ShortHair
+          description: |
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, s
+          required:
+            - color
+            - catType
+            - type
+          discriminator:
+            propertyName: catType
+          properties:
+            catType:
+              type: string
+              default: SHORT
+              title: CatType
+              x-const: SHORT
+              example: SHORT
+            angryLevel:
+              type: string
+            color:
+              type: string
+            type: *ref_0
+    Cat:
+      oneOf:
+        - $ref: '#/components/schemas/Seam'
+        - $ref: '#/components/schemas/ShortHair'
+      discriminator:
+        propertyName: catType
+        mapping:
+          SEAM: '#/components/schemas/Seam'
+          SHORT: '#/components/schemas/ShortHair'
+    GenericPet:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - title: GenericPet
+          properties:
+            name:
+              type: string
+            type:
+              type: string
+              x-const:
+                - BIRD
+                - HAMSTER
+              example: HAMSTER
+          required:
+            - type
+    Pet:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+        - $ref: '#/components/schemas/GenericPet'
+      discriminator:
+        propertyName: type
+        mapping:
+          DOG: '#/components/schemas/Dog'
+          CAT: '#/components/schemas/Cat'
+          BIRD: '#/components/schemas/GenericPet'
+          HAMSTER: '#/components/schemas/GenericPet'
+    Pets:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/Pet'
+"
+`;
+
+exports[`Generate Integration > generates with suffix > it-generate-all-base.ts-generic/api.yml 1`] = `
+"/* tslint:disable */
+/* eslint-disable */
+/**
+ * some title
+ * No description provided (generated by Openapi Generator https://github.com/openapitools/openapi-generator)
+ *
+ * The version of the OpenAPI document: 1.0.1
+ * 
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+
+import type { Configuration } from './configuration.js';
+// Some imports not used depending on template conditions
+// @ts-ignore
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
+
+export const BASE_PATH = "http://localhost".replace(/\\/+$/, "");
+
+/**
+ *
+ * @export
+ */
+export const COLLECTION_FORMATS = {
+    csv: ",",
+    ssv: " ",
+    tsv: "\\t",
+    pipes: "|",
+};
+
+/**
+ *
+ * @export
+ * @interface RequestArgs
+ */
+export interface RequestArgs {
+    url: string;
+    options: RawAxiosRequestConfig;
+}
+
+/**
+ *
+ * @export
+ * @class BaseAPI
+ */
+export class BaseAPI {
+    protected configuration: Configuration | undefined;
+
+    constructor(configuration?: Configuration, protected basePath: string = BASE_PATH, protected axios: AxiosInstance = globalAxios) {
+        if (configuration) {
+            this.configuration = configuration;
+            this.basePath = configuration.basePath ?? basePath;
+        }
+    }
+};
+
+/**
+ *
+ * @export
+ * @class RequiredError
+ * @extends {Error}
+ */
+export class RequiredError extends Error {
+    constructor(public field: string, msg?: string) {
+        super(msg);
+        this.name = "RequiredError"
+    }
+}
+
+interface ServerMap {
+    [key: string]: {
+        url: string,
+        description: string,
+    }[];
+}
+
+/**
+ *
+ * @export
+ */
+export const operationServerMap: ServerMap = {
+}
+"
+`;
+
+exports[`Generate Integration > generates with suffix > it-generate-all-common.ts-generic/api.yml 1`] = `
+"/* tslint:disable */
+/* eslint-disable */
+/**
+ * some title
+ * No description provided (generated by Openapi Generator https://github.com/openapitools/openapi-generator)
+ *
+ * The version of the OpenAPI document: 1.0.1
+ * 
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+
+import type {Configuration} from "./configuration.js";
+import type {RequestArgs} from "./base.js";
+import type {AxiosInstance, AxiosResponse} from 'axios';
+import {RequiredError} from "./base.js";
+export * from "./zod-common.js"
+
+/**
+ *
+ * @export
+ */
+export const DUMMY_BASE_URL = 'https://example.com'
+
+/**
+ *
+ * @throws {RequiredError}
+ * @export
+ */
+export const assertParamExists = function (functionName: string, paramName: string, paramValue: unknown) {
+    if (paramValue === null || paramValue === undefined) {
+        throw new RequiredError(paramName, \`Required parameter \${paramName} was null or undefined when calling \${functionName}.\`);
+    }
+}
+
+/**
+ *
+ * @export
+ */
+export const setApiKeyToObject = async function (object: any, keyParamName: string, configuration?: Configuration) {
+    if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+            ? await configuration.apiKey(keyParamName)
+            : await configuration.apiKey;
+        object[keyParamName] = localVarApiKeyValue;
+    }
+}
+
+/**
+ *
+ * @export
+ */
+export const setBasicAuthToObject = function (object: any, configuration?: Configuration) {
+    if (configuration && (configuration.username || configuration.password)) {
+        object["auth"] = {username: configuration.username, password: configuration.password};
+    }
+}
+
+/**
+ *
+ * @export
+ */
+export const setBearerAuthToObject = async function (object: any, configuration?: Configuration) {
+    if (configuration && configuration.accessToken) {
+        const accessToken = typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken()
+            : await configuration.accessToken;
+        object["Authorization"] = "Bearer " + accessToken;
+    }
+}
+
+/**
+ *
+ * @export
+ */
+export const setOAuthToObject = async function (object: any, name: string, scopes: string[], configuration?: Configuration) {
+    if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken(name, scopes)
+            : await configuration.accessToken;
+        object["Authorization"] = "Bearer " + localVarAccessTokenValue;
+    }
+}
+
+function setFlattenedQueryParams(urlSearchParams: URLSearchParams, parameter: any, key: string = ""): void {
+    if (parameter == null) return;
+    if (typeof parameter === "object") {
+        if (Array.isArray(parameter)) {
+            (parameter as any[]).forEach(item => setFlattenedQueryParams(urlSearchParams, item, key));
+        } else {
+            Object.keys(parameter).forEach(currentKey =>
+                setFlattenedQueryParams(urlSearchParams, parameter[currentKey], \`\${key}\${key !== '' ? '.' : ''}\${currentKey}\`)
+            );
+        }
+    } else {
+        if (urlSearchParams.has(key)) {
+            urlSearchParams.append(key, parameter);
+        } else {
+            urlSearchParams.set(key, parameter);
+        }
+    }
+}
+
+/**
+ *
+ * @export
+ */
+export const setSearchParams = function (url: URL, ...objects: any[]) {
+    const searchParams = new URLSearchParams(url.search);
+    setFlattenedQueryParams(searchParams, objects);
+    url.search = searchParams.toString();
+}
+
+/**
+ *
+ * @export
+ */
+export const serializeDataIfNeeded = function (value: any, requestOptions: any, configuration?: Configuration) {
+    const nonString = typeof value !== 'string';
+    const needsSerialization = nonString && configuration && configuration.isJsonMime
+        ? configuration.isJsonMime(requestOptions.headers['Content-Type'])
+        : nonString;
+    return needsSerialization
+        ? JSON.stringify(value !== undefined ? value : {})
+        : (value || "");
+}
+
+/**
+ *
+ * @export
+ */
+export const toPathString = function (url: URL) {
+    return url.pathname + url.search + url.hash
+}
+
+/**
+ *
+ * @export
+ */
+export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxios: AxiosInstance, BASE_PATH: string, configuration?: Configuration) {
+    return <T = unknown, R = AxiosResponse<T>>(axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+        const axiosRequestArgs = {...axiosArgs.options, url: (axios.defaults.baseURL ? '' : configuration?.basePath ?? basePath) + axiosArgs.url};
+        return axios.request<T, R>(axiosRequestArgs);
+    };
+}
+
+
+import { z } from "zod";
+export type UNKNOWN_ENUM_VARIANT = \`unknown:\${string}\`;
+"
+`;
+
+exports[`Generate Integration > generates with suffix > it-generate-all-configuration.ts-generic/api.yml 1`] = `
+"/* tslint:disable */
+/* eslint-disable */
+/**
+ * some title
+ * No description provided (generated by Openapi Generator https://github.com/openapitools/openapi-generator)
+ *
+ * The version of the OpenAPI document: 1.0.1
+ * 
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+
+export interface ConfigurationParameters {
+    apiKey?: string | Promise<string> | ((name: string) => string) | ((name: string) => Promise<string>);
+    username?: string;
+    password?: string;
+    accessToken?: string | Promise<string> | ((name?: string, scopes?: string[]) => string) | ((name?: string, scopes?: string[]) => Promise<string>);
+    basePath?: string;
+    serverIndex?: number;
+    baseOptions?: any;
+    formDataCtor?: new () => any;
+}
+
+export class Configuration {
+    /**
+     * parameter for apiKey security
+     * @param name security name
+     * @memberof Configuration
+     */
+    apiKey?: string | Promise<string> | ((name: string) => string) | ((name: string) => Promise<string>);
+    /**
+     * parameter for basic security
+     *
+     * @type {string}
+     * @memberof Configuration
+     */
+    username?: string;
+    /**
+     * parameter for basic security
+     *
+     * @type {string}
+     * @memberof Configuration
+     */
+    password?: string;
+    /**
+     * parameter for oauth2 security
+     * @param name security name
+     * @param scopes oauth2 scope
+     * @memberof Configuration
+     */
+    accessToken?: string | Promise<string> | ((name?: string, scopes?: string[]) => string) | ((name?: string, scopes?: string[]) => Promise<string>);
+    /**
+     * override base path
+     *
+     * @type {string}
+     * @memberof Configuration
+     */
+    basePath?: string;
+    /**
+     * override server index
+     *
+     * @type {number}
+     * @memberof Configuration
+     */
+    serverIndex?: number;
+    /**
+     * base options for axios calls
+     *
+     * @type {any}
+     * @memberof Configuration
+     */
+    baseOptions?: any;
+    /**
+     * The FormData constructor that will be used to create multipart form data
+     * requests. You can inject this here so that execution environments that
+     * do not support the FormData class can still run the generated client.
+     *
+     * @type {new () => FormData}
+     */
+    formDataCtor?: new () => any;
+
+    constructor(param: ConfigurationParameters = {}) {
+        this.apiKey = param.apiKey;
+        this.username = param.username;
+        this.password = param.password;
+        this.accessToken = param.accessToken;
+        this.basePath = param.basePath;
+        this.serverIndex = param.serverIndex;
+        this.baseOptions = param.baseOptions;
+        this.formDataCtor = param.formDataCtor;
+    }
+
+    /**
+     * Check if the given MIME is a JSON MIME.
+     * JSON MIME examples:
+     *   application/json
+     *   application/json; charset=UTF8
+     *   APPLICATION/JSON
+     *   application/vnd.company+json
+     * @param mime - MIME (Multipurpose Internet Mail Extensions)
+     * @return True if the given MIME is JSON, false otherwise.
+     */
+    public isJsonMime(mime: string): boolean {
+        const jsonMime: RegExp = new RegExp('^(application\\/json|[^;/ \\t]+\\/[^;/ \\t]+[+]json)[ \\t]*(;.*)?$', 'i');
+        return mime !== null && (jsonMime.test(mime) || mime.toLowerCase() === 'application/json-patch+json');
+    }
+}
+"
+`;
+
+exports[`Generate Integration > generates with suffix > it-generate-all-index.ts-generic/api.yml 1`] = `
+"/* tslint:disable */
+/* eslint-disable */
+/**
+ * some title
+ * No description provided (generated by Openapi Generator https://github.com/openapitools/openapi-generator)
+ *
+ * The version of the OpenAPI document: 1.0.1
+ * 
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+
+export * from "./api.js";
+export * from "./configuration.js";
+export * from "./zod.js";
+export * from "./SomeTitleEndpoints.js";
+"
+`;
+
+exports[`Generate Integration > generates with suffix > it-generate-all-zod.ts-generic/api.yml 1`] = `
+"import { z } from 'zod'
+import * as zc from './zod-common.js'
+import * as api from './api.js'
+
+export namespace Schemas {
+    export const PetBase = z.object({ id: z.number().int().min(1), type: z.string() });
+    export const GenericPet = PetBase.merge(z.object({ name: z.string().optional(), type: z.enum(['BIRD', 'HAMSTER']) }));
+    export const Dog = PetBase.merge(z.object({ bark: z.string(), type: z.literal('DOG') }));
+    export const ShortHair = PetBase.merge(z.object({ catType: z.literal('SHORT').default('SHORT'), angryLevel: z.string().optional(), color: z.string(), type: z.literal('CAT') }));
+    export const Seam = PetBase.merge(z.object({ catType: z.literal('SEAM').default('SEAM'), angryLevel: z.string().regex(/\\w+/).optional(), color: z.string(), type: z.literal('CAT') }));
+    export const Cat = zc.ZodUnionMatch.matcher("catType", { 'SEAM': Seam, 'SHORT': ShortHair, onDefault: z.object({ catType: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.CatDto>;
+    export const Pet = zc.ZodUnionMatch.matcher("type", { 'DOG': Dog, 'CAT': Cat, 'BIRD': GenericPet, 'HAMSTER': GenericPet, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.PetDto>;
+    export const Pets = z.array(Pet).max(100);
+    export const CatBase = PetBase.merge(z.object({ color: z.string(), catType: z.enum(['SEAM', 'SHORT']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional() }));
+
+    export namespace Types {
+        export type PetBase = z.infer<typeof Schemas.PetBase>;
+        export type GenericPet = z.infer<typeof Schemas.GenericPet>;
+        export type Dog = z.infer<typeof Schemas.Dog>;
+        export type ShortHair = z.infer<typeof Schemas.ShortHair>;
+        export type Seam = z.infer<typeof Schemas.Seam>;
+        export type Cat = z.infer<typeof Schemas.Cat>;
+        export type Pet = z.infer<typeof Schemas.Pet>;
+        export type Pets = z.infer<typeof Schemas.Pets>;
+        export type CatBase = z.infer<typeof Schemas.CatBase>;
+    }
+
+
+    export namespace Unions {
+        export const Cat = z.union([Seam, ShortHair]);
+        export const Pet = z.union([Cat, Dog, GenericPet]);
+    }
+
+}
+"
+`;
+
+exports[`Generate Integration > generates with suffix > it-generate-all-zod-common.ts-generic/api.yml 1`] = `
+"
+import { z } from "zod";
+
+export namespace ZodUnionMatch {
+    export type DiscriminatorValue = string;
+    export type Matcher = Record<DiscriminatorValue, z.ZodType>;
+
+    export type Schemas<T extends Matcher> = T[keyof T];
+    export type Discriminator<T extends Matcher> = RecDiscriminator<Schemas<T>>;
+    /** recursively find discriminator values from nested ZodUnion */
+    export type RecDiscriminator<T extends z.ZodType | z.core.SomeType> =
+        T extends z.ZodUnion<infer Options> ? RecDiscriminator<Options[number]> : keyof z.output<T>;
+
+    export function matcher<T extends Matcher>(discriminator: Discriminator<T>, matcher: T): Schemas<T> {
+        return z
+            .custom<z.output<Schemas<T>>>()
+            .transform((val) => {
+                const result = matchSafe<T>(val, matcher, discriminator);
+                return { result, val };
+            })
+            .superRefine((prev, ctx) => {
+                if (!prev.result.success) {
+                    // we need to extract the value for the discriminator { "foo": "bar"}
+                    // => "foo" is the discriminator and "bar" the value
+                    const discriminatorValue = prev.val?.[discriminator as keyof typeof prev.val];
+                    const discriminatorProp = JSON.stringify(discriminator);
+                    const discriminatorWithValue = \`\${discriminatorProp}: \${discriminatorValue}\`;
+                    const expected =
+                        typeof discriminatorValue === "string" && discriminatorValue in matcher
+                            ? "respective schema"
+                            : \`{\${discriminatorProp}: \${Object.keys(matcher).join(" | ")}}\`;
+                    ctx.addIssue({
+                        code: "invalid_union",
+                        input: ctx.value,
+                        errors: [prev.result.error.issues],
+                        message: \`Invalid discriminated union: expected input to match with discriminator \${expected} but received discriminator: (\${discriminatorWithValue ?? ""
+                            }) \`,
+                    });
+                }
+            })
+            .transform((v) => (v.result.success ? v.result.data : v.val)) as unknown as Schemas<T>;
+    }
+    export function match<T extends Matcher>(union: z.output<Schemas<T>>, matcher: T, discriminator: Discriminator<T>): T {
+        const handlerKey = union[discriminator] as keyof typeof matcher;
+        return handlerKey in matcher ? (matcher[handlerKey] as z.Schema<T>).parse(union) : (matcher.onDefault.parse(union) as T);
+    }
+    export function matchSafe<T extends Matcher>(
+        union: z.output<Schemas<T>>,
+        matcher: T,
+        discriminator: Discriminator<T>,
+    ): z.ZodSafeParseSuccess<Schemas<T>> | z.ZodSafeParseError<z.ZodError> {
+        const handlerKey = union?.[discriminator] as keyof typeof matcher;
+        return (handlerKey in matcher ? (matcher?.[handlerKey] as z.Schema<T>)?.safeParse(union) : matcher.onDefault.safeParse(union)) as
+            | z.ZodSafeParseSuccess<Schemas<T>>
+            | z.ZodSafeParseError<z.ZodError>;
+    }
+}
+"
+`;
+
 exports[`Generate Integration > ts > generic/api.yml > it-generate-all-EndpointDefinition.d.ts-generic/api.yml 1`] = `
 "/**
  * Framework agnostic endpoint definition intended to be consumed more detailed workflow specific tooling

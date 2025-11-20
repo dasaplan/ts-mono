@@ -31,6 +31,32 @@ describe("Generate Integration", () => {
     );
   });
 
+  test("generates with suffix", async () => {
+    const spec = "generic/api.yml";
+    const api = resolveSpecPath(spec);
+    const out = Folder.resolve("test/out/suffix", spec);
+    const bundled = await generateOpenapi(api, out.absolutePath, {
+      clearTemp: true,
+      tempFolder: out.cd("tmp").absolutePath,
+      generateZod: true,
+      modelSuffix: "Dto",
+    });
+    const processor = createTsPostProcessor({ deleteUnwantedFiles: false, ensureDiscriminatorValues: true });
+    const outDir = processor(File.resolve(bundled, "api.ts").absolutePath);
+
+    // noinspection DuplicatedCode
+    const files = Folder.of(outDir).lsFiles().sort();
+    for (const f of files) {
+      if (f.endsWith("api.ts")) {
+        console.log("ignoring api.ts in snapshot because of generator shenanigans");
+        continue;
+      }
+      const filename = File.of(f).name;
+      const content = File.of(f).readAsString();
+      expect(content).toMatchSnapshot(`it-generate-all-${filename}-${spec}`);
+    }
+  });
+
   describe("all", () => {
     const testDir = Folder.resolve(__dirname, "..", "test");
     const testOutDir = testDir.cd("out", "integration");
