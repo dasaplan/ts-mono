@@ -17,19 +17,21 @@ export interface ZodGenOptions {
 }
 
 export function createConstantDeclaration(c: Schema, options: ZodGenOptions) {
-  const name = `${pascalCase(c.getName())}${options.tsTypeNameSuffix ?? ""}`;
+  const name = `${pascalCase(c.getName())}`;
   const declaration = `export const ${name}`;
   const value = processSchema(c, options);
   const isLazy = value.includes("z.lazy");
   const isEnum = c.kind === "ENUM";
   const isDiscriminated = c.kind === "UNION" && _.isDefined(c.discriminator);
 
+  // generate the typescript type declaration
+  const tsTypeName = `${IDENTIFIER_API}.${name}${options.tsTypeNameSuffix}`;
   if (options.includeTsTypes && (isDiscriminated || isEnum)) {
     // todo: fix type inference for unknown values
-    return `${declaration} = ${value} as z.ZodType<${IDENTIFIER_API}.${name}>;`;
+    return `${declaration} = ${value} as z.ZodType<${tsTypeName}>;`;
   }
   if (isLazy && options.includeTsTypes) {
-    return `${declaration}: z.ZodType<${IDENTIFIER_API}.${name}> = ${value};`;
+    return `${declaration}: z.ZodType<${tsTypeName}> = ${value};`;
   }
   if (isLazy) {
     return `${declaration}: z.ZodTypeAny = ${value};`;
