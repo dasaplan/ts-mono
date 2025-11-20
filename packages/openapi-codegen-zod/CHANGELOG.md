@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.1](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-codegen-zod@1.6.0...@dasaplan/openapi-codegen-zod@1.6.1) (2025-11-20)
+
+
+### Bug Fixes
+
+* fixed missing suffix for ts type references in zod codegen ([cb5aa87](https://github.com/dasaplan/ts-mono/commit/cb5aa8791f93ae2fa19a904be0f25aa0efbe42b3))
+
+
+
+
+
 # [1.6.0](https://github.com/dasaplan/ts-mono/compare/@dasaplan/openapi-codegen-zod@1.5.0...@dasaplan/openapi-codegen-zod@1.6.0) (2025-11-12)
 
 
