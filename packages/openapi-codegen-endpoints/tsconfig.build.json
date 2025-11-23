@@ -10,8 +10,6 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true
   },
-  "include": [
-    "index.ts", "src", "endpoint-cli.ts"
-  ],
-  "exclude": [ "node_modules", "src/**/*.test.ts" ]
+  "include": ["index.ts", "src", "endpoint-cli.ts", "templates"],
+  "exclude": ["node_modules", "src/**/*.test.ts"]
 }

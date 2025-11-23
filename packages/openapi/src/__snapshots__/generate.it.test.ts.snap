@@ -696,6 +696,26 @@ export namespace Schemas {
         export const Pet = z.union([Cat, Dog, GenericPet]);
     }
 
+    export const Endpoints = {
+        "listPets": {
+            path: "/pets",
+            method: "get",
+            params: { header: z.object({}), path: z.object({}), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pets
+            },
+            request: undefined
+        },
+        "getPet": {
+            path: "/pets/{petId}",
+            method: "get",
+            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pet
+            },
+            request: undefined
+        }
+    } as const
 }
 "
 `;
@@ -1333,6 +1353,17 @@ export namespace Schemas {
         export const Pet = z.union([Cat, Dog]);
     }
 
+    export const Endpoints = {
+        "getPets": {
+            path: "/v1/pets",
+            method: "get",
+            params: { header: z.object({}), path: z.object({}), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pet
+            },
+            request: undefined
+        }
+    } as const
 }
 "
 `;
@@ -2245,6 +2276,44 @@ export namespace Schemas {
         export const PetToy = z.union([Ball, FluffyTeddy]);
     }
 
+    export const Endpoints = {
+        "listPets": {
+            path: "/pets",
+            method: "get",
+            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pets
+            },
+            request: undefined
+        },
+        "createPets": {
+            path: "/pets",
+            method: "post",
+            params: { header: z.object({}), path: z.object({}), query: z.object({}), cookie: z.object({}), },
+            responses: {
+
+            },
+            request: Pet
+        },
+        "showPetById": {
+            path: "/pets/{petId}",
+            method: "get",
+            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pet
+            },
+            request: undefined
+        },
+        "patchPet": {
+            path: "/pets/{petId}",
+            method: "patch",
+            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pet
+            },
+            request: Pet
+        }
+    } as const
 }
 "
 `;
@@ -2882,6 +2951,17 @@ export namespace Schemas {
         export const Pet = z.union([Cat, Dog]);
     }
 
+    export const Endpoints = {
+        "listPets": {
+            path: "/pets",
+            method: "get",
+            params: { header: z.object({}), path: z.object({}), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pets
+            },
+            request: undefined
+        }
+    } as const
 }
 "
 `;
@@ -3518,6 +3598,17 @@ export namespace Schemas {
         export const Pet = z.union([Cat, Dog]);
     }
 
+    export const Endpoints = {
+        "listPets": {
+            path: "/pets",
+            method: "get",
+            params: { header: z.object({}), path: z.object({}), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pets
+            },
+            request: undefined
+        }
+    } as const
 }
 "
 `;
@@ -4139,6 +4230,17 @@ export namespace Schemas {
         export type PetInfo = z.infer<typeof Schemas.PetInfo>;
     }
 
+    export const Endpoints = {
+        "getPets": {
+            path: "/v1/pets",
+            method: "get",
+            params: { header: z.object({}), path: z.object({}), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: PetInfo
+            },
+            request: undefined
+        }
+    } as const
 }
 "
 `;
@@ -4900,6 +5002,26 @@ export namespace Schemas {
         export const Pet = z.union([Cat, Dog, GenericPet]);
     }
 
+    export const Endpoints = {
+        "listPets": {
+            path: "/pets",
+            method: "get",
+            params: { header: z.object({}), path: z.object({}), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pets
+            },
+            request: undefined
+        },
+        "getPet": {
+            path: "/pets/{petId}",
+            method: "get",
+            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pet
+            },
+            request: undefined
+        }
+    } as const
 }
 "
 `;
@@ -5661,6 +5783,26 @@ export namespace Schemas {
         export const Pet = z.union([Cat, Dog, GenericPet]);
     }
 
+    export const Endpoints = {
+        "listPets": {
+            path: "/pets",
+            method: "get",
+            params: { header: z.object({}), path: z.object({}), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pets
+            },
+            request: undefined
+        },
+        "getPet": {
+            path: "/pets/{petId}",
+            method: "get",
+            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            responses: {
+                200: Pet
+            },
+            request: undefined
+        }
+    } as const
 }
 "
 `;

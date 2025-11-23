@@ -4,7 +4,7 @@
 import { pascalCase } from "pascal-case";
 import { _, ApplicationError } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
-import { Schema } from "@dasaplan/openapi-bundler";
+import { Schema, Endpoint } from "@dasaplan/openapi-bundler";
 
 // is being used to identify usecases
 export const IDENTIFIER_API = "api";
@@ -14,6 +14,7 @@ export interface ZodGenOptions {
   includeTsTypes: boolean;
   withUnknownEnum: boolean;
   withUnknownUnion: boolean;
+  lowerCaseHeader: boolean;
 }
 
 export function createConstantDeclaration(c: Schema, options: ZodGenOptions) {
@@ -56,12 +57,72 @@ export function createTypeDeclaration(c: Schema, options: ZodGenOptions) {
   return `${declaration} = ${value};`;
 }
 
+export function createParametersDeclaration(parameters: Array<Endpoint.Parameter> | undefined, options: ZodGenOptions) {
+  if (!parameters) {
+    return undefined;
+  }
+  let paramDeclarations = ``;
+  const header = parameters.filter((p) => p.type === "header");
+  paramDeclarations += `header: z.object({ ${header.map((p) => processParameter(p, options)).join(",\n")} }),`;
+
+  const path = parameters.filter((p) => p.type === "path");
+  paramDeclarations += `path: z.object({${path.map((p) => processParameter(p, options)).join(",\n")}}),`;
+
+  const query = parameters.filter((p) => p.type === "query");
+  paramDeclarations += `query: z.object({ ${query.map((p) => processParameter(p, options)).join(",\n")} }),`;
+
+  const cookie = parameters.filter((p) => p.type === "cookie");
+  paramDeclarations += `cookie: z.object({ ${cookie.map((p) => processParameter(p, options)).join(",\n")} }),`;
+
+  return `{ ${paramDeclarations} }`;
+}
+export function createResponsesDeclaration(responses: Endpoint["responses"] | undefined, options: ZodGenOptions) {
+  if (!responses) {
+    return undefined;
+  }
+  const responseDeclarations = responses.map((p) => processResponse(p, options));
+  return `{
+    ${responseDeclarations.join(",\n")}
+  }`;
+}
+
+export function createRequestDeclaration(request: Endpoint["requestBody"] | undefined, options: ZodGenOptions) {
+  if (!request) {
+    return undefined;
+  }
+  if (!request.schema) {
+    return false;
+  }
+  return processSubSchema(request.schema, options);
+}
+
 export function createModule(name: string, members: string[], options: ZodGenOptions) {
   return `
 export namespace ${name} {
     ${members.join("\n")}
 }
   `;
+}
+
+export function processResponse(r: Endpoint["responses"][0], options: ZodGenOptions) {
+  if (!r.schema) {
+    return `${r.status}: false`;
+  }
+  // sub schemas handles inline components and component references
+  const schema = processSubSchema(r.schema, options);
+  // TODO: handle component ref namespace
+  return `${r.status}:${schema}`;
+}
+
+export function processParameter(p: Endpoint.Parameter, options: ZodGenOptions & { lowercase?: boolean }) {
+  let schema = processSchema(p.schema, options);
+  if (!p.isRequired) {
+    schema += `${schema}.optional()`;
+  }
+  if (options.lowerCaseHeader) {
+    return `"${_.toLower(p.name)}":${schema}`;
+  }
+  return `"${p.name}":${schema}`;
 }
 
 function processSubSchema(c: Schema | Schema.DiscriminatorProperty, options: ZodGenOptions, params?: { withOptionalEntityRef?: boolean }) {
@@ -92,6 +153,7 @@ function isCircular(c: Schema | Schema.DiscriminatorProperty) {
       return c.isCircular;
   }
 }
+
 function processSchema(c: Schema | Schema.DiscriminatorProperty, options: ZodGenOptions): string {
   return Factory.withLazy(isCircular(c) ?? false, () => {
     switch (c.kind) {
@@ -111,8 +173,8 @@ function processSchema(c: Schema | Schema.DiscriminatorProperty, options: ZodGen
         const parent = _.isDefined(c.parent) ? processSubSchema(c.parent, options) : undefined;
         const properties = c.properties.map((property) => {
           const name = property.propertyName;
-          const withOptional = Factory.withOptional(property, () => processSubSchema(property.propertyValue, options));
-          const withDefault = Factory.withDefault(property, withOptional, options);
+          const withOptional = Factory.withOptionalProperty(property, () => processSubSchema(property.propertyValue, options));
+          const withDefault = Factory.withDefaultProperty(property, withOptional, options);
           return Factory.createObjectProperty(name, withDefault, options);
         });
         return Factory.createObject(properties, parent, options);
@@ -171,11 +233,11 @@ namespace Factory {
     return `${pascalCase(c.getName())}`;
   }
 
-  export function withOptional(property: Schema.Property, fn: () => string): string {
+  export function withOptionalProperty(property: Schema.Property, fn: () => string): string {
     return property.required ? fn() : `${fn()}.optional()`;
   }
 
-  export function withDefault<T>(_property: Schema.Property, value: string, options: ZodGenOptions): string {
+  export function withDefaultProperty<T>(_property: Schema.Property, value: string, options: ZodGenOptions): string {
     const property = _property.propertyValue;
     const hasDefault = property.kind === "PRIMITIVE" || property.kind === "ENUM" || property.kind === "DISCRIMINATOR";
     if (!hasDefault) {

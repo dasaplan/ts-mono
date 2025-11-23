@@ -1,6 +1,6 @@
 {
   "name": "@dasaplan/openapi-codegen-endpoints",
-  "version": "1.3.4",
+  "version": "1.3.11",
   "description": "Openapi framework agnostic endpoint generator",
   "keywords": [
     "openapi",
@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",
+    "@dasaplan/openapi-codegen-zod": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:*",
     "@rtk-query/codegen-openapi": "^2.1.0",
     "@ts-morph/common": "^0.28.1",

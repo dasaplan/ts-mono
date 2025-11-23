@@ -9,7 +9,7 @@ import { Project } from "ts-morph";
 export interface ExperimentalFeatures {
   experimental?: never;
 }
-type GenParams = { clearTemp: boolean; tempFolder?: string } & TsAxiosPublicGenOptions & ExperimentalFeatures;
+type GenParams = { clearTemp: boolean; tempFolder?: string; expressJs?: boolean } & TsAxiosPublicGenOptions & ExperimentalFeatures;
 
 export async function generateOpenapi(specFilePath: string, outputFile: string, params?: GenParams) {
   try {
@@ -60,12 +60,13 @@ async function generateZod(parsed: OpenApiBundled, out: Folder, params?: GenPara
     includeTsTypes: true,
     withUnknownUnion: true,
     withUnknownEnum: true,
+    lowerCaseHeader: params?.expressJs ?? true,
     tsTypeNameSuffix: params?.modelSuffix ?? "",
   });
 }
 
 async function generateEndpoints(parsed: OpenApiBundled, out: Folder) {
-  const { endpointFileName, endpointFilePath } = await generateEndpointDefinitionsFromBundled(parsed, { outDir: out.absolutePath });
+  const { endpointFileName, endpointFilePath } = await generateEndpointDefinitionsFromBundled(parsed, { outDir: out.absolutePath, generator: "zod" });
   const endpointFile = File.of(endpointFilePath);
 
   // add export to index.ts

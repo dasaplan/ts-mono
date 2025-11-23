@@ -1,5 +1,5 @@
-import { Command } from "commander";
-import { EndpointDefinitionGeneratorOptions, generateEndpointDefinitions } from "./endpoint-generator.js";
+import { Command, Option } from "commander";
+import { EndpointDefinitionGeneratorOptions, generateEndpointDefinitions, generateExpressApi } from "./endpoint-generator.js";
 import { _ } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
 
@@ -14,11 +14,21 @@ export function createCommandGenerateEndpoints(program: Command) {
     .option("--apiName [apiName]", "Name of the Api used to generate names for files or modules")
     .option("--typeNamespace [typeNamespace]", "Namespace used to index type module imports.")
     .option("--typeModuleName [typeModuleName]", "Module name for importing types.")
+    .addOption(new Option("--generator <type>", "Generator type").choices(["zod", "ts"]).default("zod"))
     .option("--debug", "Enable debug logging", false)
     .action(
       async (
         spec: string,
-        options: { debug: boolean; out: string; templates: string; typeSuffix: string; apiName: string; typeNamespace: string; typeModuleName: string },
+        options: {
+          debug: boolean;
+          out: string;
+          templates: string;
+          typeSuffix: string;
+          apiName: string;
+          typeNamespace: string;
+          typeModuleName: string;
+          generator: "zod" | "ts";
+        },
       ) => {
         if (options.debug) {
           appLog.setLogLevel("debug");
@@ -30,9 +40,33 @@ export function createCommandGenerateEndpoints(program: Command) {
           typeSuffix: options.typeSuffix,
           apiName: options.apiName,
           tsApiTypesModule: tsApiTypesModule,
+          generator: options.generator,
         });
       },
     );
+}
+
+export function createCommandGenerateExpressApi(program: Command) {
+  program
+    .command("generate-express-api")
+    .description("Generate Server Api for ExpressJs")
+    .argument("<openapi-spec>", "Relative filepath from the current cwd to the OpenApi root document file")
+    .option("--templates [templates]", "Temporary directory which can be deleted", "tmp")
+    .option("-o, --out [out]", "Target directory for the generated files", "out")
+    .option("--apiName [apiName]", "Name of the Api used to generate names for files or modules")
+    .addOption(new Option("--generator <type>", "Generator type").choices(["zod", "ts"]).default("ts"))
+    .option("--debug", "Enable debug logging", false)
+    .action(async (spec: string, options: { debug: boolean; out: string; templates: string; apiName: string; generator: "zod" | "ts" }) => {
+      if (options.debug) {
+        appLog.setLogLevel("debug");
+      }
+      await generateExpressApi(spec, {
+        templatesDir: options.templates,
+        outDir: options.out,
+        apiName: options.apiName,
+        generator: options.generator,
+      });
+    });
 }
 
 function parseApiTypesModule(options: { typeNamespace?: string; typeModuleName?: string }): EndpointDefinitionGeneratorOptions["tsApiTypesModule"] {

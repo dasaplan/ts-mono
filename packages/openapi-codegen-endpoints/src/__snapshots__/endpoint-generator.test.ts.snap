@@ -120,10 +120,10 @@ export namespace EndpointDefinition {
 ",
   "import { EndpointDefinition } from './EndpointDefinition.js'
 export namespace TestApiEndpoints {
-    export type Path = "/pets/{:petId}" | "/pets"
+    export type Path = "/pets/{petId}" | "/pets"
     export interface OperationToPath {
-        getPet: "/pets/{:petId}";
-        updatePet: "/pets/{:petId}";
+        getPet: "/pets/{petId}";
+        updatePet: "/pets/{petId}";
         createPet: "/pets";
     }
     export interface GetPet<ResponseSchema extends EndpointDefinition.DtoTypes, ErrorSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
@@ -133,7 +133,7 @@ export namespace TestApiEndpoints {
     > {
         name: "getPet";
         operation: "get";
-        path: "/pets/{:petId}"
+        path: "/pets/{petId}"
     }
 
     export interface UpdatePet<ResponseSchema extends EndpointDefinition.DtoTypes, RequestSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
@@ -143,7 +143,7 @@ export namespace TestApiEndpoints {
     > {
         name: "updatePet";
         operation: "put";
-        path: "/pets/{:petId}"
+        path: "/pets/{petId}"
     }
 
     export interface CreatePet<RequestSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<

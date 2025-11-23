@@ -10,8 +10,9 @@ export function createCommandGenerate(program: Command) {
     .option("-o, --output [output]", "Target directory where the generated files will appear", "out")
     .option("--modelSuffix [modelSuffix]", "All model names are suffixed as provided")
     .option("--debug", "Enable debug logging")
+    .option("--expressJs", "Express js compatible types e.g. lowercase header", false)
     .option("--templates", "If set, codegen templates will be copied into the current working directory for customization.", false)
-    .action(async (spec: string, options: { output: string; modelSuffix: string; debug: boolean; templates: boolean }) => {
+    .action(async (spec: string, options: { output: string; modelSuffix: string; debug: boolean; templates: boolean; expressJs: boolean }) => {
       if (options.debug) {
         appLog.setLogLevel("debug");
       }
@@ -22,6 +23,7 @@ export function createCommandGenerate(program: Command) {
         copyTemplates: options.templates,
         tempFolder: undefined,
         experimental: undefined,
+        expressJs: options.expressJs,
       });
       appLog.log.info(`finished generate`);
     });

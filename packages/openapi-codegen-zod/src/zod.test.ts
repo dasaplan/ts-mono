@@ -8,6 +8,7 @@ const options: () => ZodGenOptions = () => ({
   includeTsTypes: false,
   withUnknownUnion: true,
   withUnknownEnum: true,
+  tsTypeNameSuffix: "",
 });
 describe("generateZod", () => {
   const { withSchemas, createApi } = OpenapiBundledMock.create();
@@ -98,6 +99,7 @@ describe("generateZod", () => {
               export type Node = z.infer<typeof Schemas.Node>;
           }
 
+          export const Endpoints = {} as const
       }
       "
     `);
@@ -124,20 +126,21 @@ describe("generateZod", () => {
     const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
 
     expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
-        "import { z } from 'zod'
-        import * as zc from './zod-common.js'
-        
-        export namespace Schemas {
-            export const SomeEntity = z.object({ name: z.string().optional() });
-            export const Node = z.object({ id: z.string().optional(), refEntity: SomeEntity.optional(), refEntity2: SomeEntity.optional() });
-        
-            export namespace Types {
-                export type SomeEntity = z.infer<typeof Schemas.SomeEntity>;
-                export type Node = z.infer<typeof Schemas.Node>;
-            }
-        
-        }"
-`);
+      "import { z } from 'zod'
+      import * as zc from './zod-common.js'
+
+      export namespace Schemas {
+          export const SomeEntity = z.object({ name: z.string().optional() });
+          export const Node = z.object({ id: z.string().optional(), refEntity: SomeEntity.optional(), refEntity2: SomeEntity.optional() });
+
+          export namespace Types {
+              export type SomeEntity = z.infer<typeof Schemas.SomeEntity>;
+              export type Node = z.infer<typeof Schemas.Node>;
+          }
+
+          export const Endpoints = {} as const
+      }"
+    `);
   });
   test("unions have discriminator property required and have at least two schemas", async () => {
     const openapi: OpenApiBundled = createApi(
@@ -197,6 +200,7 @@ describe("generateZod", () => {
               export const MultiUnion = z.union([A, B]);
           }
 
+          export const Endpoints = {} as const
       }"
     `);
   });
@@ -284,6 +288,7 @@ describe("generateZod", () => {
               export const Child = z.lazy(() => z.union([A, B, Node]));
           }
 
+          export const Endpoints = {} as const
       }"
     `);
   });
@@ -369,6 +374,7 @@ describe("generateZod", () => {
               export const Child = z.lazy(() => z.union([A, B, Node]));
           }
 
+          export const Endpoints = {} as const
       }"
     `);
   });
@@ -462,6 +468,7 @@ describe("generateZod", () => {
               export const Child = z.lazy(() => z.union([A, B]));
           }
 
+          export const Endpoints = {} as const
       }"
     `);
   });
