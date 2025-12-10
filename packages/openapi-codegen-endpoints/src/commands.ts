@@ -14,7 +14,6 @@ export function createCommandGenerateEndpoints(program: Command) {
     .option("--apiName [apiName]", "Name of the Api used to generate names for files or modules")
     .option("--typeNamespace [typeNamespace]", "Namespace used to index type module imports.")
     .option("--typeModuleName [typeModuleName]", "Module name for importing types.")
-    .addOption(new Option("--generator <type>", "Generator type").choices(["zod", "ts"]).default("zod"))
     .option("--debug", "Enable debug logging", false)
     .action(
       async (
@@ -27,7 +26,6 @@ export function createCommandGenerateEndpoints(program: Command) {
           apiName: string;
           typeNamespace: string;
           typeModuleName: string;
-          generator: "zod" | "ts";
         },
       ) => {
         if (options.debug) {
@@ -40,7 +38,7 @@ export function createCommandGenerateEndpoints(program: Command) {
           typeSuffix: options.typeSuffix,
           apiName: options.apiName,
           tsApiTypesModule: tsApiTypesModule,
-          generator: options.generator,
+          generator: "ts",
         });
       },
     );
@@ -54,7 +52,7 @@ export function createCommandGenerateExpressApi(program: Command) {
     .option("--templates [templates]", "Temporary directory which can be deleted", "tmp")
     .option("-o, --out [out]", "Target directory for the generated files", "out")
     .option("--apiName [apiName]", "Name of the Api used to generate names for files or modules")
-    .addOption(new Option("--generator <type>", "Generator type").choices(["zod", "ts"]).default("ts"))
+    .addOption(new Option("--generator <type>", "Generator type").choices(["zod", "ts"]).default("zod"))
     .option("--debug", "Enable debug logging", false)
     .action(async (spec: string, options: { debug: boolean; out: string; templates: string; apiName: string; generator: "zod" | "ts" }) => {
       if (options.debug) {

@@ -104,3 +104,9 @@ describe.each(["zod", "ts"] as const)("generate express %s", (generator) => {
     expect(endpoints.sources).toMatchSnapshot("express");
   });
 });
+
+test("integration", async () => {
+  const spec = resolveSpecPath("fullmetal/openapi.yml");
+  const endpoints = await generateExpressApi(spec, { outDir: `tmp/zod/express/fullmetal`, apiName: "FullmetalApi", generator: "zod" });
+  expect(endpoints.sources).toMatchSnapshot("fullmetal/openapi.yml");
+});

@@ -52,7 +52,6 @@
   },
   "dependencies": {
     "@dasaplan/openapi-bundler": "workspace:*",
-    "@dasaplan/openapi-codegen-zod": "workspace:*",
     "@dasaplan/ts-sdk": "workspace:*",
     "@rtk-query/codegen-openapi": "^2.1.0",
     "@ts-morph/common": "^0.28.1",
@@ -62,6 +61,7 @@
     "tslog": "^4.10.2"
   },
   "devDependencies": {
+    "@dasaplan/openapi-codegen-zod": "workspace:*",
     "@reduxjs/toolkit": "^2.9.2",
     "@types/express": "^5.0.5",
     "@types/pascal-case": "^1.1.2",
@@ -81,6 +81,7 @@
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
+    "@dasaplan/openapi-codegen-zod": ">= 1.6",
     "@openapitools/openapi-generator-cli": "^2.7.0"
   },
   "clean-package": {

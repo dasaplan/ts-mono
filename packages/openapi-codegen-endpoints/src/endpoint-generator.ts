@@ -70,9 +70,9 @@ export async function generateExpressZodApiFromBundled(bundled: OpenApiBundled, 
     tsTypeNameSuffix: "",
   });
 
-  await generateTemplates("ExpressCommon.ts", { ...params, outDir: out.absolutePath }, project);
   await generateTemplates("ExpressZodCommon.ts", { ...params, outDir: out.absolutePath }, project);
-
+  await generateTemplates("ExpressCommon.ts", { ...params, outDir: out.absolutePath }, project);
+  // TODO FIX IMPORTS FROM EXPRESS.js - project.save seems to rewrite the sources
   const endpointFileName = `${apiName}.ts`;
   const endpointFilePath = out.makeFile(endpointFileName).absolutePath;
 
@@ -115,6 +115,8 @@ async function generateTemplates(template: string, params: Pick<EndpointDefiniti
   const endpointTmpl = Templates.getTemplateFile(template);
   const source = createTsMorphSrcFile(endpointTmpl.absolutePath, project);
   const outFile = File.resolve(params.outDir, endpointTmpl.name);
-  source.sourceFile.copy(outFile.absolutePath, { overwrite: true });
-  return { project, sourceFile: source.sourceFile };
+  // copy
+  const src = project.createSourceFile(outFile.absolutePath, source.sourceFile.getFullText(), { overwrite: true });
+
+  return { project, sourceFile: src };
 }

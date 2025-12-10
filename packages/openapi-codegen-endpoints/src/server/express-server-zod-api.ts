@@ -9,6 +9,7 @@ import {
   createTsInterface,
   createTsNestedInlineObject,
   createTsObjectProperty,
+  createTypedTsConstObject,
   createTypeObjectProperty,
 } from "./template-factory.js";
 
@@ -71,10 +72,14 @@ export function generateCreateExpressServerApi(endpoints: Array<Endpoint>, optio
       createTsObjectProperty("body", `Schemas.Endpoints.${e.alias}.request`),
     );
 
-    const responseValidation = createTsObjectProperty("responseValidation", `Schemas.Endpoints.${e.alias}.responses`);
+    const responseValidation = createTsInlineObject("responseValidation", createTsObjectProperty("responses", `Schemas.Endpoints.${e.alias}.responses`));
     return createTsNestedInlineObject(e.alias, requestValidation, responseValidation);
   });
-  const generatorDefaultConfigDeclaration = createTsConstObject("GeneratorDefaultConfig", ...generatorOperations);
+
+  const generatorDefaultConfigDeclaration = createTypedTsConstObject(
+    { name: "GeneratorDefaultConfig", type: "Record<string, Pick<Operation, 'requestValidation' | 'responseValidation'>>" },
+    ...generatorOperations,
+  );
 
   /* -------------------------------------- */
   /* -------Function Declarations -------- */

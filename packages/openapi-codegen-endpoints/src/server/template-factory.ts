@@ -81,6 +81,17 @@ export function createTsConstObject<
   };
 }
 
+export function createTypedTsConstObject<
+  const Name extends string,
+  const Type extends ReturnType<typeof createTsObjectProperty | typeof createTsNestedInlineObject>[],
+>(params: { name: Name; type: string }, ...props: Type) {
+  return {
+    toString: () => `const ${params.name}: ${params.type} = { ${props.map((p) => p.toString()).join(",")}};` as const,
+    name: params.name,
+    props,
+  };
+}
+
 export function createImport<const Name extends string, const Type extends Array<string>>(from: Name, ...imports: Type) {
   return {
     toString: () => `import { ${imports.join(", ")} } from "${from}";` as const,

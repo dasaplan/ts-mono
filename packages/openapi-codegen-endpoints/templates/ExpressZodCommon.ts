@@ -6,7 +6,12 @@ type ParamsDictionary = z.ZodObject;
 
 type ParsedQs = z.ZodObject;
 
-type RequestValidationForOperation<RequestBody extends object, PathParams extends object, QueryParams extends object, Headers extends object> = {
+type RequestValidationForOperation<
+  RequestBody extends object | undefined,
+  PathParams extends object | undefined,
+  QueryParams extends object | undefined,
+  Headers extends object | undefined,
+> = {
   /** header are deserialized to lower-case by express*/
   headers?: Headers | false;
   /** path parameters*/
@@ -24,10 +29,10 @@ type ToStringRecord<T> = T extends Record<string, unknown> ? { [K in keyof T]: s
 
 export type Operation<
   Responses extends { [httpStatus: number]: z.ZodType<object> } = { [httpStatus: number]: z.ZodType<object> },
-  RequestBody extends z.Schema = z.Schema,
-  PathParams extends ParamsDictionary = ParamsDictionary,
-  QueryParams extends ParsedQs = ParsedQs,
-  Headers extends z.Schema = z.Schema,
+  RequestBody extends z.Schema | undefined = z.Schema,
+  PathParams extends ParamsDictionary | undefined = ParamsDictionary,
+  QueryParams extends ParsedQs | undefined = ParsedQs,
+  Headers extends z.Schema | undefined = z.Schema,
 > = {
   requestValidation?: RequestValidationForOperation<RequestBody, PathParams, QueryParams, Headers>;
   responseValidation?: {
@@ -203,7 +208,7 @@ export function CreateInputValidator<
 export function CreateController<TResponses extends Record<number, any>>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   opController: Operation<TResponses, any, any, any>["controller"],
-  responseValidation: Record<number, z.ZodSchema | false> | undefined,
+  responseValidation: Record<number, z.ZodSchema | false | undefined> | undefined,
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
