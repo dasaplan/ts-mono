@@ -114,12 +114,12 @@ export function processResponse(r: Endpoint["responses"][0], options: ZodGenOpti
   return `${r.status}:${schema}`;
 }
 
-export function processParameter(p: Endpoint.Parameter, options: ZodGenOptions & { lowercase?: boolean }) {
+export function processParameter(p: Endpoint.Parameter, options: ZodGenOptions) {
   let schema = processSchema(p.schema, options);
   if (!p.isRequired) {
     schema += `${schema}.optional()`;
   }
-  if (options.lowerCaseHeader) {
+  if (options.lowerCaseHeader && p.type === "header") {
     return `"${_.toLower(p.name)}":${schema}`;
   }
   return `"${p.name}":${schema}`;

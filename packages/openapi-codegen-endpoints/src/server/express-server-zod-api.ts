@@ -103,7 +103,8 @@ export function generateCreateExpressServerApi(endpoints: Array<Endpoint>, optio
         const defaults = `${paramApiConfig.name}.defaults` as const;
 
         const idWithDefaults = `withDefaults_${e.alias}`;
-        const withDefaults = `const ${idWithDefaults} = withDefaults("${e.alias}", ${op}, ${defaults}, ${generatorDefaultConfigDeclaration.name} )`;
+        const opGeneratorConfig = `${generatorDefaultConfigDeclaration.name}["${e.alias}"]`;
+        const withDefaults = `const ${idWithDefaults} = withDefaults("${e.alias}", ${op}, ${defaults}, ${opGeneratorConfig} )`;
 
         // Generate with zod dependencies
         const zodInputSchemas = `{ 
