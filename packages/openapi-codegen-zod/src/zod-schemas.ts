@@ -11,6 +11,7 @@ export const IDENTIFIER_API = "api";
 
 export interface ZodGenOptions {
   tsTypeNameSuffix: string;
+  withValueOptional: boolean;
   includeTsTypes: boolean;
   withUnknownEnum: boolean;
   withUnknownUnion: boolean;
@@ -117,7 +118,11 @@ export function processResponse(r: Endpoint["responses"][0], options: ZodGenOpti
 export function processParameter(p: Endpoint.Parameter, options: ZodGenOptions) {
   let schema = processSchema(p.schema, options);
   if (!p.isRequired) {
-    schema += `${schema}.optional()`;
+    if (options.withValueOptional) {
+      schema += `${schema}.or(z.undefined())`;
+    } else {
+      schema += `${schema}.optional()`;
+    }
   }
   if (options.lowerCaseHeader && p.type === "header") {
     return `"${_.toLower(p.name)}":${schema}`;
@@ -173,7 +178,8 @@ function processSchema(c: Schema | Schema.DiscriminatorProperty, options: ZodGen
         const parent = _.isDefined(c.parent) ? processSubSchema(c.parent, options) : undefined;
         const properties = c.properties.map((property) => {
           const name = property.propertyName;
-          const withOptional = Factory.withOptionalProperty(property, () => processSubSchema(property.propertyValue, options));
+          const fnKeyOrValueOptional = options.withValueOptional ? Factory.withValueOptionalProperty : Factory.withKeyOptionalProperty;
+          const withOptional = fnKeyOrValueOptional(property, () => processSubSchema(property.propertyValue, options));
           const withDefault = Factory.withDefaultProperty(property, withOptional, options);
           return Factory.createObjectProperty(name, withDefault, options);
         });
@@ -233,8 +239,12 @@ namespace Factory {
     return `${pascalCase(c.getName())}`;
   }
 
-  export function withOptionalProperty(property: Schema.Property, fn: () => string): string {
+  export function withKeyOptionalProperty(property: Schema.Property, fn: () => string): string {
     return property.required ? fn() : `${fn()}.optional()`;
+  }
+
+  export function withValueOptionalProperty(property: Schema.Property, fn: () => string): string {
+    return property.required ? fn() : `${fn()}.or(z.undefined())`;
   }
 
   export function withDefaultProperty<T>(_property: Schema.Property, value: string, options: ZodGenOptions): string {

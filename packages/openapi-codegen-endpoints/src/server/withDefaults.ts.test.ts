@@ -5,7 +5,7 @@ import { ApiConfig, Operation, withDefaults } from "../../templates/ExpressTsCom
 describe.skip("withDefaults", () => {
   // Helper function to create mock controllers and middlewares
   const createMockController = (name: string): ControllerFn => {
-    const controller = vi.fn(() => ({ status: 200, json: { result: name } }));
+    const controller = vi.fn(() => Promise.resolve({ status: 200, json: { result: name } }));
     controller.mockName(name);
     return controller;
   };

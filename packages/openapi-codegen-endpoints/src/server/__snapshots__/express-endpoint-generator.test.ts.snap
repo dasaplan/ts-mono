@@ -1102,9 +1102,9 @@ export namespace ZodUnionMatch {
 import * as zc from './zod-common.js'
 
 export namespace Schemas {
-    export const ErrorSchema = z.object({ message: z.string().optional() });
-    export const RequestSchema = z.object({ help: z.string().optional() });
-    export const ResponseSchema = z.object({ id: z.string().optional() });
+    export const ErrorSchema = z.object({ message: z.string().or(z.undefined()) });
+    export const RequestSchema = z.object({ help: z.string().or(z.undefined()) });
+    export const ResponseSchema = z.object({ id: z.string().or(z.undefined()) });
 
     export namespace Types {
         export type ErrorSchema = z.infer<typeof Schemas.ErrorSchema>;
@@ -1127,13 +1127,13 @@ export namespace Schemas {
             path: "/pets/{petId}",
             method: "put",
             params: {
-                header: z.object({ "secret": z.string()z.string().optional() }), path: z.object({
+                header: z.object({ "secret": z.string()z.string().or(z.undefined()) }), path: z.object({
                     "petId": z.string(),
-                    "secret": z.string()z.string().optional()
+                    "secret": z.string()z.string().or(z.undefined())
                 }), query: z.object({
                     "secret": z.string(),
-                    "secret2": z.string()z.string().optional()
-                }), cookie: z.object({ "secret": z.string()z.string().optional() }),
+                    "secret2": z.string()z.string().or(z.undefined())
+                }), cookie: z.object({ "secret": z.string()z.string().or(z.undefined()) }),
             },
             responses: {
                 200: ResponseSchema
@@ -2460,37 +2460,37 @@ export namespace Schemas {
     export const LoginResponse = z.object({ token: z.string() });
     export const LoginRequest = z.object({ username: z.string(), password: z.string() });
     export const InventoryStockItem = z.object({ quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string(), stockId: z.string(), productId: z.string() });
-    export const InventoryStockHistory = z.object({ eventDate: z.string(), eventPrice: z.number(), deltaRevenue: z.number(), event: z.enum(['GIFTED', 'SOLD', 'PURCHASED']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string(), stockId: z.string(), productId: z.string() });
+    export const InventoryStockHistory = z.object({ eventDate: z.string(), eventPrice: z.number(), deltaRevenue: z.number(), event: z.enum(['GIFTED', 'SOLD', 'PURCHASED']), quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string(), stockId: z.string(), productId: z.string() });
     export const InventoryStock = z.object({ history: z.array(InventoryStockHistory), inventory: z.array(InventoryStockItem), quantity: z.number() });
     export const InventoryItemStats = z.object({ totalPurchase: z.number(), totalSells: z.number() });
-    export const WeightUnit = z.enum(['kg', 'g', 'oz_tr']).or(z.string().transform((s) => \`unknown:\${s}\` as const));
+    export const WeightUnit = z.enum(['kg', 'g', 'oz_tr']);
     export const Weight = z.object({ unit: WeightUnit, value: z.number() });
-    export const ItemType = z.enum(['B', 'El', 'kA', 'Ka', 'KA', 'KR', 'Pa', 'LIII', 'ML', 'R', 'Phil', 'BR']).or(z.string().transform((s) => \`unknown:\${s}\` as const));
-    export const Product = z.object({ externalId: z.string().optional(), itemType: ItemType, weight: Weight, productId: z.string() });
-    export const InventoryItem = z.object({ inventoryId: z.string(), product: Product.optional(), quantity: z.number(), invest: z.number().optional(), stats: InventoryItemStats.optional(), revenue: z.number().optional(), stock: InventoryStock.optional() });
-    export const InventorySummaryResponse = z.object({ message: z.enum(['ok']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), items: z.array(InventoryItem) });
-    export const ChangeItemDetails = z.object({ quantity: z.number().optional(), priceEuro: z.number().optional(), purchaseDate: z.string().optional() });
-    export const ChangeItemRequest = z.object({ createdAt: z.string(), event: z.enum(['PURCHASED', 'GIFTED', 'SOLD']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), details: ChangeItemDetails });
-    export const SuccessResponse = z.object({ message: z.enum(['ok']).or(z.string().transform((s) => \`unknown:\${s}\` as const)) });
-    export const UpdateItemRequestDetails = z.object({ quantity: z.number().optional(), priceEuro: z.number().optional(), purchaseDate: z.string().optional(), stockId: z.string(), productId: z.string() });
-    export const UpdateItemRequest = z.object({ event: z.enum(['UPDATED']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), createdAt: z.string(), details: UpdateItemRequestDetails });
-    export const PurchasedEventDetailBase = z.object({ kind: z.string().optional() });
-    export const PurchasedEventDetailItemProduct = PurchasedEventDetailBase.merge(z.object({ kind: z.string().optional().default('PRODUCT_REF'), productId: z.string() }));
-    export const PurchasedEventDetailItemSpecified = PurchasedEventDetailBase.merge(z.object({ kind: z.string().optional().default('SPECIFIED'), itemType: ItemType, weight: Weight }));
+    export const ItemType = z.enum(['B', 'El', 'kA', 'Ka', 'KA', 'KR', 'Pa', 'LIII', 'ML', 'R', 'Phil', 'BR']);
+    export const Product = z.object({ externalId: z.string().or(z.undefined()), itemType: ItemType, weight: Weight, productId: z.string() });
+    export const InventoryItem = z.object({ inventoryId: z.string(), product: Product.or(z.undefined()), quantity: z.number(), invest: z.number().or(z.undefined()), stats: InventoryItemStats.or(z.undefined()), revenue: z.number().or(z.undefined()), stock: InventoryStock.or(z.undefined()) });
+    export const InventorySummaryResponse = z.object({ message: z.enum(['ok']), items: z.array(InventoryItem) });
+    export const ChangeItemDetails = z.object({ quantity: z.number().or(z.undefined()), priceEuro: z.number().or(z.undefined()), purchaseDate: z.string().or(z.undefined()) });
+    export const ChangeItemRequest = z.object({ createdAt: z.string(), event: z.enum(['PURCHASED', 'GIFTED', 'SOLD']), details: ChangeItemDetails });
+    export const SuccessResponse = z.object({ message: z.enum(['ok']) });
+    export const UpdateItemRequestDetails = z.object({ quantity: z.number().or(z.undefined()), priceEuro: z.number().or(z.undefined()), purchaseDate: z.string().or(z.undefined()), stockId: z.string(), productId: z.string() });
+    export const UpdateItemRequest = z.object({ event: z.enum(['UPDATED']), createdAt: z.string(), details: UpdateItemRequestDetails });
+    export const PurchasedEventDetailBase = z.object({ kind: z.string().or(z.undefined()) });
+    export const PurchasedEventDetailItemProduct = PurchasedEventDetailBase.merge(z.object({ kind: z.string().or(z.undefined()).default('PRODUCT_REF'), productId: z.string() }));
+    export const PurchasedEventDetailItemSpecified = PurchasedEventDetailBase.merge(z.object({ kind: z.string().or(z.undefined()).default('SPECIFIED'), itemType: ItemType, weight: Weight }));
     export const PurchasedEventDetailItem = z.union([PurchasedEventDetailItemSpecified, PurchasedEventDetailItemProduct]);
-    export const PurchasedEventDetail = z.object({ item: PurchasedEventDetailItem, quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string().optional() });
+    export const PurchasedEventDetail = z.object({ item: PurchasedEventDetailItem, quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string().or(z.undefined()) });
     export const CreateItemDetails = z.object({ details: PurchasedEventDetail });
     export const CreateItem = z.object({ details: CreateItemDetails });
     export const InventoryItemList = z.object({ items: z.array(InventoryItem) });
-    export const Error = z.object({ error: z.string().optional() });
+    export const Error = z.object({ error: z.string().or(z.undefined()) });
     export const ChangeConstantBase = z.object({ event: z.string() });
     export const GoldPriceUpdateDetails = z.object({ unit: WeightUnit, price: z.number() });
     export const ChangeConstantUser = ChangeConstantBase.merge(z.object({ inventoryId: z.string(), details: GoldPriceUpdateDetails, event: z.literal('UPDATE_DOUGH_PRICE').default('UPDATE_DOUGH_PRICE') }));
     export const ChangeConstantGlobal = ChangeConstantBase.merge(z.object({ details: GoldPriceUpdateDetails, event: z.literal('GLOBAL_UPDATE_DOUGH_PRICE') }));
-    export const ChangeConstant = zc.ZodUnionMatch.matcher("event", { 'UPDATE_DOUGH_PRICE': ChangeConstantUser, 'GLOBAL_UPDATE_DOUGH_PRICE': ChangeConstantGlobal, onDefault: z.object({ event: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() });
+    export const ChangeConstant = z.discriminatedUnion("event", [ChangeConstantUser, ChangeConstantGlobal]);
     export const GoldPriceRates = z.object({ g: z.number(), kg: z.number(), oz_tr: z.number() });
     export const ConstantBase = z.object({ version: z.number(), updatedAt: z.string(), ratesByWeight: GoldPriceRates });
-    export const Constant = z.object({ history: ConstantBase.optional(), version: z.number(), updatedAt: z.string(), ratesByWeight: GoldPriceRates });
+    export const Constant = z.object({ history: ConstantBase.or(z.undefined()), version: z.number(), updatedAt: z.string(), ratesByWeight: GoldPriceRates });
     export const Constants = z.object({ doughPrices: Constant });
 
     export namespace Types {
@@ -3946,37 +3946,37 @@ export namespace Schemas {
     export const LoginResponse = z.object({ token: z.string() });
     export const LoginRequest = z.object({ username: z.string(), password: z.string() });
     export const InventoryStockItem = z.object({ quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string(), stockId: z.string(), productId: z.string() });
-    export const InventoryStockHistory = z.object({ eventDate: z.string(), eventPrice: z.number(), deltaRevenue: z.number(), event: z.enum(['GIFTED', 'SOLD', 'PURCHASED']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string(), stockId: z.string(), productId: z.string() });
+    export const InventoryStockHistory = z.object({ eventDate: z.string(), eventPrice: z.number(), deltaRevenue: z.number(), event: z.enum(['GIFTED', 'SOLD', 'PURCHASED']), quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string(), stockId: z.string(), productId: z.string() });
     export const InventoryStock = z.object({ history: z.array(InventoryStockHistory), inventory: z.array(InventoryStockItem), quantity: z.number() });
     export const InventoryItemStats = z.object({ totalPurchase: z.number(), totalSells: z.number() });
-    export const WeightUnit = z.enum(['kg', 'g', 'oz_tr']).or(z.string().transform((s) => \`unknown:\${s}\` as const));
+    export const WeightUnit = z.enum(['kg', 'g', 'oz_tr']);
     export const Weight = z.object({ unit: WeightUnit, value: z.number() });
-    export const ItemType = z.enum(['B', 'El', 'kA', 'Ka', 'KA', 'KR', 'Pa', 'LIII', 'ML', 'R', 'Phil', 'BR']).or(z.string().transform((s) => \`unknown:\${s}\` as const));
-    export const Product = z.object({ externalId: z.string().optional(), itemType: ItemType, weight: Weight, productId: z.string() });
-    export const InventoryItem = z.object({ inventoryId: z.string(), product: Product.optional(), quantity: z.number(), invest: z.number().optional(), stats: InventoryItemStats.optional(), revenue: z.number().optional(), stock: InventoryStock.optional() });
-    export const InventorySummaryResponse = z.object({ message: z.enum(['ok']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), items: z.array(InventoryItem) });
-    export const ChangeItemDetails = z.object({ quantity: z.number().optional(), priceEuro: z.number().optional(), purchaseDate: z.string().optional() });
-    export const ChangeItemRequest = z.object({ createdAt: z.string(), event: z.enum(['PURCHASED', 'GIFTED', 'SOLD']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), details: ChangeItemDetails });
-    export const SuccessResponse = z.object({ message: z.enum(['ok']).or(z.string().transform((s) => \`unknown:\${s}\` as const)) });
-    export const UpdateItemRequestDetails = z.object({ quantity: z.number().optional(), priceEuro: z.number().optional(), purchaseDate: z.string().optional(), stockId: z.string(), productId: z.string() });
-    export const UpdateItemRequest = z.object({ event: z.enum(['UPDATED']).or(z.string().transform((s) => \`unknown:\${s}\` as const)), createdAt: z.string(), details: UpdateItemRequestDetails });
-    export const PurchasedEventDetailBase = z.object({ kind: z.string().optional() });
-    export const PurchasedEventDetailItemProduct = PurchasedEventDetailBase.merge(z.object({ kind: z.string().optional().default('PRODUCT_REF'), productId: z.string() }));
-    export const PurchasedEventDetailItemSpecified = PurchasedEventDetailBase.merge(z.object({ kind: z.string().optional().default('SPECIFIED'), itemType: ItemType, weight: Weight }));
+    export const ItemType = z.enum(['B', 'El', 'kA', 'Ka', 'KA', 'KR', 'Pa', 'LIII', 'ML', 'R', 'Phil', 'BR']);
+    export const Product = z.object({ externalId: z.string().or(z.undefined()), itemType: ItemType, weight: Weight, productId: z.string() });
+    export const InventoryItem = z.object({ inventoryId: z.string(), product: Product.or(z.undefined()), quantity: z.number(), invest: z.number().or(z.undefined()), stats: InventoryItemStats.or(z.undefined()), revenue: z.number().or(z.undefined()), stock: InventoryStock.or(z.undefined()) });
+    export const InventorySummaryResponse = z.object({ message: z.enum(['ok']), items: z.array(InventoryItem) });
+    export const ChangeItemDetails = z.object({ quantity: z.number().or(z.undefined()), priceEuro: z.number().or(z.undefined()), purchaseDate: z.string().or(z.undefined()) });
+    export const ChangeItemRequest = z.object({ createdAt: z.string(), event: z.enum(['PURCHASED', 'GIFTED', 'SOLD']), details: ChangeItemDetails });
+    export const SuccessResponse = z.object({ message: z.enum(['ok']) });
+    export const UpdateItemRequestDetails = z.object({ quantity: z.number().or(z.undefined()), priceEuro: z.number().or(z.undefined()), purchaseDate: z.string().or(z.undefined()), stockId: z.string(), productId: z.string() });
+    export const UpdateItemRequest = z.object({ event: z.enum(['UPDATED']), createdAt: z.string(), details: UpdateItemRequestDetails });
+    export const PurchasedEventDetailBase = z.object({ kind: z.string().or(z.undefined()) });
+    export const PurchasedEventDetailItemProduct = PurchasedEventDetailBase.merge(z.object({ kind: z.string().or(z.undefined()).default('PRODUCT_REF'), productId: z.string() }));
+    export const PurchasedEventDetailItemSpecified = PurchasedEventDetailBase.merge(z.object({ kind: z.string().or(z.undefined()).default('SPECIFIED'), itemType: ItemType, weight: Weight }));
     export const PurchasedEventDetailItem = z.union([PurchasedEventDetailItemSpecified, PurchasedEventDetailItemProduct]);
-    export const PurchasedEventDetail = z.object({ item: PurchasedEventDetailItem, quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string().optional() });
+    export const PurchasedEventDetail = z.object({ item: PurchasedEventDetailItem, quantity: z.number(), priceEuro: z.number(), purchaseDate: z.string().or(z.undefined()) });
     export const CreateItemDetails = z.object({ details: PurchasedEventDetail });
     export const CreateItem = z.object({ details: CreateItemDetails });
     export const InventoryItemList = z.object({ items: z.array(InventoryItem) });
-    export const Error = z.object({ error: z.string().optional() });
+    export const Error = z.object({ error: z.string().or(z.undefined()) });
     export const ChangeConstantBase = z.object({ event: z.string() });
     export const GoldPriceUpdateDetails = z.object({ unit: WeightUnit, price: z.number() });
     export const ChangeConstantUser = ChangeConstantBase.merge(z.object({ inventoryId: z.string(), details: GoldPriceUpdateDetails, event: z.literal('UPDATE_DOUGH_PRICE').default('UPDATE_DOUGH_PRICE') }));
     export const ChangeConstantGlobal = ChangeConstantBase.merge(z.object({ details: GoldPriceUpdateDetails, event: z.literal('GLOBAL_UPDATE_DOUGH_PRICE') }));
-    export const ChangeConstant = zc.ZodUnionMatch.matcher("event", { 'UPDATE_DOUGH_PRICE': ChangeConstantUser, 'GLOBAL_UPDATE_DOUGH_PRICE': ChangeConstantGlobal, onDefault: z.object({ event: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() });
+    export const ChangeConstant = z.discriminatedUnion("event", [ChangeConstantUser, ChangeConstantGlobal]);
     export const GoldPriceRates = z.object({ g: z.number(), kg: z.number(), oz_tr: z.number() });
     export const ConstantBase = z.object({ version: z.number(), updatedAt: z.string(), ratesByWeight: GoldPriceRates });
-    export const Constant = z.object({ history: ConstantBase.optional(), version: z.number(), updatedAt: z.string(), ratesByWeight: GoldPriceRates });
+    export const Constant = z.object({ history: ConstantBase.or(z.undefined()), version: z.number(), updatedAt: z.string(), ratesByWeight: GoldPriceRates });
     export const Constants = z.object({ doughPrices: Constant });
 
     export namespace Types {

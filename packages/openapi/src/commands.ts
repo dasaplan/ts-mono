@@ -10,23 +10,27 @@ export function createCommandGenerate(program: Command) {
     .option("-o, --output [output]", "Target directory where the generated files will appear", "out")
     .option("--modelSuffix [modelSuffix]", "All model names are suffixed as provided")
     .option("--debug", "Enable debug logging")
+    .option("--keyOptional", "If set, will generate key optional `{foo?: number}` instead of value optional props `{foo: number | undefined}`", false)
     .option("--expressJs", "Express js compatible types e.g. lowercase header", false)
     .option("--templates", "If set, codegen templates will be copied into the current working directory for customization.", false)
-    .action(async (spec: string, options: { output: string; modelSuffix: string; debug: boolean; templates: boolean; expressJs: boolean }) => {
-      if (options.debug) {
-        appLog.setLogLevel("debug");
-      }
-      await generateOpenapi(spec, options.output, {
-        modelSuffix: options.modelSuffix,
-        clearTemp: true,
-        generateZod: true,
-        copyTemplates: options.templates,
-        tempFolder: undefined,
-        experimental: undefined,
-        expressJs: options.expressJs,
-      });
-      appLog.log.info(`finished generate`);
-    });
+    .action(
+      async (spec: string, options: { output: string; modelSuffix: string; debug: boolean; templates: boolean; expressJs: boolean; keyOptional: boolean }) => {
+        if (options.debug) {
+          appLog.setLogLevel("debug");
+        }
+        await generateOpenapi(spec, options.output, {
+          modelSuffix: options.modelSuffix,
+          clearTemp: true,
+          generateZod: true,
+          copyTemplates: options.templates,
+          tempFolder: undefined,
+          experimental: undefined,
+          expressJs: options.expressJs,
+          keyOptional: options.keyOptional,
+        });
+        appLog.log.info(`finished generate`);
+      },
+    );
 }
 
 export function createCommandGenerateTs(program: Command) {

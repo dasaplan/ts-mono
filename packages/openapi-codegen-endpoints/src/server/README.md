@@ -2,17 +2,12 @@
 ---
 feat(express-server): allow classes/objects for controller implementing the respective operation
 
----
-feat(express-server): complete types with zod
 
 ---
 feat(express-server): support errorMiddlewares in responseMiddlewares
 
 ---
-feat(express-server): no longer generate unknown types for server (only for clients)
-
----
-feat(express-server): 
+feat(express-server): improve controller return types for better error handling
 
 When user implement the operation controller, the return errors are not good enough.
 ```typescript

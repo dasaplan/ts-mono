@@ -11,13 +11,22 @@ export function createCommandGenerateZod(program: Command) {
     .option("-o, --output [output]", "Target directory for the generated files", "out")
     .option("--tsTypeSuffix [tsTypeSuffix]", "Suffix for typescript type names", "")
     .option("--expressJs", "Compatible types for express js e.g. lower case header", false)
+    .option("--keyOptional", "If set, will generate key optional `{foo?: number}` instead of value optional props `{foo: number | undefined}`", false)
     .option("--disableUnknownEnum", "If set, enums will be rendered without unknown values", false)
     .option("--disableUnknownUnion", "If set, discriminated unions (oneOf) will be rendered without unknown values", false)
     .option("--debug", "Enable debug logging", false)
     .action(
       async (
         spec: string,
-        options: { output: string; debug: string; disableUnknownEnum: boolean; disableUnknownUnion: boolean; tsTypeSuffix: string; expressJs: boolean },
+        options: {
+          output: string;
+          debug: string;
+          disableUnknownEnum: boolean;
+          disableUnknownUnion: boolean;
+          tsTypeSuffix: string;
+          expressJs: boolean;
+          keyOptional: boolean;
+        },
       ) => {
         if (options.debug) {
           appLog.setLogLevel("debug");
@@ -33,6 +42,7 @@ export function createCommandGenerateZod(program: Command) {
           withUnknownUnion: !options.disableUnknownUnion,
           tsTypeNameSuffix: options.tsTypeSuffix,
           lowerCaseHeader: options.expressJs,
+          withValueOptional: !options.keyOptional,
         });
       },
     );

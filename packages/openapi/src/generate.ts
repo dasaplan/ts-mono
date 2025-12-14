@@ -9,7 +9,7 @@ import { Project } from "ts-morph";
 export interface ExperimentalFeatures {
   experimental?: never;
 }
-type GenParams = { clearTemp: boolean; tempFolder?: string; expressJs?: boolean } & TsAxiosPublicGenOptions & ExperimentalFeatures;
+type GenParams = { clearTemp: boolean; tempFolder?: string; expressJs?: boolean; keyOptional?: boolean } & TsAxiosPublicGenOptions & ExperimentalFeatures;
 
 export async function generateOpenapi(specFilePath: string, outputFile: string, params?: GenParams) {
   try {
@@ -62,6 +62,7 @@ async function generateZod(parsed: OpenApiBundled, out: Folder, params?: GenPara
     withUnknownEnum: true,
     lowerCaseHeader: params?.expressJs ?? true,
     tsTypeNameSuffix: params?.modelSuffix ?? "",
+    withValueOptional: params?.keyOptional ?? true,
   });
 }
 

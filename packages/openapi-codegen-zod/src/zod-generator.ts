@@ -32,6 +32,7 @@ export async function generateZodSources(parsed: OpenApiBundled, filePath: strin
     withUnknownEnum: true,
     withUnknownUnion: true,
     lowerCaseHeader: true,
+    withValueOptional: true,
     tsTypeNameSuffix: "",
     ...(params ?? {}),
   };

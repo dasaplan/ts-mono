@@ -64,9 +64,10 @@ export async function generateExpressZodApiFromBundled(bundled: OpenApiBundled, 
   const zodSchemasFilePath = out.makeFile("zod.ts").absolutePath;
   const { project } = await generateZodSources(bundled, zodSchemasFilePath, {
     includeTsTypes: false,
-    withUnknownEnum: true,
-    withUnknownUnion: true,
+    withUnknownEnum: false,
+    withUnknownUnion: false,
     lowerCaseHeader: true,
+    withValueOptional: true,
     tsTypeNameSuffix: "",
   });
 
