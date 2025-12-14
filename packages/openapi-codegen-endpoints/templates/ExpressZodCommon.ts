@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars,@typescript-eslint/no-explicit-any */
+// noinspection DuplicatedCode
+
 import { NextFunction, Request, Response } from "express";
 import z from "zod";
 import { __exp_util, ControllerFn, ExpressHandler } from "./ExpressCommon.js";
@@ -7,10 +10,10 @@ type ParamsDictionary = z.ZodObject;
 type ParsedQs = z.ZodObject;
 
 type RequestValidationForOperation<
-  RequestBody extends object | undefined,
-  PathParams extends object | undefined,
-  QueryParams extends object | undefined,
-  Headers extends object | undefined,
+  RequestBody extends object | undefined = object,
+  PathParams extends object | undefined = object,
+  QueryParams extends object | undefined = object,
+  Headers extends object | undefined = object,
 > = {
   /** header are deserialized to lower-case by express*/
   headers?: Headers | false;
@@ -27,23 +30,72 @@ type RequestValidationForOperation<
  * */
 type ToStringRecord<T> = T extends Record<string, unknown> ? { [K in keyof T]: string } : never;
 
+// Type piping utilities for middleware chaining
+type PipeableRequest<
+  P = Record<string, string>,
+  ResBody = unknown,
+  ReqBody = unknown,
+  ReqQuery = Record<string, string>,
+  Locals extends Record<string, unknown> = Record<string, unknown>,
+> = Request<P, ResBody, ReqBody, ReqQuery> & { locals: Locals };
+
+type PipeableHandler<TReqIn extends PipeableRequest = PipeableRequest, TReqOut extends PipeableRequest = TReqIn, TResBody = unknown> = (
+  req: TReqIn,
+  res: Response<TResBody, TReqOut["locals"]>,
+  next: NextFunction,
+) => void | Promise<void>;
+
+type ChainHandlers<Handlers extends readonly PipeableHandler[]> = Handlers extends readonly [
+  infer First extends PipeableHandler<infer In, infer Out>,
+  ...infer Rest,
+]
+  ? Rest extends readonly PipeableHandler[]
+    ? readonly [First, ...ChainHandlers<PipeNext<Rest, Out>>]
+    : readonly [First]
+  : readonly [];
+
+type PipeNext<Handlers extends readonly PipeableHandler[], TReqIn extends PipeableRequest> = Handlers extends readonly [infer First, ...infer Rest]
+  ? First extends PipeableHandler<infer _In, infer Out>
+    ? Rest extends readonly PipeableHandler[]
+      ? readonly [PipeableHandler<TReqIn, Out>, ...PipeNext<Rest, Out>]
+      : readonly [PipeableHandler<TReqIn, Out>]
+    : Handlers
+  : Handlers;
+
+type ExtractFinalRequest<Handlers extends readonly PipeableHandler[]> = Handlers extends readonly [
+  ...PipeableHandler[],
+  infer Last extends PipeableHandler<infer _In, infer Out>,
+]
+  ? Out
+  : Handlers extends readonly [infer Only extends PipeableHandler<infer _In, infer Out>]
+    ? Out
+    : PipeableRequest;
+
 export type Operation<
   Responses extends { [httpStatus: number]: z.ZodType<object> } = { [httpStatus: number]: z.ZodType<object> },
   RequestBody extends z.Schema | undefined = z.Schema,
   PathParams extends ParamsDictionary | undefined = ParamsDictionary,
   QueryParams extends ParsedQs | undefined = ParsedQs,
   Headers extends z.Schema | undefined = z.Schema,
+  RequestMiddlewares extends readonly PipeableHandler[] = readonly [],
+  FinalRequest extends PipeableRequest = ExtractFinalRequest<RequestMiddlewares>,
 > = {
-  requestValidation?: RequestValidationForOperation<RequestBody, PathParams, QueryParams, Headers>;
-  responseValidation?: {
-    /** All http status codes for json responses must be specified. Unmapped status codes will yield a runtime error. */
-    responses?: { [httpStatus in keyof Responses]+?: Responses[httpStatus] | false };
-  };
+  requestValidation?: RequestValidationForOperation<RequestBody, PathParams, QueryParams, Headers> | false;
+  responseValidation?:
+    | {
+        /** All http status codes for json responses must be specified.  Unmapped status codes will yield a runtime error. */
+        responses?: { [httpStatus in keyof Responses]+?: Responses[httpStatus] | false };
+      }
+    | false;
 
-  requestMiddlewares?: Array<
-    ExpressHandler<Request<ToStringRecord<z.infer<PathParams>>, z.infer<Responses[number]>, z.infer<RequestBody>, ToStringRecord<z.infer<QueryParams>>>>
+  requestMiddlewares?: RequestMiddlewares;
+  controller: ControllerFn<
+    { [key in keyof Responses]: z.output<Responses[key]> },
+    z.infer<RequestBody>,
+    z.infer<PathParams> & FinalRequest["params"],
+    z.infer<QueryParams> & FinalRequest["query"],
+    FinalRequest["locals"]
   >;
-  controller: ControllerFn<{ [key in keyof Responses]: z.output<Responses[key]> }, z.infer<RequestBody>, z.infer<PathParams>, z.infer<QueryParams>>;
   responseMiddlewares?: Array<
     ExpressHandler<
       Request<ToStringRecord<z.infer<PathParams>>, z.infer<Responses[number]>, z.infer<RequestBody>, ToStringRecord<z.infer<QueryParams>>>,
@@ -52,33 +104,56 @@ export type Operation<
   >;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type OperationConfig<Op extends Operation<any, any, any, any, any>> = { [key in keyof Op]?: Op[key] | false };
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type OperationMap<Ops extends { [key in keyof object]: Operation<any, any, any, any, any> } = { [key in keyof object]: Operation<any, any, any, any, any> }> = {
+// Helper to create typed middleware chains
+export function createMiddlewareChain<const Handlers extends readonly PipeableHandler[]>(...handlers: Handlers & ChainHandlers<Handlers>): Handlers {
+  return handlers;
+}
+
+// Helper to create a typed middleware that transforms the request
+export function createTransformMiddleware<
+  TReqIn extends PipeableRequest = PipeableRequest,
+  TLocalsOut extends Record<string, unknown> = Record<string, unknown>,
+>(
+  handler: (req: TReqIn, res: Response<unknown, TReqIn["locals"]>, next: NextFunction) => TLocalsOut | Promise<TLocalsOut>,
+): PipeableHandler<TReqIn, PipeableRequest<TReqIn["params"], TReqIn["body"], TReqIn["body"], TReqIn["query"], TReqIn["locals"] & TLocalsOut>> {
+  return async (req, res, next) => {
+    try {
+      const result = await handler(req, res, next);
+      Object.assign(req.locals, result);
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+}
+
+type OperationConfig<Op extends Operation<any, any, any, any, any, any, any>> = { [key in keyof Op]?: Op[key] | false };
+
+type OperationMap<
+  Ops extends { [key in keyof object]: Operation<any, any, any, any, any, any, any> } = { [key in keyof object]: Operation<any, any, any, any, any, any, any> },
+> = {
   [operationId in keyof Ops]: Ops[operationId];
 };
 type ScopedDefaultConfig<OpMap extends OperationMap> = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key in keyof OpMap]?: (OpMap[key] extends Operation<any, any, any, any, any> ? OperationConfig<OpMap[key]> : never) | false;
+  [key in keyof OpMap]?: (OpMap[key] extends Operation<any, any, any, any, any, any, any> ? OperationConfig<OpMap[key]> : never) | false;
 };
 
 export type ApiConfig<OpMap extends OperationMap = OperationMap> = {
-  /** A controller will evaluate in order defaults.globalConfig, defaults.scopedConfig.operationId, operations.operationId.
+  /** A controller will evaluate in order defaults. globalConfig, defaults.scopedConfig.operationId, operations.operationId.
    * The defined configs are additive unless explicitly provided false for respective config.
    *
    * @example
    * ```ts
    * // defaults apply to all operations and are additive to concrete operation
    * const petsApiConfig = {
-   *   defaults: { globalConfig: { requestValidation: { headers: z.record(z.string())} } }
-   *   operations: { fetchPets: createPetsOperation(), createPet: createPetOperation() }
+   *   defaults: { globalConfig: { requestValidation: { headers: z. record(z.string())} } }
+   *   operations: { fetchPets:  createPetsOperation(), createPet: createPetOperation() }
    *  };
    *
    * // opt-out header request validation for fetchPets and only use specification in operations.fetchPets
    * const petsApiConfig = {
    *   defaults: {
-   *    globalConfig: { requestValidation: { headers: z.record(z.string())} },
+   *    globalConfig: { requestValidation:  { headers: z.record(z.string())} },
    *    scopedConfig: { fetchPets: {  requestValidation: { headers: false }} }
    *    },
    *   operations: { fetchPets: createPetsOperation(), createPet: createPetOperation() }
@@ -88,7 +163,7 @@ export type ApiConfig<OpMap extends OperationMap = OperationMap> = {
    * const petsApiConfig = {
    *   defaults: {
    *    globalConfig: { requestValidation: { headers: z.record(z.string())} },
-   *    scopedConfig: { fetchPets: {  requestValidation: false } }
+   *    scopedConfig: { fetchPets:  {  requestValidation: false } }
    *   },
    *   operations: { fetchPets: createPetsOperation(), createPet: createPetOperation() }
    *    };
@@ -99,11 +174,11 @@ export type ApiConfig<OpMap extends OperationMap = OperationMap> = {
    *    globalConfig: { requestValidation: { headers: z.record(z.string())} },
    *    scopedConfig: { fetchPets: false }
    *   },
-   *   operations: { fetchPets: createPetsOperation(), createPet: createPetOperation() }
+   *   operations: { fetchPets:  createPetsOperation(), createPet: createPetOperation() }
    *    };
    * ```
    * */
-  defaults?: { globalConfig?: OperationConfig<Operation>; scopedConfig?: ScopedDefaultConfig<OpMap> };
+  defaults?: { globalConfig?: OperationConfig<Operation<any, any, any, any, any, any, any>>; scopedConfig?: ScopedDefaultConfig<OpMap> };
   operations: OpMap;
 };
 
@@ -167,7 +242,7 @@ export function CreateInputValidator<
   ) => {
     try {
       if (requestValidation.query) {
-        const validQuery = requestValidation.query.safeParse(req.headers);
+        const validQuery = requestValidation.query.safeParse(req.query);
         if (!validQuery.success) {
           return next(new RequestValidationError("query", validQuery.error));
         }
@@ -204,10 +279,8 @@ export function CreateInputValidator<
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function CreateController<TResponses extends Record<number, any>>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  opController: Operation<TResponses, any, any, any>["controller"],
+  opController: ControllerFn<any, any, any, any, any>,
   responseValidation: Record<number, z.ZodSchema | false | undefined> | undefined,
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -238,7 +311,8 @@ export function CreateController<TResponses extends Record<number, any>>(
       if (typeof schema === "undefined") {
         return next(new MissingResponseSchemaError(resultStatus));
       }
-      const isResponseValidationDisabled = schema === false;
+
+      const isResponseValidationDisabled = typeof responseValidation === "undefined" || schema === false;
 
       if ("error" in result) {
         return next(result.error);
@@ -266,16 +340,11 @@ export function CreateController<TResponses extends Record<number, any>>(
   };
 }
 
-export function withDefaults<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  T extends Record<string, Operation<any, any, any, any, any>>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Op extends Operation<any, any, any, any, any>,
->(
+export function withDefaults<T extends Record<string, Operation<any, any, any, any, any, any, any>>, Op extends Operation<any, any, any, any, any, any, any>>(
   operationId: string,
   operation: Op,
   defaults?: ApiConfig<T>["defaults"],
-  generatorConfig?: Pick<Operation, "responseValidation" | "requestValidation">,
+  generatorConfig?: Pick<Operation<any, any, any, any, any, any, any>, "responseValidation" | "requestValidation">,
 ): __exp_util.CompleteDeep<Op> {
   if (typeof defaults === "undefined" && typeof generatorConfig === "undefined") {
     return __exp_util.asCompleteDeep(operation);
@@ -291,22 +360,17 @@ export function withDefaults<
 
   // Helper to merge arrays of middlewares
 
-  function mergeMiddlewares(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    global?: Array<ExpressHandler<any, any, any>> | false,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    scoped?: Array<ExpressHandler<any, any, any>> | false,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    operation?: Array<ExpressHandler<any, any, any>> | false,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Array<ExpressHandler<any, any, any>> | undefined {
+  function mergeMiddlewares<THandler extends ExpressHandler<any, any, any>>(
+    global?: Readonly<Array<THandler>> | false,
+    scoped?: Array<THandler> | false,
+    operation?: Readonly<Array<THandler>> | false,
+  ): Readonly<Array<THandler>> | undefined {
     if (isConfigDisabledForScope) return operation !== false ? operation : undefined;
 
     if (operation === false) return undefined;
     if (scoped === false) return undefined;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result: Array<ExpressHandler<any, any, any>> = [];
+    const result: Array<THandler> = [];
     if (global && Array.isArray(global)) {
       result.push(...global);
     }
@@ -316,11 +380,14 @@ export function withDefaults<
     if (operation && Array.isArray(operation)) {
       result.push(...operation);
     }
-    return result.length > 0 ? result : undefined;
+    return result.length > 0 ? (result as Readonly<Array<THandler>>) : undefined;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function mergeRequestValidation(): RequestValidationForOperation<any, any, any, any> | undefined {
+  function mergeRequestValidation(): RequestValidationForOperation | undefined {
+    // explicitly disabled at operation level
+    if (operation.requestValidation == false) return undefined;
+
+    if (isConfigDisabledForScope) return operation.requestValidation;
     if (isConfigDisabledForScope) return operation.requestValidation;
 
     const globalRV = globalConfig?.requestValidation;
@@ -328,11 +395,7 @@ export function withDefaults<
     const scopedRV = scopedConfig?.requestValidation;
     const opRV = operation.requestValidation;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function mergeValidationField<Key extends keyof RequestValidationForOperation<any, any, any, any>>(
-      field: Key,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ): RequestValidationForOperation<any, any, any, any>[Key] {
+    function mergeValidationField<Key extends keyof RequestValidationForOperation>(field: Key): RequestValidationForOperation[Key] {
       const operationField = opRV?.[field];
       if (isConfigDisabledForScope || typeof operationField !== "undefined") return operationField;
       if (scopedRV && typeof scopedRV[field] !== "undefined") return scopedRV[field];
@@ -362,6 +425,9 @@ export function withDefaults<
     const generatorRV = generatorConfig?.responseValidation;
     const scopedRV = scopedConfig?.responseValidation;
     const opRV = operation.responseValidation;
+
+    // explicitly disabled at operation level
+    if (opRV === false) return undefined;
 
     if (typeof scopedRV !== "undefined" && !scopedRV) return opRV;
 

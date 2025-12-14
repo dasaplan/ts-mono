@@ -104,18 +104,19 @@ export function generateCreateExpressServerApi(endpoints: Array<Endpoint>, optio
 
         const idWithDefaults = `withDefaults_${e.alias}`;
         const opGeneratorConfig = `${generatorDefaultConfigDeclaration.name}["${e.alias}"]`;
+
         const withDefaults = `const ${idWithDefaults} = withDefaults("${e.alias}", ${op}, ${defaults}, ${opGeneratorConfig} )`;
 
         // Generate with zod dependencies
         const zodInputSchemas = `{ 
-          headers: ${idWithDefaults}?.requestValidation?.headers, 
-          params:  ${idWithDefaults}?.requestValidation?.params,
-          body:  ${idWithDefaults}?.requestValidation?.body 
+          headers: ${idWithDefaults}?.requestValidation? ${idWithDefaults}.requestValidation.headers : undefined, 
+          params:  ${idWithDefaults}?.requestValidation? ${idWithDefaults}.requestValidation.params : undefined,
+          body: ${idWithDefaults}?.requestValidation? ${idWithDefaults}.requestValidation.body : undefined 
         }`;
         const CreateInputValidator = `CreateInputValidator(${zodInputSchemas})`;
 
         // TODO: include response schemas from zod - we need to think how we like to wire in the zod generator
-        const responseValidator = `${idWithDefaults}?.responseValidation?.responses`;
+        const responseValidator = `${idWithDefaults}?.responseValidation? ${idWithDefaults}.responseValidation.responses : undefined`;
 
         return `
         ${withDefaults};
@@ -123,7 +124,7 @@ export function generateCreateExpressServerApi(endpoints: Array<Endpoint>, optio
           "${expressPath}",
           ...(${idWithDefaults}?.requestMiddlewares ?? []), 
           ${CreateInputValidator},
-          CreateController(${idWithDefaults}.controller as never, ${responseValidator}),
+          CreateController(${idWithDefaults}.controller, ${responseValidator}),
           ...(${idWithDefaults}?.responseMiddlewares ?? [])
         );
       `;
