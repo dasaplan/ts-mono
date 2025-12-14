@@ -4,6 +4,10 @@ feat(express-server): allow classes/objects for controller implementing the resp
 
 
 ---
+feat(express-server): support local record in controller
+
+
+---
 feat(express-server): support errorMiddlewares in responseMiddlewares
 
 ---
