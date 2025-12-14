@@ -18,6 +18,15 @@ describe("withDefaults", () => {
     return middleware;
   };
 
+  // Utility functions to extract non-false validation objects
+  const getRequestValidation = (result: Operation) => {
+    return result.requestValidation !== false ? result.requestValidation : undefined;
+  };
+
+  const getResponseValidation = (result: Operation) => {
+    return result.responseValidation !== false ? result.responseValidation : undefined;
+  };
+
   describe("basic behavior", () => {
     test("should return operation as-is when no defaults provided", () => {
       const controller = createMockController("testController");
@@ -65,10 +74,13 @@ describe("withDefaults", () => {
       expect(result.requestMiddlewares).toEqual([reqMiddleware]);
       expect(result.responseMiddlewares).toEqual([resMiddleware]);
 
-      expect(result.requestValidation?.headers).toBe(headersSchema);
-      expect(result.requestValidation?.params).toBe(paramsSchema);
-      expect(result.requestValidation?.body).toBe(bodySchema);
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[200]).toBe(responseSchema);
+      const reqValidation = getRequestValidation(result);
+      expect(reqValidation?.headers).toBe(headersSchema);
+      expect(reqValidation?.params).toBe(paramsSchema);
+      expect(reqValidation?.body).toBe(bodySchema);
+
+      const resValidation = getResponseValidation(result);
+      expect(resValidation?.responses?.[200]).toBe(responseSchema);
     });
   });
 
@@ -137,7 +149,8 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults);
 
-      expect(result.requestValidation?.headers).toBe(globalHeaders);
+      const requestValidation = getRequestValidation(result);
+      expect(requestValidation?.headers).toBe(globalHeaders);
     });
 
     test("should apply global response validation", () => {
@@ -160,7 +173,8 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults);
 
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[400]).toBe(globalResponse);
+      const resValidation = getResponseValidation(result);
+      expect(resValidation?.responses?.[400]).toBe(globalResponse);
     });
   });
 
@@ -225,8 +239,9 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults);
 
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[400]).toBe(globalResponse);
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[200]).toBe(scopedResponse);
+      const resValidation = getResponseValidation(result);
+      expect(resValidation?.responses?.[400]).toBe(globalResponse);
+      expect(resValidation?.responses?.[200]).toBe(scopedResponse);
     });
   });
 
@@ -303,8 +318,8 @@ describe("withDefaults", () => {
       };
 
       const result = withDefaults("testOp", operation, defaults);
-
-      expect(result.requestValidation?.headers).toBe(false);
+      const requestValidation = getRequestValidation(result);
+      expect(requestValidation?.headers).toBe(false);
     });
 
     test("should opt-out response validation with false at scoped level", () => {
@@ -399,7 +414,8 @@ describe("withDefaults", () => {
       const result = withDefaults("testOp", operation, defaults);
 
       // Operation headers should take precedence
-      expect(result.requestValidation?.headers).toBe(opHeaders);
+      const reqValidation = getRequestValidation(result);
+      expect(reqValidation?.headers).toBe(opHeaders);
     });
 
     test("scoped validation should take precedence over global when operation has none", () => {
@@ -429,7 +445,8 @@ describe("withDefaults", () => {
       const result = withDefaults("testOp", operation, defaults);
 
       // Scoped headers should take precedence over global
-      expect(result.requestValidation?.headers).toBe(scopedHeaders);
+      const reqValidation = getRequestValidation(result);
+      expect(reqValidation?.headers).toBe(scopedHeaders);
     });
   });
 
@@ -470,9 +487,10 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults);
 
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[200]).toBe(global200);
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[400]).toBe(scoped400);
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[500]).toBe(op500);
+      const resValidation = getResponseValidation(result);
+      expect(resValidation?.responses?.[200]).toBe(global200);
+      expect(resValidation?.responses?.[400]).toBe(scoped400);
+      expect(resValidation?.responses?.[500]).toBe(op500);
     });
 
     test("should allow disabling specific status code validation with false", () => {
@@ -500,7 +518,8 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults);
 
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[200]).toBe(false);
+      const resValidation = getResponseValidation(result);
+      expect(resValidation?.responses?.[200]).toBe(false);
     });
   });
 
@@ -585,9 +604,10 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults);
 
-      expect(result.requestValidation?.headers).toBe(globalHeaders);
-      expect(result.requestValidation?.params).toBe(scopedParams);
-      expect(result.requestValidation?.body).toBe(opBody);
+      const reqValidation = getRequestValidation(result);
+      expect(reqValidation?.headers).toBe(globalHeaders);
+      expect(reqValidation?.params).toBe(scopedParams);
+      expect(reqValidation?.body).toBe(opBody);
     });
 
     test("should handle undefined requestValidation in operation when defaults exist", () => {
@@ -609,7 +629,8 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults);
 
-      expect(result.requestValidation?.headers).toBe(globalHeaders);
+      const reqValidation = getRequestValidation(result);
+      expect(reqValidation?.headers).toBe(globalHeaders);
     });
   });
 
@@ -637,9 +658,13 @@ describe("withDefaults", () => {
       };
 
       const result = withDefaults("testOp", operation, undefined, generatorConfig);
-      expect(result.requestValidation?.headers).toBe(generatorHeaders);
-      expect(result.requestValidation?.body).toBe(generatorBody);
-      expect(result.responseValidation?.responses?.[200]).toBe(generatorResponse);
+
+      const reqValidation = getRequestValidation(result);
+      expect(reqValidation?.headers).toBe(generatorHeaders);
+      expect(reqValidation?.body).toBe(generatorBody);
+
+      const resValidation = getResponseValidation(result);
+      expect(resValidation?.responses?.[200]).toBe(generatorResponse);
     });
 
     test("generator config should override global config", () => {
@@ -667,7 +692,8 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults, generatorConfig);
 
-      expect(result.requestValidation?.headers).toBe(generatorHeaders);
+      const reqValidation = getRequestValidation(result);
+      expect(reqValidation?.headers).toBe(generatorHeaders);
     });
 
     test("scoped config should override generator config", () => {
@@ -703,10 +729,11 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults, generatorConfig);
 
-      expect(result.requestValidation?.headers).toBe(scopedHeaders);
+      const reqValidation = getRequestValidation(result);
+      expect(reqValidation?.headers).toBe(scopedHeaders);
     });
 
-    test("operation config should override all including generator config", () => {
+    test("operation config should override generator config", () => {
       const globalHeaders = z.object({ "x-global": z.string() });
       const generatorHeaders = z.object({ "x-generated": z.string() });
       const scopedHeaders = z.object({ "x-scoped": z.string() });
@@ -743,7 +770,8 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults, generatorConfig);
 
-      expect(result.requestValidation?.headers).toBe(opHeaders);
+      const reqValidation = getRequestValidation(result);
+      expect(reqValidation?.headers).toBe(opHeaders);
     });
 
     test("should merge different fields from different levels with generator config", () => {
@@ -783,10 +811,11 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults, generatorConfig);
 
-      expect(result.requestValidation?.headers).toBe(globalHeaders);
-      expect(result.requestValidation?.params).toBe(generatorParams);
-      expect(result.requestValidation?.query).toBe(scopedQuery);
-      expect(result.requestValidation?.body).toBe(opBody);
+      const reqValidation = getRequestValidation(result);
+      expect(reqValidation?.headers).toBe(globalHeaders);
+      expect(reqValidation?.params).toBe(generatorParams);
+      expect(reqValidation?.query).toBe(scopedQuery);
+      expect(reqValidation?.body).toBe(opBody);
     });
 
     test("should opt-out generator config with false at scoped level", () => {
@@ -815,7 +844,8 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults, generatorConfig);
 
-      expect(result.requestValidation?.headers).toBe(false);
+      const reqValidation = getRequestValidation(result);
+      expect(reqValidation?.headers).toBe(false);
     });
 
     test("should merge response schemas from all levels including generator config", () => {
@@ -863,10 +893,11 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults, generatorConfig);
 
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[200]).toBe(global200);
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[201]).toBe(generator201);
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[400]).toBe(scoped400);
-      expect(typeof result.responseValidation === "object" && result.responseValidation?.responses?.[500]).toBe(op500);
+      const resValidation = getResponseValidation(result);
+      expect(resValidation?.responses?.[200]).toBe(global200);
+      expect(resValidation?.responses?.[201]).toBe(generator201);
+      expect(resValidation?.responses?.[400]).toBe(scoped400);
+      expect(resValidation?.responses?.[500]).toBe(op500);
     });
 
     test("precedence order: operation > scoped > generator > global", () => {
@@ -914,14 +945,15 @@ describe("withDefaults", () => {
 
       const result = withDefaults("testOp", operation, defaults, generatorConfig);
 
+      const reqValidation = getRequestValidation(result);
       // operation wins for headers
-      expect(result.requestValidation?.headers).toBe(opHeaders);
+      expect(reqValidation?.headers).toBe(opHeaders);
       // scoped wins for body (no generator)
-      expect(result.requestValidation?.body).toBe(scopedBody);
+      expect(reqValidation?.body).toBe(scopedBody);
       // generator wins for query (no operation or scoped)
-      expect(result.requestValidation?.query).toBe(generatorQuery);
-      // global wins for params (no operation, scoped, or generator)
-      expect(result.requestValidation?.params).toBe(globalParams);
+      expect(reqValidation?.query).toBe(generatorQuery);
+      // global wins for params (no other levels)
+      expect(reqValidation?.params).toBe(globalParams);
     });
   });
 });
