@@ -709,7 +709,7 @@ export namespace Schemas {
         "getPet": {
             path: "/pets/{petId}",
             method: "get",
-            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            params: { header: z.object({}), path: z.object({ "petId": z.string() }), query: z.object({}), cookie: z.object({}), },
             responses: {
                 200: Pet
             },
@@ -2280,7 +2280,7 @@ export namespace Schemas {
         "listPets": {
             path: "/pets",
             method: "get",
-            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            params: { header: z.object({}), path: z.object({ "petId": z.string() }), query: z.object({}), cookie: z.object({}), },
             responses: {
                 200: Pets
             },
@@ -2298,7 +2298,7 @@ export namespace Schemas {
         "showPetById": {
             path: "/pets/{petId}",
             method: "get",
-            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            params: { header: z.object({}), path: z.object({ "petId": z.string() }), query: z.object({}), cookie: z.object({}), },
             responses: {
                 200: Pet
             },
@@ -2307,7 +2307,7 @@ export namespace Schemas {
         "patchPet": {
             path: "/pets/{petId}",
             method: "patch",
-            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            params: { header: z.object({}), path: z.object({ "petId": z.string() }), query: z.object({}), cookie: z.object({}), },
             responses: {
                 200: Pet
             },
@@ -5015,7 +5015,7 @@ export namespace Schemas {
         "getPet": {
             path: "/pets/{petId}",
             method: "get",
-            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            params: { header: z.object({}), path: z.object({ "petId": z.string() }), query: z.object({}), cookie: z.object({}), },
             responses: {
                 200: Pet
             },
@@ -5796,7 +5796,7 @@ export namespace Schemas {
         "getPet": {
             path: "/pets/{petId}",
             method: "get",
-            params: { header: z.object({}), path: z.object({ "petid": z.string() }), query: z.object({}), cookie: z.object({}), },
+            params: { header: z.object({}), path: z.object({ "petId": z.string() }), query: z.object({}), cookie: z.object({}), },
             responses: {
                 200: Pet
             },

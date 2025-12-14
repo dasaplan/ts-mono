@@ -50,4 +50,4 @@ export type ControllerFn<
   PathParams = object,
   QueryParams = object,
   Locals extends Record<string, any> = Record<string, any>,
-> = (req: Request<PathParams, ResponseMap[number], RequestBody, QueryParams, Locals>) => ControllerResult<ResponseMap> | Promise<ControllerResult<ResponseMap>>;
+> = (req: Request<PathParams, ResponseMap[number], RequestBody, QueryParams, Locals>) => Promise<ControllerResult<ResponseMap>>;

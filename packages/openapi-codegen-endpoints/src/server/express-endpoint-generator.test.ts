@@ -3,7 +3,7 @@ import { generateExpressApi, generateExpressZodApiFromBundled } from "../endpoin
 import { describe, expect, test } from "vitest";
 import { resolveSpecPath } from "openapi-example-specs";
 
-describe.each(["zod", "ts"] as const)("generate express %s", (generator) => {
+describe.each(["zod" /*, "ts"*/] as const)("generate express %s", (generator) => {
   const { createApi, withSchemas, withRoute } = OpenapiBundledMock.create();
 
   test("integration", async () => {

@@ -52,7 +52,7 @@ export function createCommandGenerateExpressApi(program: Command) {
     .option("--templates [templates]", "Temporary directory which can be deleted", "tmp")
     .option("-o, --out [out]", "Target directory for the generated files", "out")
     .option("--apiName [apiName]", "Name of the Api used to generate names for files or modules")
-    .addOption(new Option("--generator <type>", "Generator type").choices(["zod", "ts"]).default("zod"))
+    .addOption(new Option("--generator <type>", "Generator type").choices(["zod" /*, "ts"*/]).default("zod"))
     .option("--debug", "Enable debug logging", false)
     .action(async (spec: string, options: { debug: boolean; out: string; templates: string; apiName: string; generator: "zod" | "ts" }) => {
       if (options.debug) {
