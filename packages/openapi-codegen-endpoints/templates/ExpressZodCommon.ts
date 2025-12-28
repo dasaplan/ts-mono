@@ -214,15 +214,16 @@ export function CreateController<TResponses extends Record<number, any>>(
     try {
       // this is generic. no need for type safety
       const result = await opController(req as never);
-      if (typeof result === "undefined") {
-        // no content
-        return res.status(204).send();
-      }
 
       if ("headers" in result && typeof result.headers === "object") {
         Object.entries(result.headers).forEach(([key, value]) => {
           res.setHeader(key, value);
         });
+      }
+
+      if (result.status) {
+        // no content
+        return res.status(204).send();
       }
 
       if ("kind" in result && result.kind === "CUSTOM_SENDER") {
@@ -232,7 +233,7 @@ export function CreateController<TResponses extends Record<number, any>>(
       // ********************************
       // zod response schema validation
       // ********************************
-      // typesafe cast
+
       const resultStatus = result.status as number;
       const schema = responseValidation?.[resultStatus];
       if (typeof schema === "undefined") {

@@ -2,7 +2,6 @@ import { Endpoint, OpenApiBundled, Transpiler } from "@dasaplan/openapi-bundler"
 import { ApplicationError } from "@dasaplan/ts-sdk";
 import {
   createImport,
-  createTsConstObject,
   createTsExtendedInterface,
   createTsFnParam,
   createTsInlineObject,
