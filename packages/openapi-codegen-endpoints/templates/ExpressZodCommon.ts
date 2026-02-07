@@ -3,7 +3,7 @@
 
 import { NextFunction, Request, Response } from "express";
 import z from "zod";
-import { __exp_util, ControllerFn, ExpressHandler } from "./ExpressCommon.js";
+import { ControllerFn, ExpressHandler } from "./ExpressCommon.js";
 
 type ParamsDictionary = z.ZodObject;
 
@@ -221,7 +221,7 @@ export function CreateController<TResponses extends Record<number, any>>(
         });
       }
 
-      if (result.status) {
+      if (result.status === 204) {
         // no content
         return res.status(204).send();
       }
@@ -273,9 +273,9 @@ export function withDefaults<T extends Record<string, Operation<any, any, any, a
   operation: Op,
   defaults?: ApiConfig<T>["defaults"],
   generatorConfig?: Pick<Operation<any, any, any, any, any>, "responseValidation" | "requestValidation">,
-): __exp_util.CompleteDeep<Op> {
+): Op {
   if (typeof defaults === "undefined" && typeof generatorConfig === "undefined") {
-    return __exp_util.asCompleteDeep(operation);
+    return operation;
   }
 
   const globalConfig = defaults?.globalConfig;
@@ -417,5 +417,5 @@ export function withDefaults<T extends Record<string, Operation<any, any, any, a
     requestValidation: mergeRequestValidation(),
     responseMiddlewares: mergeResponseMiddlewares(),
     responseValidation: mergeResponseValidation(),
-  } as __exp_util.CompleteDeep<Op>;
+  } as Op;
 }

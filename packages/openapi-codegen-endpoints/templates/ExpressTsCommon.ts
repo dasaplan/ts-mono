@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { __exp_util, ControllerFn, ExpressHandler } from "./ExpressCommon.js";
+import { ControllerFn, ExpressHandler } from "./ExpressCommon.js";
 
 export interface ResponseValidationFn<Response = unknown> {
   (httpStatus: number, payload?: Response): boolean;
@@ -172,13 +172,9 @@ export function CreateController<Req extends Request, Res extends Response, Next
   };
 }
 
-export function withDefaults<T extends Record<string, Operation>>(
-  operationId: string,
-  operation: Operation,
-  defaults?: ApiConfig<T>["defaults"],
-): __exp_util.CompleteDeep<Operation> {
+export function withDefaults<T extends Record<string, Operation>>(operationId: string, operation: Operation, defaults?: ApiConfig<T>["defaults"]): Operation {
   if (typeof defaults === "undefined") {
-    return __exp_util.asCompleteDeep(operation);
+    return operation;
   }
 
   const globalConfig = defaults.globalConfig;

@@ -78,7 +78,8 @@ export async function generateExpressZodApiFromBundled(bundled: OpenApiBundled, 
   const endpointFilePath = out.makeFile(endpointFileName).absolutePath;
 
   const indexFileTemplate = `
-    export {ResponseValidationError, RequestValidationError, MissingResponseSchemaError, ExpressHandler, ControllerResult, ControllerFn} from "./ExpressZodCommon.js"
+    export {ResponseValidationError, RequestValidationError, MissingResponseSchemaError } from "./ExpressZodCommon.js"
+    export type { ExpressHandler, ControllerResult, ControllerFn } from "./ExpressCommon.js"
     export * from './zod.js'
     export * from './${apiName}.js'
   `;

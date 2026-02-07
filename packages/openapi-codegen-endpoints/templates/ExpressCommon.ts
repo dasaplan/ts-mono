@@ -1,19 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from "express";
 
-/** helper utilities not for public use - may change frequently */
-export namespace __exp_util {
-  /**
-   * Transforms optional properties into explicit undefined unions.
-   * Example: {a?: string} → {a: string | undefined}
-   */
-  export type CompleteDeep<T> = T extends object ? { [K in keyof Required<T>]: CompleteDeep<T[K]> } : T;
-
-  export function asCompleteDeep<T>(obj: T): CompleteDeep<T> {
-    return obj as CompleteDeep<T>;
-  }
-}
-
 /** Extend ResponseMap with common HTTP status codes that may not be in the API spec */
 type ExtendedResponseMap<ResponseMap extends { [status: number]: object | unknown }> = ResponseMap & {
   500: object | unknown;
