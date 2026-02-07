@@ -1,4 +1,23 @@
-
+BUG: when generating zod schemas for this, duplicated schemas will be generated
+```yaml
+    ChangeConstant:
+      oneOf:
+        - $ref: '#/components/schemas/ChangeConstantGlobal'
+        - $ref: '#/components/schemas/ChangeConstantUser'
+      discriminator:
+        propertyName: event
+        mapping:
+          UPDATE_GOLD_PRICE: "#/components/schemas/ChangeConstantUser"
+          GLOBAL_UPDATE_GOLD_PRICE: "#/components/schemas/ChangeConstantGlobal"
+          UPDATE_SILVER_PRICE: "#/components/schemas/ChangeConstantUser"
+          GLOBAL_UPDATE_SILVER_PRICE: "#/components/schemas/ChangeConstantGlobal"
+```
+```typescript
+export const ChangeConstantUser = ChangeConstantBase.merge(z.object({ details: ConstantUpdateDetails, event: z.enum(['UPDATE_GOLD_PRICE', 'UPDATE_SILVER_PRICE']) }));
+export const ChangeConstantGlobal = ChangeConstantBase.merge(z.object({ details: ConstantUpdateDetails, event: z.enum(['GLOBAL_UPDATE_GOLD_PRICE', 'GLOBAL_UPDATE_SILVER_PRICE']) }));
+export const ChangeConstant = z.discriminatedUnion("event", [ChangeConstantUser, ChangeConstantGlobal, ChangeConstantUser, ChangeConstantGlobal]);
+```
+----
 BUG: when generating endpoints with a path param "productId" it is missing
 FIX: 
   "global" paths.*.parameters must be merged with paths.*.(get|post|put|*).parameters
