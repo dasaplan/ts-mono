@@ -18,12 +18,12 @@
     "clean": "rimraf dist"
   },
   "peerDependencies": {
-    "@redocly/openapi-core": "^1.6.0",
+    "@redocly/openapi-core": "^2.16.0",
     "lodash": "^4.17.21",
     "tslog": "^4.9.2"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.20",
+    "@types/lodash": "^4.17.23",
     "tsconfig": "workspace:*"
   }
 }

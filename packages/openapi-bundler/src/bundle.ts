@@ -1,4 +1,4 @@
-import { Source, bundle, createConfig } from "@redocly/openapi-core";
+import { Source, bundle, createConfig, BundleResult, Document } from "@redocly/openapi-core";
 import { oas30 } from "openapi3-ts";
 import { _, File, Folder } from "@dasaplan/ts-sdk";
 import { appLog } from "./logger.js";
@@ -7,6 +7,10 @@ import { PostProcessingOptions } from "./post-process/post-process.js";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface OpenApiBundled extends oas30.OpenAPIObject {}
+
+interface LocalBundledResult extends Omit<BundleResult, "bundle"> {
+  bundle: Document<OpenApiBundled>;
+}
 
 interface RedoclyFilterConfig {
   property: "tags" | "operationId" | string;
@@ -64,7 +68,7 @@ export async function bundleParseOpenapi(_pathToApi: string, params?: Partial<Om
   return cleanedParsed;
 }
 
-export async function parseOpenapi(pathToApi: string, userConfig?: { decorators?: RedoclyDecorators }) {
+export async function parseOpenapi(pathToApi: string, userConfig?: { decorators?: RedoclyDecorators }): Promise<LocalBundledResult> {
   appLog.childLog(parseOpenapi).info("-- with decorators");
 
   const config = await createConfig({
@@ -76,8 +80,9 @@ export async function parseOpenapi(pathToApi: string, userConfig?: { decorators?
     config,
     removeUnusedComponents: true,
     dereference: false,
-    skipRedoclyRegistryRefs: true,
-  });
+    // redocly changed type of result.bundle.parsed to Document<unknown>
+    // TODO: introduce type guard with validation
+  }) as Promise<LocalBundledResult>;
 }
 
 // todo: refactor - we want to remove unused after post-processing
@@ -88,6 +93,5 @@ export async function doBundle(source: Source, parsed: object) {
     config,
     removeUnusedComponents: true,
     dereference: false,
-    skipRedoclyRegistryRefs: true,
-  });
+  }) as Promise<LocalBundledResult>;
 }

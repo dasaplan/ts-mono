@@ -152,14 +152,14 @@ export namespace OaSchemaObject {
 
   export function setMember(memberName: keyof AnySchema, memberValue: unknown, schema: AnySchema) {
     if (!schema.allOf) {
-      schema[memberName] = memberValue;
+      schema[memberName] = memberValue as never;
       return undefined;
     }
     // handle allOf
     const reversed = schema.allOf.toReversed();
     const subSchema = reversed.find((a): a is AnySchema => a?.[memberName as never]);
     if (subSchema) {
-      subSchema[memberName] = memberValue;
+      subSchema[memberName] = memberValue as never;
       return undefined;
     }
     // last allOf is an inline schema => add to it

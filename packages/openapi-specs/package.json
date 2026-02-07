@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "clean": "rimraf dist",
     "openapitools:ts-axios": "openapi-generator-cli generate -g typescript-axios -i specs/generic/api.yml -o out",
     "redoc:stats": "redocly stats specs/pets-modular-complex/petstore-api.yml",
     "redoc:filtered": "redocly bundle filter specs/pets-modular-complex/petstore-api.yml -o petstore-filtered --config filter-config.yaml",
@@ -24,8 +25,8 @@
     "@dasaplan/ts-sdk": "workspace:*"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.25.0",
-    "@redocly/cli": "^2.10.0",
+    "@openapitools/openapi-generator-cli": "^2.28.2",
+    "@redocly/cli": "^2.16.0",
     "tsconfig": "workspace:*"
   }
 }
