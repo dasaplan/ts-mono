@@ -59,14 +59,9 @@ export function generateTsTypesFromParseModel(schemas: Array<Schema>, endpoints:
 
   const typeDeclarations = components.map((c) => createTypeDeclaration(c, options));
 
-  // include unions which can be used for type introspection
-  const unions = components.filter((c) => c.kind === "UNION").filter((c) => c.schemas.length > 1);
-  const unionDeclarations = unions.length > 0 ? unions.map((c) => createUnionType(c, options)) : [];
+  const typesModule = createModule("Types", typeDeclarations, options);
 
-  const allDeclarations = [...typeDeclarations, ...unionDeclarations];
-  const typesModule = createModule("Types", allDeclarations, options);
-
-  return { imports, typesModule, typeDeclarations, unionDeclarations };
+  return { imports, typesModule, typeDeclarations };
 }
 
 function createTypeDeclaration(c: Schema, options: TsTypeGenOptions) {

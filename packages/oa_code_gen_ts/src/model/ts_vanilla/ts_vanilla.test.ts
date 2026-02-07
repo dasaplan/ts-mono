@@ -86,17 +86,9 @@ describe("generatets_vanilla", () => {
     const { sourceFile } = await generateTsSources(openapi, `tmp/ts_vanilla/defaults.ts`, options());
 
     expect(sourceFile.getFullText()).toMatchInlineSnapshot(`
-      "import { z } from 'ts_vanilla'
-      import * as zc from './ts_vanilla-common.js'
-
-      export namespace Schemas {
-          export const Node = z.object({ id: z.string(), name: z.string().optional().default('foo'), tel: z.number().optional().default(123456), isNice: z.boolean().optional().default(false), hobbies: z.enum(['a', 'b', 'c']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional().default('b') });
-
-          export namespace Types {
-              export type Node = z.infer<typeof Schemas.Node>;
-          }
-
-          export const Endpoints = {} as const
+      "
+      export namespace Types {
+          export type Node = { id: string; name: string | undefined; tel: number | undefined; isNice: boolean | undefined; hobbies: "a" | "b" | "c" | undefined };
       }
       "
     `);
@@ -123,19 +115,9 @@ describe("generatets_vanilla", () => {
     const { sourceFile } = await generateTsSources(openapi, `tmp/ts_vanilla/circular.ts`, options());
 
     expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
-      "import { z } from 'ts_vanilla'
-      import * as zc from './ts_vanilla-common.js'
-
-      export namespace Schemas {
-          export const SomeEntity = z.object({ name: z.string().optional() });
-          export const Node = z.object({ id: z.string().optional(), refEntity: SomeEntity.optional(), refEntity2: SomeEntity.optional() });
-
-          export namespace Types {
-              export type SomeEntity = z.infer<typeof Schemas.SomeEntity>;
-              export type Node = z.infer<typeof Schemas.Node>;
-          }
-
-          export const Endpoints = {} as const
+      "export namespace Types {
+          export type SomeEntity = { name: string | undefined };
+          export type Node = { id: string | undefined; refEntity: Types.SomeEntity | undefined; refEntity2: Types.SomeEntity | undefined };
       }"
     `);
   });
@@ -173,31 +155,12 @@ describe("generatets_vanilla", () => {
     const { sourceFile } = await generateTsSources(openapi, `tmp/ts_vanilla/circular.ts`, options());
 
     expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
-      "import { z } from 'ts_vanilla'
-      import * as zc from './ts_vanilla-common.js'
-      import * as api from './api.js'
-
-      export namespace Schemas {
-          export const B = z.object({ id: z.string().optional(), type: z.literal('B_TYPE') });
-          export const A = z.object({ id: z.string().optional(), type: z.enum(['A_TYPE', 'AA_TYPE']) });
-          export const MultiUnion = zc.ts_vanillaUnionMatch.matcher("type", { 'A_TYPE': A, 'B_TYPE': B, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ts_vanillaType<api.MultiUnion>;
-          export const Union = zc.ts_vanillaUnionMatch.matcher("type", { 'A_TYPE': A, 'AA_TYPE': A, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ts_vanillaType<api.Union>;
-          export const SingleUnion = zc.ts_vanillaUnionMatch.matcher("type", { 'A_TYPE': A, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ts_vanillaType<api.SingleUnion>;
-
-          export namespace Types {
-              export type B = z.infer<typeof Schemas.B>;
-              export type A = z.infer<typeof Schemas.A>;
-              export type MultiUnion = z.infer<typeof Schemas.MultiUnion>;
-              export type Union = z.infer<typeof Schemas.Union>;
-              export type SingleUnion = z.infer<typeof Schemas.SingleUnion>;
-          }
-
-
-          export namespace Unions {
-              export const MultiUnion = z.union([A, B]);
-          }
-
-          export const Endpoints = {} as const
+      "export namespace Types {
+          export type B = { id: string | undefined; type: "B_TYPE" };
+          export type A = { id: string | undefined; type: "A_TYPE" | "AA_TYPE" };
+          export type MultiUnion = Types.A | Types.B;
+          export type Union = Types.A | Types.A;
+          export type SingleUnion = Types.A;
       }"
     `);
   });
@@ -268,7 +231,6 @@ describe("generatets_vanilla", () => {
           export type A = Types.Base & { id: string | undefined; parent: Types.Node | undefined; children: Array<Types.Node> | undefined; type: "A" };
           export type Child = Types.A | Types.B | Types.Node;
           export type Node = { id: string | undefined; parent: Types.Node | undefined; children: Array<Types.Child> | undefined };
-          export type Child = Types.A | Types.B | Types.Node;
       }"
     `);
   });
@@ -331,30 +293,12 @@ describe("generatets_vanilla", () => {
     const { sourceFile } = await generateTsSources(openapi, `tmp/ts_vanilla/circular.ts`, options());
 
     expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
-      "import { z } from 'ts_vanilla'
-      import * as zc from './ts_vanilla-common.js'
-
-      export namespace Schemas {
-          export const Base = z.object({ type: z.string().optional() });
-          export const B: z.ts_vanillaTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('B') })));
-          export const A: z.ts_vanillaTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('A') })));
-          export const Child: z.ts_vanillaTypeAny = z.lazy(() => zc.ts_vanillaUnionMatch.matcher("type", { 'A': A, 'B': B, 'Node': Node, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }));
-          export const Node: z.ts_vanillaTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
-
-          export namespace Types {
-              export type Base = z.infer<typeof Schemas.Base>;
-              export type B = z.infer<typeof Schemas.B>;
-              export type A = z.infer<typeof Schemas.A>;
-              export type Child = z.infer<typeof Schemas.Child>;
-              export type Node = z.infer<typeof Schemas.Node>;
-          }
-
-
-          export namespace Unions {
-              export const Child = z.lazy(() => z.union([A, B, Node]));
-          }
-
-          export const Endpoints = {} as const
+      "export namespace Types {
+          export type Base = { type: string | undefined };
+          export type B = Types.Base & { parent: Types.Child | undefined; children: Array<Types.Node> | undefined; type: "B" };
+          export type A = Types.Base & { parent: Types.Child | undefined; children: Array<Types.Node> | undefined; type: "A" };
+          export type Child = Types.A | Types.B | Types.Node;
+          export type Node = { id: string | undefined; parent: Types.Node | undefined; children: Array<Types.Child> | undefined };
       }"
     `);
   });
@@ -423,32 +367,13 @@ describe("generatets_vanilla", () => {
     const { sourceFile } = await generateTsSources(openapi, `tmp/ts_vanilla/circular.ts`, options());
 
     expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
-      "import { z } from 'ts_vanilla'
-      import * as zc from './ts_vanilla-common.js'
-
-      export namespace Schemas {
-          export const Base = z.object({ type: z.string().optional() });
-          export const B: z.ts_vanillaTypeAny = Base.merge(z.object({ children: z.lazy(() => z.array(Rec)).optional(), type: z.literal('B') }));
-          export const Rec: z.ts_vanillaTypeAny = z.lazy(() => z.object({ a: A.optional(), b: B.optional(), child: Child.optional(), node: Node.optional() }));
-          export const A: z.ts_vanillaTypeAny = z.lazy(() => Base.merge(z.object({ children: z.lazy(() => z.array(Rec)).optional(), type: z.literal('A') })));
-          export const Child: z.ts_vanillaTypeAny = z.lazy(() => zc.ts_vanillaUnionMatch.matcher("type", { 'A': A, 'B': B, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }));
-          export const Node: z.ts_vanillaTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
-
-          export namespace Types {
-              export type Base = z.infer<typeof Schemas.Base>;
-              export type B = z.infer<typeof Schemas.B>;
-              export type Rec = z.infer<typeof Schemas.Rec>;
-              export type A = z.infer<typeof Schemas.A>;
-              export type Child = z.infer<typeof Schemas.Child>;
-              export type Node = z.infer<typeof Schemas.Node>;
-          }
-
-
-          export namespace Unions {
-              export const Child = z.lazy(() => z.union([A, B]));
-          }
-
-          export const Endpoints = {} as const
+      "export namespace Types {
+          export type Base = { type: string | undefined };
+          export type B = Types.Base & { children: Array<Types.Rec> | undefined; type: "B" };
+          export type Rec = { a: Types.A | undefined; b: Types.B | undefined; child: Types.Child | undefined; node: Types.Node | undefined };
+          export type A = Types.Base & { children: Array<Types.Rec> | undefined; type: "A" };
+          export type Child = Types.A | Types.B;
+          export type Node = { id: string | undefined; parent: Types.Node | undefined; children: Array<Types.Child> | undefined };
       }"
     `);
   });

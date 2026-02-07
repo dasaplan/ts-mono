@@ -47,8 +47,6 @@ export namespace Types {
     export type ConstantBase = { version: number; updatedAt: string; ratesByWeight: Types.GoldPriceRates };
     export type Constant = { history: Types.ConstantBase | undefined; version: number; updatedAt: string; ratesByWeight: Types.GoldPriceRates };
     export type Constants = { doughPrices: Types.Constant };
-    export type PurchasedEventDetailItem = Types.PurchasedEventDetailItemSpecified | Types.PurchasedEventDetailItemProduct;
-    export type ChangeConstant = Types.ChangeConstantGlobal | Types.ChangeConstantUser;
 }
 "
 `;
@@ -65,8 +63,6 @@ export namespace Types {
     export type Pet = Types.Dog | Types.Cat | Types.GenericPet | Types.GenericPet;
     export type Pets = Array<Types.Pet>;
     export type CatBase = Types.PetBase & { color: string; catType: "SEAM" | "SHORT" | undefined };
-    export type Cat = Types.Seam | Types.ShortHair;
-    export type Pet = Types.Cat | Types.Dog | Types.GenericPet;
 }
 "
 `;
@@ -79,7 +75,6 @@ export namespace Types {
     export type Dog = Types.PetBase & { fluffy: boolean | undefined; breed: Types.DogEnum | undefined; type: "DOG" };
     export type Cat = Types.PetBase & { breed: "CAT_A" | "CAT_B" | undefined; type: "CAT" };
     export type Pet = Types.Dog | Types.Cat;
-    export type Pet = Types.Cat | Types.Dog;
 }
 "
 `;
@@ -101,7 +96,6 @@ export namespace Types {
     export type SchemaTitled = { titledProp: string | undefined };
     export type HttpErrorCode = number;
     export type Error = { code: Types.HttpErrorCode; message: string; titledSchema: Types.SchemaTitled | undefined };
-    export type PetToy = Types.Ball | Types.FluffyTeddy;
 }
 "
 `;
@@ -114,7 +108,6 @@ export namespace Types {
     export type Cat = Types.PetBase & { enemies: Types.Pets | undefined; type: "CAT" };
     export type Pet = Types.Cat | Types.Dog;
     export type Pets = { pets: Array<Types.Pet> | undefined };
-    export type Pet = Types.Cat | Types.Dog;
 }
 "
 `;
@@ -127,7 +120,6 @@ export namespace Types {
     export type Cat = Types.PetBase & { color: string; type: "CAT" };
     export type Pet = Types.Dog | Types.Cat;
     export type Pets = Array<Types.Pet>;
-    export type Pet = Types.Cat | Types.Dog;
 }
 "
 `;
