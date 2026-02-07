@@ -1,2 +1,2 @@
-export * from "./src/server/express.js";
-export * from "./src/server/template-factory.js";
+export * from "./express/express.js";
+export * from "./express/template-factory.js";

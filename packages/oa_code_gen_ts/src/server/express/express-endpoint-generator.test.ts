@@ -1,5 +1,5 @@
 import { OpenapiBundledMock, OpenApiBundled } from "@dasaplan/openapi-bundler";
-import { generateExpressApi, generateExpressZodApiFromBundled } from "../client/src/endpoint-generator.js";
+import { generateExpressApi, generateExpressZodApiFromBundled } from "../../client/endpoint/endpoint-generator.js";
 import { describe, expect, test } from "vitest";
 import { resolveSpecPath } from "openapi-example-specs";
 

@@ -6,9 +6,9 @@ import { Templates } from "./templates.js";
 import { createTypeImport, EndpointInterfaceGeneratorOptions, generateEndpointInterfacesAsText } from "./endpoint-interfaces.js";
 import { pascalCase } from "pascal-case";
 import { createTsMorphSrcFile, createTsMorphSrcFileFromText } from "./ts-sources.js";
-import { ExpressServerZodApiOption, generateExpressZodApiFromBundledAsText } from "../../server/src/server/express-server-zod-api.js";
-import { generateExpressTsApiFromBundledAsText } from "../../server/src/server/express-server-ts-api.js";
-import { generateZodSources } from "../../marshalling/src/zod-generator.js";
+import { ExpressServerZodApiOption, generateExpressZodApiFromBundledAsText } from "../../server/express/express-server-zod-api.js";
+import { generateExpressTsApiFromBundledAsText } from "../../server/express/express-server-ts-api.js";
+import { generateZodSources } from "../../marshalling/zod/zod-generator.js";
 
 export interface EndpointDefinitionGeneratorOptions extends EndpointInterfaceGeneratorOptions {
   outDir: string;

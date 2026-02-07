@@ -3,7 +3,7 @@ import { ApplicationError, Folder, Imports } from "@dasaplan/ts-sdk";
 export namespace Templates {
   export function folder() {
     const libPath = Imports.resolve("@dasaplan/openapi-codegen-ts");
-    const lib = Folder.of(libPath).cd("client/templates");
+    const lib = Folder.of(libPath).cd("client/endpoint/templates");
     if (lib.exists()) {
       return lib;
     }
@@ -12,7 +12,7 @@ export namespace Templates {
     if (local.exists()) {
       return local;
     }
-    const develop = Folder.of("dist/templates");
+    const develop = Folder.of("dist/client/endpoint/templates");
     if (develop.exists()) {
       return develop;
     }

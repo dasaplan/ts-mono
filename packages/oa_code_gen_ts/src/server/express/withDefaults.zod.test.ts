@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, test, vi } from "vitest";
 import z from "zod";
-import { ControllerFn, ExpressHandler } from "../../server/templates/ExpressCommon.js";
-import { ApiConfig, Operation, withDefaults } from "../../server/templates/ExpressZodCommon.js";
+import { ControllerFn, ExpressHandler } from "./templates/ExpressCommon.js";
+import { ApiConfig, Operation, withDefaults } from "./templates/ExpressZodCommon.js";
 
 describe("withDefaults", () => {
   // Helper function to create mock controllers and middlewares

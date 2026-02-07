@@ -32,7 +32,7 @@ describe("generateZod", () => {
       }),
     });
     const name = spec.replace(".yml", "");
-    const { sourceFile } = await generateZodSources(parsed, `test/out/zod/${name}.ts`, options());
+    const { sourceFile } = await generateZodSources(parsed, `tmp/zod/${name}.ts`, options());
 
     expect(sourceFile.getFullText()).toMatchSnapshot(name);
   });
@@ -48,7 +48,7 @@ describe("generateZod", () => {
       }),
     });
     const name = spec.replace(".yaml", "");
-    const { sourceFile } = await generateZodSources(parsed, `test/out/zod/${name}.ts`, options());
+    const { sourceFile } = await generateZodSources(parsed, `tmp/zod/${name}.ts`, options());
 
     expect(sourceFile.getFullText()).toMatchSnapshot(name);
   });
@@ -67,7 +67,7 @@ describe("generateZod", () => {
       }),
     );
 
-    const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
+    const { sourceFile } = await generateZodSources(openapi, `tmp/zod/circular.ts`, options());
 
     expect(sourceFile.getFullText()).toMatchSnapshot("circular");
   });
@@ -89,7 +89,7 @@ describe("generateZod", () => {
       }),
     );
 
-    const { sourceFile } = await generateZodSources(openapi, `test/out/zod/defaults.ts`, options());
+    const { sourceFile } = await generateZodSources(openapi, `tmp/zod/defaults.ts`, options());
 
     expect(sourceFile.getFullText()).toMatchInlineSnapshot(`
       "import { z } from 'zod'
@@ -126,7 +126,7 @@ describe("generateZod", () => {
       }),
     );
 
-    const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
+    const { sourceFile } = await generateZodSources(openapi, `tmp/zod/circular.ts`, options());
 
     expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
       "import { z } from 'zod'
@@ -176,7 +176,7 @@ describe("generateZod", () => {
         },
       }),
     );
-    const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, { ...options(), includeTsTypes: true });
+    const { sourceFile } = await generateZodSources(openapi, `tmp/zod/circular.ts`, { ...options(), includeTsTypes: true });
 
     expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
       "import { z } from 'zod'
@@ -265,7 +265,7 @@ describe("generateZod", () => {
         },
       }),
     );
-    const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
+    const { sourceFile } = await generateZodSources(openapi, `tmp/zod/circular.ts`, options());
 
     expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
       "import { z } from 'zod'
@@ -351,7 +351,7 @@ describe("generateZod", () => {
         },
       }),
     );
-    const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
+    const { sourceFile } = await generateZodSources(openapi, `tmp/zod/circular.ts`, options());
 
     expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
       "import { z } from 'zod'
@@ -443,7 +443,7 @@ describe("generateZod", () => {
         },
       }),
     );
-    const { sourceFile } = await generateZodSources(openapi, `test/out/zod/circular.ts`, options());
+    const { sourceFile } = await generateZodSources(openapi, `tmp/zod/circular.ts`, options());
 
     expect(sourceFile.getFullText().trim()).toMatchInlineSnapshot(`
       "import { z } from 'zod'

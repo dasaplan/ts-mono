@@ -1,8 +1,8 @@
 import { describe, expect, test, vi } from "vitest";
-import { ControllerFn } from "../../server/templates/ExpressCommon.js";
-import { ApiConfig, Operation, withDefaults } from "../../server/templates/ExpressTsCommon.js";
+import { ControllerFn } from "./templates/ExpressCommon.js";
+import { ApiConfig, Operation, withDefaults } from "./templates/ExpressTsCommon.js";
 
-describe.skip("withDefaults", () => {
+describe("withDefaults", () => {
   // Helper function to create mock controllers and middlewares
   const createMockController = (name: string): ControllerFn => {
     const controller = vi.fn(() => Promise.resolve({ status: 200, json: { result: name } }));
