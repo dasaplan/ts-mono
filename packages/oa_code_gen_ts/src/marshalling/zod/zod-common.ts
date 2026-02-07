@@ -1,4 +1,5 @@
 export function getZodCommon() {
+  // TODO: generate at compile time - or align with template handling as for express generator
   return `
 import { z } from "zod";
 

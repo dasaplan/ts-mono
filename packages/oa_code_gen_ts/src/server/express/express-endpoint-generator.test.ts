@@ -1,7 +1,7 @@
 import { OpenapiBundledMock, OpenApiBundled } from "@dasaplan/openapi-bundler";
-import { generateExpressApi, generateExpressZodApiFromBundled } from "../../client/endpoint/endpoint-generator.js";
 import { describe, expect, test } from "vitest";
 import { resolveSpecPath } from "openapi-example-specs";
+import { generateExpressApi, generateExpressZodApiFromBundled } from "./express-generator.js";
 
 describe.each(["zod" /*, "ts"*/] as const)("generate express %s", (generator) => {
   const { createApi, withSchemas, withRoute } = OpenapiBundledMock.create();

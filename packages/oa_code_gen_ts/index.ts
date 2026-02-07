@@ -1,27 +1,15 @@
 // Zod schema generation exports
-export {
-  generateZodSchemas,
-  generateZodSources,
-  generateZodSchemasFromParseModel,
-  ZodGenOptions,
-} from "./src/marshalling/index.js";
+export { generateZodSchemas, generateZodSources, generateZodSchemasFromParseModel, ZodGenOptions } from "./src/marshalling/index.js";
 
 // TypeScript type generation exports
-export {
-  generateTsTypes,
-  generateTsSources,
-  generateTsTypesFromParseModel,
-  TsTypeGenOptions,
-} from "./src/model/index.js";
+export { generateTsTypes, generateTsSources, generateTsTypesFromParseModel, TsTypeGenOptions } from "./src/model/index.js";
 
 // Endpoint/Client generation exports
 export {
   EndpointDefinition,
   generateEndpointDefinitions,
   generateEndpointDefinitionsFromBundled,
-  generateExpressApi,
   EndpointDefinitionGeneratorOptions,
-  ExpressApiGeneratorOptions,
   EndpointInterfaceGeneratorOptions,
   generateEndpointInterfacesAsText,
 } from "./src/client/index.js";
