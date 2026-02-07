@@ -6,6 +6,14 @@ export {
   ZodGenOptions,
 } from "./src/marshalling/index.js";
 
+// TypeScript type generation exports
+export {
+  generateTsTypes,
+  generateTsSources,
+  generateTsTypesFromParseModel,
+  TsTypeGenOptions,
+} from "./src/model/index.js";
+
 // Endpoint/Client generation exports
 export {
   EndpointDefinition,

@@ -45,7 +45,8 @@ export function createUnionDeclaration(c: Schema, options: ZodGenOptions) {
   if (c.kind !== "UNION") throw ApplicationError.create(`expected schema to be of kind UNION but received ${c.kind}`);
   const name = `${pascalCase(c.getName())}`;
   const declaration = `export const ${name}`;
-  // remove discrminator to create normal unions
+  // remove discriminator to create normal unions
+  // todo: remember, why we needed this hack
   const cloned = _.cloneDeep(c);
   delete cloned.discriminator;
   const value = processSchema(cloned, options);

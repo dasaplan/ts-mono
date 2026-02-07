@@ -1,0 +1,133 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generatets_vanilla > circular schema > circular 1`] = `
+"
+export namespace Types {
+    export type Node = { id: string | undefined; parent: Types.Node | undefined; children: Array<Types.Node> | undefined };
+}
+"
+`;
+
+exports[`generatets_vanilla > fullmetal > fullmetal/openapi.yml 1`] = `
+"
+export namespace Types {
+    export type RegisterResponse = { token: string; userId: string };
+    export type LoginResponse = { token: string };
+    export type LoginRequest = { username: string; password: string };
+    export type InventoryStockItem = { quantity: number; priceEuro: number; purchaseDate: string; stockId: string; productId: string };
+    export type InventoryStockHistory = { eventDate: string; eventPrice: number; deltaRevenue: number; event: "GIFTED" | "SOLD" | "PURCHASED"; quantity: number; priceEuro: number; purchaseDate: string; stockId: string; productId: string };
+    export type InventoryStock = { history: Array<Types.InventoryStockHistory>; inventory: Array<Types.InventoryStockItem>; quantity: number };
+    export type InventoryItemStats = { totalPurchase: number; totalSells: number };
+    export type WeightUnit = "kg" | "g" | "oz_tr";
+    export type Weight = { unit: Types.WeightUnit; value: number };
+    export type ItemType = "B" | "El" | "kA" | "Ka" | "KA" | "KR" | "Pa" | "LIII" | "ML" | "R" | "Phil" | "BR";
+    export type Product = { externalId: string | undefined; itemType: Types.ItemType; weight: Types.Weight; productId: string };
+    export type InventoryItem = { inventoryId: string; product: Types.Product | undefined; quantity: number; invest: number | undefined; stats: Types.InventoryItemStats | undefined; revenue: number | undefined; stock: Types.InventoryStock | undefined };
+    export type InventorySummaryResponse = { message: "ok"; items: Array<Types.InventoryItem> };
+    export type ChangeItemDetails = { quantity: number | undefined; priceEuro: number | undefined; purchaseDate: string | undefined };
+    export type ChangeItemRequest = { createdAt: string; event: "PURCHASED" | "GIFTED" | "SOLD"; details: Types.ChangeItemDetails };
+    export type SuccessResponse = { message: "ok" };
+    export type UpdateItemRequestDetails = { quantity: number | undefined; priceEuro: number | undefined; purchaseDate: string | undefined; stockId: string; productId: string };
+    export type UpdateItemRequest = { event: "UPDATED"; createdAt: string; details: Types.UpdateItemRequestDetails };
+    export type PurchasedEventDetailBase = { kind: string | undefined };
+    export type PurchasedEventDetailItemProduct = Types.PurchasedEventDetailBase & { kind: string | undefined; productId: string };
+    export type PurchasedEventDetailItemSpecified = Types.PurchasedEventDetailBase & { kind: string | undefined; itemType: Types.ItemType; weight: Types.Weight };
+    export type PurchasedEventDetailItem = Types.PurchasedEventDetailItemSpecified | Types.PurchasedEventDetailItemProduct;
+    export type PurchasedEventDetail = { item: Types.PurchasedEventDetailItem; quantity: number; priceEuro: number; purchaseDate: string | undefined };
+    export type CreateItemDetails = { details: Types.PurchasedEventDetail };
+    export type CreateItem = { details: Types.CreateItemDetails };
+    export type InventoryItemList = { items: Array<Types.InventoryItem> };
+    export type Error = { error: string | undefined };
+    export type ChangeConstantBase = { event: string };
+    export type GoldPriceUpdateDetails = { unit: Types.WeightUnit; price: number };
+    export type ChangeConstantUser = Types.ChangeConstantBase & { inventoryId: string; details: Types.GoldPriceUpdateDetails; event: "UPDATE_DOUGH_PRICE" };
+    export type ChangeConstantGlobal = Types.ChangeConstantBase & { details: Types.GoldPriceUpdateDetails; event: "GLOBAL_UPDATE_DOUGH_PRICE" };
+    export type ChangeConstant = Types.ChangeConstantUser | Types.ChangeConstantGlobal;
+    export type GoldPriceRates = { g: number; kg: number; oz_tr: number };
+    export type ConstantBase = { version: number; updatedAt: string; ratesByWeight: Types.GoldPriceRates };
+    export type Constant = { history: Types.ConstantBase | undefined; version: number; updatedAt: string; ratesByWeight: Types.GoldPriceRates };
+    export type Constants = { doughPrices: Types.Constant };
+    export type PurchasedEventDetailItem = Types.PurchasedEventDetailItemSpecified | Types.PurchasedEventDetailItemProduct;
+    export type ChangeConstant = Types.ChangeConstantGlobal | Types.ChangeConstantUser;
+}
+"
+`;
+
+exports[`generatets_vanilla > generates generic/api.yml > generic/api 1`] = `
+"
+export namespace Types {
+    export type PetBase = { id: number; type: string };
+    export type GenericPet = Types.PetBase & { name: string | undefined; type: "BIRD" | "HAMSTER" };
+    export type Dog = Types.PetBase & { bark: string; type: "DOG" };
+    export type ShortHair = Types.PetBase & { catType: "SHORT"; angryLevel: string | undefined; color: string; type: "CAT" };
+    export type Seam = Types.PetBase & { catType: "SEAM"; angryLevel: string | undefined; color: string; type: "CAT" };
+    export type Cat = Types.Seam | Types.ShortHair;
+    export type Pet = Types.Dog | Types.Cat | Types.GenericPet | Types.GenericPet;
+    export type Pets = Array<Types.Pet>;
+    export type CatBase = Types.PetBase & { color: string; catType: "SEAM" | "SHORT" | undefined };
+    export type Cat = Types.Seam | Types.ShortHair;
+    export type Pet = Types.Cat | Types.Dog | Types.GenericPet;
+}
+"
+`;
+
+exports[`generatets_vanilla > generates pets-modular/pets-api.yml > pets-modular/pets-api 1`] = `
+"
+export namespace Types {
+    export type PetBase = { type: string; name: string | undefined };
+    export type DogEnum = "DOG_A" | "DOG_B";
+    export type Dog = Types.PetBase & { fluffy: boolean | undefined; breed: Types.DogEnum | undefined; type: "DOG" };
+    export type Cat = Types.PetBase & { breed: "CAT_A" | "CAT_B" | undefined; type: "CAT" };
+    export type Pet = Types.Dog | Types.Cat;
+    export type Pet = Types.Cat | Types.Dog;
+}
+"
+`;
+
+exports[`generatets_vanilla > generates pets-modular-complex/petstore-api.yml > pets-modular-complex/petstore-api 1`] = `
+"
+export namespace Types {
+    export type FluffLevel = "A" | "B" | "C";
+    export type SchemasToy = { id: string; price: string; kind: string; someEnum: "FOO" | "BAR" | undefined; fluffLevel: Types.FluffLevel | undefined; targetGroup: string | undefined };
+    export type FluffyTeddy = { fluffLevel: Types.FluffLevel | undefined; id: string; price: string; kind: "TEDDY"; targetGroup: string | undefined };
+    export type Ball = { id: string; price: string; kind: "BALL"; fluffLevel: Types.FluffLevel | undefined; targetGroup: string | undefined };
+    export type PetToy = Types.Ball | Types.FluffyTeddy;
+    export type TargetGroup = string;
+    export type SchemaUntitled = { untitledProp: string | undefined };
+    export type Color = { colorId: string | undefined; untitled: Types.SchemaUntitled | undefined; untitledProp: string | undefined };
+    export type ComponentsSchemasToy = { name: string | undefined; color: Types.Color | undefined; targetGroup: Types.TargetGroup | undefined; relates: Types.PetToy | undefined; subId: string | undefined; id: string; price: string; kind: string; someEnum: "FOO" | "BAR" | undefined; fluffLevel: Types.FluffLevel | undefined };
+    export type Pet = { id: number; toy: Types.ComponentsSchemasToy | undefined; leastFavToy: Types.SchemasToy | undefined; favFluffLevel: Types.FluffLevel | undefined; tag: string | undefined; name: string };
+    export type Pets = Array<Types.Pet>;
+    export type SchemaTitled = { titledProp: string | undefined };
+    export type HttpErrorCode = number;
+    export type Error = { code: Types.HttpErrorCode; message: string; titledSchema: Types.SchemaTitled | undefined };
+    export type PetToy = Types.Ball | Types.FluffyTeddy;
+}
+"
+`;
+
+exports[`generatets_vanilla > generates pets-recursive/pets-api.yml > pets-recursive/pets-api 1`] = `
+"
+export namespace Types {
+    export type PetBase = { type: string };
+    export type Dog = Types.PetBase & { friends: Types.Pets | undefined; type: "DOG" };
+    export type Cat = Types.PetBase & { enemies: Types.Pets | undefined; type: "CAT" };
+    export type Pet = Types.Cat | Types.Dog;
+    export type Pets = { pets: Array<Types.Pet> | undefined };
+    export type Pet = Types.Cat | Types.Dog;
+}
+"
+`;
+
+exports[`generatets_vanilla > generates pets-simple/pets-api.yml > pets-simple/pets-api 1`] = `
+"
+export namespace Types {
+    export type PetBase = { id: number; type: string };
+    export type Dog = Types.PetBase & { bark: string; type: "DOG" };
+    export type Cat = Types.PetBase & { color: string; type: "CAT" };
+    export type Pet = Types.Dog | Types.Cat;
+    export type Pets = Array<Types.Pet>;
+    export type Pet = Types.Cat | Types.Dog;
+}
+"
+`;
