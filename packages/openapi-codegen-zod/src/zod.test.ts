@@ -9,7 +9,10 @@ const options: () => ZodGenOptions = () => ({
   withUnknownUnion: true,
   withUnknownEnum: true,
   tsTypeNameSuffix: "",
+  withValueOptional: false,
+  lowerCaseHeader: false,
 });
+
 describe("generateZod", () => {
   const { withSchemas, createApi } = OpenapiBundledMock.create();
 
@@ -93,7 +96,7 @@ describe("generateZod", () => {
       import * as zc from './zod-common.js'
 
       export namespace Schemas {
-          export const Node = z.object({ id: z.string(), name: z.string().or(z.undefined()).default('foo'), tel: z.number().or(z.undefined()).default(123456), isNice: z.boolean().or(z.undefined()).default(false), hobbies: z.enum(['a', 'b', 'c']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).or(z.undefined()).default('b') });
+          export const Node = z.object({ id: z.string(), name: z.string().optional().default('foo'), tel: z.number().optional().default(123456), isNice: z.boolean().optional().default(false), hobbies: z.enum(['a', 'b', 'c']).or(z.string().transform((s) => \`unknown:\${s}\` as const)).optional().default('b') });
 
           export namespace Types {
               export type Node = z.infer<typeof Schemas.Node>;
@@ -130,8 +133,8 @@ describe("generateZod", () => {
       import * as zc from './zod-common.js'
 
       export namespace Schemas {
-          export const SomeEntity = z.object({ name: z.string().or(z.undefined()) });
-          export const Node = z.object({ id: z.string().or(z.undefined()), refEntity: SomeEntity.or(z.undefined()), refEntity2: SomeEntity.or(z.undefined()) });
+          export const SomeEntity = z.object({ name: z.string().optional() });
+          export const Node = z.object({ id: z.string().optional(), refEntity: SomeEntity.optional(), refEntity2: SomeEntity.optional() });
 
           export namespace Types {
               export type SomeEntity = z.infer<typeof Schemas.SomeEntity>;
@@ -181,8 +184,8 @@ describe("generateZod", () => {
       import * as api from './api.js'
 
       export namespace Schemas {
-          export const B = z.object({ id: z.string().or(z.undefined()), type: z.literal('B_TYPE') });
-          export const A = z.object({ id: z.string().or(z.undefined()), type: z.enum(['A_TYPE', 'AA_TYPE']) });
+          export const B = z.object({ id: z.string().optional(), type: z.literal('B_TYPE') });
+          export const A = z.object({ id: z.string().optional(), type: z.enum(['A_TYPE', 'AA_TYPE']) });
           export const MultiUnion = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, 'B_TYPE': B, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.MultiUnion>;
           export const Union = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, 'AA_TYPE': A, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.Union>;
           export const SingleUnion = zc.ZodUnionMatch.matcher("type", { 'A_TYPE': A, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }) as z.ZodType<api.SingleUnion>;
@@ -269,11 +272,11 @@ describe("generateZod", () => {
       import * as zc from './zod-common.js'
 
       export namespace Schemas {
-          export const Base = z.object({ type: z.string().or(z.undefined()) });
-          export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().or(z.undefined()), parent: Node.or(z.undefined()), children: z.lazy(() => z.array(Node)).or(z.undefined()), type: z.literal('B') })));
-          export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().or(z.undefined()), parent: Node.or(z.undefined()), children: z.lazy(() => z.array(Node)).or(z.undefined()), type: z.literal('A') })));
+          export const Base = z.object({ type: z.string().optional() });
+          export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('B') })));
+          export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('A') })));
           export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, 'Node': Node, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }));
-          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().or(z.undefined()), parent: Node.or(z.undefined()), children: z.array(Child).or(z.undefined()) }));
+          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.array(Child).optional() }));
 
           export namespace Types {
               export type Base = z.infer<typeof Schemas.Base>;
@@ -355,11 +358,11 @@ describe("generateZod", () => {
       import * as zc from './zod-common.js'
 
       export namespace Schemas {
-          export const Base = z.object({ type: z.string().or(z.undefined()) });
-          export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.or(z.undefined()), children: z.lazy(() => z.array(Node)).or(z.undefined()), type: z.literal('B') })));
-          export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.or(z.undefined()), children: z.lazy(() => z.array(Node)).or(z.undefined()), type: z.literal('A') })));
+          export const Base = z.object({ type: z.string().optional() });
+          export const B: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('B') })));
+          export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ parent: Child.optional(), children: z.lazy(() => z.array(Node)).optional(), type: z.literal('A') })));
           export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, 'Node': Node, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }));
-          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().or(z.undefined()), parent: Node.or(z.undefined()), children: z.lazy(() => z.array(Child)).or(z.undefined()) }));
+          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
 
           export namespace Types {
               export type Base = z.infer<typeof Schemas.Base>;
@@ -447,12 +450,12 @@ describe("generateZod", () => {
       import * as zc from './zod-common.js'
 
       export namespace Schemas {
-          export const Base = z.object({ type: z.string().or(z.undefined()) });
-          export const B: z.ZodTypeAny = Base.merge(z.object({ children: z.lazy(() => z.array(Rec)).or(z.undefined()), type: z.literal('B') }));
-          export const Rec: z.ZodTypeAny = z.lazy(() => z.object({ a: A.or(z.undefined()), b: B.or(z.undefined()), child: Child.or(z.undefined()), node: Node.or(z.undefined()) }));
-          export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ children: z.lazy(() => z.array(Rec)).or(z.undefined()), type: z.literal('A') })));
+          export const Base = z.object({ type: z.string().optional() });
+          export const B: z.ZodTypeAny = Base.merge(z.object({ children: z.lazy(() => z.array(Rec)).optional(), type: z.literal('B') }));
+          export const Rec: z.ZodTypeAny = z.lazy(() => z.object({ a: A.optional(), b: B.optional(), child: Child.optional(), node: Node.optional() }));
+          export const A: z.ZodTypeAny = z.lazy(() => Base.merge(z.object({ children: z.lazy(() => z.array(Rec)).optional(), type: z.literal('A') })));
           export const Child: z.ZodTypeAny = z.lazy(() => zc.ZodUnionMatch.matcher("type", { 'A': A, 'B': B, onDefault: z.object({ type: z.string().transform((s) => \`unknown:\${s}\` as const) }).passthrough() }));
-          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().or(z.undefined()), parent: Node.or(z.undefined()), children: z.lazy(() => z.array(Child)).or(z.undefined()) }));
+          export const Node: z.ZodTypeAny = z.lazy(() => z.object({ id: z.string().optional(), parent: Node.optional(), children: z.lazy(() => z.array(Child)).optional() }));
 
           export namespace Types {
               export type Base = z.infer<typeof Schemas.Base>;
