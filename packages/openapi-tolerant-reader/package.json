@@ -45,16 +45,11 @@
     "ts:check": "tsc"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@dasaplan/dev-tools": "workspace:*",
     "clean-package": "^2.2.0",
-    "eslint": "^9.39.2",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-n": "^17.23.2",
-    "eslint-plugin-promise": "^7.2.1",
     "npm-run-all": "^4.1.5",
     "sort-package-json": "^3.6.1",
-    "tsconfig": "workspace:*",
-    "typescript": "^5.9.3"
+    "tsconfig": "workspace:*"
   },
   "clean-package": {
     "remove": [

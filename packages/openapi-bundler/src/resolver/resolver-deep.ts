@@ -3,7 +3,7 @@ import { oas30 } from "openapi3-ts";
 import { OpenApiBundled } from "../bundle.js";
 import { Resolver } from "./resolver.js";
 import { SchemaGraph } from "../transpiler/circular-schmeas.js";
-import _ from "lodash";
+import { _ } from "@dasaplan/ts-sdk";
 
 export function cleanObj<T extends Record<string, any>>(obj: T, except: Array<keyof T> = []) {
   Object.getOwnPropertyNames(obj).forEach((prop) => {

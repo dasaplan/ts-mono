@@ -1,0 +1,21 @@
+{
+  "name": "@dasaplan/dev-tools",
+  "version": "0.0.0",
+  "description": "Common development tools and dependencies for the monorepo",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@types/lodash": "^4.17.23",
+    "@types/pascal-case": "^1.1.2",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "clean-package": "^2.2.0",
+    "eslint": "^9.39.2",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^17.23.2",
+    "eslint-plugin-promise": "^7.2.1",
+    "npm-run-all": "^4.1.5",
+    "sort-package-json": "^3.6.1",
+    "type-fest": "^5.4.3",
+    "typescript": "^5.9.3"
+  }
+}

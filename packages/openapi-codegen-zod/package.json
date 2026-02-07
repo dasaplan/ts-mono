@@ -61,20 +61,10 @@
     "tslog": "^4.10.2"
   },
   "devDependencies": {
-    "@types/pascal-case": "^1.1.2",
-    "@typescript-eslint/eslint-plugin": "^8.54.0",
-    "clean-package": "^2.2.0",
-    "eslint": "^9.39.2",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-n": "^17.23.2",
-    "eslint-plugin-promise": "^7.2.1",
-    "npm-run-all": "^4.1.5",
+    "@dasaplan/dev-tools": "workspace:*",
     "openapi-example-specs": "workspace:*",
     "openapi3-ts": "^4.5.0",
-    "sort-package-json": "^3.6.1",
-    "tsconfig": "workspace:*",
-    "type-fest": "^5.4.3",
-    "typescript": "^5.9.3"
+    "tsconfig": "workspace:*"
   },
   "peerDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0"

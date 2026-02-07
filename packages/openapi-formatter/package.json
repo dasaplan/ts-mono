@@ -55,11 +55,10 @@
     "tslog": "^4.10.2"
   },
   "devDependencies": {
+    "@dasaplan/dev-tools": "workspace:*",
     "@types/js-yaml": "^4.0.9",
-    "@types/lodash": "^4.17.23",
     "openapi-example-specs": "workspace:*",
-    "tsconfig": "workspace:*",
-    "typescript": "^5.9.3"
+    "tsconfig": "workspace:*"
   },
   "peerDependencies": {
     "@redocly/openapi-core": "^2.16.0"
