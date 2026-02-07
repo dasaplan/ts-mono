@@ -1,18 +1,18 @@
 import { OpenapiBundledMock, OpenApiBundled } from "@dasaplan/openapi-bundler";
-import { generateEndpointDefinitions, generateEndpointDefinitionsFromBundled } from "./endpoint-generator.js";
+import { generateExpressApi, generateExpressZodApiFromBundled } from "../endpoint-generator.js";
 import { describe, expect, test } from "vitest";
 import { resolveSpecPath } from "openapi-example-specs";
 
-describe("generateEndpointDefinitions", () => {
+describe.each(["zod" /*, "ts"*/] as const)("generate express %s", (generator) => {
   const { createApi, withSchemas, withRoute } = OpenapiBundledMock.create();
 
   test("integration", async () => {
-    const spec = resolveSpecPath("pets-modular-complex/petstore-api.yml");
-    const endpoints = await generateEndpointDefinitions(spec, { outDir: "tmp/endpoints", apiName: "TestApi", generator: "zod" });
-    expect(endpoints.sources).toMatchSnapshot("pets-modular-complex/petstore-api.yml");
+    const spec = resolveSpecPath("fullmetal/openapi.yml");
+    const endpoints = await generateExpressApi(spec, { outDir: `tmp/${generator}/express/fullmetal`, apiName: "FullmetalApi", generator });
+    expect(endpoints.sources).toMatchSnapshot("fullmetal/openapi.yml");
   });
 
-  test("enspoints", async () => {
+  test("express endpoints", async () => {
     const openapi: OpenApiBundled = createApi(
       withSchemas({
         ResponseSchema: {
@@ -36,9 +36,9 @@ describe("generateEndpointDefinitions", () => {
       }),
       withRoute({
         "/pets/{petId}": {
+          parameters: [{ in: "path", name: "petId", required: true, schema: { type: "string" } }],
           get: {
             operationId: "getPet",
-            parameters: [{ in: "path", name: "petId", required: true, schema: { type: "string" } }],
             responses: {
               200: {
                 content: { "application/json": { schema: { $ref: "#/components/schemas/ResponseSchema" } } },
@@ -99,8 +99,14 @@ describe("generateEndpointDefinitions", () => {
       }),
     );
 
-    const endpoints = await generateEndpointDefinitionsFromBundled(openapi, { outDir: "tmp/endpoints", apiName: "TestApi", generator: "zod" });
+    const endpoints = await generateExpressZodApiFromBundled(openapi, { outDir: `tmp/${generator}/express-api`, apiName: "TestApi", generator });
 
-    expect(endpoints.sources).toMatchSnapshot();
+    expect(endpoints.sources).toMatchSnapshot("express");
   });
+});
+
+test("integration", async () => {
+  const spec = resolveSpecPath("fullmetal/openapi.yml");
+  const endpoints = await generateExpressApi(spec, { outDir: `tmp/zod/express/fullmetal`, apiName: "FullmetalApi", generator: "zod" });
+  expect(endpoints.sources).toMatchSnapshot("fullmetal/openapi.yml");
 });

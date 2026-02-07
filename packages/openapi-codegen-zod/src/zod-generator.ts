@@ -1,7 +1,17 @@
 import { File } from "@dasaplan/ts-sdk";
 
-import { createConstantDeclaration, createModule, createTypeDeclaration, createUnionDeclaration, IDENTIFIER_API, ZodGenOptions } from "./zod-schemas.js";
-import { OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
+import {
+  createConstantDeclaration,
+  createModule,
+  createParametersDeclaration,
+  createRequestDeclaration,
+  createResponsesDeclaration,
+  createTypeDeclaration,
+  createUnionDeclaration,
+  IDENTIFIER_API,
+  ZodGenOptions,
+} from "./zod-schemas.js";
+import { Endpoint, OpenApiBundled, Schema, Transpiler } from "@dasaplan/openapi-bundler";
 import { appLog } from "./logger.js";
 import { getZodCommon } from "./zod-common.js";
 import { Project, ScriptKind, ts } from "ts-morph";
@@ -21,12 +31,16 @@ export async function generateZodSources(parsed: OpenApiBundled, filePath: strin
     includeTsTypes: true,
     withUnknownEnum: true,
     withUnknownUnion: true,
+    lowerCaseHeader: true,
+    withValueOptional: true,
     tsTypeNameSuffix: "",
     ...(params ?? {}),
   };
-  const schemas = Transpiler.of(parsed).schemasTopoSorted();
+  const transpiler = Transpiler.of(parsed);
+  const schemas = transpiler.schemasTopoSorted();
+  const endpoints = transpiler.endpoints();
 
-  const { imports, schemasModule } = generateZodSchemasFromParseModel(schemas, options);
+  const { imports, schemasModule } = generateZodSchemasFromParseModel(schemas, endpoints, options);
 
   const source = [...imports, schemasModule].join("\n");
   const sourceSchema = createTsMorphSrcFile(filePath, source);
@@ -36,8 +50,21 @@ export async function generateZodSources(parsed: OpenApiBundled, filePath: strin
   return sourceSchema;
 }
 
+export function generateEndpointSchemasFromParseModel(endpoints: Array<Endpoint>, options: ZodGenOptions) {
+  const operations = endpoints.map((e) => {
+    return `"${e.alias}": {
+     path: "${e.path}",
+     method: "${e.method}",
+     params: ${createParametersDeclaration(e.parameters, options)},
+     responses: ${createResponsesDeclaration(e.responses, options)},
+     request: ${createRequestDeclaration(e.requestBody, options)}
+    }`;
+  });
+  return `export const Endpoints = { ${operations.join(",\n")}} as const`;
+}
+
 /** Generate zod schemas In-Memory from the parse model */
-export function generateZodSchemasFromParseModel(schemas: Array<Schema>, options: ZodGenOptions) {
+export function generateZodSchemasFromParseModel(schemas: Array<Schema>, endpoints: Array<Endpoint>, options: ZodGenOptions) {
   const components = schemas.filter((s) => s.component.kind === "COMPONENT");
   // we want to generate all components
   const imports = ["import { z } from 'zod'", "import * as zc from './zod-common.js'"];
@@ -60,6 +87,11 @@ export function generateZodSchemasFromParseModel(schemas: Array<Schema>, options
     const unionModule = createModule("Unions", unionDeclarations, options);
     schemaDeclarations.push(unionModule);
   }
+
+  // include operations from api with params
+  const operations = generateEndpointSchemasFromParseModel(endpoints, options);
+  schemaDeclarations.push(operations);
+
   const schemasModule = createModule("Schemas", schemaDeclarations, options);
 
   return { imports, schemasModule, schemaDeclarations, typeDeclarations, schemaTypesModule };

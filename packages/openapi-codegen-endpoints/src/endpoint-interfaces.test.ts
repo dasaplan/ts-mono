@@ -30,7 +30,7 @@ describe("generateEndpointDefinitions", () => {
         },
       }),
       withRoute({
-        "/pets/{:petId}": {
+        "/pets/{petId}": {
           get: {
             operationId: "getPet",
             parameters: [{ in: "path", name: "petId", required: true, schema: { type: "string" } }],
@@ -93,10 +93,10 @@ describe("generateEndpointDefinitions", () => {
 
     expect(endpoints).toMatchInlineSnapshot(`
       "export namespace TestApi {
-                      export type Path = "/pets/{:petId}" | "/pets"
+                      export type Path = "/pets/{petId}" | "/pets"
                       export interface OperationToPath {
-                          getPet: "/pets/{:petId}";
-      updatePet: "/pets/{:petId}";
+                          getPet: "/pets/{petId}";
+      updatePet: "/pets/{petId}";
       createPet: "/pets";
                       }
                       export interface GetPet<ResponseSchema extends EndpointDefinition.DtoTypes, ErrorSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
@@ -106,7 +106,7 @@ describe("generateEndpointDefinitions", () => {
                   > {
               name: "getPet";
               operation: "get";
-              path: "/pets/{:petId}"
+              path: "/pets/{petId}"
           }
           
       export interface UpdatePet<ResponseSchema extends EndpointDefinition.DtoTypes, RequestSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<
@@ -116,7 +116,7 @@ describe("generateEndpointDefinitions", () => {
                   > {
               name: "updatePet";
               operation: "put";
-              path: "/pets/{:petId}"
+              path: "/pets/{petId}"
           }
           
       export interface CreatePet<RequestSchema extends EndpointDefinition.DtoTypes> extends EndpointDefinition<

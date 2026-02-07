@@ -9,7 +9,7 @@ export namespace EndpointsExpressJs {
     T extends EndpointDefinition<Res, Req, Params>,
   >(EndpointDefinition: T) {
     const pathParams = Object.keys(EndpointDefinition.parameters?.path ?? {});
-    const expressPath = pathParams.reduce((acc, param) => acc.replaceAll(`{:${param}}`, `:${param}`), EndpointDefinition.path);
+    const expressPath = pathParams.reduce((acc, param) => acc.replaceAll(`{${param}}`, `:${param}`), EndpointDefinition.path);
     return {
       register: (
         router: Express,

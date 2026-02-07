@@ -9,10 +9,11 @@
     "strictBindCallApply": true,
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
-    "noEmit": true
+    "composite": true,
+    "moduleResolution": "nodenext",
+    "module": "NodeNext",
+    "target": "ESNext"
   },
-  "include": [
-    "test/out"
-  ],
-  "exclude": [ "node_modules", "src/**/*.test.ts", "src" ]
+  "include": ["tmp"],
+  "exclude": ["node_modules", "src/**/*.test.ts", "src"]
 }

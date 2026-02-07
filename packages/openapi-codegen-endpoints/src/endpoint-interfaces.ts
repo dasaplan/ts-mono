@@ -65,8 +65,8 @@ export async function generateEndpointInterfacesAsText(bundled: OpenApiBundled, 
 
     const interfaceGenerator = (e: Endpoint) =>
       _.isDefined(params.tsApiTypesModule) ? generateEndpointWithTypes(e, params) : generateEndpointWithGenericTypes(e, params);
-
     const interfaces = endpoints.map(interfaceGenerator);
+
     return `export namespace ${params.apiName} {
                 export type Path = ${_.uniq(endpoints.map((e) => `"${e.path}"`)).join(" | ")}
                 export interface OperationToPath {
