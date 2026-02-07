@@ -1,0 +1,115 @@
+{
+  "name": "@dasaplan/openapi-codegen-ts",
+  "version": "0.0.0",
+  "description": "Unified OpenAPI code generators for TypeScript - Zod schemas, endpoints, models, and marshalling",
+  "keywords": [
+    "OpenAPI",
+    "typescript",
+    "ts",
+    "zod",
+    "codegen",
+    "endpoints",
+    "schemas",
+    "client",
+    "server"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dasaplan/ts-mono.git",
+    "directory": "packages/oa_code_gen_ts"
+  },
+  "author": "dsp",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "run-s rup cp:templates cp:configs",
+    "clean": "rimraf dist out tmp",
+    "cp:configs": "copyfiles openapitools.json dist",
+    "cp:templates": "copyfiles -u 1 \"templates/**/*\" -e \"**/*.json\" dist/templates",
+    "lint": "eslint \"./src/**/*.ts\" ./index.ts 2>/dev/null || true",
+    "lint:fix": "eslint \"./src/**/*.ts\" ./index.ts --fix 2>/dev/null || true",
+    "prepack": "sort-package-json --quiet && clean-package",
+    "pack": "pnpm pack",
+    "postpack": "clean-package restore",
+    "rup": "tsup-node --dts",
+    "test": "vitest",
+    "test:it": "vitest --project integration-test",
+    "test:unit": "vitest --project unit-test",
+    "test:update": "vitest -u",
+    "ts:build": "tsc -p tsconfig.build.json",
+    "ts:check": "tsc",
+    "ts:check:generated": "tsc -p tsconfig.generated.json"
+  },
+  "dependencies": {
+    "@dasaplan/openapi-bundler": "workspace:*",
+    "@dasaplan/ts-sdk": "workspace:*",
+    "@ts-morph/common": "^0.28.1",
+    "jsonpointer": "^5.0.1",
+    "pascal-case": "^4.0.0",
+    "ts-morph": "^27.0.2",
+    "tslog": "^4.10.2"
+  },
+  "devDependencies": {
+    "@dasaplan/dev-tools": "workspace:*",
+    "@dasaplan/openapi-codegen-zod": "workspace:*",
+    "@dasaplan/openapi-codegen-endpoints": "workspace:*",
+    "@reduxjs/toolkit": "^2.11.2",
+    "@types/express": "^5.0.6",
+    "express": "^5.2.1",
+    "openapi-example-specs": "workspace:*",
+    "openapi3-ts": "^4.5.0",
+    "tsconfig": "workspace:*"
+  },
+  "peerDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.7.0"
+  },
+  "clean-package": {
+    "remove": [
+      "scripts.build",
+      "scripts.cp:configs",
+      "scripts.cp:templates",
+      "scripts.cp:ts:build",
+      "scripts.cp:ts:check:generated",
+      "scripts.cp:ts:check",
+      "scripts.clean",
+      "scripts.lint",
+      "scripts.lint:fix",
+      "scripts.lint:prepack",
+      "scripts.lint:rup",
+      "scripts.lint:test",
+      "scripts.lint:test:it",
+      "scripts.lint:test:unit",
+      "scripts.lint:test:update",
+      "devDependencies",
+      "tsup",
+      "clean-package",
+      "dependencies.@dasaplan/ts-sdk"
+    ]
+  },
+  "tsup": {
+    "entry": [
+      "index.ts"
+    ],
+    "noExternal": [
+      "@dasaplan/ts-sdk",
+      "tsconfig"
+    ],
+    "format": [
+      "cjs",
+      "esm"
+    ],
+    "tsconfig": "tsconfig.build.json",
+    "clean": true,
+    "sourcemap": true
+  }
+}
