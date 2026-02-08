@@ -9,7 +9,6 @@ export interface ExpressServerApiOption {
 export async function generateExpressTsApiFromBundledAsText(bundled: OpenApiBundled, params: ExpressServerApiOption) {
   try {
     const endpoints = Transpiler.of(bundled).endpoints();
-
     return generateCreateExpressServerApi(endpoints, params);
   } catch (error) {
     throw ApplicationError.create("Failed generating express api").chainUnknown(error);
