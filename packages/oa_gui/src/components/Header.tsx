@@ -1,3 +1,3 @@
-export function Header() {
-  return <div className={"header"}></div>;
+export function Header(props: React.FragmentProps) {
+  return <div className={"header"}>{props.children}</div>;
 }

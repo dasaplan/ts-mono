@@ -1,0 +1,22 @@
+
+.oa-endpoint__tag {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  align-self: start;
+  padding: 2px 8px;
+  border: 1px solid #d0d7de;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+
+.oa-tags {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 240px;
+  padding: 12px;
+  background-color: hsl(var(--debug-hue) 70% 86%);
+  border-radius: 8px;
+}

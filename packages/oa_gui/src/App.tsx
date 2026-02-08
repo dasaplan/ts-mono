@@ -1,5 +1,8 @@
 import "./App.css";
+import "./components/Components.css";
+
 import { useEffect, useState } from "react";
+import { DesignerPage } from "./pages/designer/DesignerPage.js";
 
 function App() {
   const [data, setData] = useState<Awaited<ReturnType<typeof importSpec>>>();
@@ -15,7 +18,7 @@ function App() {
 
   return (
     <>
-      <p>Hello World!</p>
+      <DesignerPage></DesignerPage>
     </>
   );
 }

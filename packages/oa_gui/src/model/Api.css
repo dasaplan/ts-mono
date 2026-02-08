@@ -1,0 +1,50 @@
+
+.oa-api {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 240px;
+  min-height: 80px;
+  padding: 12px;
+  background-color: hsl(var(--debug-hue) 75% 88%);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.oa-api__header {
+  width: 100%;
+}
+
+.oa-api__title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.oa-api__title-group {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.oa-api__title,
+.oa-api__version {
+  display: inline-flex;
+}
+
+.oa-api__openapi {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.oa-api__description,
+.oa-api__summary {
+  width: 100%;
+}

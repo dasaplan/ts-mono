@@ -1,0 +1,22 @@
+.schema-slot {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  justify-self: end;
+  width: 100%;
+}
+
+.schema-slot__button {
+  width: var(--oa-response-slot-height);
+  height: var(--oa-response-slot-height);
+  border: 1px dashed #8c959f;
+  border-radius: 8px;
+  background: #f6f8fa;
+  color: #57606a;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
